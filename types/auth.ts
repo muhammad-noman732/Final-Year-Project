@@ -1,34 +1,10 @@
-export type UserRole = 'student' | 'admin' | 'vc' | 'hod';
+// ═══════════════════════════════════════════════════════════════
+//  Barrel re-export — backward compatibility
+//  New code should import from:
+//    @/types/shared          (Role, ROLE_ROUTES, ROLE_LABELS)
+//    @/types/server/auth.types  (JWTPayload, AuthUser, etc.)
+//    @/types/client/auth.types  (ClientUser, ApiResponse, etc.)
+// ═══════════════════════════════════════════════════════════════
 
-export interface User {
-  id: string;
-  name: string;
-  email: string;
-  role: UserRole;
-  avatar?: string;
-  department?: string;
-  lastLogin?: string;
-}
-
-export interface LoginCredentials {
-  email: string;
-  password: string;
-  rememberMe?: boolean;
-}
-
-export interface ChangePasswordForm {
-  currentPassword: string;
-  newPassword: string;
-  confirmPassword: string;
-}
-
-export interface PasswordStrength {
-  level: 'weak' | 'fair' | 'good' | 'strong';
-  score: number;
-  requirements: {
-    minLength: boolean;
-    hasUppercase: boolean;
-    hasNumber: boolean;
-    hasSpecialChar: boolean;
-  };
-}
+export { type Role, ROLE_ROUTES, ROLE_LABELS } from "@/types/shared"
+export type { JWTPayload, AuthUser } from "@/types/server/auth.types"

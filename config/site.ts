@@ -9,6 +9,10 @@ export const siteConfig = {
 };
 
 export const navItems = {
+    superadmin: [
+        { label: "Dashboard", href: "/superadmin", icon: "LayoutDashboard" },
+        { label: "Universities", href: "/superadmin/universities", icon: "Building2" },
+    ],
     student: [
         { label: "Dashboard", href: "/student", icon: "LayoutDashboard" },
         { label: "Pay Fee", href: "/student/payfee", icon: "CreditCard" },
