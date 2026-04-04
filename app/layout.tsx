@@ -1,27 +1,19 @@
 import type { Metadata } from "next";
-import { Playfair_Display, DM_Sans } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
 
-const playfair = Playfair_Display({
-  variable: "--font-playfair",
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
   display: "swap",
-  weight: ["400", "500", "600", "700", "800", "900"],
-});
-
-const dmSans = DM_Sans({
-  variable: "--font-dm-sans",
-  subsets: ["latin"],
-  display: "swap",
-  weight: ["300", "400", "500", "600", "700"],
 });
 
 export const metadata: Metadata = {
-  title: "GCUF Fee Management System",
-  description:
-    "Intelligent Real-Time University Registration & Fee Management System — Government College University Faisalabad",
-  keywords: ["GCUF", "fee management", "university", "Faisalabad", "student portal"],
+  title: "Fee Management System",
+  description: "University Registration & Fee Management System",
 };
+
+import { StoreProvider } from "@/store/provider";
 
 export default function RootLayout({
   children,
@@ -30,10 +22,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark">
-      <body
-        className={`${playfair.variable} ${dmSans.variable} antialiased bg-navy-gradient noise-overlay min-h-screen`}
-      >
-        {children}
+      <body className={`${inter.variable} font-sans antialiased bg-slate-50 dark:bg-slate-950 min-h-screen text-slate-900 dark:text-slate-50`}>
+        <StoreProvider>
+          {children}
+        </StoreProvider>
       </body>
     </html>
   );

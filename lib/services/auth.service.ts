@@ -1,16 +1,3 @@
-// ═══════════════════════════════════════════════════════════════
-//  AuthService — Core authentication business logic
-//
-//  Responsibilities:
-//  - Login (credential verification, JWT issuance)
-//  - Password change (hash update, JWT re-issuance)
-//
-//  Rules:
-//  - No HTTP concepts (req, res, cookies). That's the controller's job.
-//  - All errors are thrown as AppError subclasses.
-//  - Audit logging is fire-and-forget via AuditService.
-// ═══════════════════════════════════════════════════════════════
-
 import bcrypt from "bcryptjs"
 import { signJWT } from "@/lib/jwt"
 import { logger } from "@/lib/logger"
@@ -33,7 +20,7 @@ export class AuthService {
   constructor(
     private readonly userRepo: UserRepository,
     private readonly auditService: AuditService,
-  ) {}
+  ) { }
 
   // ─── Login ──────────────────────────────────────────────────
 
@@ -61,11 +48,11 @@ export class AuthService {
 
     // 4. Build JWT payload and sign
     const jwtPayload: JWTPayload = {
-      userId:       user.id,
-      tenantId:     user.tenantId,
-      role:         user.role as Role,
-      name:         user.name,
-      email:        user.email,
+      userId: user.id,
+      tenantId: user.tenantId,
+      role: user.role as Role,
+      name: user.name,
+      email: user.email,
       isFirstLogin: user.isFirstLogin,
     }
 
@@ -76,13 +63,13 @@ export class AuthService {
 
     // 6. Audit log (fire-and-forget)
     this.auditService.log({
-      tenantId:  user.tenantId,
-      userId:    user.id,
+      tenantId: user.tenantId,
+      userId: user.id,
       userEmail: user.email,
-      userRole:  user.role,
-      action:    "user.login",
-      entity:    "User",
-      entityId:  user.id,
+      userRole: user.role,
+      action: "user.login",
+      entity: "User",
+      entityId: user.id,
       ipAddress,
     })
 
@@ -99,14 +86,14 @@ export class AuthService {
       token,
       redirectTo,
       user: {
-        id:           user.id,
-        name:         user.name,
-        email:        user.email,
-        role:         user.role,
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
         isFirstLogin: user.isFirstLogin,
-        tenantId:     user.tenantId,
-        tenantName:   user.tenant?.name || null,
-        tenantSlug:   user.tenant?.slug || null,
+        tenantId: user.tenantId,
+        tenantName: user.tenant?.name || null,
+        tenantSlug: user.tenant?.slug || null,
       },
     }
   }
@@ -137,11 +124,11 @@ export class AuthService {
 
     // 4. Re-issue JWT with isFirstLogin = false
     const jwtPayload: JWTPayload = {
-      userId:       user.id,
-      tenantId:     user.tenantId,
-      role:         user.role as Role,
-      name:         user.name,
-      email:        user.email,
+      userId: user.id,
+      tenantId: user.tenantId,
+      role: user.role as Role,
+      name: user.name,
+      email: user.email,
       isFirstLogin: false,
     }
 
@@ -149,13 +136,13 @@ export class AuthService {
 
     // 5. Audit log
     this.auditService.log({
-      tenantId:  user.tenantId,
-      userId:    user.id,
+      tenantId: user.tenantId,
+      userId: user.id,
       userEmail: user.email,
-      userRole:  user.role,
-      action:    "password.changed",
-      entity:    "User",
-      entityId:  user.id,
+      userRole: user.role,
+      action: "password.changed",
+      entity: "User",
+      entityId: user.id,
     })
 
     logger.info({ userId: user.id }, "Password changed")

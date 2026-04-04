@@ -1,16 +1,11 @@
-// ═══════════════════════════════════════════════════════════════
-//  EmailService — SendGrid email delivery
-//  In dev without API key: logs email content instead of sending.
-// ═══════════════════════════════════════════════════════════════
-
 import sgMail from "@sendgrid/mail"
 import { logger } from "@/lib/logger"
 import type { WelcomeEmailParams, PasswordResetEmailParams } from "@/types/server/auth.types"
 
 interface EmailServiceConfig {
-  apiKey?:    string
-  fromEmail:  string
-  appUrl:     string
+  apiKey?: string
+  fromEmail: string
+  appUrl: string
 }
 
 export class EmailService {

@@ -7,11 +7,13 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "seed": "tsx seed/index.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
     "@prisma/adapter-pg": "^7.6.0",
+    "@prisma/client": "^7.6.0",
     "@reduxjs/toolkit": "^2.11.2",
     "@sendgrid/mail": "^8.1.6",
     "@types/bcryptjs": "^2.4.6",
@@ -31,6 +33,7 @@
     "react-hook-form": "^7.71.2",
     "react-redux": "^9.2.0",
     "recharts": "^3.7.0",
+    "sonner": "^2.0.7",
     "tailwind-merge": "^3.5.0",
     "zod": "^4.3.6"
   },

@@ -1,17 +1,3 @@
-// ═══════════════════════════════════════════════════════════════
-//  AuthController — HTTP layer for authentication
-//
-//  Responsibilities:
-//  - Parse & validate request body (Zod)
-//  - Extract IP address from headers
-//  - Call AuthService (business logic)
-//  - Set/clear httpOnly cookies
-//  - Build API response
-//
-//  Rules:
-//  - No business logic here. Only HTTP plumbing.
-//  - withErrorHandler wraps each method in the route file.
-// ═══════════════════════════════════════════════════════════════
 
 import { type NextRequest } from "next/server"
 import { loginSchema, changePasswordSchema } from "@/lib/validators/auth.validators"
@@ -24,17 +10,16 @@ const AUTH_COOKIE = "auth-token"
 
 const COOKIE_OPTIONS = {
   httpOnly: true,
-  secure:   process.env.NODE_ENV === "production",
+  secure: process.env.NODE_ENV === "production",
   sameSite: "lax" as const,
-  path:     "/",
+  path: "/",
 }
 
-const COOKIE_MAX_AGE = 7 * 24 * 60 * 60 // 7 days
+const COOKIE_MAX_AGE = 7 * 24 * 60 * 60
 
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthService) { }
 
-  // ─── POST /api/auth/login ───────────────────────────────────
 
   async login(req: NextRequest) {
     const body = await req.json()
@@ -44,7 +29,7 @@ export class AuthController {
     const result = await this.authService.login(data, ip)
 
     const response = successResponse({
-      user:       result.user,
+      user: result.user,
       redirectTo: result.redirectTo,
     })
 
@@ -83,7 +68,7 @@ export class AuthController {
     const result = await this.authService.changePassword(authUser.userId, data)
 
     const response = successResponse({
-      message:    "Password changed successfully.",
+      message: "Password changed successfully.",
       redirectTo: result.redirectTo,
     })
 
@@ -102,11 +87,11 @@ export class AuthController {
     const user = await getAuthUser()
 
     return successResponse({
-      id:           user.userId,
-      name:         user.name,
-      email:        user.email,
-      role:         user.role,
-      tenantId:     user.tenantId,
+      id: user.userId,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      tenantId: user.tenantId,
       isFirstLogin: user.isFirstLogin,
     })
   }

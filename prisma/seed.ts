@@ -29,22 +29,22 @@ async function main(): Promise<void> {
   console.log("🌱 Seeding database...\n")
 
   // ── 1. SUPER_ADMIN (no tenantId) ────────────────────────────
-  const superAdminHash = await bcrypt.hash("SuperAdmin@123", BCRYPT_ROUNDS)
+  const superAdminHash = await bcrypt.hash("admin123", BCRYPT_ROUNDS)
 
   const superAdmin = await prisma.user.upsert({
-    where: { tenantId_email: { tenantId: null as unknown as string, email: "superadmin@system.com" } },
+    where: { tenantId_email: { tenantId: null as unknown as string, email: "noman@gmail.com" } },
     update: {},
     create: {
-      email: "superadmin@system.com",
+      email: "noman@gmail.com",
       passwordHash: superAdminHash,
-      name: "Super Admin",
+      name: "Noman (Super Admin)",
       role: "SUPER_ADMIN",
       // tenantId deliberately null — SUPER_ADMIN belongs to no university
-      isFirstLogin: true,
+      isFirstLogin: false, // Let you log in immediately without forced password reset
       isActive: true,
     },
   })
-  console.log(`✅ SUPER_ADMIN: ${superAdmin.email} (password: SuperAdmin@123)`)
+  console.log(`✅ SUPER_ADMIN: ${superAdmin.email} (password: admin123)`)
 
   // ── 2. GCUF Tenant ──────────────────────────────────────────
   const gcuf = await prisma.tenant.upsert({
@@ -223,10 +223,11 @@ async function main(): Promise<void> {
   console.log(`✅ STUDENT: ${studentUser.email} (password: Student@123)`)
 
   console.log("\n🎉 Seed completed successfully!\n")
+  console.log("╚══════════════════════════════════════════════════════╝")
   console.log("╔══════════════════════════════════════════════════════╗")
   console.log("║  Login Credentials                                  ║")
   console.log("╠══════════════════════════════════════════════════════╣")
-  console.log("║  SUPER_ADMIN  superadmin@system.com   SuperAdmin@123║")
+  console.log("║  SUPER_ADMIN  noman@gmail.com         admin123      ║")
   console.log("║  ADMIN        admin@gcuf.edu.pk       Admin@12345   ║")
   console.log("║  VC           vc@gcuf.edu.pk          VC@123456     ║")
   console.log("║  HOD          hod@gcuf.edu.pk         HOD@123456    ║")
