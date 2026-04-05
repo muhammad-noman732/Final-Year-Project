@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server"
 import { ZodError } from "zod/v4"
-import { AppError, ValidationError } from "@/lib/errors"
+import { AppError, ValidationError } from "./AppError"
 import { logger } from "@/lib/logger"
 
 export interface ApiResponse<T = unknown> {
@@ -56,16 +56,18 @@ export function handleError(
   }
 
   if (error instanceof ValidationError) {
-    return errorResponse(error.code, error.message, error.statusCode, error.fields)
+    const valErr = error as ValidationError
+    return errorResponse(valErr.code, valErr.message, valErr.statusCode, valErr.fields)
   }
   if (error instanceof AppError) {
-    if (!error.isOperational) {
+    const appErr = error as AppError
+    if (!appErr.isOperational) {
       logger.error(
-        { requestId, error: error.message, stack: error.stack },
+        { requestId, error: appErr.message, stack: appErr.stack },
         "Non-operational AppError"
       )
     }
-    return errorResponse(error.code, error.message, error.statusCode)
+    return errorResponse(appErr.code, appErr.message, appErr.statusCode)
   }
 
   if (

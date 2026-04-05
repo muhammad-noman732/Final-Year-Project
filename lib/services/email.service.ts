@@ -1,7 +1,9 @@
 import sgMail from '@sendgrid/mail'
 import { env } from "@/lib/env"
 import { logger } from "@/lib/logger"
-import { InternalServerError } from "@/lib/errors"
+import { withRetry } from "@/lib/utils/retry"
+import { withTimeout } from "@/lib/utils/timeout"
+import { InternalServerError } from "@/lib/utils/AppError"
 import { welcomeEmailTemplate, passwordResetEmailTemplate } from "../email/templates"
 import type { WelcomeEmailParams, PasswordResetEmailParams } from "@/types/server/auth.types"
 
@@ -19,9 +21,9 @@ export class EmailService {
 
         if (this.isConfigured) {
             sgMail.setApiKey(env.SENDGRID_API_KEY as string);
-            logger.info("🟢 SendGrid Service Successfully Initialized");
+            logger.info("SendGrid Service Successfully Initialized");
         } else {
-            logger.warn("⚠️ SendGrid API Key missing — emails will be printed to terminal console instead of sending.");
+            logger.warn("SendGrid API Key missing — emails will be printed to terminal console instead of sending.");
         }
     }
 
@@ -36,25 +38,42 @@ export class EmailService {
         );
 
         if (!this.isConfigured) {
-            logger.info({ htmlContent }, "📧 [DEV LOG] Welcome Email Captured (Not sent via SendGrid)");
+            logger.info({ htmlContent }, "[DEV LOG] Welcome Email Captured (Not sent via SendGrid)");
             return;
         }
 
         try {
-            await sgMail.send({
-                to: params.to,
-                from: { email: this.fromEmail, name: this.fromName },
-                subject: `Welcome to GCUF - Your ${params.role.replace("_", " ")} Account Credentials`,
-                html: htmlContent,
-            });
-            logger.info({ to: params.to }, "✅ Welcome email securely processed via SendGrid");
+            await withRetry(
+                () => withTimeout(
+                    sgMail.send({
+                        to: params.to,
+                        from: { email: this.fromEmail, name: this.fromName },
+                        subject: `Welcome to GCUF - Your ${params.role.replace("_", " ")} Account Credentials`,
+                        html: htmlContent,
+                    }),
+                    10000, // 10s timeout for SendGrid
+                    "SendGrid:sendWelcomeEmail"
+                ),
+                "SendGrid:sendWelcomeEmail",
+                {
+                    maxAttempts: 3,
+                    shouldRetry: (err: unknown) => {
+                        // Don't retry if it's a client error (e.g., bad email format)
+                        const code = (err as { code?: number })?.code;
+                        if (code === 400 || code === 401 || code === 403) return false;
+                        return true;
+                    }
+                }
+            );
+            logger.info({ to: params.to }, "Welcome email securely processed via SendGrid");
         } catch (error: Error | unknown) {
-            logger.error({ err: error, to: params.to }, "Failed to send Welcome Email");
+            logger.error({ err: error, to: params.to }, "Failed to send Welcome Email after retries");
             throw new InternalServerError(
                 `Failed to send welcome email: ${error instanceof Error ? error.message : 'Unknown error'}`
             );
         }
     }
+
 
     async sendPasswordResetEmail(params: PasswordResetEmailParams): Promise<void> {
         const htmlContent = passwordResetEmailTemplate(
@@ -64,23 +83,39 @@ export class EmailService {
         );
 
         if (!this.isConfigured) {
-            logger.info({ htmlContent }, "📧 [DEV LOG] Password Reset Email Captured (Not sent via SendGrid)");
+            logger.info({ htmlContent }, "[DEV LOG] Password Reset Email Captured (Not sent via SendGrid)");
             return;
         }
 
         try {
-            await sgMail.send({
-                to: params.to,
-                from: { email: this.fromEmail, name: this.fromName },
-                subject: 'Action Required: Password Reset - GCUF Management',
-                html: htmlContent,
-            });
-            logger.info({ to: params.to }, "✅ Password reset email securely processed via SendGrid");
+            await withRetry(
+                () => withTimeout(
+                    sgMail.send({
+                        to: params.to,
+                        from: { email: this.fromEmail, name: this.fromName },
+                        subject: 'Action Required: Password Reset - GCUF Management',
+                        html: htmlContent,
+                    }),
+                    10000,
+                    "SendGrid:sendPasswordResetEmail"
+                ),
+                "SendGrid:sendPasswordResetEmail",
+                {
+                    maxAttempts: 3,
+                    shouldRetry: (err: unknown) => {
+                        const code = (err as { code?: number })?.code;
+                        if (code === 400 || code === 401 || code === 403) return false;
+                        return true;
+                    }
+                }
+            );
+            logger.info({ to: params.to }, "Password reset email securely processed via SendGrid");
         } catch (error: Error | unknown) {
-            logger.error({ err: error, to: params.to }, "Failed to send Password Reset Email");
+            logger.error({ err: error, to: params.to }, "Failed to send Password Reset Email after retries");
             throw new InternalServerError(
                 `Failed to send password reset email: ${error instanceof Error ? error.message : 'Unknown error'}`
             );
         }
+
     }
 }

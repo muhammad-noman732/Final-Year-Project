@@ -1,7 +1,7 @@
 
 import { SignJWT, jwtVerify } from "jose"
 import type { JWTPayload } from "@/types/auth"
-import { UnauthorizedError } from "@/lib/errors"
+import { UnauthorizedError } from "@/lib/utils/AppError"
 
 // Lazy getter so this module is safe to import in Edge middleware
 // (process.env is available in Edge; TextEncoder is a Web API)

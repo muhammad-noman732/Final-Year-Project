@@ -1,7 +1,7 @@
 
 import { headers } from "next/headers"
 import type { AuthUser, Role } from "@/types/auth"
-import { UnauthorizedError, ForbiddenError } from "@/lib/errors"
+import { UnauthorizedError, ForbiddenError } from "@/lib/utils/AppError"
 
 
 export async function getAuthUser(): Promise<AuthUser> {

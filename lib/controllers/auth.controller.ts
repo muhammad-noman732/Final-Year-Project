@@ -1,7 +1,7 @@
 
 import { type NextRequest } from "next/server"
 import { loginSchema, changePasswordSchema } from "@/lib/validators/auth.validators"
-import { successResponse } from "@/lib/response"
+import { successResponse } from "@/lib/utils/ApiResponse"
 import { getAuthUser } from "@/lib/auth"
 import { logger } from "@/lib/logger"
 import type { AuthService } from "@/lib/services/auth.service"

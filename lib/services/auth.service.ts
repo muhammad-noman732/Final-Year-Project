@@ -1,7 +1,7 @@
 import bcrypt from "bcryptjs"
 import { signJWT } from "@/lib/jwt"
 import { logger } from "@/lib/logger"
-import { UnauthorizedError, ValidationError } from "@/lib/errors"
+import { UnauthorizedError, ValidationError } from "@/lib/utils/AppError"
 import { ROLE_ROUTES } from "@/types/shared"
 import type { Role } from "@/types/shared"
 import type { UserRepository } from "@/lib/repositories/user.repository"

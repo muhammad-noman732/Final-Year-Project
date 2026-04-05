@@ -1,6 +1,6 @@
 import bcrypt from "bcryptjs"
 import crypto from "crypto"
-import { AppError, ValidationError } from "@/lib/errors"
+import { AppError, ValidationError } from "@/lib/utils/AppError"
 import { logger } from "@/lib/logger"
 import type { TenantRepository } from "@/lib/repositories/tenant.repository"
 import type { EmailService } from "@/lib/services/email.service"
@@ -53,7 +53,7 @@ export class TenantService {
       role: "ADMIN",
       tempPassword: tempPassword,
       universityName: tenant.name,
-    }).catch(err => {
+    }).catch((err: unknown) => {
       logger.error({ err, tenantId: tenant.id }, "Failed to send welcome email to new admin")
     })
 

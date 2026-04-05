@@ -6,7 +6,7 @@
 //  Used by the frontend useAuth() hook to get user context.
 // ═══════════════════════════════════════════════════════════════
 
-import { withErrorHandler } from "@/lib/routeHandler"
+import { withErrorHandler } from "@/lib/utils/routeHandler"
 import { authController } from "@/lib/di"
 
 export const GET = withErrorHandler(async () => {

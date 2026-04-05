@@ -7,7 +7,7 @@
 
 import { type NextRequest, NextResponse } from "next/server"
 import { randomUUID } from "crypto"
-import { handleError } from "@/lib/response"
+import { handleError } from "./ApiResponse"
 import { logger } from "@/lib/logger"
 
 type RouteContext = { params: Promise<Record<string, string>> }

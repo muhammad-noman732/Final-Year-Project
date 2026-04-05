@@ -1,6 +1,3 @@
-// Central error classes — all errors thrown in services must be instances of AppError
-// Rule: Distinguish operational errors (4xx) from programmer bugs (5xx)
-
 export class AppError extends Error {
   public readonly statusCode: number
   public readonly code: string
@@ -69,5 +66,16 @@ export class ServiceUnavailableError extends AppError {
 export class InternalServerError extends AppError {
   constructor(message = "An unexpected internal server error occurred.") {
     super(message, 500, "INTERNAL_SERVER_ERROR", true)
+  }
+}
+
+export class TimeoutError extends AppError {
+  constructor(operationName: string, ms: number) {
+    super(
+      `${operationName} timed out after ${ms}ms`,
+      504,
+      'TIMEOUT_ERROR',
+      true
+    );
   }
 }

@@ -1,7 +1,7 @@
 import { type NextRequest } from "next/server"
-import { successResponse } from "@/lib/response"
+import { successResponse } from "@/lib/utils/ApiResponse"
 import { getAuthUser } from "@/lib/auth"
-import { UnauthorizedError } from "@/lib/errors"
+import { UnauthorizedError } from "@/lib/utils/AppError"
 import type { TenantService } from "@/lib/services/tenant.service"
 import { onboardTenantSchema } from "@/lib/validators/superadmin.validators"
 
