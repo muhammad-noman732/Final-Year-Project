@@ -5,8 +5,8 @@ export class UserRepository {
   constructor(private readonly db: PrismaClient) { }
 
   async findByEmail(email: string): Promise<UserWithTenant | null> {
-    const user = await this.db.user.findFirst({
-      where: { email, isActive: true },
+    const user = await this.db.user.findUnique({
+      where: { email },
       include: {
         tenant: {
           select: { id: true, slug: true, name: true, isActive: true },

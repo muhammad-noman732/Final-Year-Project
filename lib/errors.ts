@@ -65,3 +65,9 @@ export class ServiceUnavailableError extends AppError {
     super(message, 503, "SERVICE_UNAVAILABLE")
   }
 }
+
+export class InternalServerError extends AppError {
+  constructor(message = "An unexpected internal server error occurred.") {
+    super(message, 500, "INTERNAL_SERVER_ERROR", true)
+  }
+}

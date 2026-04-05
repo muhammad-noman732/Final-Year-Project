@@ -25,8 +25,8 @@ export class AuthService {
   // ─── Login ──────────────────────────────────────────────────
 
   async login(input: LoginInput, ipAddress: string): Promise<LoginResult> {
-    // 1. Find user by email (cross-tenant lookup)
-    const user = await this.userRepo.findByEmail(input.email)
+    const emailNormalized = input.email.toLowerCase().trim()
+    const user = await this.userRepo.findByEmail(emailNormalized)
 
     // Never reveal whether email exists — always "Invalid credentials"
     if (!user) {

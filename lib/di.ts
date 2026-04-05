@@ -23,11 +23,7 @@ const tenantRepo = new TenantRepository(prisma)
 
 // ─── Services ─────────────────────────────────────────────────
 const auditService = new AuditService(auditRepo)
-export const emailService = new EmailService({
-  apiKey: process.env.SENDGRID_API_KEY || "dummy",
-  fromEmail: process.env.FROM_EMAIL || "noreply@gcuf.edu.pk",
-  appUrl: process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
-})
+export const emailService = new EmailService()
 const authService = new AuthService(userRepo, auditService)
 export const tenantService = new TenantService(tenantRepo, emailService, auditService)
 

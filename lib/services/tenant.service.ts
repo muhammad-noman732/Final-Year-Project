@@ -36,9 +36,11 @@ export class TenantService {
       domain: input.domain,
     }
 
+    const adminEmailNormalized = input.adminEmail.toLowerCase().trim()
+
     const tenant = await this.tenantRepo.createWithAdmin(
       tenantData,
-      input.adminEmail,
+      adminEmailNormalized,
       input.adminName,
       passwordHash
     )

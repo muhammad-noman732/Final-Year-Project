@@ -1,101 +1,86 @@
-import sgMail from "@sendgrid/mail"
+import sgMail from '@sendgrid/mail'
+import { env } from "@/lib/env"
 import { logger } from "@/lib/logger"
+import { InternalServerError } from "@/lib/errors"
+import { welcomeEmailTemplate, passwordResetEmailTemplate } from "../email/templates"
 import type { WelcomeEmailParams, PasswordResetEmailParams } from "@/types/server/auth.types"
 
-interface EmailServiceConfig {
-  apiKey?: string
-  fromEmail: string
-  appUrl: string
-}
-
 export class EmailService {
-  private readonly isConfigured: boolean
-  private readonly fromEmail: string
-  private readonly appUrl: string
+    private readonly isConfigured: boolean;
+    private readonly fromEmail: string;
+    private readonly fromName: string;
+    private readonly appUrl: string;
 
-  constructor(config: EmailServiceConfig) {
-    this.isConfigured = !!config.apiKey
-    this.fromEmail = config.fromEmail
-    this.appUrl = config.appUrl
+    constructor() {
+        this.isConfigured = !!env.SENDGRID_API_KEY && env.SENDGRID_API_KEY !== "dummy";
+        this.fromEmail = env.FROM_EMAIL || "noreply@gcuf.edu.pk";
+        this.appUrl = env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+        this.fromName = 'GCUF Management System';
 
-    if (this.isConfigured) {
-      sgMail.setApiKey(config.apiKey!)
-    }
-  }
-
-  // ─── Private: core sender ───────────────────────────────────
-
-  private async send(to: string, subject: string, html: string): Promise<boolean> {
-    if (!this.isConfigured) {
-      logger.warn({ to, subject }, "SendGrid not configured — email skipped (dev mode)")
-      logger.info({ html }, "Email content (dev only)")
-      return false
+        if (this.isConfigured) {
+            sgMail.setApiKey(env.SENDGRID_API_KEY as string);
+            logger.info("🟢 SendGrid Service Successfully Initialized");
+        } else {
+            logger.warn("⚠️ SendGrid API Key missing — emails will be printed to terminal console instead of sending.");
+        }
     }
 
-    try {
-      await sgMail.send({
-        to,
-        from: { email: this.fromEmail, name: "GCUF Fee Management" },
-        subject,
-        html,
-      })
-      logger.info({ to, subject }, "Email sent via SendGrid")
-      return true
-    } catch (error) {
-      logger.error({ err: error, to }, "SendGrid delivery failed")
-      return false
+    async sendWelcomeEmail(params: WelcomeEmailParams): Promise<void> {
+        const loginUrl = `${this.appUrl}/login`;
+        const htmlContent = welcomeEmailTemplate(
+            params.name,
+            params.role,
+            params.tempPassword,
+            params.universityName,
+            loginUrl
+        );
+
+        if (!this.isConfigured) {
+            logger.info({ htmlContent }, "📧 [DEV LOG] Welcome Email Captured (Not sent via SendGrid)");
+            return;
+        }
+
+        try {
+            await sgMail.send({
+                to: params.to,
+                from: { email: this.fromEmail, name: this.fromName },
+                subject: `Welcome to GCUF - Your ${params.role.replace("_", " ")} Account Credentials`,
+                html: htmlContent,
+            });
+            logger.info({ to: params.to }, "✅ Welcome email securely processed via SendGrid");
+        } catch (error: Error | unknown) {
+            logger.error({ err: error, to: params.to }, "Failed to send Welcome Email");
+            throw new InternalServerError(
+                `Failed to send welcome email: ${error instanceof Error ? error.message : 'Unknown error'}`
+            );
+        }
     }
-  }
 
-  // ─── Welcome / Credential Email ─────────────────────────────
+    async sendPasswordResetEmail(params: PasswordResetEmailParams): Promise<void> {
+        const htmlContent = passwordResetEmailTemplate(
+            params.name,
+            params.resetToken,
+            this.appUrl
+        );
 
-  async sendWelcomeEmail(params: WelcomeEmailParams): Promise<boolean> {
-    const loginUrl = `${this.appUrl}/login`
-    const roleLabel = params.role.replace("_", " ")
+        if (!this.isConfigured) {
+            logger.info({ htmlContent }, "📧 [DEV LOG] Password Reset Email Captured (Not sent via SendGrid)");
+            return;
+        }
 
-    const html = `
-    <div style="font-family:'Segoe UI',Tahoma,sans-serif;max-width:600px;margin:0 auto;background:#0d1117;color:#e6edf3;border-radius:12px;overflow:hidden">
-      <div style="background:linear-gradient(135deg,#d4a843,#b8922e);padding:32px;text-align:center">
-        <h1 style="margin:0;color:#0a0e1a;font-size:24px">🎓 Welcome to GCUF Fee Management</h1>
-      </div>
-      <div style="padding:32px">
-        <p>Hello <strong>${params.name}</strong>,</p>
-        <p style="color:#8b949e">Your <strong style="color:#d4a843">${roleLabel}</strong> account has been created${params.universityName ? ` for <strong>${params.universityName}</strong>` : ""}.</p>
-        <div style="background:#161b22;border:1px solid #30363d;border-radius:8px;padding:20px;margin:24px 0">
-          <p style="margin:0 0 12px;color:#8b949e;font-size:13px;text-transform:uppercase;letter-spacing:1px">Login Credentials</p>
-          <p style="margin:4px 0"><strong>Email:</strong> ${params.to}</p>
-          <p style="margin:4px 0"><strong>Temporary Password:</strong> <code style="background:#0d1117;padding:2px 8px;border-radius:4px;color:#d4a843">${params.tempPassword}</code></p>
-        </div>
-        <p style="color:#f85149;font-size:14px">⚠️ You must change your password on first login.</p>
-        <div style="text-align:center">
-          <a href="${loginUrl}" style="display:inline-block;background:linear-gradient(135deg,#d4a843,#b8922e);color:#0a0e1a;text-decoration:none;padding:14px 40px;border-radius:8px;font-weight:bold">Sign In Now →</a>
-        </div>
-      </div>
-    </div>`
-
-    return this.send(params.to, `Your ${roleLabel} Account — GCUF Fee Management`, html)
-  }
-
-  // ─── Password Reset Email ───────────────────────────────────
-
-  async sendPasswordResetEmail(params: PasswordResetEmailParams): Promise<boolean> {
-    const resetUrl = `${this.appUrl}/resetpassword?token=${params.resetToken}`
-
-    const html = `
-    <div style="font-family:'Segoe UI',Tahoma,sans-serif;max-width:600px;margin:0 auto;background:#0d1117;color:#e6edf3;border-radius:12px;overflow:hidden">
-      <div style="background:linear-gradient(135deg,#d4a843,#b8922e);padding:32px;text-align:center">
-        <h1 style="margin:0;color:#0a0e1a;font-size:24px">🔒 Password Reset</h1>
-      </div>
-      <div style="padding:32px">
-        <p>Hello <strong>${params.name}</strong>,</p>
-        <p style="color:#8b949e">Click below to reset your password. This link expires in <strong>1 hour</strong>.</p>
-        <div style="text-align:center;margin:32px 0">
-          <a href="${resetUrl}" style="display:inline-block;background:linear-gradient(135deg,#d4a843,#b8922e);color:#0a0e1a;text-decoration:none;padding:14px 40px;border-radius:8px;font-weight:bold">Reset Password →</a>
-        </div>
-        <p style="color:#8b949e;font-size:14px">If you didn't request this, ignore this email.</p>
-      </div>
-    </div>`
-
-    return this.send(params.to, "Password Reset — GCUF Fee Management", html)
-  }
+        try {
+            await sgMail.send({
+                to: params.to,
+                from: { email: this.fromEmail, name: this.fromName },
+                subject: 'Action Required: Password Reset - GCUF Management',
+                html: htmlContent,
+            });
+            logger.info({ to: params.to }, "✅ Password reset email securely processed via SendGrid");
+        } catch (error: Error | unknown) {
+            logger.error({ err: error, to: params.to }, "Failed to send Password Reset Email");
+            throw new InternalServerError(
+                `Failed to send password reset email: ${error instanceof Error ? error.message : 'Unknown error'}`
+            );
+        }
+    }
 }

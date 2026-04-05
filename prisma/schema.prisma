@@ -67,7 +67,7 @@ model User {
   tenant   Tenant? @relation(fields: [tenantId], references: [id], onDelete: Cascade)
   // tenantId is NULL only for SUPER_ADMIN — they belong to no single university
 
-  email         String
+  email         String    @unique
   passwordHash  String // bcrypt hash — NEVER store plain text
   name          String
   phone         String?
@@ -90,9 +90,8 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  // Same email cannot exist twice within the same tenant
-  // But ali@gmail.com CAN exist in both GCUF and UAF
-  @@unique([tenantId, email])
+  // Indexes for performance
+  @@index([email])
   @@index([tenantId])
   @@index([tenantId, role])
   @@index([tenantId, isActive])
