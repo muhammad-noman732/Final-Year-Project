@@ -63,7 +63,12 @@ export function handleError(
     const appErr = error as AppError
     if (!appErr.isOperational) {
       logger.error(
-        { requestId, error: appErr.message, stack: appErr.stack },
+        {
+          event: "api.error.non_operational",
+          requestId,
+          error: appErr.message,
+          stack: appErr.stack,
+        },
         "Non-operational AppError"
       )
     }
@@ -87,6 +92,7 @@ export function handleError(
 
   logger.error(
     {
+      event: "api.error.unexpected",
       requestId,
       error: error instanceof Error ? error.message : String(error),
       stack: error instanceof Error ? error.stack : undefined,

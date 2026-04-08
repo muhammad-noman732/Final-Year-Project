@@ -105,7 +105,14 @@ export class ProgramService {
       newData: { name: program.name, code: program.code, departmentId: program.departmentId },
     })
 
-    logger.info({ tenantId, programId: program.id }, "Program created successfully")
+    logger.info(
+      {
+        event: "program.create.success",
+        tenantId,
+        programId: program.id,
+      },
+      "Program created successfully"
+    )
 
     return program
   }
@@ -147,7 +154,14 @@ export class ProgramService {
       },
     })
 
-    logger.info({ tenantId, programId: updated.id }, "Program updated successfully")
+    logger.info(
+      {
+        event: "program.update.success",
+        tenantId,
+        programId: updated.id,
+      },
+      "Program updated successfully"
+    )
 
     return updated
   }

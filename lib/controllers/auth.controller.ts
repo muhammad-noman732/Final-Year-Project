@@ -45,7 +45,14 @@ export class AuthController {
 
   async logout() {
     const user = await getAuthUser()
-    logger.info({ userId: user.userId, role: user.role }, "User logged out")
+    logger.info(
+      {
+        event: "auth.logout",
+        userId: user.userId,
+        role: user.role,
+      },
+      "User logged out"
+    )
 
     const response = successResponse({ message: "Logged out successfully." })
 

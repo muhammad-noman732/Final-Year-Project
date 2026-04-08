@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
+import { logger } from "@/lib/logger"
 
 export function injectRequestId(
   request: NextRequest,
@@ -30,12 +31,13 @@ export function logRequestEntry(
   request: NextRequest,
   requestId: string
 ): void {
-  if (process.env.NODE_ENV === "development") {
-    const timestamp = new Date().toISOString()
-    console.log(
-      `[${timestamp}] ➜ ${request.method} ${request.nextUrl.pathname} | rid=${requestId}`
-    )
-  }
-  // In production, structured logging (via pino) happens in withErrorHandler
-  // where we have access to the full Node.js runtime, not the Edge runtime.
+  logger.debug(
+    {
+      event: "proxy.request.received",
+      requestId,
+      method: request.method,
+      path: request.nextUrl.pathname,
+    },
+    "Proxy request received"
+  )
 }

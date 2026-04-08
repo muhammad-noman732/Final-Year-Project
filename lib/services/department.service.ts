@@ -82,7 +82,14 @@ export class DepartmentService {
       newData: { name: dept.name, code: dept.code },
     })
 
-    logger.info({ tenantId, departmentId: dept.id }, "Department created successfully")
+    logger.info(
+      {
+        event: "department.create.success",
+        tenantId,
+        departmentId: dept.id,
+      },
+      "Department created successfully"
+    )
 
     return dept
   }
@@ -111,7 +118,14 @@ export class DepartmentService {
       newData: { name: updated.name, isActive: updated.isActive },
     })
 
-    logger.info({ tenantId, departmentId: updated.id }, "Department updated successfully")
+    logger.info(
+      {
+        event: "department.update.success",
+        tenantId,
+        departmentId: updated.id,
+      },
+      "Department updated successfully"
+    )
 
     return updated
   }

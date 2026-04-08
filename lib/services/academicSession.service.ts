@@ -81,7 +81,14 @@ export class AcademicSessionService {
       newData: { name: session.name, startYear: session.startYear, isCurrent: session.isCurrent },
     })
 
-    logger.info({ tenantId, sessionId: session.id }, "Academic session created successfully")
+    logger.info(
+      {
+        event: "session.create.success",
+        tenantId,
+        sessionId: session.id,
+      },
+      "Academic session created successfully"
+    )
 
     return session
   }
@@ -109,7 +116,14 @@ export class AcademicSessionService {
       newData: { name: updated.name, isCurrent: true },
     })
 
-    logger.info({ tenantId, sessionId: updated.id }, "Academic session set as current")
+    logger.info(
+      {
+        event: "session.current.set",
+        tenantId,
+        sessionId: updated.id,
+      },
+      "Academic session set as current"
+    )
 
     return updated
   }

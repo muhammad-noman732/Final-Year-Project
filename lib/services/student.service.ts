@@ -166,7 +166,12 @@ export class StudentService {
       })
       .catch((err: unknown) => {
         logger.error(
-          { err, studentId: student.id },
+          {
+            event: "student.create.email_failed",
+            err,
+            tenantId,
+            studentId: student.id,
+          },
           "Failed to dispatch student welcome email",
         )
       })
@@ -187,7 +192,14 @@ export class StudentService {
       },
     })
 
-    logger.info({ tenantId, studentId: student.id }, "Student created successfully")
+    logger.info(
+      {
+        event: "student.create.success",
+        tenantId,
+        studentId: student.id,
+      },
+      "Student created successfully"
+    )
 
     return student
   }
@@ -237,7 +249,14 @@ export class StudentService {
       },
     })
 
-    logger.info({ tenantId, studentId: updated.id }, "Student updated successfully")
+    logger.info(
+      {
+        event: "student.update.success",
+        tenantId,
+        studentId: updated.id,
+      },
+      "Student updated successfully"
+    )
 
     return updated
   }

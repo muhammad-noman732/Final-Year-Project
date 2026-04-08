@@ -7,7 +7,17 @@ export class AuditService {
 
   log(input: CreateAuditLogInput): void {
     this.auditRepo.create(input).catch((error: unknown) => {
-      logger.error({ err: error, action: input.action }, "Failed to create audit log")
+      logger.error(
+        {
+          event: "audit.log.create_failed",
+          err: error,
+          action: input.action,
+          tenantId: input.tenantId,
+          entity: input.entity,
+          entityId: input.entityId,
+        },
+        "Failed to create audit log"
+      )
     })
   }
 }

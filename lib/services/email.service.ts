@@ -21,9 +21,12 @@ export class EmailService {
 
         if (this.isConfigured) {
             sgMail.setApiKey(env.SENDGRID_API_KEY as string);
-            logger.info("SendGrid Service Successfully Initialized");
+            logger.info({ event: "email.sendgrid.initialized" }, "SendGrid service initialized");
         } else {
-            logger.warn("SendGrid API Key missing — emails will be printed to terminal console instead of sending.");
+            logger.warn(
+                { event: "email.sendgrid.not_configured" },
+                "SendGrid API key missing; emails will not be sent"
+            );
         }
     }
 
@@ -38,7 +41,15 @@ export class EmailService {
         );
 
         if (!this.isConfigured) {
-            logger.info({ htmlContent }, "[DEV LOG] Welcome Email Captured (Not sent via SendGrid)");
+            logger.info(
+                {
+                    event: "email.welcome.skipped_not_configured",
+                    to: params.to,
+                    role: params.role,
+                    universityName: params.universityName,
+                },
+                "Welcome email skipped because SendGrid is not configured"
+            );
             return;
         }
 
@@ -65,9 +76,15 @@ export class EmailService {
                     }
                 }
             );
-            logger.info({ to: params.to }, "Welcome email securely processed via SendGrid");
+            logger.info(
+                { event: "email.welcome.sent", to: params.to, provider: "sendgrid" },
+                "Welcome email sent"
+            );
         } catch (error: Error | unknown) {
-            logger.error({ err: error, to: params.to }, "Failed to send Welcome Email after retries");
+            logger.error(
+                { event: "email.welcome.failed", err: error, to: params.to, provider: "sendgrid" },
+                "Failed to send welcome email after retries"
+            );
             throw new InternalServerError(
                 `Failed to send welcome email: ${error instanceof Error ? error.message : 'Unknown error'}`
             );
@@ -83,7 +100,10 @@ export class EmailService {
         );
 
         if (!this.isConfigured) {
-            logger.info({ htmlContent }, "[DEV LOG] Password Reset Email Captured (Not sent via SendGrid)");
+            logger.info(
+                { event: "email.password_reset.skipped_not_configured", to: params.to },
+                "Password reset email skipped because SendGrid is not configured"
+            );
             return;
         }
 
@@ -109,9 +129,15 @@ export class EmailService {
                     }
                 }
             );
-            logger.info({ to: params.to }, "Password reset email securely processed via SendGrid");
+            logger.info(
+                { event: "email.password_reset.sent", to: params.to, provider: "sendgrid" },
+                "Password reset email sent"
+            );
         } catch (error: Error | unknown) {
-            logger.error({ err: error, to: params.to }, "Failed to send Password Reset Email after retries");
+            logger.error(
+                { event: "email.password_reset.failed", err: error, to: params.to, provider: "sendgrid" },
+                "Failed to send password reset email after retries"
+            );
             throw new InternalServerError(
                 `Failed to send password reset email: ${error instanceof Error ? error.message : 'Unknown error'}`
             );

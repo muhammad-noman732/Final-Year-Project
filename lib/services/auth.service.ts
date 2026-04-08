@@ -74,7 +74,12 @@ export class AuthService {
     })
 
     logger.info(
-      { userId: user.id, role: user.role, tenantId: user.tenantId },
+      {
+        event: "auth.login.success",
+        userId: user.id,
+        role: user.role,
+        tenantId: user.tenantId,
+      },
       "User logged in"
     )
 
@@ -145,7 +150,14 @@ export class AuthService {
       entityId: user.id,
     })
 
-    logger.info({ userId: user.id }, "Password changed")
+    logger.info(
+      {
+        event: "auth.password.changed",
+        userId: user.id,
+        tenantId: user.tenantId,
+      },
+      "Password changed"
+    )
 
     // 6. Return token + redirect
     const role = user.role as Role

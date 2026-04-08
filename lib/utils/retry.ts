@@ -58,8 +58,8 @@ export async function withRetry<T>(
 
             if (attempt > 1) {
                 logger.info(
-                    { operationName, attempt, maxAttempts },
-                    `[Retry] Succeeded on attempt ${attempt}`
+                    { event: "retry.succeeded", operationName, attempt, maxAttempts },
+                    `Retry succeeded on attempt ${attempt}`
                 );
             }
 
@@ -69,16 +69,27 @@ export async function withRetry<T>(
 
             if (attempt === maxAttempts) {
                 logger.error(
-                    { operationName, attempt, maxAttempts, err: lastError.message },
-                    `[Retry] All attempts failed for ${operationName}`
+                    {
+                        event: "retry.exhausted",
+                        operationName,
+                        attempt,
+                        maxAttempts,
+                        err: lastError.message,
+                    },
+                    `All retry attempts failed for ${operationName}`
                 );
                 break;
             }
 
             if (!shouldRetry(lastError, attempt)) {
                 logger.info(
-                    { operationName, attempt, err: lastError.message },
-                    `[Retry] Error is not retryable. Aborting.`
+                    {
+                        event: "retry.aborted_not_retryable",
+                        operationName,
+                        attempt,
+                        err: lastError.message,
+                    },
+                    "Retry aborted because error is not retryable"
                 );
                 throw lastError;
             }
@@ -89,12 +100,13 @@ export async function withRetry<T>(
 
             logger.warn(
                 {
+                    event: "retry.scheduled",
                     operationName,
                     attempt,
                     err: lastError.message,
                     nextRetryInMs: Math.round(delayMs)
                 },
-                `[Retry] Attempt failed. Retrying...`
+                "Retry attempt failed; scheduling next retry"
             );
 
             await new Promise((resolve) => setTimeout(resolve, delayMs));

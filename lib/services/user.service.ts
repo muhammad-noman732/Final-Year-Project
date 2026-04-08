@@ -130,7 +130,15 @@ export class UserService {
         universityName,
       })
       .catch((err: unknown) => {
-        logger.error({ err, userId: user.id }, "Failed to dispatch welcome email")
+        logger.error(
+          {
+            event: "user.create.email_failed",
+            err,
+            tenantId,
+            userId: user.id,
+          },
+          "Failed to dispatch welcome email"
+        )
       })
 
     // 8. Audit log (fire-and-forget)
@@ -143,7 +151,15 @@ export class UserService {
       newData: { name: user.name, email: user.email, role: user.role },
     })
 
-    logger.info({ tenantId, userId: user.id, role: user.role }, "User created successfully")
+    logger.info(
+      {
+        event: "user.create.success",
+        tenantId,
+        userId: user.id,
+        role: user.role,
+      },
+      "User created successfully"
+    )
 
     return user
   }
@@ -194,7 +210,15 @@ export class UserService {
       newData: { name: updated.name, isActive: updated.isActive },
     })
 
-    logger.info({ tenantId, userId: updated.id, role: updated.role }, "User updated successfully")
+    logger.info(
+      {
+        event: "user.update.success",
+        tenantId,
+        userId: updated.id,
+        role: updated.role,
+      },
+      "User updated successfully"
+    )
 
     return updated
   }
@@ -227,7 +251,15 @@ export class UserService {
       newData: { isActive: false },
     })
 
-    logger.info({ tenantId, userId: updated.id, role: updated.role }, "User deleted (deactivated) successfully")
+    logger.info(
+      {
+        event: "user.deactivate.success",
+        tenantId,
+        userId: updated.id,
+        role: updated.role,
+      },
+      "User deleted (deactivated) successfully"
+    )
 
     return updated
   }

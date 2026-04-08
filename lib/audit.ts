@@ -41,6 +41,16 @@ export async function createAuditLog(input: AuditLogInput): Promise<void> {
   } catch (error) {
     // Audit logging should NEVER crash the main operation.
     // Log the error and move on.
-    logger.error({ err: error, action: input.action }, "Failed to create audit log")
+    logger.error(
+      {
+        event: "audit.log.create_failed",
+        err: error,
+        action: input.action,
+        tenantId: input.tenantId,
+        entity: input.entity,
+        entityId: input.entityId,
+      },
+      "Failed to create audit log"
+    )
   }
 }

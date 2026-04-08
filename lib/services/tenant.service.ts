@@ -54,7 +54,15 @@ export class TenantService {
       tempPassword: tempPassword,
       universityName: tenant.name,
     }).catch((err: unknown) => {
-      logger.error({ err, tenantId: tenant.id }, "Failed to send welcome email to new admin")
+      logger.error(
+        {
+          event: "tenant.onboard.admin_email_failed",
+          err,
+          tenantId: tenant.id,
+          adminUserId: adminUser.id,
+        },
+        "Failed to send welcome email to new admin"
+      )
     })
 
     //  Audit Log
@@ -67,7 +75,15 @@ export class TenantService {
       newData: { name: tenant.name, adminEmail: adminUser.email },
     })
 
-    logger.info({ tenantId: tenant.id, slug: tenant.slug }, "New university onboarded successfully")
+    logger.info(
+      {
+        event: "tenant.onboard.success",
+        tenantId: tenant.id,
+        slug: tenant.slug,
+        adminUserId: adminUser.id,
+      },
+      "New university onboarded successfully"
+    )
 
     return {
       tenantId: tenant.id,
