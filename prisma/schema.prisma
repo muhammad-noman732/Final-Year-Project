@@ -1,8 +1,3 @@
-// ═══════════════════════════════════════════════════════════════
-//  GCUF Fee Management — Prisma 7 Schema
-//  Multi-Tenant · PostgreSQL · pg adapter
-// ═══════════════════════════════════════════════════════════════
-
 generator client {
   provider = "prisma-client"
   output   = "../app/generated/prisma"
@@ -12,9 +7,7 @@ datasource db {
   provider = "postgresql"
 }
 
-// ═══════════════════════════════════════════════
 //  TENANT — One row = one university
-// ═══════════════════════════════════════════════
 
 model Tenant {
   id        String  @id @default(cuid())
@@ -57,9 +50,7 @@ model Tenant {
   @@index([slug])
 }
 
-// ═══════════════════════════════════════════════
 //  USER — All roles in one table (Admin, VC, HOD, Student, SuperAdmin)
-// ═══════════════════════════════════════════════
 
 model User {
   id       String  @id @default(cuid())
@@ -68,13 +59,13 @@ model User {
   // tenantId is NULL only for SUPER_ADMIN — they belong to no single university
 
   email         String    @unique
-  passwordHash  String // bcrypt hash — NEVER store plain text
+  passwordHash  String
   name          String
   phone         String?
   avatarUrl     String?
   role          Role
   isActive      Boolean   @default(true)
-  isFirstLogin  Boolean   @default(true) // force password change on first login
+  isFirstLogin  Boolean   @default(true) 
   emailVerified Boolean   @default(false)
   lastLoginAt   DateTime?
 
@@ -82,7 +73,7 @@ model User {
   hodDepartmentId String?
   hodDepartment   Department? @relation("HODDepartment", fields: [hodDepartmentId], references: [id], onDelete: SetNull)
 
-  // ── Relations ──
+  // Relations 
   student             Student?
   refreshTokens       RefreshToken[]
   passwordResetTokens PasswordResetToken[]
@@ -97,37 +88,26 @@ model User {
   @@index([tenantId, isActive])
 }
 
-// ═══════════════════════════════════════════════
 //  REFRESH TOKEN — Enables "log out all devices" & token revocation
-// ═══════════════════════════════════════════════
 
 model RefreshToken {
   id     String @id @default(cuid())
   userId String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  // Store SHA-256 hash of the token — not the raw value
-  // If DB is breached, hashed tokens cannot be used by attackers
   tokenHash String @unique
-
-  // Device context for "active sessions" UI
   ipAddress  String?
   userAgent  String?
-  deviceName String? // "Chrome on Windows" — computed from userAgent
-
+  deviceName String? 
   isRevoked Boolean   @default(false)
   revokedAt DateTime?
-  expiresAt DateTime // 7 days from creation
-
+  expiresAt DateTime 
   createdAt DateTime @default(now())
 
   @@index([userId])
-  @@index([userId, isRevoked]) // fast: "get all active sessions for this user"
+  @@index([userId, isRevoked])
 }
 
-// ═══════════════════════════════════════════════
 //  PASSWORD RESET TOKEN — One-time, 1-hour token for forgot password
-// ═══════════════════════════════════════════════
 
 model PasswordResetToken {
   id     String @id @default(cuid())
@@ -143,9 +123,7 @@ model PasswordResetToken {
   @@index([userId])
 }
 
-// ═══════════════════════════════════════════════
 //  ACADEMIC SESSION — e.g. "2024-2028" batch
-// ═══════════════════════════════════════════════
 
 model AcademicSession {
   id       String @id @default(cuid())
@@ -167,9 +145,7 @@ model AcademicSession {
   @@index([tenantId, isCurrent])
 }
 
-// ═══════════════════════════════════════════════
 //  DEPARTMENT — CS, Biology, Physics, Math…
-// ═══════════════════════════════════════════════
 
 model Department {
   id       String @id @default(cuid())
@@ -193,9 +169,7 @@ model Department {
   @@index([tenantId, isActive])
 }
 
-// ═══════════════════════════════════════════════
 //  PROGRAM — BS CS, MCS, BS SE within a department
-// ═══════════════════════════════════════════════
 
 model Program {
   id           String     @id @default(cuid())

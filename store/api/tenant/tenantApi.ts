@@ -1,5 +1,5 @@
 import { baseApi } from "../baseApi"
-import type { OnboardTenantPayload, OnboardTenantResponse } from "@/types/frontend/tenant.api.types"
+import type { OnboardTenantPayload, OnboardTenantResponse } from "@/types/client/tenant.api.types"
 
 export const tenantApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -9,7 +9,7 @@ export const tenantApi = baseApi.injectEndpoints({
         method: "POST",
         body,
       }),
-      invalidatesTags: ["Tenant"], 
+      invalidatesTags: ["Tenant"],
     }),
   }),
 })

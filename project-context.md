@@ -38,13 +38,13 @@ VC dashboard updates live without refresh → sees everything happening now
 | Background Jobs | BullMQ (runs on VPS as persistent process) |
 | Auth | Custom JWT (httpOnly cookies) + bcryptjs |
 | Payment | Stripe only (no JazzCash, no EasyPaisa) |
-| Email | Resend |
+| Email | sendgrid|
 | Real-Time | Server-Sent Events (SSE) |
-| Deployment | VPS (Hetzner/Hostinger) — NOT serverless, NOT Vercel |
+| Deployment | VPS (Hetzner/Hostinger) — |
 | Process Manager | PM2 (Next.js app + BullMQ workers + cron jobs) |
 | Reverse Proxy | Nginx + SSL via Certbot |
 
-**Critical deployment note:** This runs on a VPS as a long-running Node.js process. It is NOT serverless. BullMQ works correctly. No connection pooling workarounds needed. One global PrismaClient instance, one global Redis client instance.
+**Critical deployment note:** This runs on a VPS as a long-running Node.js process. It is NOT serverless(but maybe in future use this as well as for now we are developing). BullMQ works correctly. No connection pooling workarounds needed. One global PrismaClient instance, one global Redis client instance.
 
 ---
 

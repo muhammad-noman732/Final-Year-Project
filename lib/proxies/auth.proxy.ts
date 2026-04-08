@@ -156,7 +156,7 @@ export async function authProxy(request: NextRequest): Promise<NextResponse> {
   requestHeaders.set("x-user-email", email)
   requestHeaders.set("x-user-first-login", String(isFirstLogin))
 
-  // ── 10. Final response with all headers applied ───────────────────
+  // 10. Final response with all headers applied 
   const response = NextResponse.next({
     request: { headers: requestHeaders },
   })
