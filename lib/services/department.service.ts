@@ -9,6 +9,7 @@ import type {
 } from "@/lib/validators/department.validators"
 import type { PaginatedResult } from "@/types/server/admin.types"
 import { getPaginationParams, buildPaginationMeta } from "@/lib/utils/paginate"
+import { logger } from "@/lib/logger"
 
 export class DepartmentService {
   constructor(
@@ -81,6 +82,8 @@ export class DepartmentService {
       newData: { name: dept.name, code: dept.code },
     })
 
+    logger.info({ tenantId, departmentId: dept.id }, "Department created successfully")
+
     return dept
   }
 
@@ -107,6 +110,8 @@ export class DepartmentService {
       oldData: { name: existing.name, isActive: existing.isActive },
       newData: { name: updated.name, isActive: updated.isActive },
     })
+
+    logger.info({ tenantId, departmentId: updated.id }, "Department updated successfully")
 
     return updated
   }

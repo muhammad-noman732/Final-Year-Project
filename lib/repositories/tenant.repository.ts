@@ -21,6 +21,12 @@ export class TenantRepository {
     })
   }
 
+  async findById(id: string) {
+    return this.db.tenant.findUnique({
+      where: { id },
+    })
+  }
+
   async createWithAdmin(tenantData: CreateTenantData, adminEmail: string, adminName: string, adminPasswordHash: string) {
     // We must use a heavily nested Prisma create or an interactive transaction
     // to ensure BOTH the tenant and its initial admin are created together.

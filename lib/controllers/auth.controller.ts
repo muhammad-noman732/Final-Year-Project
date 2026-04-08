@@ -41,7 +41,7 @@ export class AuthController {
     return response
   }
 
-  // ─── POST /api/auth/logout ──────────────────────────────────
+  // POST /api/auth/logout 
 
   async logout() {
     const user = await getAuthUser()
@@ -58,7 +58,7 @@ export class AuthController {
     return response
   }
 
-  // ─── POST /api/auth/changepassword ──────────────────────────
+  // POST /api/auth/changepassword 
 
   async changePassword(req: NextRequest) {
     const authUser = await getAuthUser()
@@ -81,7 +81,7 @@ export class AuthController {
     return response
   }
 
-  // ─── GET /api/auth/me ───────────────────────────────────────
+  // GET /api/auth/me 
 
   async me() {
     const user = await getAuthUser()

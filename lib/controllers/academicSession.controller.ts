@@ -4,7 +4,6 @@ import { getTenantContext, requireRole } from "@/lib/auth"
 import type { AcademicSessionService } from "@/lib/services/academicSession.service"
 import {
   createSessionSchema,
-  setCurrentSessionSchema,
   listSessionsQuerySchema,
 } from "@/lib/validators/session.validators"
 
@@ -38,11 +37,9 @@ export class AcademicSessionController {
     return successResponse(result, 201)
   }
 
-  async setCurrentSession(req: NextRequest, id: string) {
+  async setCurrentSession(_req: NextRequest, id: string) {
     const { tenantId, userId } = await getTenantContext()
     await requireRole("ADMIN")
-    const body = await req.json()
-    setCurrentSessionSchema.parse(body)
 
     const result = await this.sessionService.makeCurrent(tenantId, userId, id)
     return successResponse(result)

@@ -8,6 +8,7 @@ import type {
 } from "@/lib/validators/session.validators"
 import type { PaginatedResult } from "@/types/server/admin.types"
 import { getPaginationParams, buildPaginationMeta } from "@/lib/utils/paginate"
+import { logger } from "@/lib/logger"
 
 export class AcademicSessionService {
   constructor(
@@ -80,6 +81,8 @@ export class AcademicSessionService {
       newData: { name: session.name, startYear: session.startYear, isCurrent: session.isCurrent },
     })
 
+    logger.info({ tenantId, sessionId: session.id }, "Academic session created successfully")
+
     return session
   }
 
@@ -105,6 +108,8 @@ export class AcademicSessionService {
       entityId: updated.id,
       newData: { name: updated.name, isCurrent: true },
     })
+
+    logger.info({ tenantId, sessionId: updated.id }, "Academic session set as current")
 
     return updated
   }

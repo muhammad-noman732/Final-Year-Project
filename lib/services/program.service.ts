@@ -10,6 +10,7 @@ import type {
 } from "@/lib/validators/program.validators"
 import type { PaginatedResult } from "@/types/server/admin.types"
 import { getPaginationParams, buildPaginationMeta } from "@/lib/utils/paginate"
+import { logger } from "@/lib/logger"
 
 export class ProgramService {
   constructor(
@@ -104,6 +105,8 @@ export class ProgramService {
       newData: { name: program.name, code: program.code, departmentId: program.departmentId },
     })
 
+    logger.info({ tenantId, programId: program.id }, "Program created successfully")
+
     return program
   }
 
@@ -143,6 +146,8 @@ export class ProgramService {
         totalSemesters: updated.totalSemesters,
       },
     })
+
+    logger.info({ tenantId, programId: updated.id }, "Program updated successfully")
 
     return updated
   }
