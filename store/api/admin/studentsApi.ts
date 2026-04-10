@@ -38,9 +38,9 @@ export const studentsApi = baseApi.injectEndpoints({
       providesTags: (result) =>
         result?.data?.data
           ? [
-              { type: "Student", id: "LIST" },
-              ...result.data.data.map((s) => ({ type: "Student" as const, id: s.id })),
-            ]
+            { type: "Student", id: "LIST" },
+            ...result.data.data.map((s) => ({ type: "Student" as const, id: s.id })),
+          ]
           : [{ type: "Student", id: "LIST" }],
     }),
 

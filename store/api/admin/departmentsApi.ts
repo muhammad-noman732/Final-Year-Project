@@ -34,9 +34,9 @@ export const departmentsApi = baseApi.injectEndpoints({
       providesTags: (result) =>
         result?.data?.data
           ? [
-              { type: "Department", id: "LIST" },
-              ...result.data.data.map((d) => ({ type: "Department" as const, id: d.id })),
-            ]
+            { type: "Department", id: "LIST" },
+            ...result.data.data.map((d) => ({ type: "Department" as const, id: d.id })),
+          ]
           : [{ type: "Department", id: "LIST" }],
     }),
 

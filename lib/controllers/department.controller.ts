@@ -7,6 +7,12 @@ import {
   updateDepartmentSchema,
   listDepartmentsQuerySchema,
 } from "@/lib/validators/department.validators"
+import {
+  buildCachedFn,
+  deptTag,
+  revalidateDepartments,
+  revalidatePrograms,
+} from "@/lib/cache"
 
 export class DepartmentController {
   constructor(private readonly deptService: DepartmentService) { }
@@ -17,7 +23,20 @@ export class DepartmentController {
     const searchParams = Object.fromEntries(req.nextUrl.searchParams.entries())
     const query = listDepartmentsQuerySchema.parse(searchParams)
 
-    const result = await this.deptService.getDepartments(tenantId, query)
+    const queryKey = JSON.stringify({ tenantId, ...query })
+
+    const getCached = buildCachedFn(
+      async (key: string) => {
+        const parsed = JSON.parse(key)
+        const { tenantId: tid, ...q } = parsed
+        return this.deptService.getDepartments(tid, q)
+      },
+      ["departments", queryKey],
+      [deptTag(tenantId)],
+      120,
+    )
+
+    const result = await getCached(queryKey)
     return successResponse(result)
   }
 
@@ -35,6 +54,11 @@ export class DepartmentController {
     const data = createDepartmentSchema.parse(body)
 
     const result = await this.deptService.createDepartment(tenantId, userId, data)
+
+    // Bust server cache so next GET returns fresh data
+    revalidateDepartments(tenantId)
+    revalidatePrograms(tenantId) // programs reference departments
+
     return successResponse(result, 201)
   }
 
@@ -45,6 +69,10 @@ export class DepartmentController {
     const data = updateDepartmentSchema.parse(body)
 
     const result = await this.deptService.updateDepartment(tenantId, userId, id, data)
+
+    revalidateDepartments(tenantId)
+    revalidatePrograms(tenantId)
+
     return successResponse(result)
   }
 }

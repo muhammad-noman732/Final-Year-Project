@@ -32,8 +32,8 @@ const toListQueryParams = (query?: ListUsersQueryParams): Record<string, string>
 
 export const usersApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
- 
-   getUsers: builder.query<GetUsersApiResponse, ListUsersQueryParams | undefined>({
+
+    getUsers: builder.query<GetUsersApiResponse, ListUsersQueryParams | undefined>({
       query: (query) => ({
         url: "/admin/users",
         params: toListQueryParams(query),
@@ -41,9 +41,9 @@ export const usersApi = baseApi.injectEndpoints({
       providesTags: (result) =>
         result?.data?.data
           ? [
-              { type: "User", id: "LIST" },
-              ...result.data.data.map((user) => ({ type: "User" as const, id: user.id })),
-            ]
+            { type: "User", id: "LIST" },
+            ...result.data.data.map((user) => ({ type: "User" as const, id: user.id })),
+          ]
           : [{ type: "User", id: "LIST" }],
     }),
     getUser: builder.query<GetUserApiResponse, string>({
@@ -59,32 +59,6 @@ export const usersApi = baseApi.injectEndpoints({
         method: "POST",
         body,
       }),
-      async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
-        try {
-          const { data } = await queryFulfilled
-          const createdUser = data.data
-
-          if (!createdUser) return
-
-          dispatch(
-            usersApi.util.updateQueryData("getUsers", undefined, (draft) => {
-              if (!draft.data?.data) return
-
-              draft.data.data.unshift(createdUser)
-
-              if (draft.data.meta) {
-                draft.data.meta.total += 1
-                draft.data.meta.totalPages = Math.max(
-                  1,
-                  Math.ceil(draft.data.meta.total / draft.data.meta.limit)
-                )
-              }
-            })
-          )
-        } catch {
-          // No-op: invalidation below ensures cache consistency.
-        }
-      },
       invalidatesTags: [{ type: "User", id: "LIST" }],
     }),
 

@@ -47,6 +47,7 @@ export const programsApi = baseApi.injectEndpoints({
         method: "POST",
         body,
       }),
+      // Pure invalidation — server cache makes the refetch fast.
       invalidatesTags: [{ type: "Program", id: "LIST" }],
     }),
   }),

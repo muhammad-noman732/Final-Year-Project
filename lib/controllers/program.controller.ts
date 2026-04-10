@@ -7,6 +7,11 @@ import {
   updateProgramSchema,
   listProgramsQuerySchema,
 } from "@/lib/validators/program.validators"
+import {
+  buildCachedFn,
+  programTag,
+  revalidatePrograms,
+} from "@/lib/cache"
 
 export class ProgramController {
   constructor(private readonly programService: ProgramService) { }
@@ -17,7 +22,20 @@ export class ProgramController {
     const searchParams = Object.fromEntries(req.nextUrl.searchParams.entries())
     const query = listProgramsQuerySchema.parse(searchParams)
 
-    const result = await this.programService.getPrograms(tenantId, query)
+    const queryKey = JSON.stringify({ tenantId, ...query })
+
+    const getCached = buildCachedFn(
+      async (key: string) => {
+        const parsed = JSON.parse(key)
+        const { tenantId: tid, ...q } = parsed
+        return this.programService.getPrograms(tid, q)
+      },
+      ["programs", queryKey],
+      [programTag(tenantId)],
+      120,
+    )
+
+    const result = await getCached(queryKey)
     return successResponse(result)
   }
 
@@ -27,10 +45,20 @@ export class ProgramController {
     const searchParams = Object.fromEntries(req.nextUrl.searchParams.entries())
     const query = listProgramsQuerySchema.parse(searchParams)
 
-    const result = await this.programService.getPrograms(tenantId, {
-      ...query,
-      departmentId,
-    })
+    const queryKey = JSON.stringify({ tenantId, ...query, departmentId })
+
+    const getCached = buildCachedFn(
+      async (key: string) => {
+        const parsed = JSON.parse(key)
+        const { tenantId: tid, ...q } = parsed
+        return this.programService.getPrograms(tid, q)
+      },
+      ["programs-by-dept", queryKey],
+      [programTag(tenantId)],
+      120,
+    )
+
+    const result = await getCached(queryKey)
     return successResponse(result)
   }
 
@@ -41,6 +69,9 @@ export class ProgramController {
     const data = createProgramSchema.parse(body)
 
     const result = await this.programService.createProgram(tenantId, userId, data)
+
+    revalidatePrograms(tenantId)
+
     return successResponse(result, 201)
   }
 
@@ -51,6 +82,9 @@ export class ProgramController {
     const data = updateProgramSchema.parse(body)
 
     const result = await this.programService.updateProgram(tenantId, userId, id, data)
+
+    revalidatePrograms(tenantId)
+
     return successResponse(result)
   }
 }

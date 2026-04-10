@@ -7,6 +7,11 @@ import {
   updateStudentSchema,
   listStudentsQuerySchema,
 } from "@/lib/validators/admin.validators"
+import {
+  buildCachedFn,
+  studentTag,
+  revalidateStudents,
+} from "@/lib/cache"
 
 export class StudentController {
   constructor(private readonly studentService: StudentService) { }
@@ -18,7 +23,20 @@ export class StudentController {
     const searchParams = Object.fromEntries(req.nextUrl.searchParams.entries())
     const query = listStudentsQuerySchema.parse(searchParams)
 
-    const result = await this.studentService.getStudents(tenantId, query)
+    const queryKey = JSON.stringify({ tenantId, ...query })
+
+    const getCached = buildCachedFn(
+      async (key: string) => {
+        const parsed = JSON.parse(key)
+        const { tenantId: tid, ...q } = parsed
+        return this.studentService.getStudents(tid, q)
+      },
+      ["students", queryKey],
+      [studentTag(tenantId)],
+      120,
+    )
+
+    const result = await getCached(queryKey)
     return successResponse(result)
   }
 
@@ -39,6 +57,9 @@ export class StudentController {
     const data = createStudentSchema.parse(body)
 
     const result = await this.studentService.createStudent(tenantId, userId, data)
+
+    revalidateStudents(tenantId)
+
     return successResponse(result, 201)
   }
 
@@ -50,6 +71,9 @@ export class StudentController {
     const data = updateStudentSchema.parse(body)
 
     const result = await this.studentService.updateStudent(tenantId, userId, id, data)
+
+    revalidateStudents(tenantId)
+
     return successResponse(result)
   }
 }
