@@ -1,0 +1,59 @@
+import { baseApi } from "@/store/api/baseApi"
+import type {
+  CreateProgramPayload,
+  GetProgramApiResponse,
+  GetProgramsApiResponse,
+  ListProgramsQueryParams,
+} from "@/types/client/admin.api.types"
+
+const toQueryParams = (query?: ListProgramsQueryParams): Record<string, string> => {
+  if (!query) return {}
+  const params: Record<string, string> = {}
+  if (query.page !== undefined) params.page = String(query.page)
+  if (query.limit !== undefined) params.limit = String(query.limit)
+  if (query.search) params.search = query.search
+  if (query.departmentId) params.departmentId = query.departmentId
+  if (query.isActive !== undefined) params.isActive = String(query.isActive)
+  if (query.degreeType) params.degreeType = query.degreeType
+  if (query.sortBy) params.sortBy = query.sortBy
+  if (query.sortDir) params.sortDir = query.sortDir
+  return params
+}
+
+export const programsApi = baseApi.injectEndpoints({
+  endpoints: (builder) => ({
+    getPrograms: builder.query<GetProgramsApiResponse, ListProgramsQueryParams | undefined>({
+      query: (query) => ({
+        url: "/admin/programs",
+        params: toQueryParams(query),
+      }),
+      providesTags: (result) =>
+        result?.data?.data
+          ? [
+              { type: "Program", id: "LIST" },
+              ...result.data.data.map((p) => ({ type: "Program" as const, id: p.id })),
+            ]
+          : [{ type: "Program", id: "LIST" }],
+    }),
+
+    getProgram: builder.query<GetProgramApiResponse, string>({
+      query: (id) => ({ url: `/admin/programs/${id}` }),
+      providesTags: (_r, _e, id) => [{ type: "Program", id }],
+    }),
+
+    createProgram: builder.mutation<GetProgramApiResponse, CreateProgramPayload>({
+      query: (body) => ({
+        url: "/admin/programs",
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: [{ type: "Program", id: "LIST" }],
+    }),
+  }),
+})
+
+export const {
+  useGetProgramsQuery,
+  useGetProgramQuery,
+  useCreateProgramMutation,
+} = programsApi

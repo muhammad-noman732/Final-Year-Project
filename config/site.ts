@@ -20,7 +20,11 @@ export const navItems = {
     ],
     admin: [
         { label: "Dashboard", href: "/admin", icon: "LayoutDashboard" },
+        { label: "Users", href: "/admin/users", icon: "UserCog" },
         { label: "Students", href: "/admin/students", icon: "Users" },
+        { label: "Departments", href: "/admin/departments", icon: "Building" },
+        { label: "Programs", href: "/admin/programs", icon: "GraduationCap" },
+        { label: "Sessions", href: "/admin/sessions", icon: "Calendar" },
         { label: "Fee Management", href: "/admin/fees", icon: "Banknote" },
         { label: "Payments", href: "/admin/payments", icon: "Receipt" },
         { label: "Reports", href: "/admin/reports", icon: "FileBarChart" },

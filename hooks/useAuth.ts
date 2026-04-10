@@ -1,9 +1,3 @@
-// ═══════════════════════════════════════════════════════════════
-//  useAuth — Client-side hook for authentication state
-//
-//  Fetches current user from /api/auth/me on mount.
-//  Provides: user data, loading state, logout function.
-// ═══════════════════════════════════════════════════════════════
 
 "use client"
 

@@ -14,6 +14,7 @@ export const metadata: Metadata = {
 };
 
 import { StoreProvider } from "@/store/provider";
+import "@/bones/registry";
 
 export default function RootLayout({
   children,

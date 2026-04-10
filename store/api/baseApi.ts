@@ -4,13 +4,18 @@ import { baseQueryWithReauth } from "./baseQuery"
 export const baseApi = createApi({
   reducerPath: "api",
   baseQuery: baseQueryWithReauth,
+  keepUnusedDataFor: 600,
+  refetchOnMountOrArgChange: false,
+  refetchOnFocus: false,
+  refetchOnReconnect: false,
 
   tagTypes: [
     "Tenant",
     "User",
     "Student",
     "Department",
-    "Program"
+    "Program",
+    "Session"
   ],
 
   endpoints: () => ({}),

@@ -175,9 +175,7 @@ export const usersApi = baseApi.injectEndpoints({
 
 export const {
   useGetUsersQuery,
-  useLazyGetUsersQuery,
   useGetUserQuery,
-  useLazyGetUserQuery,
   useCreateUserMutation,
   useUpdateUserMutation,
   useDeactivateUserMutation,
