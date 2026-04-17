@@ -33,7 +33,7 @@ export class StudentController {
       },
       ["students", queryKey],
       [studentTag(tenantId)],
-      120,
+      60,
     )
 
     const result = await getCached(queryKey)

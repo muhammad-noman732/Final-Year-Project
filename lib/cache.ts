@@ -24,6 +24,10 @@ export function userTag(tenantId: string) {
   return `users-${tenantId}`
 }
 
+export function feeStructureTag(tenantId: string) {
+  return `fee-structures-${tenantId}`
+}
+
 // Cache builder
 // Wraps unstable_cache with tenant-scoped tags and a default TTL.
 
@@ -59,4 +63,8 @@ export function revalidateStudents(tenantId: string) {
 
 export function revalidateUsers(tenantId: string) {
   revalidateTag(userTag(tenantId), "max")
+}
+
+export function revalidateFeeStructures(tenantId: string) {
+  revalidateTag(feeStructureTag(tenantId), "max")
 }

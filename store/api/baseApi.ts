@@ -15,7 +15,8 @@ export const baseApi = createApi({
     "Student",
     "Department",
     "Program",
-    "Session"
+    "Session",
+    "FeeStructure",
   ],
 
   endpoints: () => ({}),
