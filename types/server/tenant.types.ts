@@ -12,3 +12,9 @@ export interface OnboardTenantInput {
   adminName: string
   adminEmail: string
 }
+
+export interface OnboardTenantResponse {
+  tenantId: string
+  slug: string
+  adminEmail: string
+}

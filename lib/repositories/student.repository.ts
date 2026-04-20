@@ -53,6 +53,20 @@ export class StudentRepository {
     })
   }
 
+  /**
+   * Looks up the Student record that belongs to the authenticated user.
+   * Used by the student portal — guarantees tenant isolation via userId.
+   */
+  async findByUserId(
+    tenantId: string,
+    userId: string,
+  ): Promise<StudentRow | null> {
+    return this.db.student.findFirst({
+      where: { tenantId, userId },
+      select: STUDENT_SELECT,
+    })
+  }
+
   async findMany(params: {
     where: Prisma.StudentWhereInput
     orderBy: Prisma.StudentOrderByWithRelationInput[]
@@ -74,9 +88,6 @@ export class StudentRepository {
 
   /**
    * Creates User + Student atomically.
-   * Rule 12: Every multi-table write uses $transaction.
-   * Both records must succeed or both must fail — never create a user
-   * without a student record or vice versa.
    */
   async createWithUser(params: {
     userData: Prisma.UserUncheckedCreateInput

@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { useGetUsersQuery } from "@/store/api/admin/usersApi"
-import type { ListUsersQueryParams } from "@/types/client/user.api.types"
+import type { ListUsersQueryParams } from "@/types/client/store/user.store.types"
 
 type RoleFilter = "all" | "VC" | "HOD"
 

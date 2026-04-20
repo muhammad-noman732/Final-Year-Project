@@ -1,15 +1,12 @@
 import { baseApi } from "@/store/api/baseApi"
+import type { ApiResponse } from "@/types/server/shared.types"
 import type {
   AdminUser,
   CreateAdminUserPayload,
-  CreateUserApiResponse,
-  DeactivateUserApiResponse,
-  GetUserApiResponse,
-  GetUsersApiResponse,
   ListUsersQueryParams,
   UpdateAdminUserPayload,
-  UpdateUserApiResponse,
-} from "@/types/client/user.api.types"
+  PaginatedAdminUsers,
+} from "@/types/client/store/user.store.types"
 
 interface UpdateUserArg {
   id: string
@@ -33,7 +30,7 @@ const toListQueryParams = (query?: ListUsersQueryParams): Record<string, string>
 export const usersApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
 
-    getUsers: builder.query<GetUsersApiResponse, ListUsersQueryParams | undefined>({
+    getUsers: builder.query<ApiResponse<PaginatedAdminUsers>, ListUsersQueryParams | undefined>({
       query: (query) => ({
         url: "/admin/users",
         params: toListQueryParams(query),
@@ -46,14 +43,14 @@ export const usersApi = baseApi.injectEndpoints({
           ]
           : [{ type: "User", id: "LIST" }],
     }),
-    getUser: builder.query<GetUserApiResponse, string>({
+    getUser: builder.query<ApiResponse<AdminUser>, string>({
       query: (id) => ({
         url: `/admin/users/${id}`,
       }),
       providesTags: (_result, _error, id) => [{ type: "User", id }],
     }),
 
-    createUser: builder.mutation<CreateUserApiResponse, CreateAdminUserPayload>({
+    createUser: builder.mutation<ApiResponse<AdminUser>, CreateAdminUserPayload>({
       query: (body) => ({
         url: "/admin/users",
         method: "POST",
@@ -62,7 +59,7 @@ export const usersApi = baseApi.injectEndpoints({
       invalidatesTags: [{ type: "User", id: "LIST" }],
     }),
 
-    updateUser: builder.mutation<UpdateUserApiResponse, UpdateUserArg>({
+    updateUser: builder.mutation<ApiResponse<AdminUser>, UpdateUserArg>({
       query: ({ id, body }) => ({
         url: `/admin/users/${id}`,
         method: "PATCH",
@@ -107,7 +104,7 @@ export const usersApi = baseApi.injectEndpoints({
       ],
     }),
 
-    deactivateUser: builder.mutation<DeactivateUserApiResponse, string>({
+    deactivateUser: builder.mutation<ApiResponse<AdminUser>, string>({
       query: (id) => ({
         url: `/admin/users/${id}`,
         method: "DELETE",

@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
 import { jwtVerify } from "jose"
-import { ROLE_ROUTES } from "@/types/shared"
+import { ROLE_ROUTES } from "@/types/server/shared.types"
 import { handleCorsPreflight, applyCorsHeaders } from "@/lib/proxies/cors.proxy"
 import { applySecurityHeaders } from "@/lib/proxies/security-headers.proxy"
 import {

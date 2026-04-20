@@ -1,6 +1,6 @@
 
 import { SignJWT, jwtVerify } from "jose"
-import type { JWTPayload } from "@/types/auth"
+import type { JWTPayload } from "@/types/server/auth.types"
 import { UnauthorizedError } from "@/lib/utils/AppError"
 
 // Lazy getter so this module is safe to import in Edge middleware

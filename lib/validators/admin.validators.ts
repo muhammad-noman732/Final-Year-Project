@@ -172,3 +172,10 @@ export const listFeeStructuresQuerySchema = paginationQuerySchema.extend({
 export type CreateFeeStructureInput = z.infer<typeof createFeeStructureSchema>
 export type UpdateFeeStructureInput = z.infer<typeof updateFeeStructureSchema>
 export type ListFeeStructuresQuery = z.infer<typeof listFeeStructuresQuerySchema>
+
+export type CreateUserPayload = z.infer<typeof createUserSchema>
+export type UpdateUserPayload = z.infer<typeof updateUserSchema>
+export type CreateStudentPayload = z.infer<typeof createStudentSchema>
+export type UpdateStudentPayload = z.infer<typeof updateStudentSchema>
+export type CreateFeeStructurePayload = z.infer<typeof createFeeStructureSchema>
+export type UpdateFeeStructurePayload = z.infer<typeof updateFeeStructureSchema>

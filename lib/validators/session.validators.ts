@@ -28,3 +28,6 @@ export const listSessionsQuerySchema = paginationQuerySchema.extend({
 
 export type CreateSessionInput = z.infer<typeof createSessionSchema>
 export type ListSessionsQuery = z.infer<typeof listSessionsQuerySchema>
+
+export type CreateSessionPayload = z.infer<typeof createSessionSchema>
+export type UpdateSessionPayload = z.infer<typeof setCurrentSessionSchema>

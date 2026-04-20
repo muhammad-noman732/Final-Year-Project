@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Plus, AlertTriangle, Mail, Download, Eye, Pencil, Trash2, ChevronLeft, ChevronRight } from "lucide-react";
+import { Plus, AlertTriangle, Mail, Download, Eye, Pencil, Trash2, ChevronLeft, ChevronRight, UserPlus, Loader2 } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -16,6 +16,7 @@ import { Skeleton } from "boneyard-js/react";
 
 import { useGetFeeStructures } from "@/hooks/admin/useGetFeeStructures";
 import { useAddFeeStructure } from "@/hooks/admin/useAddFeeStructure";
+import { useAssignFee } from "@/hooks/admin/useAssignFee";
 
 const defaulters = [
     { id: "1", studentName: "Zain Abbas", department: "Mathematics", semester: "6th", amountDue: 52000, deadline: "Feb 15, 2026", daysOverdue: 11 },
@@ -46,6 +47,16 @@ export default function FeesPage() {
     const watchedProgramId = watch("programId");
     const watchedSemester = watch("semester");
     const watchedSessionYear = watch("sessionYear");
+
+    // --- Assignment ---
+    const { assignAll, isAssigning } = useAssignFee();
+    const [assigningId, setAssigningId] = useState<string | null>(null);
+
+    const handleAssign = async (feeStructureId: string) => {
+        setAssigningId(feeStructureId);
+        await assignAll(feeStructureId);
+        setAssigningId(null);
+    };
 
     return (
         <div className="space-y-6">
@@ -110,6 +121,18 @@ export default function FeesPage() {
                                                         <div className="flex gap-1">
                                                             <Button size="icon" variant="ghost" className="h-8 w-8 text-muted-foreground hover:text-sky-400"><Eye className="w-3.5 h-3.5" /></Button>
                                                             <Button size="icon" variant="ghost" className="h-8 w-8 text-muted-foreground hover:text-gold-400"><Pencil className="w-3.5 h-3.5" /></Button>
+                                                            <Button
+                                                                size="icon"
+                                                                variant="ghost"
+                                                                title="Assign to Students"
+                                                                disabled={isAssigning && assigningId === fs.id}
+                                                                onClick={() => handleAssign(fs.id)}
+                                                                className="h-8 w-8 text-muted-foreground hover:text-emerald-400"
+                                                            >
+                                                                {isAssigning && assigningId === fs.id
+                                                                    ? <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                                                                    : <UserPlus className="w-3.5 h-3.5" />}
+                                                            </Button>
                                                             <Button size="icon" variant="ghost" className="h-8 w-8 text-muted-foreground hover:text-rose-400"><Trash2 className="w-3.5 h-3.5" /></Button>
                                                         </div>
                                                     </TableCell>

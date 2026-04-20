@@ -1,6 +1,7 @@
 
 import { headers } from "next/headers"
-import type { AuthUser, Role } from "@/types/auth"
+import type { AuthUser } from "@/types/server/auth.types"
+import type { Role } from "@/types/server/shared.types"
 import { UnauthorizedError, ForbiddenError } from "@/lib/utils/AppError"
 
 

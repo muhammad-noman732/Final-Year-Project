@@ -1,10 +1,11 @@
 import { baseApi } from "@/store/api/baseApi"
+import type { ApiResponse } from "@/types/server/shared.types"
 import type {
   CreateProgramPayload,
-  GetProgramApiResponse,
-  GetProgramsApiResponse,
   ListProgramsQueryParams,
-} from "@/types/client/admin.api.types"
+  Program,
+  PaginatedPrograms,
+} from "@/types/client/store/program.store.types"
 
 const toQueryParams = (query?: ListProgramsQueryParams): Record<string, string> => {
   if (!query) return {}
@@ -22,7 +23,7 @@ const toQueryParams = (query?: ListProgramsQueryParams): Record<string, string> 
 
 export const programsApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getPrograms: builder.query<GetProgramsApiResponse, ListProgramsQueryParams | undefined>({
+    getPrograms: builder.query<ApiResponse<PaginatedPrograms>, ListProgramsQueryParams | undefined>({
       query: (query) => ({
         url: "/admin/programs",
         params: toQueryParams(query),
@@ -36,12 +37,12 @@ export const programsApi = baseApi.injectEndpoints({
           : [{ type: "Program", id: "LIST" }],
     }),
 
-    getProgram: builder.query<GetProgramApiResponse, string>({
+    getProgram: builder.query<ApiResponse<Program>, string>({
       query: (id) => ({ url: `/admin/programs/${id}` }),
       providesTags: (_r, _e, id) => [{ type: "Program", id }],
     }),
 
-    createProgram: builder.mutation<GetProgramApiResponse, CreateProgramPayload>({
+    createProgram: builder.mutation<ApiResponse<Program>, CreateProgramPayload>({
       query: (body) => ({
         url: "/admin/programs",
         method: "POST",

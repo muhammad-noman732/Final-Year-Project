@@ -4,7 +4,7 @@ import { useGetDepartmentsQuery } from "@/store/api/admin/departmentsApi"
 import { useGetProgramsQuery } from "@/store/api/admin/programsApi"
 import { useGetSessionsQuery } from "@/store/api/admin/sessionsApi"
 import { useDebounce } from "@/hooks/useDebounce"
-import type { ListStudentsQueryParams } from "@/types/client/admin.api.types"
+import type { ListStudentsQueryParams } from "@/types/client/store/student.store.types"
 
 export function useGetStudents() {
   const [searchQuery, setSearchQuery] = useState("")

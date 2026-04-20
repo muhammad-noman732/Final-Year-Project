@@ -1,14 +1,12 @@
 import { baseApi } from "@/store/api/baseApi"
+import type { ApiResponse } from "@/types/server/shared.types"
 import type {
   CreateFeeStructurePayload,
-  GetFeeStructuresApiResponse,
-  GetFeeStructureApiResponse,
   ListFeeStructuresQueryParams,
   UpdateFeeStructurePayload,
-  CreateFeeStructureApiResponse,
-  UpdateFeeStructureApiResponse,
   FeeStructure,
-} from "@/types/client/admin.api.types"
+  PaginatedFeeStructures,
+} from "@/types/client/store/fee.store.types"
 
 interface UpdateFeeStructureArg {
   id: string
@@ -32,7 +30,7 @@ const toListQueryParams = (query?: ListFeeStructuresQueryParams): Record<string,
 
 export const feeStructuresApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getFeeStructures: builder.query<GetFeeStructuresApiResponse, ListFeeStructuresQueryParams | undefined>({
+    getFeeStructures: builder.query<ApiResponse<PaginatedFeeStructures>, ListFeeStructuresQueryParams | undefined>({
       query: (query) => ({
         url: "/admin/fees/structures",
         params: toListQueryParams(query),
@@ -46,14 +44,14 @@ export const feeStructuresApi = baseApi.injectEndpoints({
           : [{ type: "FeeStructure", id: "LIST" }],
     }),
 
-    getFeeStructure: builder.query<GetFeeStructureApiResponse, string>({
+    getFeeStructure: builder.query<ApiResponse<FeeStructure>, string>({
       query: (id) => ({
         url: `/admin/fees/structures/${id}`,
       }),
       providesTags: (_result, _error, id) => [{ type: "FeeStructure", id }],
     }),
 
-    createFeeStructure: builder.mutation<CreateFeeStructureApiResponse, CreateFeeStructurePayload>({
+    createFeeStructure: builder.mutation<ApiResponse<FeeStructure>, CreateFeeStructurePayload>({
       query: (body) => ({
         url: "/admin/fees/structures",
         method: "POST",
@@ -62,7 +60,7 @@ export const feeStructuresApi = baseApi.injectEndpoints({
       invalidatesTags: [{ type: "FeeStructure", id: "LIST" }],
     }),
 
-    updateFeeStructure: builder.mutation<UpdateFeeStructureApiResponse, UpdateFeeStructureArg>({
+    updateFeeStructure: builder.mutation<ApiResponse<FeeStructure>, UpdateFeeStructureArg>({
       query: ({ id, body }) => ({
         url: `/admin/fees/structures/${id}`,
         method: "PATCH",

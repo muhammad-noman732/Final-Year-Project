@@ -31,3 +31,6 @@ export const listDepartmentsQuerySchema = paginationQuerySchema.extend({
 export type CreateDepartmentInput = z.infer<typeof createDepartmentSchema>
 export type UpdateDepartmentInput = z.infer<typeof updateDepartmentSchema>
 export type ListDepartmentsQuery = z.infer<typeof listDepartmentsQuerySchema>
+
+export type CreateDepartmentPayload = z.infer<typeof createDepartmentSchema>
+export type UpdateDepartmentPayload = z.infer<typeof updateDepartmentSchema>

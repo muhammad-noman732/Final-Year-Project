@@ -3,7 +3,7 @@ import { useGetFeeStructuresQuery } from "@/store/api/admin/feeStructuresApi"
 import { useGetProgramsQuery } from "@/store/api/admin/programsApi"
 import { useGetSessionsQuery } from "@/store/api/admin/sessionsApi"
 import { useGetDepartmentsQuery } from "@/store/api/admin/departmentsApi"
-import type { ListFeeStructuresQueryParams } from "@/types/client/admin.api.types"
+import type { ListFeeStructuresQueryParams } from "@/types/client/store/fee.store.types"
 
 export function useGetFeeStructures() {
   const [selectedDept, setSelectedDept] = useState("all")

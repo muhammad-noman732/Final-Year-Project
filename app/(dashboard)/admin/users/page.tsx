@@ -13,7 +13,7 @@ import { Skeleton } from "boneyard-js/react";
 import { useGetUsers } from "@/hooks/admin/useGetUsers";
 import { useAddUser } from "@/hooks/admin/useAddUser";
 import { useDeleteUser } from "@/hooks/admin/useDeleteUser";
-import type { AdminUserRole } from "@/types/client/user.api.types";
+import type { AdminUserRole } from "@/types/client/store/user.store.types";
 
 export default function UsersPage() {
     const {

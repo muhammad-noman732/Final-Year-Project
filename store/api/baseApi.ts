@@ -13,6 +13,7 @@ export const baseApi = createApi({
     "Tenant",
     "User",
     "Student",
+    "StudentFeeProfile",
     "Department",
     "Program",
     "Session",

@@ -10,6 +10,7 @@ import { ProgramRepository } from "@/lib/repositories/program.repository"
 import { AcademicSessionRepository } from "@/lib/repositories/academicSession.repository"
 import { StudentRepository } from "@/lib/repositories/student.repository"
 import { FeeStructureRepository } from "@/lib/repositories/feeStructure.repository"
+import { FeeAssignmentRepository } from "@/lib/repositories/feeAssignment.repository"
 
 // Services
 import { AuditService } from "@/lib/services/audit.service"
@@ -22,6 +23,8 @@ import { AcademicSessionService } from "@/lib/services/academicSession.service"
 import { UserService } from "@/lib/services/user.service"
 import { StudentService } from "@/lib/services/student.service"
 import { FeeStructureService } from "@/lib/services/feeStructure.service"
+import { StudentFeeService } from "@/lib/services/studentFee.service"
+import { FeeAssignmentService } from "@/lib/services/feeAssignment.service"
 
 // Controllers
 import { AuthController } from "@/lib/controllers/auth.controller"
@@ -32,6 +35,8 @@ import { AcademicSessionController } from "@/lib/controllers/academicSession.con
 import { UserController } from "@/lib/controllers/user.controller"
 import { StudentController } from "@/lib/controllers/student.controller"
 import { FeeStructureController } from "@/lib/controllers/feeStructure.controller"
+import { StudentFeeController } from "@/lib/controllers/studentFee.controller"
+import { FeeAssignmentController } from "@/lib/controllers/feeAssignment.controller"
 
 // Repositories 
 const userRepo = new UserRepository(prisma)
@@ -42,6 +47,7 @@ const programRepo = new ProgramRepository(prisma)
 const sessionRepo = new AcademicSessionRepository(prisma)
 const studentRepo = new StudentRepository(prisma)
 const feeStructureRepo = new FeeStructureRepository(prisma)
+const feeAssignmentRepo = new FeeAssignmentRepository(prisma)
 
 // Services
 const auditService = new AuditService(auditRepo)
@@ -54,6 +60,8 @@ const sessionService = new AcademicSessionService(sessionRepo, auditService)
 const userService = new UserService(userRepo, deptRepo, tenantRepo, emailService, auditService)
 const studentService = new StudentService(studentRepo, deptRepo, programRepo, sessionRepo, tenantRepo, emailService, auditService)
 const feeStructureService = new FeeStructureService(feeStructureRepo, programRepo, auditService)
+const studentFeeService = new StudentFeeService(studentRepo, feeAssignmentRepo)
+const feeAssignmentService = new FeeAssignmentService(studentRepo, feeStructureRepo, feeAssignmentRepo, auditService)
 
 // Controllers
 export const authController = new AuthController(authService)
@@ -64,3 +72,5 @@ export const sessionController = new AcademicSessionController(sessionService)
 export const userController = new UserController(userService)
 export const studentController = new StudentController(studentService)
 export const feeStructureController = new FeeStructureController(feeStructureService)
+export const studentFeeController = new StudentFeeController(studentFeeService)
+export const feeAssignmentController = new FeeAssignmentController(feeAssignmentService)

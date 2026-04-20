@@ -1,10 +1,11 @@
 import { baseApi } from "@/store/api/baseApi"
+import type { ApiResponse } from "@/types/server/shared.types"
 import type {
   CreateSessionPayload,
-  GetSessionApiResponse,
-  GetSessionsApiResponse,
   ListSessionsQueryParams,
-} from "@/types/client/admin.api.types"
+  AcademicSession,
+  PaginatedSessions,
+} from "@/types/client/store/session.store.types"
 
 const toQueryParams = (query?: ListSessionsQueryParams): Record<string, string> => {
   if (!query) return {}
@@ -19,7 +20,7 @@ const toQueryParams = (query?: ListSessionsQueryParams): Record<string, string> 
 
 export const sessionsApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getSessions: builder.query<GetSessionsApiResponse, ListSessionsQueryParams | undefined>({
+    getSessions: builder.query<ApiResponse<PaginatedSessions>, ListSessionsQueryParams | undefined>({
       query: (query) => ({
         url: "/admin/sessions",
         params: toQueryParams(query),
@@ -33,12 +34,12 @@ export const sessionsApi = baseApi.injectEndpoints({
           : [{ type: "Session", id: "LIST" }],
     }),
 
-    getSession: builder.query<GetSessionApiResponse, string>({
+    getSession: builder.query<ApiResponse<AcademicSession>, string>({
       query: (id) => ({ url: `/admin/sessions/${id}` }),
       providesTags: (_r, _e, id) => [{ type: "Session", id }],
     }),
 
-    createSession: builder.mutation<GetSessionApiResponse, CreateSessionPayload>({
+    createSession: builder.mutation<ApiResponse<AcademicSession>, CreateSessionPayload>({
       query: (body) => ({
         url: "/admin/sessions",
         method: "POST",
@@ -48,7 +49,7 @@ export const sessionsApi = baseApi.injectEndpoints({
       invalidatesTags: [{ type: "Session", id: "LIST" }],
     }),
 
-    setCurrentSession: builder.mutation<GetSessionApiResponse, string>({
+    setCurrentSession: builder.mutation<ApiResponse<AcademicSession>, string>({
       query: (id) => ({
         url: `/admin/sessions/${id}/current`,
         method: "PATCH",

@@ -1,11 +1,12 @@
 import { baseApi } from "@/store/api/baseApi"
+import type { ApiResponse } from "@/types/server/shared.types"
 import type {
   CreateStudentPayload,
-  GetStudentApiResponse,
-  GetStudentsApiResponse,
   ListStudentsQueryParams,
   UpdateStudentPayload,
-} from "@/types/client/admin.api.types"
+  Student,
+  PaginatedStudents,
+} from "@/types/client/store/student.store.types"
 
 interface UpdateStudentArg {
   id: string
@@ -30,7 +31,7 @@ const toQueryParams = (query?: ListStudentsQueryParams): Record<string, string> 
 
 export const studentsApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getStudents: builder.query<GetStudentsApiResponse, ListStudentsQueryParams | undefined>({
+    getStudents: builder.query<ApiResponse<PaginatedStudents>, ListStudentsQueryParams | undefined>({
       query: (query) => ({
         url: "/admin/students",
         params: toQueryParams(query),
@@ -44,12 +45,12 @@ export const studentsApi = baseApi.injectEndpoints({
           : [{ type: "Student", id: "LIST" }],
     }),
 
-    getStudent: builder.query<GetStudentApiResponse, string>({
+    getStudent: builder.query<ApiResponse<Student>, string>({
       query: (id) => ({ url: `/admin/students/${id}` }),
       providesTags: (_r, _e, id) => [{ type: "Student", id }],
     }),
 
-    createStudent: builder.mutation<GetStudentApiResponse, CreateStudentPayload>({
+    createStudent: builder.mutation<ApiResponse<Student>, CreateStudentPayload>({
       query: (body) => ({
         url: "/admin/students",
         method: "POST",
@@ -58,7 +59,7 @@ export const studentsApi = baseApi.injectEndpoints({
       invalidatesTags: [{ type: "Student", id: "LIST" }],
     }),
 
-    updateStudent: builder.mutation<GetStudentApiResponse, UpdateStudentArg>({
+    updateStudent: builder.mutation<ApiResponse<Student>, UpdateStudentArg>({
       query: ({ id, body }) => ({
         url: `/admin/students/${id}`,
         method: "PATCH",

@@ -1,11 +1,12 @@
 import { baseApi } from "@/store/api/baseApi"
+import type { ApiResponse } from "@/types/server/shared.types"
 import type {
   CreateDepartmentPayload,
   UpdateDepartmentPayload,
-  GetDepartmentApiResponse,
-  GetDepartmentsApiResponse,
   ListDepartmentsQueryParams,
-} from "@/types/client/admin.api.types"
+  Department,
+  PaginatedDepartments,
+} from "@/types/client/store/department.store.types"
 
 interface UpdateDepartmentArg {
   id: string
@@ -26,7 +27,7 @@ const toQueryParams = (query?: ListDepartmentsQueryParams): Record<string, strin
 
 export const departmentsApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getDepartments: builder.query<GetDepartmentsApiResponse, ListDepartmentsQueryParams | undefined>({
+    getDepartments: builder.query<ApiResponse<PaginatedDepartments>, ListDepartmentsQueryParams | undefined>({
       query: (query) => ({
         url: "/admin/departments",
         params: toQueryParams(query),
@@ -40,12 +41,12 @@ export const departmentsApi = baseApi.injectEndpoints({
           : [{ type: "Department", id: "LIST" }],
     }),
 
-    getDepartment: builder.query<GetDepartmentApiResponse, string>({
+    getDepartment: builder.query<ApiResponse<Department>, string>({
       query: (id) => ({ url: `/admin/departments/${id}` }),
       providesTags: (_r, _e, id) => [{ type: "Department", id }],
     }),
 
-    createDepartment: builder.mutation<GetDepartmentApiResponse, CreateDepartmentPayload>({
+    createDepartment: builder.mutation<ApiResponse<Department>, CreateDepartmentPayload>({
       query: (body) => ({
         url: "/admin/departments",
         method: "POST",
@@ -54,7 +55,7 @@ export const departmentsApi = baseApi.injectEndpoints({
       invalidatesTags: [{ type: "Department", id: "LIST" }],
     }),
 
-    updateDepartment: builder.mutation<GetDepartmentApiResponse, UpdateDepartmentArg>({
+    updateDepartment: builder.mutation<ApiResponse<Department>, UpdateDepartmentArg>({
       query: ({ id, body }) => ({
         url: `/admin/departments/${id}`,
         method: "PATCH",

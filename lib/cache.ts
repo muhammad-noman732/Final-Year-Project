@@ -28,6 +28,14 @@ export function feeStructureTag(tenantId: string) {
   return `fee-structures-${tenantId}`
 }
 
+/**
+ * Per-student fee tag — scoped to both tenant AND user so each student's
+ * cache is invalidated independently when their fee status changes.
+ */
+export function studentFeeTag(tenantId: string, userId: string) {
+  return `student-fee-${tenantId}-${userId}`
+}
+
 // Cache builder
 // Wraps unstable_cache with tenant-scoped tags and a default TTL.
 
@@ -67,4 +75,8 @@ export function revalidateUsers(tenantId: string) {
 
 export function revalidateFeeStructures(tenantId: string) {
   revalidateTag(feeStructureTag(tenantId), "max")
+}
+
+export function revalidateStudentFee(tenantId: string, userId: string) {
+  revalidateTag(studentFeeTag(tenantId, userId), "max")
 }

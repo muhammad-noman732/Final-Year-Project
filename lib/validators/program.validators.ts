@@ -39,3 +39,6 @@ export const listProgramsQuerySchema = paginationQuerySchema.extend({
 export type CreateProgramInput = z.infer<typeof createProgramSchema>
 export type UpdateProgramInput = z.infer<typeof updateProgramSchema>
 export type ListProgramsQuery = z.infer<typeof listProgramsQuerySchema>
+
+export type CreateProgramPayload = z.infer<typeof createProgramSchema>
+export type UpdateProgramPayload = z.infer<typeof updateProgramSchema>

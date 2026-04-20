@@ -13,7 +13,7 @@ import StatusBadge from "@/components/shared/StatusBadge";
 import { Skeleton } from "boneyard-js/react";
 import { useGetProgramsQuery } from "@/store/api/admin/programsApi";
 import { useAddProgram } from "@/hooks/admin/useAddProgram";
-import type { DegreeType } from "@/types/client/admin.api.types";
+import type { DegreeType } from "@/types/client/store/program.store.types";
 
 const DEGREE_TYPES: DegreeType[] = ["BS", "MS", "MCS", "PhD", "BE", "MBA", "BBA"];
 

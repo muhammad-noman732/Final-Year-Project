@@ -3,7 +3,7 @@
 
 import { useState, useEffect, useCallback } from "react"
 import { useRouter } from "next/navigation"
-import type { Role } from "@/types/auth"
+import type { Role } from "@/types/server/shared.types"
 
 interface AuthUser {
   id: string

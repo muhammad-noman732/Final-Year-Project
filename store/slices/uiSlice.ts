@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import type { UiState, ThemeMode } from "@/types/client/store.types"
+import type { UiState, ThemeMode } from "@/types/client/store/app.store.types"
 
 const initialState: UiState = {
   sidebarOpen: true,
