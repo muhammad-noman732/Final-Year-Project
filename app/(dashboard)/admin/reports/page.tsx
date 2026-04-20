@@ -30,7 +30,7 @@ export default function ReportsPage() {
 
     return (
         <div className="space-y-6">
-            <h1 className="text-2xl font-bold text-foreground font-[family-name:var(--font-playfair)]">Reports</h1>
+            <h1 className="text-2xl font-bold text-foreground tracking-tight">Reports</h1>
 
             {/* Report Type Cards */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -46,7 +46,7 @@ export default function ReportsPage() {
                                 <type.icon className={`w-6 h-6 ${type.color}`} />
                             </div>
                             <div>
-                                <h3 className="text-base font-semibold text-foreground font-[family-name:var(--font-playfair)] mb-1">
+                                <h3 className="text-base font-semibold text-foreground tracking-tight mb-1">
                                     {type.title}
                                 </h3>
                                 <p className="text-sm text-muted-foreground">{type.desc}</p>
@@ -59,7 +59,7 @@ export default function ReportsPage() {
             {/* Configuration Panel */}
             {selectedType && (
                 <Card className="glass-card border-0 p-6 animate-count">
-                    <h3 className="text-sm font-semibold text-foreground font-[family-name:var(--font-playfair)] mb-5">
+                    <h3 className="text-sm font-semibold text-foreground tracking-tight mb-5">
                         Configure Report
                     </h3>
                     <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
@@ -129,7 +129,7 @@ export default function ReportsPage() {
             {/* Recent Reports */}
             <Card className="glass-card border-0 overflow-hidden">
                 <div className="px-6 py-4 border-b border-gold-500/5">
-                    <h3 className="text-sm font-semibold text-foreground font-[family-name:var(--font-playfair)]">
+                    <h3 className="text-sm font-semibold text-foreground tracking-tight">
                         Recent Reports
                     </h3>
                 </div>
@@ -150,7 +150,7 @@ export default function ReportsPage() {
                                     <TableCell className="text-sm font-medium">{report.name}</TableCell>
                                     <TableCell className="text-sm text-muted-foreground">{report.generatedOn}</TableCell>
                                     <TableCell>
-                                        <span className="px-2 py-0.5 text-[10px] font-bold uppercase rounded bg-gold-500/10 text-gold-400 border border-gold-500/15">
+                                        <span className="px-2 py-0.5 text-[11px] font-bold uppercase rounded bg-gold-500/10 text-gold-400 border border-gold-500/15">
                                             {report.format}
                                         </span>
                                     </TableCell>

@@ -70,7 +70,7 @@ export default function VCAnalyticsPage() {
     return (
         <div className="space-y-6">
             <div className="flex items-center justify-between">
-                <h1 className="text-2xl font-bold text-foreground font-[family-name:var(--font-playfair)]">
+                <h1 className="text-2xl font-bold text-foreground tracking-tight">
                     Analytics & Insights
                 </h1>
                 <div className="flex gap-2">
@@ -81,7 +81,7 @@ export default function VCAnalyticsPage() {
 
             {/* ═══ CUMULATIVE TIMELINE ═══ */}
             <Card className="glass-card border-0 p-5">
-                <h3 className="text-sm font-semibold text-foreground font-[family-name:var(--font-playfair)] mb-4">
+                <h3 className="text-sm font-semibold text-foreground tracking-tight mb-4">
                     Cumulative Collection Timeline
                 </h3>
                 <ResponsiveContainer width="100%" height={280}>
@@ -104,7 +104,7 @@ export default function VCAnalyticsPage() {
             <div className="grid lg:grid-cols-2 gap-4">
                 {/* Daily Breakdown */}
                 <Card className="glass-card border-0 p-5">
-                    <h3 className="text-sm font-semibold text-foreground font-[family-name:var(--font-playfair)] mb-4">
+                    <h3 className="text-sm font-semibold text-foreground tracking-tight mb-4">
                         Daily Collection — February 2026
                     </h3>
                     <ResponsiveContainer width="100%" height={220}>
@@ -120,7 +120,7 @@ export default function VCAnalyticsPage() {
 
                 {/* Week over Week */}
                 <Card className="glass-card border-0 p-5">
-                    <h3 className="text-sm font-semibold text-foreground font-[family-name:var(--font-playfair)] mb-4">
+                    <h3 className="text-sm font-semibold text-foreground tracking-tight mb-4">
                         Week-over-Week Comparison
                     </h3>
                     <ResponsiveContainer width="100%" height={220}>
@@ -139,7 +139,7 @@ export default function VCAnalyticsPage() {
             <div className="grid lg:grid-cols-2 gap-4">
                 {/* Defaulters by Dept */}
                 <Card className="glass-card border-0 p-5">
-                    <h3 className="text-sm font-semibold text-foreground font-[family-name:var(--font-playfair)] mb-4">
+                    <h3 className="text-sm font-semibold text-foreground tracking-tight mb-4">
                         Defaulters by Department
                     </h3>
                     <ResponsiveContainer width="100%" height={200}>
@@ -155,7 +155,7 @@ export default function VCAnalyticsPage() {
 
                 {/* Days Overdue Distribution */}
                 <Card className="glass-card border-0 p-5">
-                    <h3 className="text-sm font-semibold text-foreground font-[family-name:var(--font-playfair)] mb-4">
+                    <h3 className="text-sm font-semibold text-foreground tracking-tight mb-4">
                         Days Overdue Distribution
                     </h3>
                     <ResponsiveContainer width="100%" height={200}>
@@ -177,7 +177,7 @@ export default function VCAnalyticsPage() {
             {/* ═══ DETAILED DEFAULTERS TABLE ═══ */}
             <Card className="glass-card border-0 overflow-hidden">
                 <div className="px-6 py-4 border-b border-gold-500/5">
-                    <h3 className="text-sm font-semibold text-foreground font-[family-name:var(--font-playfair)]">
+                    <h3 className="text-sm font-semibold text-foreground tracking-tight">
                         Detailed Defaulters List
                     </h3>
                 </div>

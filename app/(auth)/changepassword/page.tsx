@@ -120,14 +120,14 @@ export default function ChangePasswordPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 py-12">
+    <div className="min-h-[100dvh] flex items-center justify-center px-4 py-12">
       <div className="w-full max-w-md">
         {/* Header */}
         <div className="text-center mb-8">
           <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-gold-400 to-gold-700 flex items-center justify-center mx-auto mb-4 shadow-xl shadow-gold-500/20">
             <GraduationCap className="w-8 h-8 text-navy-950" />
           </div>
-          <h1 className="text-2xl font-bold text-foreground font-[family-name:var(--font-playfair)] mb-2">
+          <h1 className="text-2xl font-bold text-foreground tracking-tight mb-2">
             Set Your New Password
           </h1>
           <p className="text-sm text-muted-foreground">

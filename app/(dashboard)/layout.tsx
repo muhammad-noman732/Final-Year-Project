@@ -86,7 +86,7 @@ export default function DashboardLayout({
   const userRole = config.label
 
   return (
-    <div className="min-h-screen flex">
+    <div className="min-h-[100dvh] flex">
       <Sidebar
         items={config.items}
         role={role}
@@ -102,7 +102,7 @@ export default function DashboardLayout({
           onMenuClick={() => setSidebarOpen(true)}
           showLiveIndicator={config.showLive}
         />
-        <main className="flex-1 overflow-y-auto p-4 lg:p-6">{children}</main>
+        <main className="flex-1 overflow-y-auto p-5 lg:p-8 scroll-smooth">{children}</main>
       </div>
     </div>
   )

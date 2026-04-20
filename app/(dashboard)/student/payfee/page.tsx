@@ -3,9 +3,8 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import {
-    Lock, ShieldCheck, AlertCircle, ChevronRight,
-    CreditCard, Building2, Smartphone, BookOpen, Clock,
-    Info, CheckCircle2, ArrowLeft, Loader2,
+    Lock, ShieldCheck, AlertCircle, CreditCard,
+    BookOpen, Clock, Info, CheckCircle2, ArrowLeft, Loader2,
 } from "lucide-react";
 import { formatFullCurrency } from "@/config/constants";
 
@@ -17,8 +16,6 @@ const feeItems = [
     { label: "Registration Fee", amount: 5000 },
 ];
 const total = feeItems.reduce((s, i) => s + i.amount, 0);
-
-type PayMethod = "card" | "jazzcash" | "easypaisa";
 
 /* ─── Card Input Formatter ─── */
 function formatCard(v: string) {
@@ -50,11 +47,11 @@ function CardPreview({ number, name, expiry, flipped }: { number: string; name: 
                     <p className="font-mono text-sm text-gold-300/90 tracking-widest mb-3">{display}</p>
                     <div className="flex justify-between items-end">
                         <div>
-                            <p className="text-[9px] text-slate-500 uppercase tracking-widest mb-0.5">Cardholder</p>
+                            <p className="text-[11px] text-muted-foreground uppercase tracking-widest mb-0.5">Cardholder</p>
                             <p className="text-xs text-slate-300 uppercase">{name || "FULL NAME"}</p>
                         </div>
                         <div>
-                            <p className="text-[9px] text-slate-500 uppercase tracking-widest mb-0.5">Expires</p>
+                            <p className="text-[11px] text-muted-foreground uppercase tracking-widest mb-0.5">Expires</p>
                             <p className="text-xs text-slate-300">{expiry || "MM/YY"}</p>
                         </div>
                     </div>
@@ -89,7 +86,7 @@ function PayInput({
                     }`}
             >
                 <label
-                    className={`block text-[10px] font-semibold uppercase tracking-widest transition-colors duration-200 mb-1 ${focused ? "text-gold-400" : "text-slate-500"
+                    className={`block text-[11px] font-semibold uppercase tracking-widest transition-colors duration-200 mb-1 ${focused ? "text-gold-400" : "text-muted-foreground"
                         }`}
                 >
                     {label}
@@ -103,7 +100,7 @@ function PayInput({
                     placeholder={placeholder}
                     maxLength={maxLen}
                     autoComplete={autoComplete}
-                    className="w-full bg-transparent text-sm text-foreground placeholder:text-slate-600 outline-none font-mono"
+                    className="w-full bg-transparent text-sm text-foreground placeholder:text-muted-foreground/60 outline-none font-mono"
                 />
             </div>
         </div>
@@ -112,35 +109,29 @@ function PayInput({
 
 export default function PayFeePage() {
     const router = useRouter();
-    const [method, setMethod] = useState<PayMethod>("card");
     const [cardNum, setCardNum] = useState("");
     const [expiry, setExpiry] = useState("");
     const [cvc, setCvc] = useState("");
     const [name, setName] = useState("");
     const [cvcFocused, setCvcFocused] = useState(false);
-    const [phone, setPhone] = useState("");
     const [processing, setProcessing] = useState(false);
     const [error, setError] = useState("");
 
     function handlePay() {
         setError("");
-        if (method === "card") {
-            const digitsOnly = cardNum.replace(/\s/g, "");
-            if (digitsOnly.length < 16) { setError("Please enter a valid 16-digit card number."); return; }
-            if (expiry.length < 5) { setError("Please enter a valid expiry date (MM/YY)."); return; }
-            if (cvc.length < 3) { setError("Please enter your 3-digit CVC."); return; }
-            if (!name.trim()) { setError("Please enter the cardholder name."); return; }
-        } else {
-            if (phone.length < 11) { setError("Please enter a valid 11-digit mobile number."); return; }
-        }
+        const digitsOnly = cardNum.replace(/\s/g, "");
+        if (digitsOnly.length < 16) { setError("Please enter a valid 16-digit card number."); return; }
+        if (expiry.length < 5) { setError("Please enter a valid expiry date (MM/YY)."); return; }
+        if (cvc.length < 3) { setError("Please enter your 3-digit CVC."); return; }
+        if (!name.trim()) { setError("Please enter the cardholder name."); return; }
         setProcessing(true);
         setTimeout(() => router.push("/student/paymentsuccess"), 2800);
     }
 
     return (
-        <div className="max-w-5xl mx-auto pb-10">
+        <div className="max-w-5xl mx-auto pb-10 animate-in fade-in duration-500">
             {/* ── Back link ── */}
-            <a href="/student" className="inline-flex items-center gap-1.5 text-slate-500 hover:text-gold-400 text-sm mb-6 transition-colors">
+            <a href="/student" className="inline-flex items-center gap-1.5 text-muted-foreground hover:text-gold-400 text-sm mb-6 transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-gold-500/50">
                 <ArrowLeft className="w-3.5 h-3.5" /> Back to Dashboard
             </a>
 
@@ -150,100 +141,73 @@ export default function PayFeePage() {
                     <div className="rounded-2xl border border-white/[0.06] bg-[#0a0e1a] overflow-hidden shadow-2xl shadow-black/30">
                         {/* Header */}
                         <div className="px-6 pt-6 pb-4 border-b border-white/[0.04]">
-                            <h2 className="text-lg font-bold font-[family-name:var(--font-playfair)] text-foreground">
-                                Payment Details
-                            </h2>
-                            <p className="text-xs text-slate-500 mt-0.5">Secured with 256-bit TLS encryption</p>
+                            <div className="flex items-center gap-3">
+                                <div className="w-10 h-10 rounded-xl bg-[#635BFF]/10 flex items-center justify-center border border-[#635BFF]/20">
+                                    <CreditCard className="w-5 h-5 text-[#635BFF]" />
+                                </div>
+                                <div>
+                                    <h2 className="text-lg font-bold text-foreground tracking-tight">
+                                        Pay with Stripe
+                                    </h2>
+                                    <p className="text-xs text-muted-foreground">Secured with 256-bit TLS encryption</p>
+                                </div>
+                            </div>
                         </div>
 
                         <div className="p-6">
-                            {/* ── Method Tabs ── */}
-                            <div className="grid grid-cols-3 gap-2 mb-6">
-                                {[
-                                    { id: "card" as PayMethod, icon: CreditCard, label: "Card" },
-                                    { id: "jazzcash" as PayMethod, icon: Smartphone, label: "JazzCash" },
-                                    { id: "easypaisa" as PayMethod, icon: Smartphone, label: "EasyPaisa" },
-                                ].map((m) => (
-                                    <button
-                                        key={m.id}
-                                        onClick={() => { setMethod(m.id); setError(""); }}
-                                        className={`flex flex-col items-center gap-1.5 py-3 px-2 rounded-xl border text-xs font-semibold transition-all duration-200 ${method === m.id
-                                                ? "border-gold-500/30 bg-gold-500/8 text-gold-400 shadow-[0_0_0_1px_rgba(212,168,67,0.2)]"
-                                                : "border-white/[0.06] bg-white/[0.02] text-slate-500 hover:text-slate-300 hover:border-white/[0.1]"
-                                            }`}
-                                    >
-                                        <m.icon className="w-4 h-4" />
-                                        {m.label}
-                                    </button>
-                                ))}
+                            {/* Stripe branding accent */}
+                            <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-[#635BFF]/5 border border-[#635BFF]/15 mb-6">
+                                <div className="w-5 h-5 rounded bg-[#635BFF] flex items-center justify-center">
+                                    <span className="text-white text-[11px] font-bold">S</span>
+                                </div>
+                                <span className="text-xs text-[#A5A2FF] font-medium">Powered by Stripe</span>
+                                <span className="ml-auto text-[11px] text-muted-foreground/60">Visa, Mastercard, Amex</span>
                             </div>
 
-                            {/* ── Card Method ── */}
-                            {method === "card" && (
-                                <div className="space-y-3">
-                                    <CardPreview number={cardNum} name={name} expiry={expiry} flipped={cvcFocused} />
+                            {/* ── Card Form ── */}
+                            <div className="space-y-3">
+                                <CardPreview number={cardNum} name={name} expiry={expiry} flipped={cvcFocused} />
 
+                                <PayInput
+                                    label="Card Number"
+                                    value={formatCard(cardNum)}
+                                    onChange={(v) => setCardNum(v.replace(/\s/g, ""))}
+                                    placeholder="1234 5678 9012 3456"
+                                    maxLen={19}
+                                    autoComplete="cc-number"
+                                />
+                                <div className="grid grid-cols-2 gap-3">
                                     <PayInput
-                                        label="Card Number"
-                                        value={formatCard(cardNum)}
-                                        onChange={(v) => setCardNum(v.replace(/\s/g, ""))}
-                                        placeholder="1234 5678 9012 3456"
-                                        maxLen={19}
-                                        autoComplete="cc-number"
+                                        label="Expiry"
+                                        value={expiry}
+                                        onChange={(v) => setExpiry(formatExpiry(v))}
+                                        placeholder="MM / YY"
+                                        maxLen={5}
+                                        autoComplete="cc-exp"
                                     />
-                                    <div className="grid grid-cols-2 gap-3">
+                                    <div
+                                        onFocus={() => setCvcFocused(true)}
+                                        onBlur={() => setCvcFocused(false)}
+                                    >
                                         <PayInput
-                                            label="Expiry"
-                                            value={expiry}
-                                            onChange={(v) => setExpiry(formatExpiry(v))}
-                                            placeholder="MM / YY"
-                                            maxLen={5}
-                                            autoComplete="cc-exp"
+                                            label="CVC"
+                                            value={cvc}
+                                            onChange={setCvc}
+                                            placeholder="123"
+                                            type="password"
+                                            maxLen={4}
+                                            autoComplete="cc-csc"
                                         />
-                                        <div
-                                            onFocus={() => setCvcFocused(true)}
-                                            onBlur={() => setCvcFocused(false)}
-                                        >
-                                            <PayInput
-                                                label="CVC"
-                                                value={cvc}
-                                                onChange={setCvc}
-                                                placeholder="•••"
-                                                type="password"
-                                                maxLen={4}
-                                                autoComplete="cc-csc"
-                                            />
-                                        </div>
                                     </div>
-                                    <PayInput
-                                        label="Cardholder Name"
-                                        value={name}
-                                        onChange={(v) => setName(v.toUpperCase())}
-                                        placeholder="As on card"
-                                        autoComplete="cc-name"
-                                    />
                                 </div>
-                            )}
-
-                            {/* ── JazzCash / EasyPaisa ── */}
-                            {(method === "jazzcash" || method === "easypaisa") && (
-                                <div className="space-y-4">
-                                    <div className={`p-4 rounded-xl border ${method === "jazzcash" ? "border-red-500/15 bg-red-500/5" : "border-green-500/15 bg-green-500/5"}`}>
-                                        <p className="text-xs text-slate-400 leading-relaxed">
-                                            Enter your {method === "jazzcash" ? "JazzCash" : "EasyPaisa"} registered mobile number. You will receive an OTP to confirm the payment.
-                                        </p>
-                                    </div>
-                                    <PayInput
-                                        label="Mobile Number"
-                                        value={phone}
-                                        onChange={setPhone}
-                                        placeholder="03XX XXXXXXX"
-                                        type="tel"
-                                        maxLen={11}
-                                        autoComplete="tel"
-                                    />
-                                </div>
-                            )}
+                                <PayInput
+                                    label="Cardholder Name"
+                                    value={name}
+                                    onChange={(v) => setName(v.toUpperCase())}
+                                    placeholder="As on card"
+                                    autoComplete="cc-name"
+                                />
+                            </div>
 
                             {/* Error */}
                             {error && (
@@ -257,12 +221,12 @@ export default function PayFeePage() {
                             <button
                                 onClick={handlePay}
                                 disabled={processing}
-                                className="mt-6 w-full h-13 rounded-xl font-bold text-base text-[#050811] bg-gradient-to-r from-gold-600 via-gold-500 to-amber-400 hover:from-gold-500 hover:to-amber-300 disabled:opacity-60 disabled:cursor-not-allowed shadow-2xl shadow-gold-500/20 hover:shadow-gold-500/30 transition-all duration-300 hover:scale-[1.01] active:scale-[0.99] flex items-center justify-center gap-3 py-4"
+                                className="mt-6 w-full h-13 rounded-xl font-bold text-base text-white bg-[#635BFF] hover:bg-[#5249E0] disabled:opacity-60 disabled:cursor-not-allowed shadow-2xl shadow-[#635BFF]/20 hover:shadow-[#635BFF]/30 transition-all duration-300 flex items-center justify-center gap-3 py-4"
                             >
                                 {processing ? (
                                     <>
                                         <Loader2 className="w-5 h-5 animate-spin" />
-                                        Processing…
+                                        Processing Payment...
                                     </>
                                 ) : (
                                     <>
@@ -279,9 +243,9 @@ export default function PayFeePage() {
                                     { icon: ShieldCheck, label: "PCI DSS" },
                                     { icon: CheckCircle2, label: "Stripe" },
                                 ].map((b) => (
-                                    <div key={b.label} className="flex items-center gap-1.5 text-slate-600">
+                                    <div key={b.label} className="flex items-center gap-1.5 text-muted-foreground/50">
                                         <b.icon className="w-3.5 h-3.5" />
-                                        <span className="text-[10px] uppercase tracking-wider font-medium">{b.label}</span>
+                                        <span className="text-[11px] uppercase tracking-wider font-medium">{b.label}</span>
                                     </div>
                                 ))}
                             </div>
@@ -299,10 +263,10 @@ export default function PayFeePage() {
                                     <BookOpen className="w-5 h-5 text-gold-400" />
                                 </div>
                                 <div>
-                                    <h3 className="text-sm font-bold text-foreground font-[family-name:var(--font-playfair)]">
+                                    <h3 className="text-sm font-bold text-foreground tracking-tight">
                                         4th Semester
                                     </h3>
-                                    <p className="text-xs text-slate-500">BS Computer Science</p>
+                                    <p className="text-xs text-muted-foreground">BS Computer Science</p>
                                 </div>
                             </div>
                             {/* Student Info */}
@@ -313,7 +277,7 @@ export default function PayFeePage() {
                                     { l: "Email", v: "ali@gcuf.edu.pk" },
                                 ].map((r) => (
                                     <div key={r.l} className="flex justify-between">
-                                        <span className="text-slate-500">{r.l}</span>
+                                        <span className="text-muted-foreground">{r.l}</span>
                                         <span className="text-slate-300 font-mono">{r.v}</span>
                                     </div>
                                 ))}
@@ -324,8 +288,8 @@ export default function PayFeePage() {
                         <div className="px-6 py-4 space-y-2.5">
                             {feeItems.map((item) => (
                                 <div key={item.label} className="flex justify-between text-sm">
-                                    <span className="text-slate-500">{item.label}</span>
-                                    <span className="text-foreground">{formatFullCurrency(item.amount)}</span>
+                                    <span className="text-muted-foreground">{item.label}</span>
+                                    <span className="text-foreground tabular-nums">{formatFullCurrency(item.amount)}</span>
                                 </div>
                             ))}
                         </div>
@@ -334,7 +298,7 @@ export default function PayFeePage() {
                         <div className="px-6 py-4 border-t border-white/[0.04] bg-gold-500/3">
                             <div className="flex justify-between items-center">
                                 <span className="text-sm font-bold text-gold-400">Total</span>
-                                <span className="text-2xl font-bold text-gold-gradient font-[family-name:var(--font-playfair)]">
+                                <span className="text-2xl font-bold text-gold-gradient tracking-tight">
                                     {formatFullCurrency(total)}
                                 </span>
                             </div>
@@ -345,12 +309,12 @@ export default function PayFeePage() {
                             <div className="mt-3 flex items-center gap-2 px-3 py-2.5 rounded-lg bg-amber-500/5 border border-amber-500/12">
                                 <Clock className="w-3.5 h-3.5 text-amber-400 flex-shrink-0" />
                                 <span className="text-xs text-amber-300/70">
-                                    Due <span className="text-amber-300 font-semibold">March 15, 2026</span> · 17 days left
+                                    Due <span className="text-amber-300 font-semibold">March 15, 2026</span> &middot; 17 days left
                                 </span>
                             </div>
                             <div className="mt-2.5 flex items-start gap-2 px-3 py-2.5 rounded-lg bg-white/[0.02]">
-                                <Info className="w-3.5 h-3.5 text-slate-600 flex-shrink-0 mt-0.5" />
-                                <span className="text-[11px] text-slate-600 leading-relaxed">
+                                <Info className="w-3.5 h-3.5 text-muted-foreground/50 flex-shrink-0 mt-0.5" />
+                                <span className="text-[11px] text-muted-foreground/60 leading-relaxed">
                                     Payments are non-refundable. A digital receipt will be emailed to you immediately after payment.
                                 </span>
                             </div>

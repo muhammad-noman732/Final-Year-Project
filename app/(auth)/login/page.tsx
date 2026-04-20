@@ -94,7 +94,7 @@ export default function LoginPage() {
   ]
 
   return (
-    <div className="min-h-screen flex">
+    <div className="min-h-[100dvh] flex">
       {/* ──────────────────────────────────────────────────── */}
       {/* Left Panel — Branding                               */}
       {/* ──────────────────────────────────────────────────── */}
@@ -123,7 +123,7 @@ export default function LoginPage() {
             </div>
           </div>
 
-          <h1 className="text-3xl font-bold text-gold-gradient font-[family-name:var(--font-playfair)] text-center mb-3">
+          <h1 className="text-3xl font-bold text-gold-gradient tracking-tight text-center mb-3">
             Government College
             <br />
             University Faisalabad
@@ -137,7 +137,7 @@ export default function LoginPage() {
 
           {/* Demo credentials (development only) */}
           <div className="mt-12 space-y-2 w-full max-w-xs">
-            <p className="text-[10px] uppercase tracking-[0.2em] text-gold-500/40 mb-3">
+            <p className="text-[11px] uppercase tracking-[0.2em] text-gold-500/40 mb-3">
               Quick Access (Dev)
             </p>
             {demoCredentials.map((cred) => (
@@ -162,10 +162,10 @@ export default function LoginPage() {
                     }
                   }
                 }}
-                className="flex items-center justify-between w-full px-3 py-2 rounded-lg bg-navy-800/30 border border-gold-500/5 text-xs hover:bg-navy-800/50 hover:border-gold-500/15 transition-all cursor-pointer"
+                className="flex items-center justify-between w-full px-3 py-2.5 rounded-lg bg-navy-800/30 border border-gold-500/5 text-xs hover:bg-navy-800/50 hover:border-gold-500/15 transition-all duration-150 cursor-pointer focus-visible:outline-2 focus-visible:outline-gold-500/50"
               >
                 <span className="text-muted-foreground">{cred.email}</span>
-                <span className="text-gold-500/40">{cred.label}</span>
+                <span className="text-gold-400/60 font-medium">{cred.label}</span>
               </button>
             ))}
           </div>
@@ -183,10 +183,10 @@ export default function LoginPage() {
               <GraduationCap className="w-6 h-6 text-navy-950" />
             </div>
             <div>
-              <h1 className="text-lg font-bold text-gold-gradient font-[family-name:var(--font-playfair)]">
+              <h1 className="text-lg font-bold text-gold-gradient tracking-tight">
                 GCUF
               </h1>
-              <p className="text-[10px] text-muted-foreground tracking-wider uppercase">
+              <p className="text-[11px] text-muted-foreground tracking-wider uppercase">
                 Fee Management
               </p>
             </div>
@@ -194,7 +194,7 @@ export default function LoginPage() {
 
           {/* Form Header */}
           <div className="mb-8">
-            <h2 className="text-2xl font-bold text-foreground font-[family-name:var(--font-playfair)] mb-2">
+            <h2 className="text-2xl font-bold text-foreground tracking-tight mb-2">
               Welcome Back
             </h2>
             <p className="text-muted-foreground text-sm">
@@ -281,7 +281,7 @@ export default function LoginPage() {
             <p className="text-xs text-muted-foreground">
               Protected by institutional security protocols
             </p>
-            <p className="text-[10px] text-muted-foreground/50 mt-1">
+            <p className="text-[11px] text-muted-foreground/50 mt-1">
               © 2026 Government College University Faisalabad
             </p>
           </div>

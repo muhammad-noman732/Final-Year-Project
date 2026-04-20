@@ -30,15 +30,15 @@ export default async function SuperAdminDashboard() {
   const tenants = await getTenants()
 
   return (
-    <div className="min-h-screen p-8 sm:p-12 max-w-7xl mx-auto space-y-10">
+    <div className="max-w-7xl mx-auto space-y-8">
       
       {/* Header */}
-      <header className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 pb-6 border-b border-slate-200 dark:border-slate-800">
-        <div className="space-y-1">
-          <h1 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-white">
+      <header className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-6 border-b border-white/[0.05]">
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight text-foreground">
             Platform Administration
           </h1>
-          <p className="text-sm text-slate-500 dark:text-slate-400">
+          <p className="text-sm text-muted-foreground mt-1.5">
             Manage universities, monitor usage, and supervise global systems.
           </p>
         </div>
@@ -48,39 +48,39 @@ export default async function SuperAdminDashboard() {
       </header>
 
       {/* Stats Cards */}
-      <section className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-sm">
+      <section className="grid grid-cols-1 md:grid-cols-3 gap-4 stagger-children">
+        <div className="glass-card glass-card-hover rounded-xl p-5">
           <div className="flex items-center gap-4">
-            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400">
-              <Building2 className="h-6 w-6" />
+            <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-sky-500/10 text-sky-400">
+              <Building2 className="h-5 w-5" />
             </div>
             <div>
-              <p className="text-sm font-medium text-slate-500 dark:text-slate-400">Active Universities</p>
-              <h3 className="text-3xl font-bold text-slate-900 dark:text-white">{stats.tenantsCount}</h3>
+              <p className="text-[11px] font-semibold text-muted-foreground uppercase tracking-widest">Active Universities</p>
+              <h3 className="text-2xl font-bold text-foreground">{stats.tenantsCount}</h3>
             </div>
           </div>
         </div>
 
-        <div className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-sm">
+        <div className="glass-card glass-card-hover rounded-xl p-5">
           <div className="flex items-center gap-4">
-            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400">
-              <Users className="h-6 w-6" />
+            <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-400">
+              <Users className="h-5 w-5" />
             </div>
             <div>
-              <p className="text-sm font-medium text-slate-500 dark:text-slate-400">Total Admin/Staff</p>
-              <h3 className="text-3xl font-bold text-slate-900 dark:text-white">{stats.usersCount}</h3>
+              <p className="text-[11px] font-semibold text-muted-foreground uppercase tracking-widest">Total Admin/Staff</p>
+              <h3 className="text-2xl font-bold text-foreground">{stats.usersCount}</h3>
             </div>
           </div>
         </div>
 
-        <div className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-sm">
+        <div className="glass-card glass-card-hover rounded-xl p-5">
           <div className="flex items-center gap-4">
-            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-purple-50 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400">
-              <GraduationCap className="h-6 w-6" />
+            <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gold-500/10 text-gold-400">
+              <GraduationCap className="h-5 w-5" />
             </div>
             <div>
-              <p className="text-sm font-medium text-slate-500 dark:text-slate-400">Enrolled Students</p>
-              <h3 className="text-3xl font-bold text-slate-900 dark:text-white">{stats.studentsCount}</h3>
+              <p className="text-[11px] font-semibold text-muted-foreground uppercase tracking-widest">Enrolled Students</p>
+              <h3 className="text-2xl font-bold text-foreground">{stats.studentsCount}</h3>
             </div>
           </div>
         </div>
@@ -88,53 +88,54 @@ export default async function SuperAdminDashboard() {
 
       {/* Tenants Table */}
       <section className="space-y-4">
-        <h2 className="text-xl font-semibold tracking-tight text-slate-900 dark:text-white">
+        <h2 className="text-base font-bold tracking-tight text-foreground">
           Deployed Universities
         </h2>
 
         {tenants.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-16 text-center border border-dashed border-slate-300 dark:border-slate-700 rounded-xl bg-slate-50 dark:bg-slate-900/50">
-            <LayoutDashboard className="h-10 w-10 text-slate-400 mb-4" />
-            <p className="text-base font-semibold text-slate-700 dark:text-slate-300">No universities deployed</p>
-            <p className="text-sm text-slate-500 mt-1 max-w-sm">
-              You haven't onboarded any universities yet. Click the button above to provision your first tenant.
+          <div className="flex flex-col items-center justify-center py-16 text-center border border-dashed border-white/[0.08] rounded-xl bg-navy-900/30">
+            <LayoutDashboard className="h-10 w-10 text-gold-500/30 mb-4" />
+            <p className="text-base font-semibold text-foreground/80">No universities deployed</p>
+            <p className="text-sm text-muted-foreground mt-1.5 max-w-sm">
+              You haven&apos;t onboarded any universities yet. Click the button above to provision your first tenant.
             </p>
           </div>
         ) : (
-          <div className="overflow-hidden rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm">
+          <div className="overflow-hidden rounded-xl glass-card">
             <div className="overflow-x-auto">
               <table className="w-full text-left text-sm">
-                <thead className="border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950/50 text-slate-500 dark:text-slate-400">
+                <thead className="border-b border-white/[0.05] text-muted-foreground">
                   <tr>
-                    <th className="px-6 py-4 font-medium">University</th>
-                    <th className="px-6 py-4 font-medium">Domain / Slug</th>
-                    <th className="px-6 py-4 font-medium">Users</th>
-                    <th className="px-6 py-4 font-medium">Students</th>
-                    <th className="px-6 py-4 font-medium">Status</th>
+                    <th className="px-5 py-3.5 text-[11px] font-semibold uppercase tracking-widest">University</th>
+                    <th className="px-5 py-3.5 text-[11px] font-semibold uppercase tracking-widest">Domain / Slug</th>
+                    <th className="px-5 py-3.5 text-[11px] font-semibold uppercase tracking-widest">Users</th>
+                    <th className="px-5 py-3.5 text-[11px] font-semibold uppercase tracking-widest">Students</th>
+                    <th className="px-5 py-3.5 text-[11px] font-semibold uppercase tracking-widest">Status</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-200 dark:divide-slate-800">
+                <tbody className="divide-y divide-white/[0.04]">
                   {tenants.map(tenant => (
-                    <tr key={tenant.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                      <td className="px-6 py-4">
-                        <div className="font-medium text-slate-900 dark:text-white">{tenant.name}</div>
-                        <div className="text-xs text-slate-500">{tenant.shortName}</div>
+                    <tr key={tenant.id} className="hover:bg-white/[0.02] transition-colors duration-150">
+                      <td className="px-5 py-3.5">
+                        <div className="font-medium text-foreground">{tenant.name}</div>
+                        <div className="text-xs text-muted-foreground mt-0.5">{tenant.shortName}</div>
                       </td>
-                      <td className="px-6 py-4 text-slate-600 dark:text-slate-300">
+                      <td className="px-5 py-3.5 text-muted-foreground">
                         {tenant.domain || tenant.slug}
                       </td>
-                      <td className="px-6 py-4 text-slate-600 dark:text-slate-300">
+                      <td className="px-5 py-3.5 text-muted-foreground font-mono text-xs">
                         {tenant._count.users}
                       </td>
-                      <td className="px-6 py-4 text-slate-600 dark:text-slate-300">
+                      <td className="px-5 py-3.5 text-muted-foreground font-mono text-xs">
                         {tenant._count.students}
                       </td>
-                      <td className="px-6 py-4">
-                        <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
+                      <td className="px-5 py-3.5">
+                        <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-medium ${
                           tenant.isActive 
-                            ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400' 
-                            : 'bg-slate-100 text-slate-800 dark:bg-slate-800 dark:text-slate-400'
+                            ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' 
+                            : 'bg-white/[0.04] text-muted-foreground border border-white/[0.06]'
                         }`}>
+                          <span className={`w-1.5 h-1.5 rounded-full ${tenant.isActive ? 'bg-emerald-400' : 'bg-slate-500'}`} />
                           {tenant.isActive ? 'Active' : 'Disabled'}
                         </span>
                       </td>

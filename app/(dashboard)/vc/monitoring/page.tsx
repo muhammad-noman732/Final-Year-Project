@@ -80,7 +80,7 @@ export default function VCMonitoringPage() {
     return (
         <div className="space-y-6">
             <div className="flex items-center justify-between">
-                <h1 className="text-2xl font-bold text-foreground font-[family-name:var(--font-playfair)]">
+                <h1 className="text-2xl font-bold text-foreground tracking-tight">
                     Real-Time Monitoring
                 </h1>
                 <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20">
@@ -88,7 +88,7 @@ export default function VCMonitoringPage() {
                         <div className="absolute inset-0 rounded-full bg-emerald-400 animate-ping opacity-75" />
                         <div className="relative w-2 h-2 rounded-full bg-emerald-400" />
                     </div>
-                    <span className="text-[10px] font-bold text-emerald-400 tracking-wider uppercase">Live — Connected</span>
+                    <span className="text-[11px] font-bold text-emerald-400 tracking-wider uppercase">Live — Connected</span>
                 </div>
             </div>
 
@@ -100,8 +100,8 @@ export default function VCMonitoringPage() {
                             <Users className="w-4.5 h-4.5 text-sky-400" />
                         </div>
                         <div>
-                            <p className="text-[10px] text-muted-foreground uppercase tracking-wider">Active Sessions</p>
-                            <p className="text-xl font-bold text-foreground font-[family-name:var(--font-playfair)]">{activeSessions}</p>
+                            <p className="text-[11px] text-muted-foreground uppercase tracking-wider">Active Sessions</p>
+                            <p className="text-xl font-bold text-foreground tracking-tight">{activeSessions}</p>
                         </div>
                     </div>
                     <p className="text-xs text-muted-foreground">students online right now</p>
@@ -112,8 +112,8 @@ export default function VCMonitoringPage() {
                             <CreditCard className="w-4.5 h-4.5 text-gold-400" />
                         </div>
                         <div>
-                            <p className="text-[10px] text-muted-foreground uppercase tracking-wider">Payments This Hour</p>
-                            <p className="text-xl font-bold text-foreground font-[family-name:var(--font-playfair)]">{paymentsThisHour}</p>
+                            <p className="text-[11px] text-muted-foreground uppercase tracking-wider">Payments This Hour</p>
+                            <p className="text-xl font-bold text-foreground tracking-tight">{paymentsThisHour}</p>
                         </div>
                     </div>
                     <p className="text-xs text-gold-400">{formatFullCurrency(hourAmount)}</p>
@@ -124,14 +124,14 @@ export default function VCMonitoringPage() {
                             <AlertTriangle className="w-4.5 h-4.5 text-rose-400" />
                         </div>
                         <div>
-                            <p className="text-[10px] text-muted-foreground uppercase tracking-wider">Failed Attempts</p>
-                            <p className="text-xl font-bold text-foreground font-[family-name:var(--font-playfair)]">{failedAttempts}</p>
+                            <p className="text-[11px] text-muted-foreground uppercase tracking-wider">Failed Attempts</p>
+                            <p className="text-xl font-bold text-foreground tracking-tight">{failedAttempts}</p>
                         </div>
                     </div>
                     <p className="text-xs text-muted-foreground">this hour</p>
                 </Card>
                 <Card className="glass-card border-0 p-5">
-                    <p className="text-[10px] text-muted-foreground uppercase tracking-wider mb-2">Server Status</p>
+                    <p className="text-[11px] text-muted-foreground uppercase tracking-wider mb-2">Server Status</p>
                     <p className="text-sm font-medium text-emerald-400 mb-3">All Systems Operational</p>
                     <div className="space-y-1.5">
                         {[
@@ -142,7 +142,7 @@ export default function VCMonitoringPage() {
                         ].map((svc) => (
                             <div key={svc.label} className="flex items-center gap-2">
                                 <div className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-                                <span className="text-[10px] text-muted-foreground">{svc.label}</span>
+                                <span className="text-[11px] text-muted-foreground">{svc.label}</span>
                             </div>
                         ))}
                     </div>
@@ -166,7 +166,7 @@ export default function VCMonitoringPage() {
                                             : "bg-navy-700/20 border-gold-500/5"
                                         }`}
                                 >
-                                    <span className="text-[10px] text-muted-foreground font-mono w-20 flex-shrink-0">{event.time}</span>
+                                    <span className="text-[11px] text-muted-foreground font-mono w-20 flex-shrink-0">{event.time}</span>
                                     <span className="text-sm font-medium text-foreground flex-1">{event.student}</span>
                                     <span className="text-xs text-muted-foreground w-12">{event.dept}</span>
                                     <span className="text-xs font-medium text-gold-400 w-24 text-right">{formatFullCurrency(event.amount)}</span>
@@ -184,7 +184,7 @@ export default function VCMonitoringPage() {
                 <div className="space-y-4">
                     {/* Payments Per Minute */}
                     <Card className="glass-card border-0 p-5">
-                        <h3 className="text-sm font-semibold text-foreground font-[family-name:var(--font-playfair)] mb-3">
+                        <h3 className="text-sm font-semibold text-foreground tracking-tight mb-3">
                             Payments Per Minute
                         </h3>
                         <ResponsiveContainer width="100%" height={140}>
@@ -200,7 +200,7 @@ export default function VCMonitoringPage() {
                     {/* Today's Collection Counter */}
                     <Card className="glass-card border-0 p-6 text-center">
                         <p className="text-xs text-muted-foreground uppercase tracking-wider mb-2">Today&apos;s Collection</p>
-                        <p className="text-3xl font-bold text-gold-gradient font-[family-name:var(--font-playfair)] mb-2 animate-count">
+                        <p className="text-3xl font-bold text-gold-gradient tracking-tight mb-2 animate-count">
                             {formatFullCurrency(todayTotal)}
                         </p>
                         <p className="text-sm text-muted-foreground">{todayCount} payments</p>
@@ -208,7 +208,7 @@ export default function VCMonitoringPage() {
 
                     {/* Critical Alerts */}
                     <Card className="glass-card border-0 p-5">
-                        <h3 className="text-sm font-semibold text-foreground font-[family-name:var(--font-playfair)] mb-3">
+                        <h3 className="text-sm font-semibold text-foreground tracking-tight mb-3">
                             Critical Alerts
                         </h3>
                         <div className="space-y-2">
@@ -216,14 +216,14 @@ export default function VCMonitoringPage() {
                                 <AlertTriangle className="w-4 h-4 text-rose-400 flex-shrink-0 mt-0.5" />
                                 <div>
                                     <p className="text-xs font-medium text-rose-400">2 Failed Payments</p>
-                                    <p className="text-[10px] text-muted-foreground">Card declined — Hamza Tariq</p>
+                                    <p className="text-[11px] text-muted-foreground">Card declined — Hamza Tariq</p>
                                 </div>
                             </div>
                             <div className="flex items-start gap-2 p-2.5 rounded-lg bg-amber-500/5 border border-amber-500/10">
                                 <AlertTriangle className="w-4 h-4 text-amber-400 flex-shrink-0 mt-0.5" />
                                 <div>
                                     <p className="text-xs font-medium text-amber-400">15 Overdue Deadlines</p>
-                                    <p className="text-[10px] text-muted-foreground">Students past Feb 15 deadline</p>
+                                    <p className="text-[11px] text-muted-foreground">Students past Feb 15 deadline</p>
                                 </div>
                             </div>
                         </div>

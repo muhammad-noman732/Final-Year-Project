@@ -38,7 +38,7 @@ export default function SessionsPage() {
         <div className="space-y-6">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div>
-                    <h1 className="text-2xl font-bold text-foreground font-[family-name:var(--font-playfair)]">Academic Sessions</h1>
+                    <h1 className="text-2xl font-bold text-foreground tracking-tight">Academic Sessions</h1>
                     <p className="text-sm text-muted-foreground mt-1">{meta.total} sessions</p>
                 </div>
                 <Button onClick={() => setIsAddOpen(true)} className="bg-gradient-to-r from-gold-600 to-gold-500 hover:from-gold-500 hover:to-gold-400 text-navy-950 font-semibold">
@@ -114,7 +114,7 @@ export default function SessionsPage() {
             <Sheet open={isAddOpen} onOpenChange={setIsAddOpen}>
                 <SheetContent className="bg-navy-900 border-l border-gold-500/10 w-full sm:max-w-[420px]">
                     <SheetHeader className="mb-6">
-                        <SheetTitle className="text-xl font-bold text-foreground font-[family-name:var(--font-playfair)]">Add Session</SheetTitle>
+                        <SheetTitle className="text-xl font-bold text-foreground tracking-tight">Add Session</SheetTitle>
                     </SheetHeader>
                     <form className="space-y-5" onSubmit={onSubmit}>
                         <div className="space-y-2">

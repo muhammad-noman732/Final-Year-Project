@@ -98,7 +98,7 @@ export default function HODDashboard() {
             {/* Header */}
             <div className="flex items-center justify-between">
                 <div>
-                    <h1 className="text-2xl font-bold text-foreground font-[family-name:var(--font-playfair)]">
+                    <h1 className="text-2xl font-bold text-foreground tracking-tight">
                         {DEPT_NAME} — HOD Dashboard
                     </h1>
                     <p className="text-sm text-muted-foreground mt-1">Updated {lastUpdated}</p>
@@ -108,7 +108,7 @@ export default function HODDashboard() {
                         <div className="absolute inset-0 rounded-full bg-emerald-400 animate-ping opacity-75" />
                         <div className="relative w-2 h-2 rounded-full bg-emerald-400" />
                     </div>
-                    <span className="text-[10px] font-bold text-emerald-400 tracking-wider uppercase">Live</span>
+                    <span className="text-[11px] font-bold text-emerald-400 tracking-wider uppercase">Live</span>
                 </div>
             </div>
 
@@ -122,7 +122,7 @@ export default function HODDashboard() {
                             </div>
                         </div>
                         <p className="text-xs text-muted-foreground uppercase tracking-wider mb-1">{stat.label}</p>
-                        <p className="text-2xl font-bold text-foreground font-[family-name:var(--font-playfair)]">{stat.value}</p>
+                        <p className="text-2xl font-bold text-foreground tracking-tight">{stat.value}</p>
                     </Card>
                 ))}
             </div>
@@ -130,7 +130,7 @@ export default function HODDashboard() {
             <div className="grid lg:grid-cols-3 gap-4">
                 {/* Semester Breakdown Chart */}
                 <Card className="glass-card border-0 p-5 lg:col-span-2">
-                    <h3 className="text-sm font-semibold text-foreground font-[family-name:var(--font-playfair)] mb-4">
+                    <h3 className="text-sm font-semibold text-foreground tracking-tight mb-4">
                         Semester-wise Collection
                     </h3>
                     <ResponsiveContainer width="100%" height={240}>
@@ -160,11 +160,11 @@ export default function HODDashboard() {
                                 <div key={event.id} className="p-2.5 rounded-lg bg-navy-700/20 border border-gold-500/5">
                                     <div className="flex items-center justify-between mb-0.5">
                                         <span className="text-xs font-medium text-foreground">{event.name}</span>
-                                        <span className="text-[10px] text-muted-foreground">{event.time}</span>
+                                        <span className="text-[11px] text-muted-foreground">{event.time}</span>
                                     </div>
                                     <div className="flex items-center justify-between">
-                                        <span className="text-[10px] text-muted-foreground">{event.semester} Sem</span>
-                                        <span className="text-xs font-medium text-gold-400">{formatFullCurrency(event.amount)} ✓</span>
+                                        <span className="text-[11px] text-muted-foreground">{event.semester} Sem</span>
+                                        <span className="text-xs font-medium text-gold-400 flex items-center gap-1.5">{formatFullCurrency(event.amount)} <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 inline-block" /></span>
                                     </div>
                                 </div>
                             ))}
@@ -176,7 +176,7 @@ export default function HODDashboard() {
             {/* Student List */}
             <Card className="glass-card border-0 overflow-hidden">
                 <div className="px-4 py-3 border-b border-gold-500/5 flex items-center justify-between">
-                    <h3 className="text-sm font-semibold text-foreground font-[family-name:var(--font-playfair)]">
+                    <h3 className="text-sm font-semibold text-foreground tracking-tight">
                         Department Students
                     </h3>
                     <div className="flex gap-2">
@@ -234,7 +234,7 @@ export default function HODDashboard() {
             {/* Defaulters */}
             <Card className="glass-card border-0 overflow-hidden">
                 <div className="px-4 py-3 border-b border-gold-500/5">
-                    <h3 className="text-sm font-semibold text-foreground font-[family-name:var(--font-playfair)]">
+                    <h3 className="text-sm font-semibold text-foreground tracking-tight">
                         Department Defaulters
                     </h3>
                 </div>

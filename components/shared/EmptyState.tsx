@@ -34,7 +34,7 @@ export default function EmptyState({
                     <span className="text-gold-500/60 text-xs">?</span>
                 </div>
             </div>
-            <h3 className="text-lg font-semibold text-foreground/80 font-[family-name:var(--font-playfair)] mb-2">
+            <h3 className="text-lg font-semibold text-foreground/80 tracking-tight mb-2">
                 {title}
             </h3>
             <p className="text-sm text-muted-foreground text-center max-w-sm mb-6">

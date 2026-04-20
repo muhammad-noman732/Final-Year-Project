@@ -45,7 +45,7 @@ export function CreateTenantModal() {
 
           <div className="space-y-4">
             <div className="space-y-1.5">
-              <label className="text-sm font-medium text-slate-700 dark:text-slate-300">
+              <label className="text-sm font-medium text-muted-foreground/50 dark:text-slate-300">
                 University Name
               </label>
               <Input
@@ -58,7 +58,7 @@ export function CreateTenantModal() {
 
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-1.5">
-                <label className="text-sm font-medium text-slate-700 dark:text-slate-300">
+                <label className="text-sm font-medium text-muted-foreground/50 dark:text-slate-300">
                   Short Name
                 </label>
                 <Input
@@ -70,7 +70,7 @@ export function CreateTenantModal() {
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-sm font-medium text-slate-700 dark:text-slate-300">
+                <label className="text-sm font-medium text-muted-foreground/50 dark:text-slate-300">
                   Domain <span className="text-slate-400 font-normal">(Optional)</span>
                 </label>
                 <Input
@@ -87,7 +87,7 @@ export function CreateTenantModal() {
               
               <div className="space-y-4">
                 <div className="space-y-1.5">
-                  <label className="text-sm text-slate-600 dark:text-slate-400">
+                  <label className="text-sm text-muted-foreground/60 dark:text-slate-400">
                     Full Name
                   </label>
                   <Input
@@ -99,7 +99,7 @@ export function CreateTenantModal() {
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-sm text-slate-600 dark:text-slate-400">
+                  <label className="text-sm text-muted-foreground/60 dark:text-slate-400">
                     Email Address
                   </label>
                   <Input

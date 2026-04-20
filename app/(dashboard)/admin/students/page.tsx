@@ -46,7 +46,7 @@ export default function StudentsPage() {
             {/* Header */}
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div>
-                    <h1 className="text-2xl font-bold text-foreground font-[family-name:var(--font-playfair)]">
+                    <h1 className="text-2xl font-bold text-foreground tracking-tight">
                         Students Management
                     </h1>
                     <p className="text-sm text-muted-foreground mt-1">{meta.total} total students</p>
@@ -249,7 +249,7 @@ export default function StudentsPage() {
             <Sheet open={isAddOpen} onOpenChange={setIsAddOpen}>
                 <SheetContent className="bg-navy-900 border-l border-gold-500/10 w-full sm:max-w-[480px] overflow-y-auto">
                     <SheetHeader className="mb-6">
-                        <SheetTitle className="text-xl font-bold text-foreground font-[family-name:var(--font-playfair)]">
+                        <SheetTitle className="text-xl font-bold text-foreground tracking-tight">
                             Add New Student
                         </SheetTitle>
                     </SheetHeader>

@@ -49,7 +49,7 @@ export default function FeesPage() {
 
     return (
         <div className="space-y-6">
-            <h1 className="text-2xl font-bold text-foreground font-[family-name:var(--font-playfair)]">
+            <h1 className="text-2xl font-bold text-foreground tracking-tight">
                 Fee Management
             </h1>
 
@@ -60,7 +60,7 @@ export default function FeesPage() {
                     </TabsTrigger>
                     <TabsTrigger value="defaulters" className="data-[state=active]:bg-gold-500/10 data-[state=active]:text-gold-400">
                         Defaulters
-                        <span className="ml-2 px-1.5 py-0.5 text-[10px] font-bold rounded-full bg-rose-500/15 text-rose-400">
+                        <span className="ml-2 px-1.5 py-0.5 text-[11px] font-bold rounded-full bg-rose-500/15 text-rose-400">
                             {defaulters.length}
                         </span>
                     </TabsTrigger>
@@ -145,7 +145,7 @@ export default function FeesPage() {
                             </div>
                             <div>
                                 <p className="text-xs text-muted-foreground uppercase tracking-wider">Total Defaulters</p>
-                                <p className="text-2xl font-bold text-foreground font-[family-name:var(--font-playfair)]">{defaulters.length}</p>
+                                <p className="text-2xl font-bold text-foreground tracking-tight">{defaulters.length}</p>
                             </div>
                         </Card>
                         <Card className="glass-card border-0 p-5 flex items-center gap-4">
@@ -154,7 +154,7 @@ export default function FeesPage() {
                             </div>
                             <div>
                                 <p className="text-xs text-muted-foreground uppercase tracking-wider">Total Outstanding</p>
-                                <p className="text-2xl font-bold text-foreground font-[family-name:var(--font-playfair)]">
+                                <p className="text-2xl font-bold text-foreground tracking-tight">
                                     {formatFullCurrency(defaulters.reduce((s, d) => s + d.amountDue, 0))}
                                 </p>
                             </div>
@@ -221,7 +221,7 @@ export default function FeesPage() {
             <Dialog open={createOpen} onOpenChange={setCreateOpen}>
                 <DialogContent className="bg-navy-900 border border-gold-500/10 w-full sm:max-w-lg max-h-[90vh] overflow-y-auto">
                     <DialogHeader>
-                        <DialogTitle className="text-xl font-bold font-[family-name:var(--font-playfair)]">
+                        <DialogTitle className="text-xl font-bold tracking-tight">
                             Create Fee Structure
                         </DialogTitle>
                     </DialogHeader>
@@ -296,7 +296,7 @@ export default function FeesPage() {
                             ))}
                             <div className="flex items-center justify-between pt-3 border-t border-gold-500/10">
                                 <span className="text-sm font-bold text-gold-400">Total Setup</span>
-                                <span className="text-lg font-bold text-gold-gradient font-[family-name:var(--font-playfair)]">
+                                <span className="text-lg font-bold text-gold-gradient tracking-tight">
                                     {formatFullCurrency(computedTotal)}
                                 </span>
                             </div>

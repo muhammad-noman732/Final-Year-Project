@@ -5,15 +5,14 @@
 @custom-variant dark (&:is(.dark *));
 
 /* ═══════════════════════════════════════════════════════════════
-   GCUF Fee Management System — Dark Institutional Luxury Theme
-   Deep Navy + Gold/Amber + Playfair Display + DM Sans
+   GCUF Fee Management System — Dark Institutional Theme
+   Deep Navy + Gold/Amber + DM Sans
    ═══════════════════════════════════════════════════════════════ */
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-dm-sans);
-  --font-heading: var(--font-playfair);
   --font-mono: var(--font-geist-mono);
 
   /* GCUF Custom Colors */
@@ -92,7 +91,8 @@
   --secondary: #1a2332;
   --secondary-foreground: #e8e6e3;
   --muted: #111827;
-  --muted-foreground: #94a3b8;
+  /* Improved muted-foreground: bumped from #94a3b8 to #a1b1c7 for better contrast on dark bg */
+  --muted-foreground: #a1b1c7;
   --accent: #1a2332;
   --accent-foreground: #f5c542;
   --destructive: #f43f5e;
@@ -125,15 +125,6 @@
     font-family: var(--font-dm-sans), system-ui, sans-serif;
   }
 
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    font-family: var(--font-playfair), serif;
-  }
-
   /* ── Cursor pointer on all interactive elements ── */
   button,
   [role="button"],
@@ -160,19 +151,34 @@
 
 /* ═══ Utility Classes ═══ */
 
+/* Heading font utility — DM Sans bold tracking-tight for institutional feel */
+.font-heading {
+  font-weight: 700;
+  letter-spacing: -0.025em;
+}
+
 /* Glass card effect */
 .glass-card {
   background: linear-gradient(135deg, rgba(13, 19, 33, 0.9) 0%, rgba(26, 35, 50, 0.7) 100%);
   backdrop-filter: blur(20px);
-  border: 1px solid rgba(212, 168, 67, 0.1);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(212, 168, 67, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+
+.glass-card-hover {
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
 }
 
 .glass-card-hover:hover {
-  border-color: rgba(212, 168, 67, 0.25);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(212, 168, 67, 0.1), 0 0 60px rgba(212, 168, 67, 0.05);
+  border-color: rgba(212, 168, 67, 0.18);
+  box-shadow:
+    0 12px 40px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(212, 168, 67, 0.06);
   transform: translateY(-2px);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Gold gradient text */
@@ -238,51 +244,51 @@
 }
 
 .animate-count {
-  animation: count-up 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  animation: count-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-/* Stagger children */
+/* Stagger children — entry animation cascade */
 .stagger-children>* {
   opacity: 0;
-  animation: fade-up 0.5s ease forwards;
+  animation: fade-up 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 .stagger-children>*:nth-child(1) {
-  animation-delay: 0.05s;
+  animation-delay: 0.04s;
 }
 
 .stagger-children>*:nth-child(2) {
-  animation-delay: 0.1s;
+  animation-delay: 0.08s;
 }
 
 .stagger-children>*:nth-child(3) {
-  animation-delay: 0.15s;
+  animation-delay: 0.12s;
 }
 
 .stagger-children>*:nth-child(4) {
-  animation-delay: 0.2s;
+  animation-delay: 0.16s;
 }
 
 .stagger-children>*:nth-child(5) {
-  animation-delay: 0.25s;
+  animation-delay: 0.20s;
 }
 
 .stagger-children>*:nth-child(6) {
-  animation-delay: 0.3s;
+  animation-delay: 0.24s;
 }
 
 .stagger-children>*:nth-child(7) {
-  animation-delay: 0.35s;
+  animation-delay: 0.28s;
 }
 
 .stagger-children>*:nth-child(8) {
-  animation-delay: 0.4s;
+  animation-delay: 0.32s;
 }
 
 @keyframes fade-up {
   from {
     opacity: 0;
-    transform: translateY(16px);
+    transform: translateY(12px);
   }
 
   to {
@@ -331,7 +337,13 @@
   background: linear-gradient(180deg, #050811 0%, #0a0e1a 40%, #0d1321 100%);
 }
 
-/* Scrollbar */
+/* ═══ Tactile button feedback ═══ */
+button:not(:disabled):active,
+[role="button"]:not([aria-disabled="true"]):active {
+  transform: scale(0.98);
+}
+
+/* ═══ Scrollbar ═══ */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -367,7 +379,7 @@
   pointer-events: none;
 }
 
-/* Background pattern / noise overlay */
+/* Background noise overlay — applied to fixed pseudo-element only */
 .noise-overlay::after {
   content: '';
   position: fixed;
@@ -376,4 +388,67 @@
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
   pointer-events: none;
   z-index: 0;
+}
+
+/* ═══ Custom checkbox styling for tables ═══ */
+input[type="checkbox"] {
+  appearance: none;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 0.25rem;
+  border: 1.5px solid rgba(212, 168, 67, 0.25);
+  background: rgba(13, 19, 33, 0.6);
+  cursor: pointer;
+  position: relative;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+input[type="checkbox"]:checked {
+  background: #d4a843;
+  border-color: #d4a843;
+}
+
+input[type="checkbox"]:checked::after {
+  content: '';
+  position: absolute;
+  top: 1px;
+  left: 4px;
+  width: 5px;
+  height: 9px;
+  border: solid #050811;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+input[type="checkbox"]:focus-visible {
+  outline: 2px solid #d4a843;
+  outline-offset: 2px;
+}
+
+/* ═══ Reduced Motion ═══ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .stagger-children>* {
+    opacity: 1;
+    animation: none;
+  }
+
+  .glass-card-hover:hover {
+    transform: none;
+  }
+
+  .animate-float {
+    animation: none;
+  }
+
+  .animate-ping {
+    animation: none;
+  }
 }

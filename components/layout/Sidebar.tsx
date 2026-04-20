@@ -33,21 +33,27 @@ export default function Sidebar({ items, role, roleLabel, open, onClose }: Sideb
             {/* Mobile overlay */}
             {open && (
                 <div
-                    className="fixed inset-0 z-40 bg-black/70 backdrop-blur-sm lg:hidden"
+                    className="fixed inset-0 z-40 bg-navy-950/80 backdrop-blur-sm lg:hidden transition-opacity duration-200"
                     onClick={onClose}
+                    aria-hidden="true"
                 />
             )}
 
-            <aside className={cn(
-                "fixed top-0 left-0 z-50 h-full w-[252px] flex flex-col transition-transform duration-300 ease-in-out",
-                "border-r border-white/[0.05]",
-                "bg-[#070b14]",
-                "lg:translate-x-0 lg:static lg:z-auto",
-                open ? "translate-x-0" : "-translate-x-full"
-            )}>
+            <aside
+                className={cn(
+                    "fixed top-0 left-0 z-50 h-full w-64 flex flex-col",
+                    "transition-transform duration-300 cubic-bezier(0.16, 1, 0.3, 1)",
+                    "border-r border-white/[0.05]",
+                    "bg-[#070b14]",
+                    "lg:translate-x-0 lg:static lg:z-auto",
+                    open ? "translate-x-0" : "-translate-x-full"
+                )}
+                role="navigation"
+                aria-label="Main navigation"
+            >
                 {/* ── Logo ── */}
-                <div className="px-5 py-5 border-b border-white/[0.05]">
-                    <div className="flex items-center justify-between">
+                <div className="px-5 h-14 flex items-center border-b border-white/[0.05]">
+                    <div className="flex items-center justify-between w-full">
                         <div className="flex items-center gap-3">
                             {/* Icon */}
                             <div className="relative w-9 h-9 rounded-xl bg-gradient-to-br from-gold-500 to-gold-700 flex items-center justify-center shadow-lg shadow-gold-500/25 flex-shrink-0">
@@ -55,15 +61,19 @@ export default function Sidebar({ items, role, roleLabel, open, onClose }: Sideb
                                 <div className="absolute inset-0 rounded-xl bg-gradient-to-t from-black/20 to-transparent" />
                             </div>
                             <div>
-                                <h1 className="text-sm font-bold text-gold-400 font-[family-name:var(--font-playfair)] tracking-wide leading-tight">
+                                <h1 className="text-sm font-bold text-gold-400 tracking-wide leading-tight">
                                     GCUF
                                 </h1>
-                                <p className="text-[9px] text-slate-600 uppercase tracking-[0.18em] leading-tight">
+                                <p className="text-[11px] text-slate-500 uppercase tracking-[0.18em] leading-tight">
                                     Fee Management
                                 </p>
                             </div>
                         </div>
-                        <button onClick={onClose} className="lg:hidden w-7 h-7 rounded-lg flex items-center justify-center text-slate-600 hover:text-slate-300 hover:bg-white/[0.05] transition-all">
+                        <button
+                            onClick={onClose}
+                            className="lg:hidden w-7 h-7 rounded-lg flex items-center justify-center text-slate-500 hover:text-slate-300 hover:bg-white/[0.05] transition-colors duration-150"
+                            aria-label="Close navigation"
+                        >
                             <X className="w-4 h-4" />
                         </button>
                     </div>
@@ -71,7 +81,7 @@ export default function Sidebar({ items, role, roleLabel, open, onClose }: Sideb
 
                 {/* ── Role Badge ── */}
                 <div className="px-5 py-3 border-b border-white/[0.04]">
-                    <span className={cn("inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-semibold uppercase tracking-widest border", palette.badge)}>
+                    <span className={cn("inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold uppercase tracking-widest border", palette.badge)}>
                         <span className="w-1.5 h-1.5 rounded-full bg-current" />
                         {roleLabel}
                     </span>
@@ -89,11 +99,14 @@ export default function Sidebar({ items, role, roleLabel, open, onClose }: Sideb
                                 href={item.href}
                                 onClick={onClose}
                                 className={cn(
-                                    "relative flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 group",
+                                    "relative flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium group",
+                                    "transition-colors duration-150",
+                                    "focus-visible:outline-2 focus-visible:outline-gold-500/50 focus-visible:outline-offset-1",
                                     isActive
                                         ? "bg-white/[0.05] text-foreground"
                                         : "text-slate-500 hover:text-slate-300 hover:bg-white/[0.03]"
                                 )}
+                                aria-current={isActive ? "page" : undefined}
                             >
                                 {/* Active indicator line */}
                                 {isActive && (
@@ -101,8 +114,8 @@ export default function Sidebar({ items, role, roleLabel, open, onClose }: Sideb
                                 )}
 
                                 <Icon className={cn(
-                                    "w-4 h-4 flex-shrink-0 transition-colors",
-                                    isActive ? palette.accent : "text-slate-600 group-hover:text-slate-400"
+                                    "w-4 h-4 flex-shrink-0 transition-colors duration-150",
+                                    isActive ? palette.accent : "text-muted-foreground/60 group-hover:text-slate-400"
                                 )} />
                                 <span className="truncate">{item.label}</span>
 
@@ -116,11 +129,11 @@ export default function Sidebar({ items, role, roleLabel, open, onClose }: Sideb
 
                 {/* ── Footer ── */}
                 <div className="px-4 py-4 border-t border-white/[0.04]">
-                    <button className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm text-slate-600 hover:text-rose-400 hover:bg-rose-500/5 transition-all duration-200 group">
-                        <LogOut className="w-4 h-4 flex-shrink-0 group-hover:text-rose-400 transition-colors" />
+                    <button className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm text-slate-500 hover:text-rose-400 hover:bg-rose-500/5 transition-colors duration-150 group focus-visible:outline-2 focus-visible:outline-rose-400/50">
+                        <LogOut className="w-4 h-4 flex-shrink-0 group-hover:text-rose-400 transition-colors duration-150" />
                         <span>Sign Out</span>
                     </button>
-                    <p className="text-[9px] text-slate-700 text-center mt-2 tracking-wider uppercase">
+                    <p className="text-[11px] text-muted-foreground/60 text-center mt-2.5 tracking-wider uppercase">
                         v2.0.0 &middot; GCUF 2026
                     </p>
                 </div>

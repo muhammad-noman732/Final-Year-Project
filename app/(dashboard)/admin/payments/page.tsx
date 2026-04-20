@@ -66,7 +66,7 @@ export default function PaymentsPage() {
     return (
         <div className="space-y-6">
             <div className="flex items-center justify-between">
-                <h1 className="text-2xl font-bold text-foreground font-[family-name:var(--font-playfair)]">Payments</h1>
+                <h1 className="text-2xl font-bold text-foreground tracking-tight">Payments</h1>
             </div>
 
             {/* Stats */}
@@ -79,7 +79,7 @@ export default function PaymentsPage() {
                             </div>
                         </div>
                         <p className="text-xs text-muted-foreground uppercase tracking-wider mb-1">{stat.label}</p>
-                        <p className="text-2xl font-bold text-foreground font-[family-name:var(--font-playfair)]">{stat.value}</p>
+                        <p className="text-2xl font-bold text-foreground tracking-tight">{stat.value}</p>
                     </Card>
                 ))}
             </div>
@@ -106,7 +106,7 @@ export default function PaymentsPage() {
                                 >
                                     <div className="flex items-center justify-between mb-1">
                                         <span className="text-sm font-medium text-foreground">{event.name}</span>
-                                        <span className="text-[10px] text-muted-foreground">{event.time}</span>
+                                        <span className="text-[11px] text-muted-foreground">{event.time}</span>
                                     </div>
                                     <div className="flex items-center justify-between">
                                         <span className="text-xs text-muted-foreground">

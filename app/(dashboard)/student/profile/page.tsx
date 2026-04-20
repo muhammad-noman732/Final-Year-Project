@@ -35,18 +35,18 @@ export default function StudentProfilePage() {
             <Card className="glass-card border-0 p-6">
                 <div className="flex flex-col sm:flex-row items-center gap-5">
                     <Avatar className="w-20 h-20 border-2 border-gold-500/20">
-                        <AvatarFallback className="bg-gradient-to-br from-gold-500/20 to-gold-700/20 text-gold-400 text-2xl font-bold font-[family-name:var(--font-playfair)]">
+                        <AvatarFallback className="bg-gradient-to-br from-gold-500/20 to-gold-700/20 text-gold-400 text-2xl font-bold tracking-tight">
                             MA
                         </AvatarFallback>
                     </Avatar>
                     <div className="text-center sm:text-left">
-                        <h1 className="text-2xl font-bold text-foreground font-[family-name:var(--font-playfair)]">
+                        <h1 className="text-2xl font-bold text-foreground tracking-tight">
                             {profile.name}
                         </h1>
                         <p className="text-sm text-muted-foreground font-mono">{profile.studentId}</p>
                         <div className="flex items-center gap-2 mt-2">
                             <div className="px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20">
-                                <span className="text-[10px] font-bold text-emerald-400 uppercase tracking-wider">Active Student</span>
+                                <span className="text-[11px] font-bold text-emerald-400 uppercase tracking-wider">Active Student</span>
                             </div>
                             <span className="text-xs text-muted-foreground">{profile.department}</span>
                         </div>
@@ -71,7 +71,7 @@ export default function StudentProfilePage() {
                 {/* Personal Info */}
                 <TabsContent value="personal">
                     <Card className="glass-card border-0 p-6">
-                        <h3 className="text-sm font-semibold text-foreground font-[family-name:var(--font-playfair)] mb-6">
+                        <h3 className="text-sm font-semibold text-foreground tracking-tight mb-6">
                             Personal Information
                         </h3>
                         <div className="grid sm:grid-cols-2 gap-5">
@@ -106,7 +106,7 @@ export default function StudentProfilePage() {
                 {/* Academic Info */}
                 <TabsContent value="academic">
                     <Card className="glass-card border-0 p-6">
-                        <h3 className="text-sm font-semibold text-foreground font-[family-name:var(--font-playfair)] mb-6">
+                        <h3 className="text-sm font-semibold text-foreground tracking-tight mb-6">
                             Academic Information
                         </h3>
                         <div className="grid sm:grid-cols-2 gap-5">
@@ -136,7 +136,7 @@ export default function StudentProfilePage() {
                     <div className="space-y-4">
                         {/* Change Password */}
                         <Card className="glass-card border-0 p-6">
-                            <h3 className="text-sm font-semibold text-foreground font-[family-name:var(--font-playfair)] mb-6">
+                            <h3 className="text-sm font-semibold text-foreground tracking-tight mb-6">
                                 Change Password
                             </h3>
                             <div className="space-y-4 max-w-md">
@@ -165,7 +165,7 @@ export default function StudentProfilePage() {
 
                         {/* Notifications */}
                         <Card className="glass-card border-0 p-6">
-                            <h3 className="text-sm font-semibold text-foreground font-[family-name:var(--font-playfair)] mb-6">
+                            <h3 className="text-sm font-semibold text-foreground tracking-tight mb-6">
                                 Notification Preferences
                             </h3>
                             <div className="space-y-4">
