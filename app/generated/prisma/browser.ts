@@ -73,6 +73,11 @@ export type FeeAssignment = Prisma.FeeAssignmentModel
  */
 export type Payment = Prisma.PaymentModel
 /**
+ * Model WebhookEvent
+ * 
+ */
+export type WebhookEvent = Prisma.WebhookEventModel
+/**
  * Model EmailLog
  * 
  */

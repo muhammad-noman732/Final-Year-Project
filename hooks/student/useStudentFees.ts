@@ -12,7 +12,6 @@ export interface UseStudentFeesReturn {
   profile: StudentProfile | undefined
   assignments: FeeAssignment[]
   summary: FeeProfileSummary | undefined
-  // Current (latest unpaid/overdue) for the hero card
   current: FeeAssignment | null
   // UI state
   isLoading: boolean

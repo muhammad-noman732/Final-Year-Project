@@ -18,6 +18,7 @@ export const baseApi = createApi({
     "Program",
     "Session",
     "FeeStructure",
+    "Payment",
   ],
 
   endpoints: () => ({}),

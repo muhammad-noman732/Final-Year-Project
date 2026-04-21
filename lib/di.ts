@@ -11,6 +11,8 @@ import { AcademicSessionRepository } from "@/lib/repositories/academicSession.re
 import { StudentRepository } from "@/lib/repositories/student.repository"
 import { FeeStructureRepository } from "@/lib/repositories/feeStructure.repository"
 import { FeeAssignmentRepository } from "@/lib/repositories/feeAssignment.repository"
+import { PaymentRepository } from "@/lib/repositories/payment.repository"
+import { WebhookRepository } from "@/lib/repositories/webhook.repository"
 
 // Services
 import { AuditService } from "@/lib/services/audit.service"
@@ -25,6 +27,8 @@ import { StudentService } from "@/lib/services/student.service"
 import { FeeStructureService } from "@/lib/services/feeStructure.service"
 import { StudentFeeService } from "@/lib/services/studentFee.service"
 import { FeeAssignmentService } from "@/lib/services/feeAssignment.service"
+import { PaymentService } from "@/lib/services/payment.service"
+import { WebhookService } from "@/lib/services/webhook.service"
 
 // Controllers
 import { AuthController } from "@/lib/controllers/auth.controller"
@@ -37,6 +41,8 @@ import { StudentController } from "@/lib/controllers/student.controller"
 import { FeeStructureController } from "@/lib/controllers/feeStructure.controller"
 import { StudentFeeController } from "@/lib/controllers/studentFee.controller"
 import { FeeAssignmentController } from "@/lib/controllers/feeAssignment.controller"
+import { PaymentController } from "@/lib/controllers/payment.controller"
+import { WebhookController } from "@/lib/controllers/webhook.controller"
 
 // Repositories 
 const userRepo = new UserRepository(prisma)
@@ -48,6 +54,8 @@ const sessionRepo = new AcademicSessionRepository(prisma)
 const studentRepo = new StudentRepository(prisma)
 const feeStructureRepo = new FeeStructureRepository(prisma)
 const feeAssignmentRepo = new FeeAssignmentRepository(prisma)
+const paymentRepo = new PaymentRepository(prisma)
+const webhookRepo = new WebhookRepository(prisma)
 
 // Services
 const auditService = new AuditService(auditRepo)
@@ -59,9 +67,11 @@ const programService = new ProgramService(programRepo, deptRepo, auditService)
 const sessionService = new AcademicSessionService(sessionRepo, auditService)
 const userService = new UserService(userRepo, deptRepo, tenantRepo, emailService, auditService)
 const studentService = new StudentService(studentRepo, deptRepo, programRepo, sessionRepo, tenantRepo, emailService, auditService)
-const feeStructureService = new FeeStructureService(feeStructureRepo, programRepo, auditService)
 const studentFeeService = new StudentFeeService(studentRepo, feeAssignmentRepo)
 const feeAssignmentService = new FeeAssignmentService(studentRepo, feeStructureRepo, feeAssignmentRepo, auditService)
+const feeStructureService = new FeeStructureService(feeStructureRepo, programRepo, auditService, feeAssignmentService)
+const paymentService = new PaymentService(paymentRepo)
+const webhookService = new WebhookService(paymentRepo, webhookRepo)
 
 // Controllers
 export const authController = new AuthController(authService)
@@ -74,3 +84,57 @@ export const studentController = new StudentController(studentService)
 export const feeStructureController = new FeeStructureController(feeStructureService)
 export const studentFeeController = new StudentFeeController(studentFeeService)
 export const feeAssignmentController = new FeeAssignmentController(feeAssignmentService)
+export const paymentController = new PaymentController(paymentService)
+export const webhookController = new WebhookController(webhookService)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

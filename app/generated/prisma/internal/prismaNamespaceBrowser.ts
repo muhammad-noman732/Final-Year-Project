@@ -62,6 +62,7 @@ export const ModelName = {
   FeeStructure: 'FeeStructure',
   FeeAssignment: 'FeeAssignment',
   Payment: 'Payment',
+  WebhookEvent: 'WebhookEvent',
   EmailLog: 'EmailLog',
   Notification: 'Notification',
   AuditLog: 'AuditLog',
@@ -288,6 +289,22 @@ export const PaymentScalarFieldEnum = {
 } as const
 
 export type PaymentScalarFieldEnum = (typeof PaymentScalarFieldEnum)[keyof typeof PaymentScalarFieldEnum]
+
+
+export const WebhookEventScalarFieldEnum = {
+  id: 'id',
+  stripeEventId: 'stripeEventId',
+  type: 'type',
+  tenantId: 'tenantId',
+  processed: 'processed',
+  processedAt: 'processedAt',
+  failedAt: 'failedAt',
+  failureReason: 'failureReason',
+  rawPayload: 'rawPayload',
+  createdAt: 'createdAt'
+} as const
+
+export type WebhookEventScalarFieldEnum = (typeof WebhookEventScalarFieldEnum)[keyof typeof WebhookEventScalarFieldEnum]
 
 
 export const EmailLogScalarFieldEnum = {

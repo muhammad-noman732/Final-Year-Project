@@ -6,6 +6,7 @@ import type {
 } from "@/lib/repositories/feeStructure.repository"
 import type { ProgramRepository } from "@/lib/repositories/program.repository"
 import type { AuditService } from "@/lib/services/audit.service"
+import type { FeeAssignmentService } from "@/lib/services/feeAssignment.service"
 import type {
   CreateFeeStructureInput,
   UpdateFeeStructureInput,
@@ -20,6 +21,7 @@ export class FeeStructureService {
     private readonly feeStructureRepo: FeeStructureRepository,
     private readonly programRepo: ProgramRepository,
     private readonly auditService: AuditService,
+    private readonly feeAssignmentService: FeeAssignmentService,
   ) { }
 
   //  List 
@@ -106,7 +108,25 @@ export class FeeStructureService {
       lateFee: input.lateFee,
     })
 
-    // 4. Audit log (fire-and-forget)
+    // 4. AUTOMATIC ASSIGNMENT: Assign to all matching active students immediately
+    try {
+      await this.feeAssignmentService.assignFee(tenantId, adminUserId, {
+        feeStructureId: feeStructure.id,
+      })
+    } catch (assignError) {
+      // We don't want to fail the whole creation if assignment fails (e.g., 0 students)
+      logger.warn(
+        {
+          event: "fee_structure.auto_assign.failure",
+          tenantId,
+          feeStructureId: feeStructure.id,
+          error: assignError,
+        },
+        "Auto-assignment failed after structure creation",
+      )
+    }
+
+    // 5. Audit log (fire-and-forget)
     this._audit({
       tenantId,
       userId: adminUserId,

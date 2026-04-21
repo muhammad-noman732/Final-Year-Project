@@ -26,7 +26,7 @@ export class StudentFeeService {
     tenantId: string,
     userId: string,
   ): Promise<StudentFeeProfile> {
-    // 1. Resolve student record from the authenticated user's ID
+    // Resolve student record from the authenticated user's ID
     const student = await this.studentRepo.findByUserId(tenantId, userId)
     if (!student) {
       throw new NotFoundError(

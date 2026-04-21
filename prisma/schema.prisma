@@ -380,6 +380,39 @@
     @@index([stripePaymentIntentId]) // fast webhook lookup
   }
 
+
+model WebhookEvent {
+  id            String    @id @default(cuid())
+
+  // Stripe's own event ID — e.g. "evt_1ABC123..."
+  // This is what makes it idempotent: if the same ID arrives twice, we skip it
+  stripeEventId String    @unique
+
+  // The event type — e.g. "payment_intent.succeeded"
+  type          String
+
+  // Which tenant this event belongs to (extracted from PI metadata)
+  // Nullable because some events may not have a tenant (e.g. early webhook before metadata set)
+  tenantId      String?
+
+  // Processing state
+  processed     Boolean   @default(false)
+  processedAt   DateTime?
+
+  // Error tracking — if handler threw, store why so you can debug/replay
+  failedAt      DateTime?
+  failureReason String?
+
+  // Raw payload stored for debugging and manual replay
+  // NEVER query this in business logic — always use the typed Stripe object
+  rawPayload    String    @db.Text
+
+  createdAt     DateTime  @default(now())
+
+  @@index([processed, createdAt])     // cron: find stuck/failed events
+  @@index([tenantId, type])            // analytics: events per tenant
+  @@index([stripeEventId])             // fast lookup on every webhook hit
+}
   // ═══════════════════════════════════════════════
   //  EMAIL LOG — Every email ever sent (receipts, reminders, resets)
   // ═══════════════════════════════════════════════
@@ -550,8 +583,7 @@
 
   enum PaymentMethod {
     STRIPE_CARD // Online card payment via Stripe
-    BANK_CHALLAN // Offline — student deposits at bank, admin verifies manually
-    WAIVER // Admin granted a waiver — no actual money moved
+    
   }
 
   enum PaymentStatus {

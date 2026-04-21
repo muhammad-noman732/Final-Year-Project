@@ -1,43 +1,15 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useRef, useEffect } from "react";
 import Link from "next/link";
 import {
     CheckCircle2, Download, Mail, Printer,
-    ArrowLeft, Check, Info, QrCode, Sparkles,
+    ArrowLeft, Check, Info, QrCode, Sparkles, Loader2,
+    AlertCircle,
 } from "lucide-react";
 import { formatFullCurrency } from "@/config/constants";
+import { usePaymentSuccess } from "@/hooks/student/usePaymentSuccess";
 
-const RECEIPT = {
-    studentName: "Muhammad Ali",
-    studentId: "GCUF-2024-CS-0042",
-    department: "Computer Science",
-    program: "BS Computer Science",
-    semester: "4th Semester",
-    session: "2024-2028",
-    transactionId: "TXN-2026-00456",
-    paymentMethod: "Stripe · Visa ****1234",
-    dateTime: "February 26, 2026 · 12:45 PM",
-    status: "VERIFIED",
-};
-
-const FEE_ITEMS = [
-    { label: "Tuition Fee", amount: 35000 },
-    { label: "Lab Fee", amount: 5000 },
-    { label: "Library Fee", amount: 3000 },
-    { label: "Sports Fee", amount: 2000 },
-    { label: "Registration Fee", amount: 5000 },
-];
-const TOTAL = FEE_ITEMS.reduce((s, i) => s + i.amount, 0);
-
-const NEXT_STEPS = [
-    { done: true, text: "Fee payment confirmed" },
-    { done: true, text: "Receipt saved to your account" },
-    { done: true, text: "Email sent to ali@gcuf.edu.pk" },
-    { done: false, text: "You now have full access to semester facilities", info: true },
-];
-
-/* ─── Animated Check Icon ─── */
 function AnimatedCheck() {
     return (
         <div className="relative inline-flex">
@@ -51,19 +23,71 @@ function AnimatedCheck() {
     );
 }
 
+function SuccessLoading() {
+    return (
+        <div className="max-w-2xl mx-auto pb-12 flex items-center justify-center min-h-[400px]">
+            <div className="flex flex-col items-center gap-3">
+                <Loader2 className="w-8 h-8 text-gold-400 animate-spin" />
+                <p className="text-sm text-muted-foreground">Verifying your payment…</p>
+            </div>
+        </div>
+    );
+}
+
 export default function PaymentSuccessPage() {
     const checkRef = useRef<HTMLDivElement>(null);
+    const {
+        paidAssignment,
+        isLoading,
+        stripeRedirectFailed,
+        studentName,
+        studentIdStr,
+        studentEmail,
+        programName,
+        semLabel,
+        sessionName,
+        departmentName,
+        displayAmount,
+        receiptNumber,
+        formattedDate,
+    } = usePaymentSuccess();
 
+    // Entrance animation
     useEffect(() => {
-        if (checkRef.current) {
-            checkRef.current.style.opacity = "1";
-            checkRef.current.style.transform = "translateY(0) scale(1)";
-        }
+        const el = checkRef.current;
+        if (!el) return;
+        const timer = setTimeout(() => {
+            el.style.opacity = "1";
+            el.style.transform = "translateY(0) scale(1)";
+        }, 100);
+        return () => clearTimeout(timer);
     }, []);
+
+    if (isLoading) return <SuccessLoading />;
+
+    if (stripeRedirectFailed) {
+        return (
+            <div className="max-w-2xl mx-auto pb-12 flex items-center justify-center min-h-[400px]">
+                <div className="flex flex-col items-center gap-4 text-center">
+                    <AlertCircle className="w-12 h-12 text-rose-400" />
+                    <h2 className="text-lg font-bold text-foreground">Payment Not Completed</h2>
+                    <p className="text-sm text-muted-foreground max-w-xs">
+                        Your payment was not successful. No charge has been made.
+                    </p>
+                    <Link
+                        href="/student/payfee"
+                        className="px-4 py-2.5 rounded-xl bg-[#635BFF] text-white text-sm font-medium hover:bg-[#5249E0] transition-colors"
+                    >
+                        Try Again
+                    </Link>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="max-w-2xl mx-auto pb-12 space-y-8">
-            {/* ══════════ SUCCESS HEADER ══════════ */}
+            {/* ══ SUCCESS HEADER ══ */}
             <div
                 ref={checkRef}
                 className="text-center transition-all duration-700"
@@ -76,24 +100,25 @@ export default function PaymentSuccessPage() {
                     Payment Successful
                 </h1>
                 <p className="text-muted-foreground text-sm">
-                    Your fee has been paid and verified by GCUF.
+                    Your fee has been paid and verified by the institution.
                 </p>
             </div>
 
-            {/* ══════════ OFFICIAL RECEIPT ══════════ */}
+            {/* ══ OFFICIAL RECEIPT ══ */}
             <div className="relative rounded-2xl border border-white/[0.07] bg-[#0a0e1a] overflow-hidden shadow-2xl shadow-black/40">
                 {/* Gold accent bar */}
                 <div className="h-0.5 bg-gradient-to-r from-transparent via-gold-400 to-transparent" />
 
-                {/* PAID stamp */}
+                {/* PAID watermark */}
                 <div
                     className="pointer-events-none select-none absolute top-6 right-6 text-emerald-500/10 font-black uppercase text-[64px] leading-none [transform:rotate(-15deg)] tracking-wider"
+                    aria-hidden
                 >
                     PAID
                 </div>
 
                 <div className="p-6 sm:p-8 relative">
-                    {/* University Header */}
+                    {/* University header */}
                     <div className="text-center mb-6 pb-6 border-b border-white/[0.06]">
                         <p className="text-[11px] text-gold-500/50 uppercase tracking-[0.25em] font-medium mb-1.5">
                             Government College University Faisalabad
@@ -103,50 +128,65 @@ export default function PaymentSuccessPage() {
                         </h2>
                     </div>
 
-                    {/* Student Info Grid */}
+                    {/* Student info grid */}
                     <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-6 gap-y-4 mb-6 pb-6 border-b border-white/[0.06]">
                         {[
-                            { label: "Student Name", value: RECEIPT.studentName },
-                            { label: "Student ID", value: RECEIPT.studentId },
-                            { label: "Department", value: RECEIPT.department },
-                            { label: "Program", value: RECEIPT.program },
-                            { label: "Semester", value: RECEIPT.semester },
-                            { label: "Session", value: RECEIPT.session },
+                            { label: "Student Name", value: studentName },
+                            { label: "Student ID", value: studentIdStr },
+                            { label: "Department", value: departmentName },
+                            { label: "Program", value: programName },
+                            { label: "Semester", value: `${semLabel} Semester` },
+                            { label: "Session", value: sessionName },
                         ].map((f) => (
                             <div key={f.label}>
-                                <p className="text-[11px] text-muted-foreground uppercase tracking-widest mb-0.5">{f.label}</p>
+                                <p className="text-[11px] text-muted-foreground uppercase tracking-widest mb-0.5">
+                                    {f.label}
+                                </p>
                                 <p className="text-xs font-medium text-foreground">{f.value}</p>
                             </div>
                         ))}
                     </div>
 
-                    {/* Fee Breakdown */}
-                    <div className="space-y-1 mb-4">
-                        {FEE_ITEMS.map((item) => (
-                            <div
-                                key={item.label}
-                                className="flex justify-between text-sm py-2 border-b border-white/[0.03] last:border-0"
-                            >
-                                <span className="text-muted-foreground">{item.label}</span>
-                                <span className="text-foreground tabular-nums">{formatFullCurrency(item.amount)}</span>
-                            </div>
-                        ))}
-                    </div>
+                    {/* Fee breakdown */}
+                    {paidAssignment && (
+                        <div className="space-y-1 mb-4">
+                            {[
+                                { label: "Tuition Fee", amount: paidAssignment.feeStructure.tuitionFee },
+                                { label: "Lab Fee", amount: paidAssignment.feeStructure.labFee },
+                                { label: "Library Fee", amount: paidAssignment.feeStructure.libraryFee },
+                                { label: "Sports Fee", amount: paidAssignment.feeStructure.sportsFee },
+                                { label: "Registration Fee", amount: paidAssignment.feeStructure.registrationFee },
+                                { label: "Examination Fee", amount: paidAssignment.feeStructure.examinationFee },
+                            ]
+                                .filter((i) => i.amount > 0)
+                                .map((item) => (
+                                    <div
+                                        key={item.label}
+                                        className="flex justify-between text-sm py-2 border-b border-white/[0.03] last:border-0"
+                                    >
+                                        <span className="text-muted-foreground">{item.label}</span>
+                                        <span className="text-foreground tabular-nums">
+                                            {formatFullCurrency(item.amount)}
+                                        </span>
+                                    </div>
+                                ))}
+                        </div>
+                    )}
 
                     {/* Total */}
                     <div className="flex justify-between items-center py-3 px-4 rounded-xl bg-gold-500/5 border border-gold-500/10 mb-6">
                         <span className="text-sm font-bold text-gold-400">Total Paid</span>
                         <span className="text-xl font-bold text-gold-gradient tracking-tight">
-                            {formatFullCurrency(TOTAL)}
+                            {formatFullCurrency(displayAmount)}
                         </span>
                     </div>
 
-                    {/* Transaction Info */}
+                    {/* Transaction info */}
                     <div className="space-y-2 mb-6 pb-6 border-b border-white/[0.06]">
                         {[
-                            { label: "Transaction ID", value: RECEIPT.transactionId },
-                            { label: "Payment Method", value: RECEIPT.paymentMethod },
-                            { label: "Date & Time", value: RECEIPT.dateTime },
+                            { label: "Receipt No.", value: receiptNumber },
+                            { label: "Payment Method", value: "Stripe · Card" },
+                            { label: "Date & Time", value: formattedDate },
                         ].map((f) => (
                             <div key={f.label} className="flex justify-between text-sm">
                                 <span className="text-muted-foreground">{f.label}</span>
@@ -161,11 +201,15 @@ export default function PaymentSuccessPage() {
                         </div>
                     </div>
 
-                    {/* QR + Footer */}
+                    {/* QR + footer */}
                     <div className="flex items-center justify-between">
                         <div>
-                            <p className="text-[11px] text-muted-foreground uppercase tracking-widest mb-1">Scan to verify</p>
-                            <p className="text-[11px] text-muted-foreground/60 font-mono">{RECEIPT.transactionId}</p>
+                            <p className="text-[11px] text-muted-foreground uppercase tracking-widest mb-1">
+                                Scan to verify
+                            </p>
+                            <p className="text-[11px] text-muted-foreground/60 font-mono">
+                                {receiptNumber}
+                            </p>
                         </div>
                         <div className="w-16 h-16 rounded-lg bg-white/5 border border-white/[0.08] flex items-center justify-center">
                             <QrCode className="w-9 h-9 text-gold-500/25" />
@@ -178,41 +222,44 @@ export default function PaymentSuccessPage() {
                 </div>
             </div>
 
-            {/* ══════════ ACTION BUTTONS ══════════ */}
+            {/* ══ ACTIONS ══ */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                 {[
-                    { icon: Download, label: "Download" },
-                    { icon: Mail, label: "Email" },
-                    { icon: Printer, label: "Print" },
+                    { icon: Download, label: "Download", onClick: () => window.print() },
+                    { icon: Mail, label: "Email", onClick: undefined },
+                    { icon: Printer, label: "Print", onClick: () => window.print() },
                     { icon: ArrowLeft, label: "Dashboard", href: "/student" },
                 ].map((btn) => {
                     const cls =
-                        "flex items-center justify-center gap-2 py-2.5 rounded-xl border border-white/[0.07] bg-white/[0.02] text-sm font-medium text-muted-foreground hover:text-gold-400 hover:border-gold-500/20 hover:bg-gold-500/4 transition-all duration-200 w-full focus-visible:outline-2 focus-visible:outline-gold-500/50";
+                        "flex items-center justify-center gap-2 py-2.5 rounded-xl border border-white/[0.07] bg-white/[0.02] text-sm font-medium text-muted-foreground hover:text-gold-400 hover:border-gold-500/20 hover:bg-gold-500/[0.04] transition-all duration-200 w-full focus-visible:outline-2 focus-visible:outline-gold-500/50";
                     return btn.href ? (
                         <Link key={btn.label} href={btn.href} className={cls}>
                             <btn.icon className="w-4 h-4" /> {btn.label}
                         </Link>
                     ) : (
-                        <button key={btn.label} className={cls}>
+                        <button key={btn.label} className={cls} onClick={btn.onClick}>
                             <btn.icon className="w-4 h-4" /> {btn.label}
                         </button>
                     );
                 })}
             </div>
 
-            {/* ══════════ WHAT'S NEXT ══════════ */}
+            {/* ══ WHAT'S NEXT ══ */}
             <div className="rounded-2xl border border-white/[0.06] bg-[#0a0e1a] p-6">
                 <h3 className="text-sm font-bold text-foreground tracking-tight mb-4 flex items-center gap-2">
                     <Sparkles className="w-4 h-4 text-gold-400" />
                     What&apos;s Next
                 </h3>
                 <div className="space-y-3">
-                    {NEXT_STEPS.map((step, i) => (
+                    {[
+                        { done: true, text: `Fee payment confirmed for ${semLabel} Semester` },
+                        { done: true, text: "Receipt saved to your account" },
+                        { done: true, text: `Confirmation email sent to ${studentEmail}` },
+                        { done: false, info: true, text: "You now have full access to semester facilities" },
+                    ].map((step, i) => (
                         <div key={i} className="flex items-center gap-3">
                             <div
-                                className={`w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 ${step.info
-                                    ? "bg-sky-500/10"
-                                    : "bg-emerald-500/10"
+                                className={`w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 ${step.info ? "bg-sky-500/10" : "bg-emerald-500/10"
                                     }`}
                             >
                                 {step.info ? (

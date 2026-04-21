@@ -62,9 +62,7 @@ export type FeeStatus = (typeof FeeStatus)[keyof typeof FeeStatus]
 
 
 export const PaymentMethod = {
-  STRIPE_CARD: 'STRIPE_CARD',
-  BANK_CHALLAN: 'BANK_CHALLAN',
-  WAIVER: 'WAIVER'
+  STRIPE_CARD: 'STRIPE_CARD'
 } as const
 
 export type PaymentMethod = (typeof PaymentMethod)[keyof typeof PaymentMethod]
