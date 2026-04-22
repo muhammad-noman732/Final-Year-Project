@@ -62,6 +62,9 @@ export interface UseStudentDashboardReturn {
   // Payment history panel toggle
   historyOpen: boolean
   setHistoryOpen: (open: boolean) => void
+
+  isNavigating: boolean
+  setIsNavigating: (navigating: boolean) => void
 }
 
 //  Ordinal helper 
@@ -92,6 +95,7 @@ export function useStudentDashboard(): UseStudentDashboardReturn {
   const { data, isLoading, isFetching, isError } = useGetMyFeeProfileQuery()
 
   const [historyOpen, setHistoryOpen] = useState(false)
+  const [isNavigating, setIsNavigating] = useState(false)
   const [countdown, setCountdown] = useState<CountdownTime>(
     { days: 0, hours: 0, minutes: 0, seconds: 0 },
   )
@@ -173,5 +177,7 @@ export function useStudentDashboard(): UseStudentDashboardReturn {
     isError,
     historyOpen,
     setHistoryOpen,
+    isNavigating,
+    setIsNavigating,
   }
 }

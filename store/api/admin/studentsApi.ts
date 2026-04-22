@@ -70,6 +70,33 @@ export const studentsApi = baseApi.injectEndpoints({
         { type: "Student", id: arg.id },
       ],
     }),
+
+    deactivateStudent: builder.mutation<ApiResponse<Student>, string>({
+      query: (id) => ({
+        url: `/admin/students/${id}`,
+        method: "PATCH",
+        body: { enrollmentStatus: "SUSPENDED" },
+      }),
+      async onQueryStarted(id, { dispatch, queryFulfilled }) {
+        const listPatch = dispatch(
+          studentsApi.util.updateQueryData("getStudents", undefined, (draft) => {
+            const students = draft.data?.data
+            if (!students) return
+            const existing = students.find((s) => s.id === id)
+            if (existing) existing.enrollmentStatus = "SUSPENDED"
+          }),
+        )
+        try {
+          await queryFulfilled
+        } catch {
+          listPatch.undo()
+        }
+      },
+      invalidatesTags: (_r, _e, id) => [
+        { type: "Student", id: "LIST" },
+        { type: "Student", id },
+      ],
+    }),
   }),
 })
 
@@ -78,4 +105,5 @@ export const {
   useGetStudentQuery,
   useCreateStudentMutation,
   useUpdateStudentMutation,
+  useDeactivateStudentMutation,
 } = studentsApi

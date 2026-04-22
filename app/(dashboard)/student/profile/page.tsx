@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { User, Mail, Phone, MapPin, GraduationCap, Calendar, Shield, Bell, Eye, EyeOff, Save } from "lucide-react";
+import { User, Mail, Phone, MapPin, GraduationCap, Calendar, Shield, Bell, Eye, EyeOff, Save, BookOpen } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -10,49 +10,62 @@ import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
-const profile = {
-    name: "Muhammad Ali",
-    email: "ali@gcuf.edu.pk",
-    phone: "+92 300 1234567",
-    cnic: "33100-1234567-1",
-    address: "123 Main Street, Faisalabad",
-    studentId: "GCUF-2024-CS-0042",
-    department: "Computer Science",
-    program: "BS Computer Science",
-    semester: "4th Semester",
-    session: "2024-2028",
-    enrollmentDate: "Aug 15, 2024",
-    guardianName: "Ahmed Ali",
-    guardianPhone: "+92 301 7654321",
-};
-
+import { useStudentProfile } from "@/hooks/student/useStudentProfile";
+import { format } from "date-fns";
+import { Skeleton } from "boneyard-js/react";
 export default function StudentProfilePage() {
     const [showPassword, setShowPassword] = useState(false);
+    const { profile, isLoading, isError } = useStudentProfile();
+
+    if (isError) {
+        return (
+            <div className="max-w-3xl mx-auto flex items-center justify-center min-h-[400px]">
+                <p className="text-muted-foreground">Failed to load profile. Please try again later.</p>
+            </div>
+        );
+    }
+
+    const initials = profile?.user?.name
+        ? profile.user.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase()
+        : "";
+
+    const enrollmentDateObj = profile?.createdAt ? new Date(profile.createdAt) : null;
+    const formattedEnrollmentDate = enrollmentDateObj && !isNaN(enrollmentDateObj.getTime()) ? format(enrollmentDateObj, "MMM dd, yyyy") : "N/A";
 
     return (
         <div className="max-w-3xl mx-auto space-y-6">
             {/* Profile Header */}
-            <Card className="glass-card border-0 p-6">
-                <div className="flex flex-col sm:flex-row items-center gap-5">
-                    <Avatar className="w-20 h-20 border-2 border-gold-500/20">
-                        <AvatarFallback className="bg-gradient-to-br from-gold-500/20 to-gold-700/20 text-gold-400 text-2xl font-bold tracking-tight">
-                            MA
-                        </AvatarFallback>
-                    </Avatar>
-                    <div className="text-center sm:text-left">
-                        <h1 className="text-2xl font-bold text-foreground tracking-tight">
-                            {profile.name}
-                        </h1>
-                        <p className="text-sm text-muted-foreground font-mono">{profile.studentId}</p>
-                        <div className="flex items-center gap-2 mt-2">
-                            <div className="px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20">
-                                <span className="text-[11px] font-bold text-emerald-400 uppercase tracking-wider">Active Student</span>
+            <Skeleton name="student-profile-header" loading={isLoading}>
+                <div className="p-8 rounded-[2rem] bg-gradient-to-br from-[#0d1321] to-[#080c14] border border-white/[0.05] shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] relative overflow-hidden">
+                    <div className="absolute top-0 right-0 w-64 h-64 bg-gold-500/10 blur-[100px] pointer-events-none rounded-full" />
+                    
+                    <div className="relative z-10 flex flex-col sm:flex-row items-center sm:items-start gap-6">
+                        <Avatar className="w-24 h-24 border border-gold-500/20 shadow-xl shadow-gold-500/5">
+                            <AvatarFallback className="bg-gradient-to-br from-navy-900 to-navy-950 text-gold-400 text-3xl font-bold tracking-tight">
+                                {initials}
+                            </AvatarFallback>
+                        </Avatar>
+                        <div className="text-center sm:text-left mt-2">
+                            <h1 className="text-3xl font-bold text-foreground tracking-tighter mb-1">
+                                {profile?.user?.name}
+                            </h1>
+                            <p className="text-sm font-mono text-muted-foreground tracking-widest">{profile?.studentId}</p>
+                            
+                            <div className="flex flex-wrap items-center justify-center sm:justify-start gap-3 mt-4">
+                                {profile?.enrollmentStatus && (
+                                    <div className="px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 shadow-inner">
+                                        <span className="text-[10px] font-bold text-emerald-400 uppercase tracking-widest">{profile.enrollmentStatus.replace(/_/g, ' ')}</span>
+                                    </div>
+                                )}
+                                <div className="flex items-center gap-1.5 text-xs text-muted-foreground font-medium bg-white/5 py-1 px-3 rounded-full border border-white/5">
+                                    <BookOpen className="w-3.5 h-3.5" />
+                                    {profile?.program?.code || profile?.department?.name}
+                                </div>
                             </div>
-                            <span className="text-xs text-muted-foreground">{profile.department}</span>
                         </div>
                     </div>
                 </div>
-            </Card>
+            </Skeleton>
 
             {/* Tabs */}
             <Tabs defaultValue="personal" className="space-y-4">
@@ -69,66 +82,62 @@ export default function StudentProfilePage() {
                 </TabsList>
 
                 {/* Personal Info */}
-                <TabsContent value="personal">
-                    <Card className="glass-card border-0 p-6">
-                        <h3 className="text-sm font-semibold text-foreground tracking-tight mb-6">
-                            Personal Information
-                        </h3>
-                        <div className="grid sm:grid-cols-2 gap-5">
-                            {[
-                                { icon: User, label: "Full Name", value: profile.name },
-                                { icon: Mail, label: "Email", value: profile.email },
-                                { icon: Phone, label: "Phone", value: profile.phone },
-                                { icon: Shield, label: "CNIC", value: profile.cnic },
-                                { icon: User, label: "Guardian Name", value: profile.guardianName },
-                                { icon: Phone, label: "Guardian Phone", value: profile.guardianPhone },
-                            ].map((field) => (
-                                <div key={field.label} className="space-y-2">
-                                    <Label className="text-xs text-muted-foreground flex items-center gap-1.5">
-                                        <field.icon className="w-3 h-3" /> {field.label}
-                                    </Label>
-                                    <Input defaultValue={field.value} className="h-10 bg-navy-800/50 border-gold-500/10 focus:border-gold-500/30" />
+                <TabsContent value="personal" className="mt-6">
+                    <Skeleton name="student-profile-personal" loading={isLoading}>
+                    <div className="grid sm:grid-cols-2 gap-4">
+                        {[
+                            { icon: User, label: "Full Name", value: profile?.user?.name },
+                            { icon: Mail, label: "Email Address", value: profile?.user?.email },
+                            { icon: Phone, label: "Phone Number", value: profile?.user?.phone || "Not Provided" },
+                            { icon: Shield, label: "National ID (CNIC)", value: profile?.cnic || "Not Provided" },
+                        ].map((field) => (
+                            <div key={field.label} className="p-5 rounded-[1.5rem] bg-navy-900/30 border border-white/[0.05] flex flex-col gap-1.5 transition-all hover:bg-navy-900/50">
+                                <div className="flex items-center gap-2 text-muted-foreground mb-1">
+                                    <field.icon className="w-3.5 h-3.5 text-gold-500/70" />
+                                    <span className="text-[11px] font-bold uppercase tracking-widest">{field.label}</span>
                                 </div>
-                            ))}
-                            <div className="sm:col-span-2 space-y-2">
-                                <Label className="text-xs text-muted-foreground flex items-center gap-1.5">
-                                    <MapPin className="w-3 h-3" /> Address
-                                </Label>
-                                <Input defaultValue={profile.address} className="h-10 bg-navy-800/50 border-gold-500/10 focus:border-gold-500/30" />
+                                <div className="text-sm font-medium text-foreground tracking-tight pl-5">
+                                    {field.value}
+                                </div>
+                            </div>
+                        ))}
+                        <div className="sm:col-span-2 p-5 rounded-[1.5rem] bg-navy-900/30 border border-white/[0.05] flex flex-col gap-1.5 transition-all hover:bg-navy-900/50">
+                            <div className="flex items-center gap-2 text-muted-foreground mb-1">
+                                <MapPin className="w-3.5 h-3.5 text-gold-500/70" />
+                                <span className="text-[11px] font-bold uppercase tracking-widest">Registered Address</span>
+                            </div>
+                            <div className="text-sm font-medium text-foreground tracking-tight pl-5">
+                                Not provided in current system record.
                             </div>
                         </div>
-                        <Button className="mt-6 bg-gradient-to-r from-gold-600 to-gold-500 text-navy-950 font-semibold">
-                            <Save className="w-4 h-4 mr-2" /> Save Changes
-                        </Button>
-                    </Card>
+                    </div>
+                    </Skeleton>
                 </TabsContent>
 
                 {/* Academic Info */}
-                <TabsContent value="academic">
-                    <Card className="glass-card border-0 p-6">
-                        <h3 className="text-sm font-semibold text-foreground tracking-tight mb-6">
-                            Academic Information
-                        </h3>
-                        <div className="grid sm:grid-cols-2 gap-5">
-                            {[
-                                { icon: GraduationCap, label: "Department", value: profile.department },
-                                { icon: GraduationCap, label: "Program", value: profile.program },
-                                { icon: Calendar, label: "Current Semester", value: profile.semester },
-                                { icon: Calendar, label: "Session", value: profile.session },
-                                { icon: Calendar, label: "Enrollment Date", value: profile.enrollmentDate },
-                                { icon: Shield, label: "Student ID", value: profile.studentId },
-                            ].map((field) => (
-                                <div key={field.label} className="space-y-2">
-                                    <Label className="text-xs text-muted-foreground flex items-center gap-1.5">
-                                        <field.icon className="w-3 h-3" /> {field.label}
-                                    </Label>
-                                    <div className="h-10 px-3 flex items-center bg-navy-800/30 border border-gold-500/5 rounded-md text-sm text-muted-foreground">
-                                        {field.value}
-                                    </div>
+                <TabsContent value="academic" className="mt-6">
+                    <Skeleton name="student-profile-academic" loading={isLoading}>
+                    <div className="grid sm:grid-cols-2 gap-4">
+                        {[
+                            { icon: GraduationCap, label: "Department", value: profile?.department?.name },
+                            { icon: BookOpen, label: "Program Enrolled", value: profile?.program?.name },
+                            { icon: Calendar, label: "Current Semester", value: profile?.currentSemester ? `${profile.currentSemester}${["st","nd","rd"][((profile.currentSemester+90)%100-10)%10-1]||"th"} Semester` : "N/A" },
+                            { icon: Calendar, label: "Academic Session", value: profile?.session?.name },
+                            { icon: Calendar, label: "Enrollment Date", value: formattedEnrollmentDate },
+                            { icon: Shield, label: "Student Identification", value: profile?.studentId },
+                        ].map((field) => (
+                            <div key={field.label} className="p-5 rounded-[1.5rem] bg-navy-900/30 border border-white/[0.05] flex flex-col gap-1.5 transition-all hover:bg-navy-900/50">
+                                <div className="flex items-center gap-2 text-muted-foreground mb-1">
+                                    <field.icon className="w-3.5 h-3.5 text-gold-500/70" />
+                                    <span className="text-[11px] font-bold uppercase tracking-widest">{field.label}</span>
                                 </div>
-                            ))}
-                        </div>
-                    </Card>
+                                <div className="text-sm font-medium text-foreground tracking-tight pl-5">
+                                    {field.value}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                    </Skeleton>
                 </TabsContent>
 
                 {/* Settings */}

@@ -1,19 +1,22 @@
 "use client";
 
-import { 
-    Elements, 
+import {
+    Elements,
 } from "@stripe/react-stripe-js";
 import { stripePromise } from "@/lib/stripe/stripe.client";
 import { usePayFee } from "@/hooks/student/usePayFee";
-import { 
-    AlertCircle, 
-    ArrowLeft, 
-    Loader2 
+import {
+    AlertCircle,
+    ArrowLeft,
+    Loader2
 } from "lucide-react";
 import { CheckoutForm } from "@/components/student/payfee/CheckoutForm";
 import { OrderSummary } from "@/components/student/payfee/OrderSummary";
+import { Skeleton } from "boneyard-js/react";
 
-export default function PayFeePage() {
+import { Suspense } from "react";
+
+function PayFeeContent() {
     const {
         feeProfile,
         targetAssignment,
@@ -24,16 +27,10 @@ export default function PayFeePage() {
         errorMessage
     } = usePayFee();
 
-    if (isLoading) {
-        return (
-            <div className="max-w-5xl mx-auto pb-10 flex flex-col items-center justify-center min-h-[400px]">
-                <Loader2 className="w-10 h-10 animate-spin text-gold-500 mb-4" />
-                <p className="text-muted-foreground animate-pulse">Initializing Secure Checkout...</p>
-            </div>
-        );
-    }
 
-    if (isError || !targetAssignment) {
+    const isActuallyLoading = isLoading || Boolean(!clientSecret && targetAssignment && !isError);
+
+    if (!isLoading && (isError || !targetAssignment)) {
         return (
             <div className="max-w-5xl mx-auto pb-10">
                 <a href="/student" className="inline-flex items-center gap-1.5 text-muted-foreground hover:text-gold-400 text-sm mb-6">
@@ -57,39 +54,79 @@ export default function PayFeePage() {
                 <ArrowLeft className="w-3.5 h-3.5" /> Back to Dashboard
             </a>
 
-            {clientSecret ? (
-                <div className="grid lg:grid-cols-[1fr_420px] gap-6">
-                    <div className="order-2 lg:order-1">
-                        <Elements
-                            stripe={stripePromise}
-                            options={{
-                                clientSecret,
-                                appearance: { theme: 'night' },
-                            }}
-                        >
-                            <CheckoutForm
-                                amountPkr={intentAmount}
-                                targetAssignment={targetAssignment}
-                                studentName={feeProfile?.student.user.name ?? ""}
-                                studentId={feeProfile?.student.studentId ?? ""}
-                                clientSecret={clientSecret}
-                            />
-                        </Elements>
-                    </div>
-                    <div className="order-1 lg:order-2">
-                        <OrderSummary
-                            targetAssignment={targetAssignment}
-                            amountPkr={intentAmount}
-                            studentName={feeProfile?.student.user.name ?? ""}
-                            studentId={feeProfile?.student.studentId ?? ""}
-                        />
-                    </div>
+            <div className="grid lg:grid-cols-[1fr_420px] gap-6">
+                <div className="order-2 lg:order-1">
+                        {clientSecret && targetAssignment ? (
+                            <Elements
+                                stripe={stripePromise}
+                                options={{
+                                    clientSecret,
+                                    appearance: { theme: 'night' },
+                                }}
+                            >
+                                <CheckoutForm
+                                    amountPkr={intentAmount}
+                                    targetAssignment={targetAssignment}
+                                    studentName={feeProfile?.student.user.name ?? ""}
+                                    studentId={feeProfile?.student.studentId ?? ""}
+                                    clientSecret={clientSecret}
+                                />
+                            </Elements>
+                        ) : (
+                            <div className="rounded-2xl border border-white/[0.06] bg-[#0a0e1a] p-6 shadow-2xl relative overflow-hidden">
+                                <div className="absolute inset-0 pointer-events-none opacity-50 bg-gradient-to-br from-white/[0.01] to-transparent" />
+
+                                {/* Header Skeleton */}
+                                <div className="pb-4 border-b border-white/[0.04] mb-6 flex gap-3 items-center animate-pulse">
+                                    <div className="w-10 h-10 rounded-xl bg-[#635BFF]/10 border border-[#635BFF]/10 shrink-0" />
+                                    <div className="space-y-2.5 flex-1">
+                                        <div className="w-32 h-4 rounded-md bg-white/[0.05]" />
+                                        <div className="w-48 h-2.5 rounded-md bg-white/[0.03]" />
+                                    </div>
+                                </div>
+
+                                <div className="space-y-4 animate-pulse">
+                                    {/* Fake Card Preview */}
+                                    <div className="w-full h-[180px] rounded-xl bg-gradient-to-br from-white/[0.04] to-white/[0.01] border border-white/[0.02] mb-6" />
+
+                                    {/* Fake Inputs */}
+                                    <div className="space-y-4">
+                                        <div className="w-full h-12 rounded-xl bg-white/[0.03] border border-white/[0.02]" />
+                                        <div className="grid grid-cols-2 gap-3">
+                                            <div className="w-full h-12 rounded-xl bg-white/[0.03] border border-white/[0.02]" />
+                                            <div className="w-full h-12 rounded-xl bg-white/[0.03] border border-white/[0.02]" />
+                                        </div>
+                                        <div className="w-full h-12 rounded-xl bg-white/[0.03] border border-white/[0.02]" />
+                                    </div>
+
+                                    {/* Fake Pay Button */}
+                                    <div className="w-full h-14 rounded-xl bg-[#635BFF]/20 border border-[#635BFF]/20 mt-6" />
+                                </div>
+                            </div>
+                        )}
                 </div>
-            ) : (
-                <div className="flex flex-col items-center justify-center min-h-[400px]">
-                    <Loader2 className="w-10 h-10 animate-spin text-gold-500" />
+                <div className="order-1 lg:order-2">
+                    <OrderSummary
+                        targetAssignment={targetAssignment}
+                        amountPkr={intentAmount}
+                        studentName={feeProfile?.student.user.name ?? ""}
+                        studentId={feeProfile?.student.studentId ?? ""}
+                        isLoading={isActuallyLoading}
+                    />
                 </div>
-            )}
+            </div>
         </div>
+    );
+}
+
+export default function PayFeePage() {
+    return (
+        <Suspense fallback={
+            <div className="max-w-5xl mx-auto pb-10 flex items-center justify-center min-h-[400px]">
+                <Loader2 className="w-10 h-10 text-gold-500 animate-spin" />
+            </div>
+        }>
+            <PayFeeContent />
+        </Suspense>
     );
 }

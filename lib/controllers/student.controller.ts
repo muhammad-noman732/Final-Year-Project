@@ -11,6 +11,7 @@ import {
   buildCachedFn,
   studentTag,
   revalidateStudents,
+  revalidateStudentFee
 } from "@/lib/cache"
 
 export class StudentController {
@@ -59,6 +60,7 @@ export class StudentController {
     const result = await this.studentService.createStudent(tenantId, userId, data)
 
     revalidateStudents(tenantId)
+    revalidateStudentFee(tenantId, result.user.id)
 
     return successResponse(result, 201)
   }
@@ -73,6 +75,7 @@ export class StudentController {
     const result = await this.studentService.updateStudent(tenantId, userId, id, data)
 
     revalidateStudents(tenantId)
+    revalidateStudentFee(tenantId, result.user.id)
 
     return successResponse(result)
   }

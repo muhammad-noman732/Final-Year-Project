@@ -16,6 +16,7 @@ const AUTH_COOKIE = "auth-token"
 const PUBLIC_PATHS = [
   "/login",
   "/api/auth/login",
+  "/api/webhooks/stripe",
   "/",
 ]
 

@@ -5,9 +5,3 @@ import { webhookController } from "@/lib/di"
 export const POST = withErrorHandler(async (req: NextRequest) => {
   return webhookController.handleWebhookRaw(req)
 })
-
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-}

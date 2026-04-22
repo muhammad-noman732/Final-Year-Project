@@ -18,7 +18,7 @@ export function CardPreview({ number, name, expiry, brand, flipped }: CardPrevie
     }, [number]);
 
     // Brand colors or icons
-    const brandLabel = brand.toUpperCase() || "CARD";
+    const brandLabel = brand?.toUpperCase() || "CARD";
 
     return (
         <div className="perspective-1000 h-40 w-full max-w-sm mx-auto mb-6 [perspective:1000px]">

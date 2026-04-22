@@ -21,6 +21,7 @@ export const metadata: Metadata = {
 };
 
 import { StoreProvider } from "@/store/provider";
+import { Toaster } from "@/components/ui/sonner";
 
 export default function RootLayout({
   children,
@@ -32,6 +33,7 @@ export default function RootLayout({
       <body className={`${dmSans.variable} ${geistMono.variable} font-sans antialiased bg-background min-h-[100dvh] text-foreground`}>
         <StoreProvider>
           {children}
+          <Toaster position="top-right" richColors closeButton />
         </StoreProvider>
       </body>
     </html>

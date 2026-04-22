@@ -15,7 +15,7 @@ export const navItems = {
     ],
     student: [
         { label: "Dashboard", href: "/student", icon: "LayoutDashboard" },
-        { label: "Pay Fee", href: "/student/payfee", icon: "CreditCard" },
+        { label: "History", href: "/student/ledger", icon: "Receipt" },
         { label: "Profile", href: "/student/profile", icon: "User" },
     ],
     admin: [

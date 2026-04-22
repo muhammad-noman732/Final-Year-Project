@@ -34,7 +34,9 @@ function SuccessLoading() {
     );
 }
 
-export default function PaymentSuccessPage() {
+import { Suspense } from "react";
+
+function PaymentSuccessContent() {
     const checkRef = useRef<HTMLDivElement>(null);
     const {
         paidAssignment,
@@ -274,5 +276,17 @@ export default function PaymentSuccessPage() {
                 </div>
             </div>
         </div>
+    );
+}
+
+export default function PaymentSuccessPage() {
+    return (
+        <Suspense fallback={
+            <div className="max-w-2xl mx-auto pb-12 flex items-center justify-center min-h-[400px]">
+                <Loader2 className="w-10 h-10 text-gold-500 animate-spin" />
+            </div>
+        }>
+            <PaymentSuccessContent />
+        </Suspense>
     );
 }
