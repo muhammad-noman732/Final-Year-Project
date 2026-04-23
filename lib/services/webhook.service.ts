@@ -8,12 +8,16 @@ import {
 } from "@/lib/utils/paymentError"
 import type { StripePaymentMetadata } from "@/types/server/payment.types"
 import { logger } from "@/lib/logger"
+import { revalidateStudentFee } from "@/lib/cache"
+import { sseBroadcaster } from "@/lib/sse"
+import type { StudentRepository } from "../repositories/student.repository"
 
 export class WebhookService {
   constructor(
     private readonly paymentRepository: PaymentRepository,
-    private readonly webhookRepository: WebhookRepository
-  ) {}
+    private readonly webhookRepository: WebhookRepository,
+    private readonly studentRepo: StudentRepository,
+  ) { }
 
   /**
    * Entry point for all incoming Stripe webhook events.
@@ -129,6 +133,32 @@ export class WebhookService {
       { event: "webhook.fulfilled", student: meta.studentRollNo, amount: pi.amount, pi: pi.id },
       `Payment fulfilled: student=${meta.studentRollNo} amount=PKR ${pi.amount} pi=${pi.id}`
     )
+
+    // Broadcast real-time SSE event to VC dashboard
+    if (meta.tenantId) {
+      sseBroadcaster.broadcastPayment(meta.tenantId, {
+        type: "PaymentSuccess",
+        payload: {
+          studentName: meta.studentName,
+          rollNumber: meta.studentRollNo,
+          department: meta.programName?.split(" ")[0] ?? "",
+          program: meta.programName,
+          semester: meta.semesterName,
+          amount: pi.amount,
+          paidAt: new Date().toISOString(),
+        },
+      })
+    }
+
+    // Trigger cache revalidation
+    try {
+      const student = await this.studentRepo.findById(meta.tenantId, meta.studentId)
+      if (student?.user?.id) {
+        void revalidateStudentFee(meta.tenantId, student.user.id)
+      }
+    } catch (err) {
+      logger.error({ event: "webhook.revalidate_failed", error: err }, "Failed to revalidate student fee after webhook")
+    }
   }
 
   private async handlePaymentFailed(pi: Stripe.PaymentIntent): Promise<void> {

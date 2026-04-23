@@ -1,5 +1,4 @@
 import prisma from "@/lib/prisma"
-import { env } from "@/lib/env"
 
 // Repositories
 import { UserRepository } from "@/lib/repositories/user.repository"
@@ -13,6 +12,7 @@ import { FeeStructureRepository } from "@/lib/repositories/feeStructure.reposito
 import { FeeAssignmentRepository } from "@/lib/repositories/feeAssignment.repository"
 import { PaymentRepository } from "@/lib/repositories/payment.repository"
 import { WebhookRepository } from "@/lib/repositories/webhook.repository"
+import { VCRepository } from "@/lib/repositories/vc.repository"
 
 // Services
 import { AuditService } from "@/lib/services/audit.service"
@@ -29,6 +29,7 @@ import { StudentFeeService } from "@/lib/services/studentFee.service"
 import { FeeAssignmentService } from "@/lib/services/feeAssignment.service"
 import { PaymentService } from "@/lib/services/payment.service"
 import { WebhookService } from "@/lib/services/webhook.service"
+import { VCService } from "@/lib/services/vc.service"
 
 // Controllers
 import { AuthController } from "@/lib/controllers/auth.controller"
@@ -43,6 +44,7 @@ import { StudentFeeController } from "@/lib/controllers/studentFee.controller"
 import { FeeAssignmentController } from "@/lib/controllers/feeAssignment.controller"
 import { PaymentController } from "@/lib/controllers/payment.controller"
 import { WebhookController } from "@/lib/controllers/webhook.controller"
+import { VCController } from "@/lib/controllers/vc.controller"
 
 // Repositories 
 const userRepo = new UserRepository(prisma)
@@ -56,6 +58,7 @@ const feeStructureRepo = new FeeStructureRepository(prisma)
 const feeAssignmentRepo = new FeeAssignmentRepository(prisma)
 const paymentRepo = new PaymentRepository(prisma)
 const webhookRepo = new WebhookRepository(prisma)
+const vcRepo = new VCRepository(prisma)
 
 // Services
 const auditService = new AuditService(auditRepo)
@@ -70,8 +73,9 @@ const studentService = new StudentService(studentRepo, deptRepo, programRepo, se
 const studentFeeService = new StudentFeeService(studentRepo, feeAssignmentRepo)
 const feeAssignmentService = new FeeAssignmentService(studentRepo, feeStructureRepo, feeAssignmentRepo, auditService)
 const feeStructureService = new FeeStructureService(feeStructureRepo, programRepo, auditService, feeAssignmentService)
-const paymentService = new PaymentService(paymentRepo)
-const webhookService = new WebhookService(paymentRepo, webhookRepo)
+const paymentService = new PaymentService(paymentRepo, studentRepo)
+const webhookService = new WebhookService(paymentRepo, webhookRepo, studentRepo)
+const vcService = new VCService(vcRepo)
 
 // Controllers
 export const authController = new AuthController(authService)
@@ -86,6 +90,7 @@ export const studentFeeController = new StudentFeeController(studentFeeService)
 export const feeAssignmentController = new FeeAssignmentController(feeAssignmentService)
 export const paymentController = new PaymentController(paymentService)
 export const webhookController = new WebhookController(webhookService)
+export const vcController = new VCController(vcService)
 
 
 

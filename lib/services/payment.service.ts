@@ -14,9 +14,14 @@ import type {
 import type { CreatePaymentIntentPayload } from "@/lib/validators/payment.validators"
 import Stripe from "stripe"
 import { logger } from "@/lib/logger"
+import { revalidateStudentFee } from "@/lib/cache"
+import type { StudentRepository } from "../repositories/student.repository"
 
 export class PaymentService {
-  constructor(private readonly paymentRepository: PaymentRepository) { }
+  constructor(
+    private readonly paymentRepository: PaymentRepository,
+    private readonly studentRepo: StudentRepository,
+  ) { }
 
   async createPaymentIntent(
     dto: CreatePaymentIntentPayload & { tenantId: string; userId: string },
@@ -51,7 +56,6 @@ export class PaymentService {
       throw new FeeAlreadyPaidError(dto.feeAssignmentId)
     }
 
-    // ── Check for an existing PI we can reuse ──────────────────────────
     const existingPayment =
       await this.paymentRepository.findExistingPaymentForAssignment(
         dto.feeAssignmentId,
@@ -63,8 +67,8 @@ export class PaymentService {
           existingPayment.stripePaymentIntentId,
         )
 
-        // PI already succeeded on Stripe but our DB missed the webhook.
-        // Fulfil inline and inform the student.
+        // If it's already succeeded but the status in our DB is not updated yet (due to localhost/no webhook),
+        // we shouldn't create a new one. This prevents the 409 error.
         if (existingPI.status === "succeeded") {
           logger.info(
             { event: "payment.inline_fulfil", pi: existingPI.id },
@@ -78,10 +82,14 @@ export class PaymentService {
             stripeResponse: existingPI as unknown as object,
             paidAt: new Date(),
           })
+          
+          // Clear cache so the student dashboard is immediately correct
+          void revalidateStudentFee(dto.tenantId, dto.userId)
+          
           throw new FeeAlreadyPaidError(dto.feeAssignmentId)
         }
 
-        // Still confirmable — reuse it
+        // Reuse if still in a confirmable state
         if (
           existingPI.status === "requires_payment_method" ||
           existingPI.status === "requires_confirmation" ||
@@ -93,27 +101,12 @@ export class PaymentService {
             amountPkr: existingPI.amount,
           }
         }
-
-        // Terminal but NOT succeeded (canceled, etc.) — clean up DB record
-        // and fall through to create a fresh PI.
-        logger.info(
-          { event: "payment.stale_pi_cleanup", pi: existingPI.id, status: existingPI.status },
-          `Existing PI in terminal state '${existingPI.status}' — marking failed and creating new PI`,
-        )
-        await this.paymentRepository.failPayment(existingPayment.id)
       } catch (err) {
-        // If it's our own FeeAlreadyPaidError, rethrow it
-        if (err instanceof FeeAlreadyPaidError) throw err
-
         // Log error but continue to create new PI if retrieval fails
-        logger.error(
-          { event: "payment.pi_retrieve_failed", error: err instanceof Error ? err.message : String(err) },
-          "Failed to retrieve existing PI from Stripe — will create new one",
-        )
+        console.error("[PaymentService] Failed to retrieve existing PI:", err)
       }
     }
 
-    // ── Create a fresh PaymentIntent ───────────────────────────────────
     const metadata: StripePaymentMetadata = {
       tenantId: dto.tenantId,
       studentId: student.id,
@@ -142,11 +135,13 @@ export class PaymentService {
           `Semester ${assignment.feeStructure?.semester ?? ""}`,
           student.studentId,
         ].join(" — "),
+        setup_future_usage: "off_session",
       },
       { idempotencyKey },
     )
 
-    // Idempotency hit — same PI returned, don't create a duplicate DB record
+    // If we have an existing payment record but we just got an idempotency hit (same PI ID),
+    // we should NOT try to create it again.
     if (existingPayment?.stripePaymentIntentId === paymentIntent.id) {
       return {
         clientSecret: paymentIntent.client_secret!,

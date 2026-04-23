@@ -1,15 +1,12 @@
 "use client";
+import { useMemo, useState } from "react";
 import { Users, Banknote, Clock, AlertTriangle, TrendingUp, TrendingDown, ArrowRight, Shield, Building2, GraduationCap, Calendar, Receipt, FileBarChart, LayoutGrid } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import Link from "next/link";
 import { formatCurrency } from "@/config/constants";
-
-const stats = [
-    { label: "Total Students", value: "1,247", change: "+12", trend: "up" as const, icon: Users, color: "text-sky-400", bg: "bg-sky-500/10", border: "border-sky-500/20", glow: "group-hover:shadow-[0_0_20px_rgba(56,189,248,0.15)]" },
-    { label: "Total Fee Collected", value: formatCurrency(62500000), change: "+5.2%", trend: "up" as const, icon: Banknote, color: "text-emerald-400", bg: "bg-emerald-500/10", border: "border-emerald-500/20", glow: "group-hover:shadow-[0_0_20px_rgba(52,211,153,0.15)]" },
-    { label: "Pending Payments", value: "49", change: "-8", trend: "down" as const, icon: Clock, color: "text-amber-400", bg: "bg-amber-500/10", border: "border-amber-500/20", glow: "group-hover:shadow-[0_0_20px_rgba(251,191,36,0.15)]" },
-    { label: "Defaulters", value: "15", change: "+3", trend: "up" as const, icon: AlertTriangle, color: "text-rose-400", bg: "bg-rose-500/10", border: "border-rose-500/20", glow: "group-hover:shadow-[0_0_20px_rgba(251,113,133,0.15)]" },
-];
+import { useGetStudentsQuery } from "@/store/api/admin/studentsApi";
+import { useGetVCDashboardQuery, useGetVCStudentsQuery } from "@/store/api/vc/vcApi";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const quickLinks = [
     { label: "Manage Students", href: "/admin/students", desc: "Enrollments & directory", col: "col-span-1 md:col-span-2 lg:col-span-2", icon: Users, gradient: "from-sky-500/10 via-transparent to-transparent", hoverGrad: "group-hover:from-sky-500/20", iconColor: "text-sky-400", border: "hover:border-sky-500/20" },
@@ -23,6 +20,35 @@ const quickLinks = [
 ];
 
 export default function AdminDashboard() {
+    const [statusTab, setStatusTab] = useState<"paid" | "unpaid" | "defaulters">("paid");
+    const { data: studentsData } = useGetStudentsQuery({ page: 1, limit: 1 });
+    const { data: vcData } = useGetVCDashboardQuery({ feeStatus: "ALL", range: "30d" });
+    const studentsByStatus = useGetVCStudentsQuery({
+        feeStatus: statusTab === "defaulters" ? "OVERDUE" : statusTab === "paid" ? "PAID" : "UNPAID",
+        page: 1,
+        limit: 8,
+        range: "30d",
+    });
+
+    const totalStudents = studentsData?.data?.meta?.total ?? 0;
+    const overview = vcData?.data?.overview;
+    const totalCollected = overview?.totalCollected ?? 0;
+    const outstanding = overview?.outstandingAmount ?? 0;
+    const defaulters = overview?.defaulters ?? 0;
+    const unpaid = overview?.studentsUnpaid ?? 0;
+    const previewRows = studentsByStatus.data?.data?.data ?? [];
+    const statusLabel = useMemo(
+        () => (statusTab === "defaulters" ? "Defaulters" : statusTab === "paid" ? "Paid" : "Unpaid"),
+        [statusTab],
+    );
+
+    const stats = [
+        { label: "Total Students", value: String(totalStudents), change: "live", trend: "up" as const, icon: Users, color: "text-sky-400", bg: "bg-sky-500/10", border: "border-sky-500/20", glow: "group-hover:shadow-[0_0_20px_rgba(56,189,248,0.15)]" },
+        { label: "Total Fee Collected", value: formatCurrency(totalCollected), change: "live", trend: "up" as const, icon: Banknote, color: "text-emerald-400", bg: "bg-emerald-500/10", border: "border-emerald-500/20", glow: "group-hover:shadow-[0_0_20px_rgba(52,211,153,0.15)]" },
+        { label: "Outstanding Amount", value: formatCurrency(outstanding), change: "live", trend: "down" as const, icon: Clock, color: "text-amber-400", bg: "bg-amber-500/10", border: "border-amber-500/20", glow: "group-hover:shadow-[0_0_20px_rgba(251,191,36,0.15)]" },
+        { label: "Defaulters", value: String(defaulters), change: "live", trend: "up" as const, icon: AlertTriangle, color: "text-rose-400", bg: "bg-rose-500/10", border: "border-rose-500/20", glow: "group-hover:shadow-[0_0_20px_rgba(251,113,133,0.15)]" },
+    ];
+
     return (
         <div className="space-y-8 animate-in fade-in duration-500">
             {/* Header Area */}
@@ -97,6 +123,52 @@ export default function AdminDashboard() {
                     ))}
                 </div>
             </div>
+
+            <Card className="bg-navy-900/40 border border-white/5 p-5 space-y-4">
+                <div className="flex items-center justify-between">
+                    <h3 className="text-sm font-semibold text-foreground">Current Semester Student Status</h3>
+                    <Tabs value={statusTab} onValueChange={(value) => setStatusTab(value as "paid" | "unpaid" | "defaulters")}>
+                        <TabsList className="bg-white/[0.03]">
+                            <TabsTrigger value="paid">Paid</TabsTrigger>
+                            <TabsTrigger value="unpaid">Unpaid ({unpaid})</TabsTrigger>
+                            <TabsTrigger value="defaulters">Defaulters ({defaulters})</TabsTrigger>
+                        </TabsList>
+                    </Tabs>
+                </div>
+
+                <div className="overflow-hidden rounded-xl border border-white/[0.06]">
+                    <table className="w-full text-sm">
+                        <thead className="bg-white/[0.03] text-muted-foreground">
+                            <tr>
+                                <th className="px-3 py-2 text-left font-medium">Student</th>
+                                <th className="px-3 py-2 text-left font-medium">Roll No</th>
+                                <th className="px-3 py-2 text-left font-medium">Department</th>
+                                <th className="px-3 py-2 text-left font-medium">Semester</th>
+                                <th className="px-3 py-2 text-left font-medium">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {previewRows.length === 0 ? (
+                                <tr>
+                                    <td className="px-3 py-4 text-muted-foreground" colSpan={5}>
+                                        No {statusLabel.toLowerCase()} students in current scope.
+                                    </td>
+                                </tr>
+                            ) : (
+                                previewRows.map((row) => (
+                                    <tr key={row.assignmentId} className="border-t border-white/[0.06]">
+                                        <td className="px-3 py-2 text-foreground">{row.studentName}</td>
+                                        <td className="px-3 py-2 text-muted-foreground">{row.rollNumber}</td>
+                                        <td className="px-3 py-2 text-muted-foreground">{row.departmentCode}</td>
+                                        <td className="px-3 py-2 text-muted-foreground">{row.semester}</td>
+                                        <td className="px-3 py-2 text-foreground">{row.feeStatus}</td>
+                                    </tr>
+                                ))
+                            )}
+                        </tbody>
+                    </table>
+                </div>
+            </Card>
         </div>
     );
 }

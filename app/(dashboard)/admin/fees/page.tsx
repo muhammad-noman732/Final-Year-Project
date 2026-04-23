@@ -72,7 +72,7 @@ export default function FeesPage() {
     // ── Stats ─────────────────────────────────────────────────────
     const totalRevenue = feeStructures.reduce((s, fs) => s + (fs.totalFee * fs._count.assignments), 0);
     const totalAssigned = feeStructures.reduce((s, fs) => s + fs._count.assignments, 0);
-    const activeCount = feeStructures.filter(fs => fs.isActive).length;
+    const activeCount = meta.total;
 
     // ── Fee breakdown labels ─────────────────────────────────────
     const feeBreakdownFields = [
@@ -111,7 +111,7 @@ export default function FeesPage() {
                         <BarChart3 className="w-5 h-5 text-emerald-400" />
                     </div>
                     <div>
-                        <p className="text-xs text-muted-foreground uppercase tracking-wider">Active</p>
+                        <p className="text-xs text-muted-foreground uppercase tracking-wider">Active (All)</p>
                         <p className="text-lg font-bold text-emerald-400">{activeCount}</p>
                     </div>
                 </Card>
