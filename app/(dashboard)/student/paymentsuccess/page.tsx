@@ -89,6 +89,36 @@ function PaymentSuccessContent() {
 
     return (
         <div className="max-w-2xl mx-auto pb-12 space-y-8">
+            {/* Print CSS — only the receipt card renders when printing */}
+            <style dangerouslySetInnerHTML={{ __html: `
+                @media print {
+                    * { visibility: hidden !important; }
+                    #receipt-print-area, #receipt-print-area * { visibility: visible !important; }
+                    #receipt-print-area {
+                        position: fixed !important;
+                        inset: 0 !important;
+                        padding: 20mm !important;
+                        background-color: #ffffff !important;
+                        border: none !important;
+                        box-shadow: none !important;
+                        border-radius: 0 !important;
+                        --foreground: #111827;
+                        --muted-foreground: #4b5563;
+                        color: #111827 !important;
+                    }
+                    #receipt-print-area .text-muted-foreground { color: #4b5563 !important; }
+                    #receipt-print-area .text-foreground { color: #111827 !important; }
+                    #receipt-print-area .text-gold-400, #receipt-print-area .text-gold-gradient { color: #92650a !important; }
+                    #receipt-print-area .text-gold-500\\/50 { color: #92650a !important; }
+                    #receipt-print-area .text-emerald-400 { color: #059669 !important; }
+                    #receipt-print-area .text-slate-300 { color: #374151 !important; }
+                    #receipt-print-area .bg-gold-500\\/5, #receipt-print-area .bg-\\[\\#0a0e1a\\] { background: transparent !important; }
+                    #receipt-print-area .border-gold-500\\/10, #receipt-print-area .border-white\\/\\[0\\.07\\], #receipt-print-area .border-white\\/\\[0\\.06\\] { border-color: #e5e7eb !important; }
+                    #receipt-print-area .text-emerald-500\\/10 { background: transparent !important; }
+                    @page { margin: 0; }
+                }
+            ` }} />
+
             {/* ══ SUCCESS HEADER ══ */}
             <div
                 ref={checkRef}
@@ -107,7 +137,7 @@ function PaymentSuccessContent() {
             </div>
 
             {/* ══ OFFICIAL RECEIPT ══ */}
-            <div className="relative rounded-2xl border border-white/[0.07] bg-[#0a0e1a] overflow-hidden shadow-2xl shadow-black/40">
+            <div id="receipt-print-area" className="relative rounded-2xl border border-white/[0.07] bg-[#0a0e1a] overflow-hidden shadow-2xl shadow-black/40">
                 {/* Gold accent bar */}
                 <div className="h-0.5 bg-gradient-to-r from-transparent via-gold-400 to-transparent" />
 
