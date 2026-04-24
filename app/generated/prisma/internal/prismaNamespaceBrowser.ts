@@ -66,7 +66,9 @@ export const ModelName = {
   EmailLog: 'EmailLog',
   Notification: 'Notification',
   AuditLog: 'AuditLog',
-  Subscription: 'Subscription'
+  Subscription: 'Subscription',
+  ActivityLog: 'ActivityLog',
+  Insight: 'Insight'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -212,6 +214,9 @@ export const StudentScalarFieldEnum = {
   feeStatus: 'feeStatus',
   totalFeeDue: 'totalFeeDue',
   totalFeePaid: 'totalFeePaid',
+  riskLevel: 'riskLevel',
+  latePaymentCount: 'latePaymentCount',
+  lastPaymentDate: 'lastPaymentDate',
   metadata: 'metadata',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -386,6 +391,35 @@ export const SubscriptionScalarFieldEnum = {
 } as const
 
 export type SubscriptionScalarFieldEnum = (typeof SubscriptionScalarFieldEnum)[keyof typeof SubscriptionScalarFieldEnum]
+
+
+export const ActivityLogScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  type: 'type',
+  message: 'message',
+  metadata: 'metadata',
+  createdAt: 'createdAt'
+} as const
+
+export type ActivityLogScalarFieldEnum = (typeof ActivityLogScalarFieldEnum)[keyof typeof ActivityLogScalarFieldEnum]
+
+
+export const InsightScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  type: 'type',
+  message: 'message',
+  actionLabel: 'actionLabel',
+  actionType: 'actionType',
+  priority: 'priority',
+  isRead: 'isRead',
+  departmentId: 'departmentId',
+  createdAt: 'createdAt',
+  expiresAt: 'expiresAt'
+} as const
+
+export type InsightScalarFieldEnum = (typeof InsightScalarFieldEnum)[keyof typeof InsightScalarFieldEnum]
 
 
 export const SortOrder = {

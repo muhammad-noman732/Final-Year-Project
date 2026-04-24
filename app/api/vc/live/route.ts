@@ -1,48 +1,51 @@
 import { getTenantContext, requireRole } from "@/lib/auth"
-import { sseBroadcaster } from "@/lib/sse"
+import { createRedisSubscriber, sseChannel } from "@/lib/redis"
 
 /**
  * GET /api/vc/live
  *
  * Server-Sent Events endpoint for real-time payment notifications.
- * Only accessible to VC and ADMIN roles.
+ * Each connection creates its own Redis subscriber so events are delivered
+ * correctly regardless of how many server processes are running.
  */
 export async function GET() {
   const { tenantId } = await getTenantContext()
   await requireRole("VC", "ADMIN")
 
-  let interval: ReturnType<typeof setInterval> | null = null
-  let clientRef: { controller: ReadableStreamDefaultController; tenantId: string } | null = null
+  const channel = sseChannel(tenantId)
+  const subscriber = createRedisSubscriber()
+  const encoder = new TextEncoder()
+
+  // Subscribe before the stream opens so no events are missed during setup
+  await subscriber.subscribe(channel)
+
+  let keepaliveInterval: ReturnType<typeof setInterval> | null = null
 
   const stream = new ReadableStream({
     start(controller) {
-      controller.enqueue(
-        new TextEncoder().encode("data: {\"type\":\"connected\"}\n\n"),
-      )
+      controller.enqueue(encoder.encode('data: {"type":"connected"}\n\n'))
 
-      clientRef = sseBroadcaster.addClient(controller, tenantId)
-
-      interval = setInterval(() => {
+      subscriber.on("message", (_ch: string, message: string) => {
         try {
-          controller.enqueue(new TextEncoder().encode(": keepalive\n\n"))
+          controller.enqueue(encoder.encode(`data: ${message}\n\n`))
         } catch {
-          clearInterval(interval!)
-          if (clientRef) {
-            sseBroadcaster.removeClient(clientRef)
-            clientRef = null
-          }
+          // Stream already closed — client disconnected before cancel() fired
+        }
+      })
+
+      keepaliveInterval = setInterval(() => {
+        try {
+          controller.enqueue(encoder.encode(": keepalive\n\n"))
+        } catch {
+          if (keepaliveInterval) clearInterval(keepaliveInterval)
         }
       }, 30_000)
     },
+
     cancel() {
-      if (interval) {
-        clearInterval(interval)
-        interval = null
-      }
-      if (clientRef) {
-        sseBroadcaster.removeClient(clientRef)
-        clientRef = null
-      }
+      if (keepaliveInterval) clearInterval(keepaliveInterval)
+      void subscriber.unsubscribe()
+      void subscriber.quit()
     },
   })
 

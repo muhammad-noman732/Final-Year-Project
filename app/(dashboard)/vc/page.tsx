@@ -1,144 +1,38 @@
 "use client"
 
-import { useEffect, useMemo, useState } from "react"
-import { useRouter } from "next/navigation"
-import { skipToken } from "@reduxjs/toolkit/query"
 import { Skeleton } from "boneyard-js/react"
 import { Clock, Zap } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import VCFilterBar, { type VCFilterState } from "@/components/vc/VCFilterBar"
+import VCFilterBar from "@/components/vc/VCFilterBar"
 import VCOverviewCards from "@/components/vc/VCOverviewCards"
 import VCDashboardPanels from "@/components/vc/VCDashboardPanels"
 import VCAnalyticsPanels from "@/components/vc/VCAnalyticsPanels"
 import VCLiveFeed from "@/components/vc/VCLiveFeed"
-import { buildVCQuery, defaultVCFilters } from "@/components/vc/vcFilters"
-import { useGetDepartmentsQuery } from "@/store/api/admin/departmentsApi"
-import { useGetProgramsQuery } from "@/store/api/admin/programsApi"
-import { useGetSessionsQuery } from "@/store/api/admin/sessionsApi"
-import { useGetVCDashboardQuery } from "@/store/api/vc/vcApi"
-import { useSSE } from "@/hooks/useSSE"
-import { formatFullCurrency } from "@/config/constants"
+import { useVCDashboard } from "@/hooks/vc/useVCDashboard"
 
 export default function VCDashboard() {
-  const router = useRouter()
-  const [filters, setFilters] = useState<VCFilterState>(defaultVCFilters)
-
-  const query = useMemo(() => buildVCQuery(filters), [filters])
-
-  const { data: departmentsData } = useGetDepartmentsQuery({ page: 1, limit: 100 })
-  const departmentsRaw = departmentsData?.data?.data ?? []
-  const hasDepartmentsLoaded = Boolean(departmentsData?.data)
-  const departmentExists = filters.departmentId
-    ? departmentsRaw.some((department) => department.id === filters.departmentId)
-    : true
-
-  const programsQueryArg = filters.departmentId
-    ? (!hasDepartmentsLoaded
-      ? skipToken
-      : departmentExists
-        ? { page: 1, limit: 100, departmentId: filters.departmentId }
-        : skipToken)
-    : { page: 1, limit: 100 }
-
-  const { data: programsData } = useGetProgramsQuery(programsQueryArg)
-  const { data: sessionsData } = useGetSessionsQuery({ page: 1, limit: 100 })
-
-  const dashboardQuery = useGetVCDashboardQuery(query, {
-    refetchOnMountOrArgChange: true,
-  })
-
-  // SSE real-time events
   const {
-    transactions: liveTransactions,
+    filters,
+    handleFilterChange,
+    handleReset,
+    handleTodayToggle,
+    departments,
+    programs,
+    sessions,
+    dashboard,
+    isLoading,
+    lastUpdatedAt,
+    liveTransactions,
+    initialTransactions,
+    sseConnected,
     newPaymentsCount,
     newAmountCollected,
-    connected: sseConnected,
-    latestEvent,
-    clearLatestEvent,
-  } = useSSE()
-
-  // Toast notification for new payments
-  const [showToast, setShowToast] = useState(false)
-  const [toastMessage, setToastMessage] = useState("")
-
-  useEffect(() => {
-    if (latestEvent && latestEvent.type === "PaymentSuccess") {
-      const p = latestEvent.payload
-      setToastMessage(`${p.studentName} paid ${formatFullCurrency(p.amount)}`)
-      setShowToast(true)
-      clearLatestEvent()
-
-      const timer = setTimeout(() => setShowToast(false), 4000)
-      return () => clearTimeout(timer)
-    }
-  }, [latestEvent, clearLatestEvent])
-
-  const departments = departmentsRaw.map((department) => ({
-    id: department.id,
-    label: department.name,
-  }))
-  useEffect(() => {
-    if (hasDepartmentsLoaded && filters.departmentId && !departmentExists) {
-      setFilters((current) => ({
-        ...current,
-        departmentId: "",
-        programId: "",
-      }))
-    }
-  }, [hasDepartmentsLoaded, filters.departmentId, departmentExists])
-
-
-  const programs = (programsData?.data?.data ?? []).map((program) => ({
-    id: program.id,
-    label: program.name,
-  }))
-
-  const sessions = (sessionsData?.data?.data ?? []).map((session) => ({
-    id: session.id,
-    label: session.name,
-  }))
-
-  const handleFilterChange = (key: keyof VCFilterState, value: string) => {
-    setFilters((current) => ({
-      ...current,
-      [key]: value,
-      ...(key === "departmentId" ? { programId: "" } : {}),
-    }))
-  }
-
-  const handleReset = () => {
-    setFilters(defaultVCFilters)
-  }
-
-  const handleTodayToggle = () => {
-    setFilters((current) => ({
-      ...current,
-      range: current.range === "today" ? "30d" : "today",
-    }))
-  }
-
-  const handleDepartmentTracking = (departmentId: string) => {
-    router.push(`/vc/tracking?scope=department&departmentId=${departmentId}&tab=overview`)
-  }
-
-  const handleSemesterTracking = (semester: number) => {
-    const departmentPart = filters.departmentId ? `&departmentId=${filters.departmentId}` : ""
-    router.push(`/vc/tracking?scope=semester&semester=${semester}${departmentPart}&tab=overview`)
-  }
-
-  const handleOverviewCardClick = (tab: "paid" | "defaulters" | "payments") => {
-    const targetTab = tab === "defaulters" ? "defaulters" : tab === "paid" ? "paid" : "overview"
-    router.push(`/vc/tracking?tab=${targetTab}`)
-  }
-
-  const dashboard = dashboardQuery.data?.data
-  const lastUpdatedAt = dashboardQuery.fulfilledTimeStamp
-    ? new Date(dashboardQuery.fulfilledTimeStamp).toLocaleTimeString([], {
-      hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit",
-    })
-    : null
+    showToast,
+    toastMessage,
+    handleDepartmentTracking,
+    handleSemesterTracking,
+    handleOverviewCardClick,
+  } = useVCDashboard()
 
   return (
     <div className="space-y-6 pb-8">
@@ -160,9 +54,7 @@ export default function VCDashboard() {
       {/* Header */}
       <div className="flex items-center justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-foreground">
-            VC Dashboard
-          </h1>
+          <h1 className="text-2xl font-bold tracking-tight text-foreground">VC Dashboard</h1>
           <p className="mt-1 text-sm text-muted-foreground">
             Tenant-wide payment visibility with filters by department, semester, session, and status.
           </p>
@@ -201,21 +93,20 @@ export default function VCDashboard() {
         showSearch={false}
       />
 
-      <Skeleton name="vc-overview-cards" loading={dashboardQuery.isLoading && !dashboard}>
+      <Skeleton name="vc-overview-cards" loading={isLoading && !dashboard}>
         {dashboard ? (
           <VCOverviewCards overview={dashboard.overview} onCardClick={handleOverviewCardClick} />
         ) : null}
       </Skeleton>
 
-      {/* Live Feed + Charts Grid */}
+      {/* Charts + Live Feed */}
       <div className="grid gap-4 xl:grid-cols-3">
         <div className="xl:col-span-2">
-          <Skeleton name="vc-dashboard-panels" loading={dashboardQuery.isLoading && !dashboard}>
+          <Skeleton name="vc-dashboard-panels" loading={isLoading && !dashboard}>
             {dashboard ? (
               <VCDashboardPanels
                 departmentPerformance={dashboard.departmentPerformance}
                 semesterBreakdown={dashboard.semesterBreakdown}
-                livePayments={dashboard.livePayments}
                 collectionTrend={dashboard.collectionTrend}
                 onDepartmentSelect={handleDepartmentTracking}
                 onSemesterSelect={handleSemesterTracking}
@@ -228,10 +119,10 @@ export default function VCDashboard() {
           </Skeleton>
         </div>
 
-        {/* Live Transaction Feed */}
         <div>
           <VCLiveFeed
             transactions={liveTransactions}
+            initialTransactions={initialTransactions}
             connected={sseConnected}
             newPaymentsCount={newPaymentsCount}
             newAmountCollected={newAmountCollected}
@@ -239,13 +130,13 @@ export default function VCDashboard() {
         </div>
       </div>
 
-      {/* Analytics merged into main dashboard */}
+      {/* Advanced Analytics */}
       <div className="space-y-3">
         <div className="flex items-center justify-between">
           <h2 className="text-sm font-semibold tracking-wide text-foreground">Advanced Analytics</h2>
           <p className="text-[11px] uppercase tracking-[0.2em] text-muted-foreground">In Dashboard</p>
         </div>
-        <Skeleton name="vc-analytics-panels-inline" loading={dashboardQuery.isLoading && !dashboard}>
+        <Skeleton name="vc-analytics-panels-inline" loading={isLoading && !dashboard}>
           {dashboard ? (
             <VCAnalyticsPanels
               data={{

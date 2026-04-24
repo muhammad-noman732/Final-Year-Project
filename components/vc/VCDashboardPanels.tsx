@@ -19,7 +19,6 @@ import { Card } from "@/components/ui/card"
 import { formatCurrency, formatFullCurrency } from "@/config/constants"
 import type {
   VCDepartmentPerformance,
-  VCLivePaymentItem,
   VCSemesterBreakdown,
   VCTrendPoint,
 } from "@/types/client/store/vc.store.types"
@@ -27,7 +26,6 @@ import type {
 interface VCDashboardPanelsProps {
   departmentPerformance: VCDepartmentPerformance[]
   semesterBreakdown: VCSemesterBreakdown[]
-  livePayments: VCLivePaymentItem[]
   collectionTrend: VCTrendPoint[]
   onDepartmentSelect?: (departmentId: string) => void
   onSemesterSelect?: (semester: number) => void
@@ -58,12 +56,10 @@ function ChartTooltip(props: {
 export default function VCDashboardPanels({
   departmentPerformance,
   semesterBreakdown,
-  livePayments,
   collectionTrend,
   onDepartmentSelect,
   onSemesterSelect,
 }: VCDashboardPanelsProps) {
-  void livePayments
 
   const monthlyComparison = Array.from(
     collectionTrend.reduce<Map<string, number>>((acc, item) => {

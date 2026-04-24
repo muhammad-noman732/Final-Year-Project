@@ -30,12 +30,14 @@ export type StudentAvgAggregateOutputType = {
   currentSemester: number | null
   totalFeeDue: number | null
   totalFeePaid: number | null
+  latePaymentCount: number | null
 }
 
 export type StudentSumAggregateOutputType = {
   currentSemester: number | null
   totalFeeDue: number | null
   totalFeePaid: number | null
+  latePaymentCount: number | null
 }
 
 export type StudentMinAggregateOutputType = {
@@ -52,6 +54,9 @@ export type StudentMinAggregateOutputType = {
   feeStatus: $Enums.FeeStatus | null
   totalFeeDue: number | null
   totalFeePaid: number | null
+  riskLevel: string | null
+  latePaymentCount: number | null
+  lastPaymentDate: Date | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -70,6 +75,9 @@ export type StudentMaxAggregateOutputType = {
   feeStatus: $Enums.FeeStatus | null
   totalFeeDue: number | null
   totalFeePaid: number | null
+  riskLevel: string | null
+  latePaymentCount: number | null
+  lastPaymentDate: Date | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -88,6 +96,9 @@ export type StudentCountAggregateOutputType = {
   feeStatus: number
   totalFeeDue: number
   totalFeePaid: number
+  riskLevel: number
+  latePaymentCount: number
+  lastPaymentDate: number
   metadata: number
   createdAt: number
   updatedAt: number
@@ -99,12 +110,14 @@ export type StudentAvgAggregateInputType = {
   currentSemester?: true
   totalFeeDue?: true
   totalFeePaid?: true
+  latePaymentCount?: true
 }
 
 export type StudentSumAggregateInputType = {
   currentSemester?: true
   totalFeeDue?: true
   totalFeePaid?: true
+  latePaymentCount?: true
 }
 
 export type StudentMinAggregateInputType = {
@@ -121,6 +134,9 @@ export type StudentMinAggregateInputType = {
   feeStatus?: true
   totalFeeDue?: true
   totalFeePaid?: true
+  riskLevel?: true
+  latePaymentCount?: true
+  lastPaymentDate?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -139,6 +155,9 @@ export type StudentMaxAggregateInputType = {
   feeStatus?: true
   totalFeeDue?: true
   totalFeePaid?: true
+  riskLevel?: true
+  latePaymentCount?: true
+  lastPaymentDate?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -157,6 +176,9 @@ export type StudentCountAggregateInputType = {
   feeStatus?: true
   totalFeeDue?: true
   totalFeePaid?: true
+  riskLevel?: true
+  latePaymentCount?: true
+  lastPaymentDate?: true
   metadata?: true
   createdAt?: true
   updatedAt?: true
@@ -263,6 +285,9 @@ export type StudentGroupByOutputType = {
   feeStatus: $Enums.FeeStatus
   totalFeeDue: number
   totalFeePaid: number
+  riskLevel: string
+  latePaymentCount: number
+  lastPaymentDate: Date | null
   metadata: runtime.JsonValue | null
   createdAt: Date
   updatedAt: Date
@@ -305,6 +330,9 @@ export type StudentWhereInput = {
   feeStatus?: Prisma.EnumFeeStatusFilter<"Student"> | $Enums.FeeStatus
   totalFeeDue?: Prisma.IntFilter<"Student"> | number
   totalFeePaid?: Prisma.IntFilter<"Student"> | number
+  riskLevel?: Prisma.StringFilter<"Student"> | string
+  latePaymentCount?: Prisma.IntFilter<"Student"> | number
+  lastPaymentDate?: Prisma.DateTimeNullableFilter<"Student"> | Date | string | null
   metadata?: Prisma.JsonNullableFilter<"Student">
   createdAt?: Prisma.DateTimeFilter<"Student"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Student"> | Date | string
@@ -331,6 +359,9 @@ export type StudentOrderByWithRelationInput = {
   feeStatus?: Prisma.SortOrder
   totalFeeDue?: Prisma.SortOrder
   totalFeePaid?: Prisma.SortOrder
+  riskLevel?: Prisma.SortOrder
+  latePaymentCount?: Prisma.SortOrder
+  lastPaymentDate?: Prisma.SortOrderInput | Prisma.SortOrder
   metadata?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -361,6 +392,9 @@ export type StudentWhereUniqueInput = Prisma.AtLeast<{
   feeStatus?: Prisma.EnumFeeStatusFilter<"Student"> | $Enums.FeeStatus
   totalFeeDue?: Prisma.IntFilter<"Student"> | number
   totalFeePaid?: Prisma.IntFilter<"Student"> | number
+  riskLevel?: Prisma.StringFilter<"Student"> | string
+  latePaymentCount?: Prisma.IntFilter<"Student"> | number
+  lastPaymentDate?: Prisma.DateTimeNullableFilter<"Student"> | Date | string | null
   metadata?: Prisma.JsonNullableFilter<"Student">
   createdAt?: Prisma.DateTimeFilter<"Student"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Student"> | Date | string
@@ -387,6 +421,9 @@ export type StudentOrderByWithAggregationInput = {
   feeStatus?: Prisma.SortOrder
   totalFeeDue?: Prisma.SortOrder
   totalFeePaid?: Prisma.SortOrder
+  riskLevel?: Prisma.SortOrder
+  latePaymentCount?: Prisma.SortOrder
+  lastPaymentDate?: Prisma.SortOrderInput | Prisma.SortOrder
   metadata?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -414,6 +451,9 @@ export type StudentScalarWhereWithAggregatesInput = {
   feeStatus?: Prisma.EnumFeeStatusWithAggregatesFilter<"Student"> | $Enums.FeeStatus
   totalFeeDue?: Prisma.IntWithAggregatesFilter<"Student"> | number
   totalFeePaid?: Prisma.IntWithAggregatesFilter<"Student"> | number
+  riskLevel?: Prisma.StringWithAggregatesFilter<"Student"> | string
+  latePaymentCount?: Prisma.IntWithAggregatesFilter<"Student"> | number
+  lastPaymentDate?: Prisma.DateTimeNullableWithAggregatesFilter<"Student"> | Date | string | null
   metadata?: Prisma.JsonNullableWithAggregatesFilter<"Student">
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Student"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Student"> | Date | string
@@ -428,6 +468,9 @@ export type StudentCreateInput = {
   feeStatus?: $Enums.FeeStatus
   totalFeeDue?: number
   totalFeePaid?: number
+  riskLevel?: string
+  latePaymentCount?: number
+  lastPaymentDate?: Date | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -454,6 +497,9 @@ export type StudentUncheckedCreateInput = {
   feeStatus?: $Enums.FeeStatus
   totalFeeDue?: number
   totalFeePaid?: number
+  riskLevel?: string
+  latePaymentCount?: number
+  lastPaymentDate?: Date | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -470,6 +516,9 @@ export type StudentUpdateInput = {
   feeStatus?: Prisma.EnumFeeStatusFieldUpdateOperationsInput | $Enums.FeeStatus
   totalFeeDue?: Prisma.IntFieldUpdateOperationsInput | number
   totalFeePaid?: Prisma.IntFieldUpdateOperationsInput | number
+  riskLevel?: Prisma.StringFieldUpdateOperationsInput | string
+  latePaymentCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lastPaymentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -496,6 +545,9 @@ export type StudentUncheckedUpdateInput = {
   feeStatus?: Prisma.EnumFeeStatusFieldUpdateOperationsInput | $Enums.FeeStatus
   totalFeeDue?: Prisma.IntFieldUpdateOperationsInput | number
   totalFeePaid?: Prisma.IntFieldUpdateOperationsInput | number
+  riskLevel?: Prisma.StringFieldUpdateOperationsInput | string
+  latePaymentCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lastPaymentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -517,6 +569,9 @@ export type StudentCreateManyInput = {
   feeStatus?: $Enums.FeeStatus
   totalFeeDue?: number
   totalFeePaid?: number
+  riskLevel?: string
+  latePaymentCount?: number
+  lastPaymentDate?: Date | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -531,6 +586,9 @@ export type StudentUpdateManyMutationInput = {
   feeStatus?: Prisma.EnumFeeStatusFieldUpdateOperationsInput | $Enums.FeeStatus
   totalFeeDue?: Prisma.IntFieldUpdateOperationsInput | number
   totalFeePaid?: Prisma.IntFieldUpdateOperationsInput | number
+  riskLevel?: Prisma.StringFieldUpdateOperationsInput | string
+  latePaymentCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lastPaymentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -550,6 +608,9 @@ export type StudentUncheckedUpdateManyInput = {
   feeStatus?: Prisma.EnumFeeStatusFieldUpdateOperationsInput | $Enums.FeeStatus
   totalFeeDue?: Prisma.IntFieldUpdateOperationsInput | number
   totalFeePaid?: Prisma.IntFieldUpdateOperationsInput | number
+  riskLevel?: Prisma.StringFieldUpdateOperationsInput | string
+  latePaymentCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lastPaymentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -589,6 +650,9 @@ export type StudentCountOrderByAggregateInput = {
   feeStatus?: Prisma.SortOrder
   totalFeeDue?: Prisma.SortOrder
   totalFeePaid?: Prisma.SortOrder
+  riskLevel?: Prisma.SortOrder
+  latePaymentCount?: Prisma.SortOrder
+  lastPaymentDate?: Prisma.SortOrder
   metadata?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -598,6 +662,7 @@ export type StudentAvgOrderByAggregateInput = {
   currentSemester?: Prisma.SortOrder
   totalFeeDue?: Prisma.SortOrder
   totalFeePaid?: Prisma.SortOrder
+  latePaymentCount?: Prisma.SortOrder
 }
 
 export type StudentMaxOrderByAggregateInput = {
@@ -614,6 +679,9 @@ export type StudentMaxOrderByAggregateInput = {
   feeStatus?: Prisma.SortOrder
   totalFeeDue?: Prisma.SortOrder
   totalFeePaid?: Prisma.SortOrder
+  riskLevel?: Prisma.SortOrder
+  latePaymentCount?: Prisma.SortOrder
+  lastPaymentDate?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -632,6 +700,9 @@ export type StudentMinOrderByAggregateInput = {
   feeStatus?: Prisma.SortOrder
   totalFeeDue?: Prisma.SortOrder
   totalFeePaid?: Prisma.SortOrder
+  riskLevel?: Prisma.SortOrder
+  latePaymentCount?: Prisma.SortOrder
+  lastPaymentDate?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -640,6 +711,7 @@ export type StudentSumOrderByAggregateInput = {
   currentSemester?: Prisma.SortOrder
   totalFeeDue?: Prisma.SortOrder
   totalFeePaid?: Prisma.SortOrder
+  latePaymentCount?: Prisma.SortOrder
 }
 
 export type StudentScalarRelationFilter = {
@@ -892,6 +964,9 @@ export type StudentCreateWithoutTenantInput = {
   feeStatus?: $Enums.FeeStatus
   totalFeeDue?: number
   totalFeePaid?: number
+  riskLevel?: string
+  latePaymentCount?: number
+  lastPaymentDate?: Date | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -916,6 +991,9 @@ export type StudentUncheckedCreateWithoutTenantInput = {
   feeStatus?: $Enums.FeeStatus
   totalFeeDue?: number
   totalFeePaid?: number
+  riskLevel?: string
+  latePaymentCount?: number
+  lastPaymentDate?: Date | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -966,6 +1044,9 @@ export type StudentScalarWhereInput = {
   feeStatus?: Prisma.EnumFeeStatusFilter<"Student"> | $Enums.FeeStatus
   totalFeeDue?: Prisma.IntFilter<"Student"> | number
   totalFeePaid?: Prisma.IntFilter<"Student"> | number
+  riskLevel?: Prisma.StringFilter<"Student"> | string
+  latePaymentCount?: Prisma.IntFilter<"Student"> | number
+  lastPaymentDate?: Prisma.DateTimeNullableFilter<"Student"> | Date | string | null
   metadata?: Prisma.JsonNullableFilter<"Student">
   createdAt?: Prisma.DateTimeFilter<"Student"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Student"> | Date | string
@@ -980,6 +1061,9 @@ export type StudentCreateWithoutUserInput = {
   feeStatus?: $Enums.FeeStatus
   totalFeeDue?: number
   totalFeePaid?: number
+  riskLevel?: string
+  latePaymentCount?: number
+  lastPaymentDate?: Date | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1004,6 +1088,9 @@ export type StudentUncheckedCreateWithoutUserInput = {
   feeStatus?: $Enums.FeeStatus
   totalFeeDue?: number
   totalFeePaid?: number
+  riskLevel?: string
+  latePaymentCount?: number
+  lastPaymentDate?: Date | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1036,6 +1123,9 @@ export type StudentUpdateWithoutUserInput = {
   feeStatus?: Prisma.EnumFeeStatusFieldUpdateOperationsInput | $Enums.FeeStatus
   totalFeeDue?: Prisma.IntFieldUpdateOperationsInput | number
   totalFeePaid?: Prisma.IntFieldUpdateOperationsInput | number
+  riskLevel?: Prisma.StringFieldUpdateOperationsInput | string
+  latePaymentCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lastPaymentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1060,6 +1150,9 @@ export type StudentUncheckedUpdateWithoutUserInput = {
   feeStatus?: Prisma.EnumFeeStatusFieldUpdateOperationsInput | $Enums.FeeStatus
   totalFeeDue?: Prisma.IntFieldUpdateOperationsInput | number
   totalFeePaid?: Prisma.IntFieldUpdateOperationsInput | number
+  riskLevel?: Prisma.StringFieldUpdateOperationsInput | string
+  latePaymentCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lastPaymentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1076,6 +1169,9 @@ export type StudentCreateWithoutSessionInput = {
   feeStatus?: $Enums.FeeStatus
   totalFeeDue?: number
   totalFeePaid?: number
+  riskLevel?: string
+  latePaymentCount?: number
+  lastPaymentDate?: Date | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1100,6 +1196,9 @@ export type StudentUncheckedCreateWithoutSessionInput = {
   feeStatus?: $Enums.FeeStatus
   totalFeeDue?: number
   totalFeePaid?: number
+  riskLevel?: string
+  latePaymentCount?: number
+  lastPaymentDate?: Date | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1142,6 +1241,9 @@ export type StudentCreateWithoutDepartmentInput = {
   feeStatus?: $Enums.FeeStatus
   totalFeeDue?: number
   totalFeePaid?: number
+  riskLevel?: string
+  latePaymentCount?: number
+  lastPaymentDate?: Date | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1166,6 +1268,9 @@ export type StudentUncheckedCreateWithoutDepartmentInput = {
   feeStatus?: $Enums.FeeStatus
   totalFeeDue?: number
   totalFeePaid?: number
+  riskLevel?: string
+  latePaymentCount?: number
+  lastPaymentDate?: Date | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1208,6 +1313,9 @@ export type StudentCreateWithoutProgramInput = {
   feeStatus?: $Enums.FeeStatus
   totalFeeDue?: number
   totalFeePaid?: number
+  riskLevel?: string
+  latePaymentCount?: number
+  lastPaymentDate?: Date | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1232,6 +1340,9 @@ export type StudentUncheckedCreateWithoutProgramInput = {
   feeStatus?: $Enums.FeeStatus
   totalFeeDue?: number
   totalFeePaid?: number
+  riskLevel?: string
+  latePaymentCount?: number
+  lastPaymentDate?: Date | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1274,6 +1385,9 @@ export type StudentCreateWithoutFeeAssignmentsInput = {
   feeStatus?: $Enums.FeeStatus
   totalFeeDue?: number
   totalFeePaid?: number
+  riskLevel?: string
+  latePaymentCount?: number
+  lastPaymentDate?: Date | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1299,6 +1413,9 @@ export type StudentUncheckedCreateWithoutFeeAssignmentsInput = {
   feeStatus?: $Enums.FeeStatus
   totalFeeDue?: number
   totalFeePaid?: number
+  riskLevel?: string
+  latePaymentCount?: number
+  lastPaymentDate?: Date | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1330,6 +1447,9 @@ export type StudentUpdateWithoutFeeAssignmentsInput = {
   feeStatus?: Prisma.EnumFeeStatusFieldUpdateOperationsInput | $Enums.FeeStatus
   totalFeeDue?: Prisma.IntFieldUpdateOperationsInput | number
   totalFeePaid?: Prisma.IntFieldUpdateOperationsInput | number
+  riskLevel?: Prisma.StringFieldUpdateOperationsInput | string
+  latePaymentCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lastPaymentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1355,6 +1475,9 @@ export type StudentUncheckedUpdateWithoutFeeAssignmentsInput = {
   feeStatus?: Prisma.EnumFeeStatusFieldUpdateOperationsInput | $Enums.FeeStatus
   totalFeeDue?: Prisma.IntFieldUpdateOperationsInput | number
   totalFeePaid?: Prisma.IntFieldUpdateOperationsInput | number
+  riskLevel?: Prisma.StringFieldUpdateOperationsInput | string
+  latePaymentCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lastPaymentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1370,6 +1493,9 @@ export type StudentCreateWithoutPaymentsInput = {
   feeStatus?: $Enums.FeeStatus
   totalFeeDue?: number
   totalFeePaid?: number
+  riskLevel?: string
+  latePaymentCount?: number
+  lastPaymentDate?: Date | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1395,6 +1521,9 @@ export type StudentUncheckedCreateWithoutPaymentsInput = {
   feeStatus?: $Enums.FeeStatus
   totalFeeDue?: number
   totalFeePaid?: number
+  riskLevel?: string
+  latePaymentCount?: number
+  lastPaymentDate?: Date | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1426,6 +1555,9 @@ export type StudentUpdateWithoutPaymentsInput = {
   feeStatus?: Prisma.EnumFeeStatusFieldUpdateOperationsInput | $Enums.FeeStatus
   totalFeeDue?: Prisma.IntFieldUpdateOperationsInput | number
   totalFeePaid?: Prisma.IntFieldUpdateOperationsInput | number
+  riskLevel?: Prisma.StringFieldUpdateOperationsInput | string
+  latePaymentCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lastPaymentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1451,6 +1583,9 @@ export type StudentUncheckedUpdateWithoutPaymentsInput = {
   feeStatus?: Prisma.EnumFeeStatusFieldUpdateOperationsInput | $Enums.FeeStatus
   totalFeeDue?: Prisma.IntFieldUpdateOperationsInput | number
   totalFeePaid?: Prisma.IntFieldUpdateOperationsInput | number
+  riskLevel?: Prisma.StringFieldUpdateOperationsInput | string
+  latePaymentCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lastPaymentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1470,6 +1605,9 @@ export type StudentCreateManyTenantInput = {
   feeStatus?: $Enums.FeeStatus
   totalFeeDue?: number
   totalFeePaid?: number
+  riskLevel?: string
+  latePaymentCount?: number
+  lastPaymentDate?: Date | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1484,6 +1622,9 @@ export type StudentUpdateWithoutTenantInput = {
   feeStatus?: Prisma.EnumFeeStatusFieldUpdateOperationsInput | $Enums.FeeStatus
   totalFeeDue?: Prisma.IntFieldUpdateOperationsInput | number
   totalFeePaid?: Prisma.IntFieldUpdateOperationsInput | number
+  riskLevel?: Prisma.StringFieldUpdateOperationsInput | string
+  latePaymentCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lastPaymentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1508,6 +1649,9 @@ export type StudentUncheckedUpdateWithoutTenantInput = {
   feeStatus?: Prisma.EnumFeeStatusFieldUpdateOperationsInput | $Enums.FeeStatus
   totalFeeDue?: Prisma.IntFieldUpdateOperationsInput | number
   totalFeePaid?: Prisma.IntFieldUpdateOperationsInput | number
+  riskLevel?: Prisma.StringFieldUpdateOperationsInput | string
+  latePaymentCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lastPaymentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1528,6 +1672,9 @@ export type StudentUncheckedUpdateManyWithoutTenantInput = {
   feeStatus?: Prisma.EnumFeeStatusFieldUpdateOperationsInput | $Enums.FeeStatus
   totalFeeDue?: Prisma.IntFieldUpdateOperationsInput | number
   totalFeePaid?: Prisma.IntFieldUpdateOperationsInput | number
+  riskLevel?: Prisma.StringFieldUpdateOperationsInput | string
+  latePaymentCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lastPaymentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1546,6 +1693,9 @@ export type StudentCreateManySessionInput = {
   feeStatus?: $Enums.FeeStatus
   totalFeeDue?: number
   totalFeePaid?: number
+  riskLevel?: string
+  latePaymentCount?: number
+  lastPaymentDate?: Date | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1560,6 +1710,9 @@ export type StudentUpdateWithoutSessionInput = {
   feeStatus?: Prisma.EnumFeeStatusFieldUpdateOperationsInput | $Enums.FeeStatus
   totalFeeDue?: Prisma.IntFieldUpdateOperationsInput | number
   totalFeePaid?: Prisma.IntFieldUpdateOperationsInput | number
+  riskLevel?: Prisma.StringFieldUpdateOperationsInput | string
+  latePaymentCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lastPaymentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1584,6 +1737,9 @@ export type StudentUncheckedUpdateWithoutSessionInput = {
   feeStatus?: Prisma.EnumFeeStatusFieldUpdateOperationsInput | $Enums.FeeStatus
   totalFeeDue?: Prisma.IntFieldUpdateOperationsInput | number
   totalFeePaid?: Prisma.IntFieldUpdateOperationsInput | number
+  riskLevel?: Prisma.StringFieldUpdateOperationsInput | string
+  latePaymentCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lastPaymentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1604,6 +1760,9 @@ export type StudentUncheckedUpdateManyWithoutSessionInput = {
   feeStatus?: Prisma.EnumFeeStatusFieldUpdateOperationsInput | $Enums.FeeStatus
   totalFeeDue?: Prisma.IntFieldUpdateOperationsInput | number
   totalFeePaid?: Prisma.IntFieldUpdateOperationsInput | number
+  riskLevel?: Prisma.StringFieldUpdateOperationsInput | string
+  latePaymentCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lastPaymentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1622,6 +1781,9 @@ export type StudentCreateManyDepartmentInput = {
   feeStatus?: $Enums.FeeStatus
   totalFeeDue?: number
   totalFeePaid?: number
+  riskLevel?: string
+  latePaymentCount?: number
+  lastPaymentDate?: Date | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1636,6 +1798,9 @@ export type StudentUpdateWithoutDepartmentInput = {
   feeStatus?: Prisma.EnumFeeStatusFieldUpdateOperationsInput | $Enums.FeeStatus
   totalFeeDue?: Prisma.IntFieldUpdateOperationsInput | number
   totalFeePaid?: Prisma.IntFieldUpdateOperationsInput | number
+  riskLevel?: Prisma.StringFieldUpdateOperationsInput | string
+  latePaymentCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lastPaymentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1660,6 +1825,9 @@ export type StudentUncheckedUpdateWithoutDepartmentInput = {
   feeStatus?: Prisma.EnumFeeStatusFieldUpdateOperationsInput | $Enums.FeeStatus
   totalFeeDue?: Prisma.IntFieldUpdateOperationsInput | number
   totalFeePaid?: Prisma.IntFieldUpdateOperationsInput | number
+  riskLevel?: Prisma.StringFieldUpdateOperationsInput | string
+  latePaymentCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lastPaymentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1680,6 +1848,9 @@ export type StudentUncheckedUpdateManyWithoutDepartmentInput = {
   feeStatus?: Prisma.EnumFeeStatusFieldUpdateOperationsInput | $Enums.FeeStatus
   totalFeeDue?: Prisma.IntFieldUpdateOperationsInput | number
   totalFeePaid?: Prisma.IntFieldUpdateOperationsInput | number
+  riskLevel?: Prisma.StringFieldUpdateOperationsInput | string
+  latePaymentCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lastPaymentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1698,6 +1869,9 @@ export type StudentCreateManyProgramInput = {
   feeStatus?: $Enums.FeeStatus
   totalFeeDue?: number
   totalFeePaid?: number
+  riskLevel?: string
+  latePaymentCount?: number
+  lastPaymentDate?: Date | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1712,6 +1886,9 @@ export type StudentUpdateWithoutProgramInput = {
   feeStatus?: Prisma.EnumFeeStatusFieldUpdateOperationsInput | $Enums.FeeStatus
   totalFeeDue?: Prisma.IntFieldUpdateOperationsInput | number
   totalFeePaid?: Prisma.IntFieldUpdateOperationsInput | number
+  riskLevel?: Prisma.StringFieldUpdateOperationsInput | string
+  latePaymentCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lastPaymentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1736,6 +1913,9 @@ export type StudentUncheckedUpdateWithoutProgramInput = {
   feeStatus?: Prisma.EnumFeeStatusFieldUpdateOperationsInput | $Enums.FeeStatus
   totalFeeDue?: Prisma.IntFieldUpdateOperationsInput | number
   totalFeePaid?: Prisma.IntFieldUpdateOperationsInput | number
+  riskLevel?: Prisma.StringFieldUpdateOperationsInput | string
+  latePaymentCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lastPaymentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1756,6 +1936,9 @@ export type StudentUncheckedUpdateManyWithoutProgramInput = {
   feeStatus?: Prisma.EnumFeeStatusFieldUpdateOperationsInput | $Enums.FeeStatus
   totalFeeDue?: Prisma.IntFieldUpdateOperationsInput | number
   totalFeePaid?: Prisma.IntFieldUpdateOperationsInput | number
+  riskLevel?: Prisma.StringFieldUpdateOperationsInput | string
+  latePaymentCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lastPaymentDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1815,6 +1998,9 @@ export type StudentSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   feeStatus?: boolean
   totalFeeDue?: boolean
   totalFeePaid?: boolean
+  riskLevel?: boolean
+  latePaymentCount?: boolean
+  lastPaymentDate?: boolean
   metadata?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1842,6 +2028,9 @@ export type StudentSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   feeStatus?: boolean
   totalFeeDue?: boolean
   totalFeePaid?: boolean
+  riskLevel?: boolean
+  latePaymentCount?: boolean
+  lastPaymentDate?: boolean
   metadata?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1866,6 +2055,9 @@ export type StudentSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   feeStatus?: boolean
   totalFeeDue?: boolean
   totalFeePaid?: boolean
+  riskLevel?: boolean
+  latePaymentCount?: boolean
+  lastPaymentDate?: boolean
   metadata?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1890,12 +2082,15 @@ export type StudentSelectScalar = {
   feeStatus?: boolean
   totalFeeDue?: boolean
   totalFeePaid?: boolean
+  riskLevel?: boolean
+  latePaymentCount?: boolean
+  lastPaymentDate?: boolean
   metadata?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type StudentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "userId" | "studentId" | "cnic" | "sessionId" | "departmentId" | "programId" | "currentSemester" | "enrollmentStatus" | "feeStatus" | "totalFeeDue" | "totalFeePaid" | "metadata" | "createdAt" | "updatedAt", ExtArgs["result"]["student"]>
+export type StudentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "userId" | "studentId" | "cnic" | "sessionId" | "departmentId" | "programId" | "currentSemester" | "enrollmentStatus" | "feeStatus" | "totalFeeDue" | "totalFeePaid" | "riskLevel" | "latePaymentCount" | "lastPaymentDate" | "metadata" | "createdAt" | "updatedAt", ExtArgs["result"]["student"]>
 export type StudentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -1946,6 +2141,9 @@ export type $StudentPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     feeStatus: $Enums.FeeStatus
     totalFeeDue: number
     totalFeePaid: number
+    riskLevel: string
+    latePaymentCount: number
+    lastPaymentDate: Date | null
     metadata: runtime.JsonValue | null
     createdAt: Date
     updatedAt: Date
@@ -2392,6 +2590,9 @@ export interface StudentFieldRefs {
   readonly feeStatus: Prisma.FieldRef<"Student", 'FeeStatus'>
   readonly totalFeeDue: Prisma.FieldRef<"Student", 'Int'>
   readonly totalFeePaid: Prisma.FieldRef<"Student", 'Int'>
+  readonly riskLevel: Prisma.FieldRef<"Student", 'String'>
+  readonly latePaymentCount: Prisma.FieldRef<"Student", 'Int'>
+  readonly lastPaymentDate: Prisma.FieldRef<"Student", 'DateTime'>
   readonly metadata: Prisma.FieldRef<"Student", 'Json'>
   readonly createdAt: Prisma.FieldRef<"Student", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Student", 'DateTime'>

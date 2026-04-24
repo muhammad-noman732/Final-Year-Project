@@ -3,20 +3,13 @@
 import { useEffect, useState } from "react"
 import { Activity, Wifi, WifiOff } from "lucide-react"
 import { formatFullCurrency } from "@/config/constants"
-
-interface LiveTransaction {
-  id: string
-  studentName: string
-  rollNumber: string
-  department: string
-  program: string
-  semester: string
-  amount: number
-  paidAt: string
-}
+import type { SSELiveTransaction } from "@/types/client/ui/vc.ui.types"
 
 interface VCLiveFeedProps {
-  transactions: LiveTransaction[]
+  /** Real-time transactions pushed via SSE (newest first). */
+  transactions: SSELiveTransaction[]
+  /** Historical transactions seeded from the DB on mount (last 12 payments). */
+  initialTransactions?: SSELiveTransaction[]
   connected: boolean
   newPaymentsCount: number
   newAmountCollected: number
@@ -24,10 +17,18 @@ interface VCLiveFeedProps {
 
 export default function VCLiveFeed({
   transactions,
+  initialTransactions = [],
   connected,
   newPaymentsCount,
   newAmountCollected,
 }: VCLiveFeedProps) {
+  // Merge SSE events (newest) with DB seed (older), deduplicate by id, cap at 50
+  const sseIds = new Set(transactions.map((t) => t.id))
+  const merged = [
+    ...transactions,
+    ...initialTransactions.filter((t) => !sseIds.has(t.id)),
+  ].slice(0, 50)
+
   return (
     <div className="rounded-2xl border border-white/[0.06] bg-[#0a0e1a] overflow-hidden">
       {/* Header */}
@@ -44,7 +45,7 @@ export default function VCLiveFeed({
         <div className="flex items-center gap-3">
           {newPaymentsCount > 0 && (
             <div className="flex items-center gap-2 text-[11px]">
-              <span className="text-emerald-400 font-medium">+{newPaymentsCount} payments</span>
+              <span className="text-emerald-400 font-medium">+{newPaymentsCount} new</span>
               <span className="text-muted-foreground">&middot;</span>
               <span className="text-gold-400 font-medium">+{formatFullCurrency(newAmountCollected)}</span>
             </div>
@@ -64,18 +65,18 @@ export default function VCLiveFeed({
 
       {/* Feed */}
       <div className="max-h-[360px] overflow-y-auto">
-        {transactions.length === 0 ? (
+        {merged.length === 0 ? (
           <div className="px-5 py-10 text-center">
             <Activity className="mx-auto h-8 w-8 text-white/[0.06] mb-3" />
-            <p className="text-sm text-muted-foreground">No live transactions yet</p>
+            <p className="text-sm text-muted-foreground">No transactions yet</p>
             <p className="mt-1 text-xs text-muted-foreground/60">
               New payments will appear here in real-time
             </p>
           </div>
         ) : (
           <div className="divide-y divide-white/[0.03]">
-            {transactions.map((tx) => (
-              <LiveTransactionRow key={tx.id} tx={tx} />
+            {merged.map((tx, i) => (
+              <LiveTransactionRow key={tx.id} tx={tx} isNew={i < transactions.length} />
             ))}
           </div>
         )}
@@ -84,17 +85,18 @@ export default function VCLiveFeed({
   )
 }
 
-function LiveTransactionRow({ tx }: { tx: LiveTransaction }) {
-  const [isNew, setIsNew] = useState(true)
+function LiveTransactionRow({ tx, isNew }: { tx: SSELiveTransaction; isNew: boolean }) {
+  const [highlight, setHighlight] = useState(isNew)
 
   useEffect(() => {
-    const timer = setTimeout(() => setIsNew(false), 2000)
+    if (!isNew) return
+    const timer = setTimeout(() => setHighlight(false), 2_000)
     return () => clearTimeout(timer)
-  }, [])
+  }, [isNew])
 
   return (
     <div
-      className={`px-5 py-3 transition-colors duration-700 ${isNew ? "bg-emerald-500/[0.04]" : "bg-transparent"}`}
+      className={`px-5 py-3 transition-colors duration-700 ${highlight ? "bg-emerald-500/[0.04]" : "bg-transparent"}`}
     >
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0 flex-1">

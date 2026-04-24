@@ -121,3 +121,13 @@ export type AuditLog = Prisma.AuditLogModel
  * 
  */
 export type Subscription = Prisma.SubscriptionModel
+/**
+ * Model ActivityLog
+ * 
+ */
+export type ActivityLog = Prisma.ActivityLogModel
+/**
+ * Model Insight
+ * 
+ */
+export type Insight = Prisma.InsightModel

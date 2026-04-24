@@ -1,5 +1,5 @@
 import type { VCAnalyticsFilters } from "@/types/client/store/vc.store.types"
-import type { VCFilterState } from "@/components/vc/VCFilterBar"
+import type { VCFilterState } from "@/types/client/ui/vc.ui.types"
 
 const VALID_FEE_STATUS = new Set(["ALL", "PAID", "UNPAID", "PARTIAL", "OVERDUE", "WAIVED"])
 const VALID_RANGE = new Set(["today", "7d", "30d", "90d", "custom"])

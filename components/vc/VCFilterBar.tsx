@@ -10,27 +10,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import type {
-  VCFeeStatus,
-  VCTimeRange,
-} from "@/types/client/store/vc.store.types"
+import type { VCFeeStatus, VCTimeRange } from "@/types/client/store/vc.store.types"
+import type { VCFilterState, VCSelectOption } from "@/types/client/ui/vc.ui.types"
 
-export interface VCSelectOption {
-  id: string
-  label: string
-}
-
-export interface VCFilterState {
-  departmentId: string
-  programId: string
-  sessionId: string
-  semester: string
-  feeStatus: VCFeeStatus
-  range: VCTimeRange
-  from: string
-  to: string
-  search: string
-}
+export type { VCFilterState, VCSelectOption }
 
 interface VCFilterBarProps {
   filters: VCFilterState
@@ -43,6 +26,7 @@ interface VCFilterBarProps {
   showFeeStatus?: boolean
   showSearch?: boolean
 }
+
 
 const semesterOptions = Array.from({ length: 12 }, (_, index) => ({
   id: String(index + 1),
