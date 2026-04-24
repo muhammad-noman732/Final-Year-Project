@@ -8,8 +8,6 @@ import {
   listFeeStructuresQuerySchema,
 } from "@/lib/validators/admin.validators"
 import {
-  buildCachedFn,
-  feeStructureTag,
   revalidateFeeStructures,
   revalidateAllStudentFees,
 } from "@/lib/cache"
@@ -24,20 +22,10 @@ export class FeeStructureController {
     const searchParams = Object.fromEntries(req.nextUrl.searchParams.entries())
     const query = listFeeStructuresQuerySchema.parse(searchParams)
 
-    const queryKey = JSON.stringify({ tenantId, ...query })
-
-    const getCached = buildCachedFn(
-      async (key: string) => {
-        const parsed = JSON.parse(queryKey)
-        const { tenantId: tid, ...q } = parsed
-        return this.feeStructureService.getFeeStructures(tid, q)
-      },
-      ["fee-structures", queryKey],
-      [feeStructureTag(tenantId)],
-      60,
-    )
-
-    const result = await getCached(queryKey)
+    // No server-side unstable_cache here — the RTK Query client cache (invalidatesTags)
+    // is the correct caching layer. Creating unstable_cache inside a request handler
+    // produces a new function reference each time, defeating deduplication.
+    const result = await this.feeStructureService.getFeeStructures(tenantId, query)
     return successResponse(result)
   }
 

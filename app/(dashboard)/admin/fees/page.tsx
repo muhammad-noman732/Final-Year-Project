@@ -72,7 +72,8 @@ export default function FeesPage() {
     // ── Stats ─────────────────────────────────────────────────────
     const totalRevenue = feeStructures.reduce((s, fs) => s + (fs.totalFee * fs._count.assignments), 0);
     const totalAssigned = feeStructures.reduce((s, fs) => s + fs._count.assignments, 0);
-    const activeCount = meta.total;
+    // Count only active structures from the current page — accurate after any hard-delete or deactivation
+    const activeCount = feeStructures.filter(fs => fs.isActive).length;
 
     // ── Fee breakdown labels ─────────────────────────────────────
     const feeBreakdownFields = [
@@ -111,7 +112,7 @@ export default function FeesPage() {
                         <BarChart3 className="w-5 h-5 text-emerald-400" />
                     </div>
                     <div>
-                        <p className="text-xs text-muted-foreground uppercase tracking-wider">Active (All)</p>
+                        <p className="text-xs text-muted-foreground uppercase tracking-wider">Active</p>
                         <p className="text-lg font-bold text-emerald-400">{activeCount}</p>
                     </div>
                 </Card>
@@ -234,7 +235,7 @@ export default function FeesPage() {
                                                                     size="icon"
                                                                     variant="ghost"
                                                                     className="h-8 w-8 text-muted-foreground hover:text-rose-400"
-                                                                    disabled={isDeactivating || !fs.isActive}
+                                                                    disabled={isDeactivating}
                                                                     onClick={() => setDeleteFeeState({ id: fs.id, label: `${fs.program.code} Sem ${fs.semester}` })}
                                                                 >
                                                                     <Trash2 className="w-3.5 h-3.5" />
@@ -540,12 +541,12 @@ export default function FeesPage() {
                 </DialogContent>
             </Dialog>
 
-            <ConfirmDialog 
-                open={!!deleteFeeState} 
+            <ConfirmDialog
+                open={!!deleteFeeState}
                 onOpenChange={(v) => !v && setDeleteFeeState(null)}
-                title="Deactivate Fee Structure"
-                description={`Are you sure you want to deactivate "${deleteFeeState?.label}"? Students will no longer see this fee.`}
-                actionLabel="Deactivate"
+                title="Delete Fee Structure"
+                description={`This will permanently delete "${deleteFeeState?.label}" and remove all unpaid assignments. Structures with existing payments cannot be deleted.`}
+                actionLabel="Delete"
                 isDestructive
                 isPending={isDeactivating}
                 onAction={async () => {

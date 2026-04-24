@@ -35,6 +35,8 @@ export const feeStructuresApi = baseApi.injectEndpoints({
         url: "/admin/fees/structures",
         params: toListQueryParams(query),
       }),
+      // Override the global 600s TTL — fee data must not be stale after mutations
+      keepUnusedDataFor: 60,
       providesTags: (result) =>
         result?.data?.data
           ? [
@@ -71,6 +73,17 @@ export const feeStructuresApi = baseApi.injectEndpoints({
         { type: "FeeStructure", id: arg.id },
       ],
     }),
+
+    deleteFeeStructure: builder.mutation<ApiResponse<{ deleted: boolean }>, string>({
+      query: (id) => ({
+        url: `/admin/fees/structures/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: (_result, _error, id) => [
+        { type: "FeeStructure", id: "LIST" },
+        { type: "FeeStructure", id },
+      ],
+    }),
   }),
 })
 
@@ -79,4 +92,5 @@ export const {
   useGetFeeStructureQuery,
   useCreateFeeStructureMutation,
   useUpdateFeeStructureMutation,
+  useDeleteFeeStructureMutation,
 } = feeStructuresApi

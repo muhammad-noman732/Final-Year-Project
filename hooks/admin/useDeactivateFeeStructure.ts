@@ -1,18 +1,14 @@
 import { toast } from "sonner"
-import { useUpdateFeeStructureMutation } from "@/store/api/admin/feeStructuresApi"
+import { useDeleteFeeStructureMutation } from "@/store/api/admin/feeStructuresApi"
 
 export function useDeactivateFeeStructure() {
-  const [updateFeeStructure, { isLoading }] = useUpdateFeeStructureMutation()
+  const [deleteFeeStructure, { isLoading }] = useDeleteFeeStructureMutation()
 
   const handleDeactivate = async (feeStructureId: string, label: string) => {
-
     try {
-      await updateFeeStructure({
-        id: feeStructureId,
-        body: { isActive: false },
-      }).unwrap()
-      toast.success(`"${label}" has been deactivated`, {
-        description: "This fee structure can be reactivated at any time.",
+      await deleteFeeStructure(feeStructureId).unwrap()
+      toast.success(`"${label}" has been deleted`, {
+        description: "All unpaid fee assignments have been removed.",
       })
     } catch {
       // RTK error middleware handles API error toasts
