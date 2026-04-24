@@ -11,6 +11,7 @@ import {
   buildCachedFn,
   feeStructureTag,
   revalidateFeeStructures,
+  revalidateAllStudentFees,
 } from "@/lib/cache"
 
 export class FeeStructureController {
@@ -33,7 +34,7 @@ export class FeeStructureController {
       },
       ["fee-structures", queryKey],
       [feeStructureTag(tenantId)],
-      120,
+      60,
     )
 
     const result = await getCached(queryKey)
@@ -57,6 +58,7 @@ export class FeeStructureController {
     const result = await this.feeStructureService.createFeeStructure(tenantId, userId, data)
 
     revalidateFeeStructures(tenantId)
+    revalidateAllStudentFees(tenantId)
 
     return successResponse(result, 201)
   }
@@ -71,7 +73,20 @@ export class FeeStructureController {
     const result = await this.feeStructureService.updateFeeStructure(tenantId, userId, id, data)
 
     revalidateFeeStructures(tenantId)
+    revalidateAllStudentFees(tenantId)
 
     return successResponse(result)
+  }
+
+  async deleteFeeStructure(id: string) {
+    const { tenantId, userId } = await getTenantContext()
+    await requireRole("ADMIN")
+
+    await this.feeStructureService.deleteFeeStructure(tenantId, userId, id)
+
+    revalidateFeeStructures(tenantId)
+    revalidateAllStudentFees(tenantId)
+
+    return successResponse({ deleted: true })
   }
 }

@@ -130,4 +130,27 @@ export class StudentRepository {
       data: { phone },
     })
   }
+
+  /**
+   * Recalculates and persists the denormalized totalFeeDue on each student.
+   * totalFeeDue = SUM(amountDue - amountPaid) across UNPAID / OVERDUE / PARTIAL assignments.
+   * Called after fee-structure updates or deletes to eliminate ghost fees.
+   */
+  async recalcFeeTotals(tenantId: string, studentIds: string[]): Promise<void> {
+    if (studentIds.length === 0) return
+    for (const studentId of studentIds) {
+      const { _sum } = await this.db.feeAssignment.aggregate({
+        where: { tenantId, studentId, status: { notIn: ["PAID", "WAIVED"] } },
+        _sum: { amountDue: true, amountPaid: true },
+      })
+      const totalFeeDue = Math.max(
+        (_sum.amountDue ?? 0) - (_sum.amountPaid ?? 0),
+        0,
+      )
+      await this.db.student.update({
+        where: { id: studentId },
+        data: { totalFeeDue },
+      })
+    }
+  }
 }

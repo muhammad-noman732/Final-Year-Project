@@ -80,3 +80,17 @@ export function revalidateFeeStructures(tenantId: string) {
 export function revalidateStudentFee(tenantId: string, userId: string) {
   revalidateTag(studentFeeTag(tenantId, userId), "max")
 }
+
+/**
+ * Tenant-wide tag that covers every student's fee cache entry.
+ * Add this tag alongside studentFeeTag on any cached fee query so a single
+ * revalidateAllStudentFees() call busts all of them at once (e.g. after a
+ * fee-structure update that affects multiple students).
+ */
+export function allStudentFeesTag(tenantId: string) {
+  return `all-student-fees-${tenantId}`
+}
+
+export function revalidateAllStudentFees(tenantId: string) {
+  revalidateTag(allStudentFeesTag(tenantId), "max")
+}

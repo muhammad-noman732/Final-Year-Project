@@ -4,6 +4,8 @@ import type {
   FeeStructureRepository,
   FeeStructureRow,
 } from "@/lib/repositories/feeStructure.repository"
+import type { FeeAssignmentRepository } from "@/lib/repositories/feeAssignment.repository"
+import type { StudentRepository } from "@/lib/repositories/student.repository"
 import type { ProgramRepository } from "@/lib/repositories/program.repository"
 import type { AuditService } from "@/lib/services/audit.service"
 import type { FeeAssignmentService } from "@/lib/services/feeAssignment.service"
@@ -22,9 +24,11 @@ export class FeeStructureService {
     private readonly programRepo: ProgramRepository,
     private readonly auditService: AuditService,
     private readonly feeAssignmentService: FeeAssignmentService,
+    private readonly feeAssignmentRepo: FeeAssignmentRepository,
+    private readonly studentRepo: StudentRepository,
   ) { }
 
-  //  List 
+  //  List
 
   async getFeeStructures(
     tenantId: string,
@@ -54,7 +58,7 @@ export class FeeStructureService {
     return { data, meta: buildPaginationMeta(total, query.page, query.limit) }
   }
 
-  //  Get Single 
+  //  Get Single
 
   async getFeeStructure(tenantId: string, id: string): Promise<FeeStructureRow> {
     const feeStructure = await this.feeStructureRepo.findById(tenantId, id)
@@ -62,7 +66,7 @@ export class FeeStructureService {
     return feeStructure
   }
 
-  //  Create 
+  //  Create
 
   async createFeeStructure(
     tenantId: string,
@@ -154,7 +158,7 @@ export class FeeStructureService {
     return feeStructure
   }
 
-  //  Update 
+  //  Update
 
   async updateFeeStructure(
     tenantId: string,
@@ -183,6 +187,9 @@ export class FeeStructureService {
       mergedExamination +
       mergedOther
 
+    const newTotal = input.totalFee ?? recomputedTotal
+    const newDueDate = input.dueDate ? new Date(input.dueDate) : existing.dueDate
+
     const updated = await this.feeStructureRepo.update(id, tenantId, {
       ...(input.tuitionFee !== undefined && { tuitionFee: input.tuitionFee }),
       ...(input.labFee !== undefined && { labFee: input.labFee }),
@@ -191,12 +198,40 @@ export class FeeStructureService {
       ...(input.registrationFee !== undefined && { registrationFee: input.registrationFee }),
       ...(input.examinationFee !== undefined && { examinationFee: input.examinationFee }),
       ...(input.otherFee !== undefined && { otherFee: input.otherFee }),
-      ...(input.dueDate !== undefined && { dueDate: new Date(input.dueDate) }),
+      ...(input.dueDate !== undefined && { dueDate: newDueDate }),
       ...(input.lateFee !== undefined && { lateFee: input.lateFee }),
       ...(input.isActive !== undefined && { isActive: input.isActive }),
-      // Always keep totalFee in sync if any component changed
-      totalFee: input.totalFee ?? recomputedTotal,
+      totalFee: newTotal,
     })
+
+    // Cascade to UNPAID/OVERDUE assignments when totalFee or dueDate changed
+    const totalFeeChanged = newTotal !== existing.totalFee
+    const dueDateChanged = newDueDate.getTime() !== existing.dueDate.getTime()
+
+    if (totalFeeChanged || dueDateChanged) {
+      const affected = await this.feeAssignmentRepo.findUnpaidByFeeStructure(tenantId, id)
+
+      if (affected.length > 0) {
+        await this.feeAssignmentRepo.updateUnpaidByFeeStructure(tenantId, id, {
+          amountDue: newTotal,
+          dueDate: newDueDate,
+        })
+
+        const affectedStudentIds = [...new Set(affected.map((a) => a.studentId))]
+        await this.studentRepo.recalcFeeTotals(tenantId, affectedStudentIds)
+
+        logger.info(
+          {
+            event: "fee_structure.update.cascade",
+            tenantId,
+            feeStructureId: id,
+            updatedAssignments: affected.length,
+            affectedStudents: affectedStudentIds.length,
+          },
+          "Cascaded fee structure update to UNPAID assignments",
+        )
+      }
+    }
 
     this._audit({
       tenantId,
@@ -226,6 +261,63 @@ export class FeeStructureService {
     )
 
     return updated
+  }
+
+  //  Delete
+
+  async deleteFeeStructure(
+    tenantId: string,
+    adminUserId: string,
+    id: string,
+  ): Promise<void> {
+    const existing = await this.feeStructureRepo.findById(tenantId, id)
+    if (!existing) throw new NotFoundError("Fee structure not found.")
+
+    // Block deletion if any student has already paid against this structure
+    const paidCount = await this.feeAssignmentRepo.countPaidByFeeStructure(tenantId, id)
+    if (paidCount > 0) {
+      throw new ConflictError(
+        `Cannot delete: ${paidCount} student(s) have already paid or partially paid against this fee structure. Archive it (set isActive = false) instead.`,
+      )
+    }
+
+    // Capture affected students before deletion for totals recalc
+    const affected = await this.feeAssignmentRepo.findUnpaidByFeeStructure(tenantId, id)
+    const affectedStudentIds = [...new Set(affected.map((a) => a.studentId))]
+
+    // Delete UNPAID/OVERDUE assignments, then the structure itself
+    await this.feeAssignmentRepo.deleteUnpaidByFeeStructure(tenantId, id)
+    await this.feeStructureRepo.delete(id, tenantId)
+
+    // Recalculate student totals so ghost fees are cleared immediately
+    await this.studentRepo.recalcFeeTotals(tenantId, affectedStudentIds)
+
+    this._audit({
+      tenantId,
+      userId: adminUserId,
+      action: "fee_structure.deleted",
+      entity: "FeeStructure",
+      entityId: id,
+      oldData: {
+        programId: existing.program.id,
+        semester: existing.semester,
+        sessionYear: existing.sessionYear,
+        totalFee: existing.totalFee,
+        deletedAssignments: affected.length,
+        affectedStudents: affectedStudentIds.length,
+      },
+    })
+
+    logger.info(
+      {
+        event: "fee_structure.delete.success",
+        tenantId,
+        feeStructureId: id,
+        deletedAssignments: affected.length,
+        affectedStudents: affectedStudentIds.length,
+      },
+      "Fee structure deleted successfully",
+    )
   }
 
   // ─── Private helpers ──────────────────────────────────────────────────────

@@ -4,6 +4,7 @@ import type { StudentFeeService } from "@/lib/services/studentFee.service"
 import {
   buildCachedFn,
   studentFeeTag,
+  allStudentFeesTag,
 } from "@/lib/cache"
 
 export class StudentFeeController {
@@ -13,14 +14,14 @@ export class StudentFeeController {
     const { tenantId, userId } = await getTenantContext()
     await requireRole("STUDENT")
 
-    // Cache per-student using userId (not studentId) as the key component.
-    // TTL: 300s = 5 minutes. Invalidated when fee is assigned or payment confirmed.
+    // Cache per-student (userId) + tenant-wide tag so either a targeted
+    // revalidateStudentFee() or a bulk revalidateAllStudentFees() busts it.
     const getCached = buildCachedFn(
       async (uid: string, tid: string) =>
         this.studentFeeService.getMyFeeProfile(tid, uid),
       ["student-fee-profile", userId, tenantId],
-      [studentFeeTag(tenantId, userId)],
-      300,
+      [studentFeeTag(tenantId, userId), allStudentFeesTag(tenantId)],
+      60,
     )
 
     const result = await getCached(userId, tenantId)

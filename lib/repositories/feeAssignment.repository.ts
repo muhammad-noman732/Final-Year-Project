@@ -111,4 +111,43 @@ export class FeeAssignmentRepository {
       where: { tenantId, feeStructureId },
     })
   }
+
+  /** Returns UNPAID/OVERDUE assignments for a structure with student userId for cache busting */
+  async findUnpaidByFeeStructure(
+    tenantId: string,
+    feeStructureId: string,
+  ): Promise<Array<{ id: string; studentId: string; student: { userId: string } }>> {
+    return this.db.feeAssignment.findMany({
+      where: { tenantId, feeStructureId, status: { in: ["UNPAID", "OVERDUE"] } },
+      select: { id: true, studentId: true, student: { select: { userId: true } } },
+    })
+  }
+
+  /** Bulk-updates amountDue + dueDate for all UNPAID/OVERDUE assignments on a structure */
+  async updateUnpaidByFeeStructure(
+    tenantId: string,
+    feeStructureId: string,
+    data: { amountDue: number; dueDate: Date },
+  ): Promise<number> {
+    const result = await this.db.feeAssignment.updateMany({
+      where: { tenantId, feeStructureId, status: { in: ["UNPAID", "OVERDUE"] } },
+      data: { amountDue: data.amountDue, dueDate: data.dueDate },
+    })
+    return result.count
+  }
+
+  /** Count assignments with financial activity — these block deletion */
+  async countPaidByFeeStructure(tenantId: string, feeStructureId: string): Promise<number> {
+    return this.db.feeAssignment.count({
+      where: { tenantId, feeStructureId, status: { in: ["PAID", "PARTIAL", "WAIVED"] } },
+    })
+  }
+
+  /** Deletes UNPAID/OVERDUE assignments for a structure; returns deleted count */
+  async deleteUnpaidByFeeStructure(tenantId: string, feeStructureId: string): Promise<number> {
+    const result = await this.db.feeAssignment.deleteMany({
+      where: { tenantId, feeStructureId, status: { in: ["UNPAID", "OVERDUE"] } },
+    })
+    return result.count
+  }
 }

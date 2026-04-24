@@ -107,4 +107,8 @@ export class FeeStructureRepository {
       select: FEE_STRUCTURE_SELECT,
     })
   }
+
+  async delete(id: string, tenantId: string): Promise<void> {
+    await this.db.feeStructure.delete({ where: { id, tenantId } })
+  }
 }
