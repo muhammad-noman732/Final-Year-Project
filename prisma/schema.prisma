@@ -231,6 +231,11 @@
     totalFeeDue  Int       @default(0) // PKR as integer — no floats
     totalFeePaid Int       @default(0)
 
+    // ── Intelligence / Risk metrics ──
+    riskLevel        String    @default("LOW") // "LOW" | "MEDIUM" | "HIGH"
+    latePaymentCount Int       @default(0)
+    lastPaymentDate  DateTime?
+
     // Extensible future data (chatbot session ID, scholarship type, etc.)
     metadata Json?
 
@@ -538,6 +543,37 @@ model WebhookEvent {
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+  }
+
+  // ═══════════════════════════════════════════════
+  //  ACTIVITY LOG & INSIGHTS (Intelligence Module)
+  // ═══════════════════════════════════════════════
+
+  model ActivityLog {
+    id        String   @id @default(cuid())
+    tenantId  String
+    type      String   // "PAYMENT" | "IMPORT" | "REMINDER" | "SYSTEM"
+    message   String   // e.g., "Ali paid PKR 50,000"
+    metadata  Json?    
+    createdAt DateTime @default(now())
+    
+    @@index([tenantId, createdAt])
+  }
+
+  model Insight {
+    id           String   @id @default(cuid())
+    tenantId     String
+    type         String   // "ALERT" | "SUCCESS" | "PREDICTION" | "RISK"
+    message      String   
+    actionLabel  String?  // e.g., "Send Reminders"
+    actionType   String?  // "SEND_REMINDER" | "VIEW_LIST" | "EXPORT"
+    priority     String   // "HIGH" | "MEDIUM" | "LOW"
+    isRead       Boolean  @default(false)
+    departmentId String?  
+    createdAt    DateTime @default(now())
+    expiresAt    DateTime 
+    
+    @@index([tenantId, isRead, priority])
   }
 
   // ═══════════════════════════════════════════════

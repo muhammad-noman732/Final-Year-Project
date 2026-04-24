@@ -11,31 +11,38 @@ export async function GET() {
   const { tenantId } = await getTenantContext()
   await requireRole("VC", "ADMIN")
 
+  let interval: ReturnType<typeof setInterval> | null = null
+  let clientRef: { controller: ReadableStreamDefaultController; tenantId: string } | null = null
+
   const stream = new ReadableStream({
     start(controller) {
-      // Send initial heartbeat so the client knows the connection is alive
       controller.enqueue(
         new TextEncoder().encode("data: {\"type\":\"connected\"}\n\n"),
       )
 
-      const client = sseBroadcaster.addClient(controller, tenantId)
+      clientRef = sseBroadcaster.addClient(controller, tenantId)
 
-      // Keep-alive ping every 30 seconds to prevent proxy/browser timeout
-      const interval = setInterval(() => {
+      interval = setInterval(() => {
         try {
           controller.enqueue(new TextEncoder().encode(": keepalive\n\n"))
         } catch {
-          clearInterval(interval)
-          sseBroadcaster.removeClient(client)
+          clearInterval(interval!)
+          if (clientRef) {
+            sseBroadcaster.removeClient(clientRef)
+            clientRef = null
+          }
         }
       }, 30_000)
-
-      // Cleanup when client disconnects (stream cancelled)
-      const originalCancel = controller.close.bind(controller)
-      void originalCancel // referenced for TS
     },
     cancel() {
-      // The stream was cancelled by the client disconnecting
+      if (interval) {
+        clearInterval(interval)
+        interval = null
+      }
+      if (clientRef) {
+        sseBroadcaster.removeClient(clientRef)
+        clientRef = null
+      }
     },
   })
 

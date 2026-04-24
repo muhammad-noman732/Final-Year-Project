@@ -4,8 +4,8 @@ import { feeAssignmentController } from "@/lib/di"
 
 
 export const POST = withErrorHandler(
-  async (req: NextRequest, ctx?: { params: Promise<Record<string, string>> }) => {
-    const params = await ctx!.params
-    return feeAssignmentController.assignFee(req, params.id)
+  async (req: NextRequest, ctx: { params: Promise<Record<string, string>> }) => {
+    const { id } = await ctx.params
+    return feeAssignmentController.assignFee(req, id)
   },
 )
