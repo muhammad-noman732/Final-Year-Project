@@ -17,6 +17,7 @@ export function useSSE(): UseSSEReturn {
   const [newAmountCollected, setNewAmountCollected] = useState(0)
   const [connected, setConnected] = useState(false)
   const [latestEvent, setLatestEvent] = useState<SSEPaymentEvent | null>(null)
+  const [insightsUpdatedAt, setInsightsUpdatedAt] = useState<number | null>(null)
 
   const eventSourceRef = useRef<EventSource | null>(null)
   const retryTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -43,7 +44,7 @@ export function useSSE(): UseSSEReturn {
       es.onmessage = (event) => {
         if (cancelled) return
         try {
-          const data = JSON.parse(event.data) as SSEPaymentEvent | { type: "connected" }
+          const data = JSON.parse(event.data) as SSEPaymentEvent | { type: "connected" | "InsightsUpdated" }
           if (data.type === "connected") return
 
           if (data.type === "PaymentSuccess") {
@@ -56,6 +57,10 @@ export function useSSE(): UseSSEReturn {
             setNewPaymentsCount((prev) => prev + 1)
             setNewAmountCollected((prev) => prev + payment.amount)
             setLatestEvent(data as SSEPaymentEvent)
+          }
+
+          if (data.type === "InsightsUpdated") {
+            setInsightsUpdatedAt(Date.now())
           }
         } catch {
           // Ignore malformed frames (e.g. keepalive comments)
@@ -88,5 +93,6 @@ export function useSSE(): UseSSEReturn {
     connected,
     latestEvent,
     clearLatestEvent,
+    insightsUpdatedAt,
   }
 }

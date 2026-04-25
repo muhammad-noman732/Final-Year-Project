@@ -4,8 +4,10 @@ import type {
   LivePaymentRow,
   VCRepository,
 } from "@/lib/repositories/vc.repository"
+import type { InsightRepository } from "@/lib/repositories/insight.repository"
 import { buildPaginationMeta, getPaginationParams } from "@/lib/utils/paginate"
 import type {
+  InsightItem,
   VCAnalyticsData,
   VCAnalyticsFilters,
   VCDepartmentPerformance,
@@ -30,8 +32,19 @@ interface CanonicalStudentAssignment {
   status: CanonicalStudentFeeStatus
 }
 
+const PRIORITY_ORDER: Record<string, number> = {
+  CRITICAL: 0,
+  HIGH: 1,
+  MEDIUM: 2,
+  LOW: 3,
+  SUCCESS: 4,
+}
+
 export class VCService {
-  constructor(private readonly vcRepo: VCRepository) {}
+  constructor(
+    private readonly vcRepo: VCRepository,
+    private readonly insightRepo: InsightRepository,
+  ) {}
 
   async getDashboard(
     tenantId: string,
@@ -148,6 +161,155 @@ export class VCService {
       data: pagedRows.map((row) => this.mapCanonicalStudentLedgerRow(row)),
       meta: buildPaginationMeta(total, page, limit),
     }
+  }
+
+  async computeFeeInsights(tenantId: string): Promise<void> {
+    const now = new Date()
+    const expiresAt = new Date(now.getTime() + 24 * 60 * 60 * 1000)
+
+    await this.insightRepo.deleteAllForTenant(tenantId)
+
+    const allAssignments = await this.vcRepo.findCurrentStatusAssignments({ tenantId })
+    const canonicalAssignments = this.buildCanonicalAssignments(allAssignments)
+
+    const totalStudents = canonicalAssignments.length
+    if (totalStudents === 0) return
+
+    const paidStudents = canonicalAssignments.filter((a) => a.status === "PAID").length
+    const overallRate = (paidStudents / totalStudents) * 100
+
+    const insightRows: Parameters<InsightRepository["createMany"]>[0] = []
+
+    // 1. ALERT: Departmental Lag — any dept 15%+ below campus average
+    const deptMap = new Map<string, { deptId: string; deptName: string; total: number; paid: number }>()
+    for (const row of canonicalAssignments) {
+      const dept = row.assignment.student.department
+      const current = deptMap.get(dept.id) ?? { deptId: dept.id, deptName: dept.name, total: 0, paid: 0 }
+      current.total += 1
+      if (row.status === "PAID") current.paid += 1
+      deptMap.set(dept.id, current)
+    }
+    for (const dept of deptMap.values()) {
+      const deptRate = dept.total === 0 ? 0 : (dept.paid / dept.total) * 100
+      const lag = overallRate - deptRate
+      if (lag >= 15) {
+        insightRows.push({
+          tenantId,
+          type: "ALERT",
+          priority: "HIGH",
+          message: `${dept.deptName} department is ${Math.round(lag)}% below campus average. ${dept.total - dept.paid} students unpaid.`,
+          actionLabel: "Send Reminders",
+          actionType: "SEND_REMINDER",
+          departmentId: dept.deptId,
+          expiresAt,
+        })
+      }
+    }
+
+    // 2. ALERT CRITICAL: Deadline in ≤ 3 days with unpaid students
+    const nearestDeadlineRow = await this.vcRepo.findNearestDeadline(tenantId)
+    let daysUntilDeadline: number | null = null
+    if (nearestDeadlineRow) {
+      daysUntilDeadline = Math.ceil(
+        (nearestDeadlineRow.dueDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24),
+      )
+      if (daysUntilDeadline <= 3 && daysUntilDeadline >= 0) {
+        const unpaid = canonicalAssignments.filter((a) => a.status !== "PAID")
+        if (unpaid.length > 0) {
+          const expectedLoss = unpaid.reduce(
+            (sum, a) => sum + Math.max(a.assignment.amountDue - a.assignment.amountPaid, 0),
+            0,
+          )
+          insightRows.push({
+            tenantId,
+            type: "ALERT",
+            priority: "CRITICAL",
+            message: `Deadline in ${daysUntilDeadline} day${daysUntilDeadline !== 1 ? "s" : ""}. ${unpaid.length} students unpaid. Expected loss: PKR ${expectedLoss.toLocaleString()}.`,
+            actionLabel: "Send Urgent Reminder to All",
+            actionType: "SEND_REMINDER",
+            expiresAt,
+          })
+        }
+      }
+    }
+
+    // 3. SUCCESS: Collection rate > 90% with 5+ days until deadline
+    if (overallRate > 90 && daysUntilDeadline !== null && daysUntilDeadline >= 5) {
+      insightRows.push({
+        tenantId,
+        type: "SUCCESS",
+        priority: "LOW",
+        message: `${Math.round(overallRate)}% of students paid ${daysUntilDeadline} days before deadline. Best performance this session.`,
+        expiresAt,
+      })
+    }
+
+    // 4. PREDICTION: Full collection ETA based on 7-day daily average
+    const recentPayments = await this.vcRepo.findRecentPayments(tenantId, 7)
+    if (recentPayments.length > 0) {
+      const totalRecentAmount = recentPayments.reduce((sum, p) => sum + p.amount, 0)
+      const dailyRate = totalRecentAmount / 7
+      if (dailyRate > 0 && overallRate < 100) {
+        const remainingAmount = canonicalAssignments
+          .filter((a) => a.status !== "PAID")
+          .reduce((sum, a) => sum + Math.max(a.assignment.amountDue - a.assignment.amountPaid, 0), 0)
+        if (remainingAmount > 0) {
+          const daysToCompletion = Math.ceil(remainingAmount / dailyRate)
+          const targetDate = new Date(now.getTime() + daysToCompletion * 24 * 60 * 60 * 1000)
+          const formattedDate = targetDate.toLocaleDateString("en-US", { month: "short", day: "numeric" })
+          insightRows.push({
+            tenantId,
+            type: "PREDICTION",
+            priority: "MEDIUM",
+            message: `At current rate of PKR ${Math.round(dailyRate).toLocaleString()}/day, full collection target will be reached by ${formattedDate}.`,
+            expiresAt,
+          })
+        }
+      }
+    }
+
+    // 5. RISK: Students with latePaymentCount > 2 and OVERDUE status
+    const atRiskStudents = await this.vcRepo.findAtRiskStudents(tenantId)
+    if (atRiskStudents.length > 0) {
+      await this.vcRepo.updateStudentRiskLevels(
+        atRiskStudents.map((s) => s.id),
+        "HIGH",
+      )
+      insightRows.push({
+        tenantId,
+        type: "RISK",
+        priority: "HIGH",
+        message: `${atRiskStudents.length} student${atRiskStudents.length !== 1 ? "s" : ""} flagged HIGH RISK based on 3+ consecutive late payments.`,
+        actionLabel: "View Risk Students",
+        actionType: "VIEW_LIST",
+        expiresAt,
+      })
+    }
+
+    if (insightRows.length > 0) {
+      await this.insightRepo.createMany(insightRows)
+    }
+  }
+
+  async getInsights(tenantId: string): Promise<InsightItem[]> {
+    const rows = await this.insightRepo.findUnread(tenantId)
+    return rows
+      .sort((a, b) => (PRIORITY_ORDER[a.priority] ?? 5) - (PRIORITY_ORDER[b.priority] ?? 5))
+      .map((row) => ({
+        id: row.id,
+        type: row.type,
+        message: row.message,
+        actionLabel: row.actionLabel,
+        actionType: row.actionType,
+        priority: row.priority,
+        departmentId: row.departmentId,
+        createdAt: row.createdAt.toISOString(),
+        expiresAt: row.expiresAt.toISOString(),
+      }))
+  }
+
+  async markInsightRead(id: string): Promise<void> {
+    await this.insightRepo.markRead(id)
   }
 
   private buildStudentWhere(tenantId: string, filters: VCAnalyticsFilters): Prisma.StudentWhereInput {

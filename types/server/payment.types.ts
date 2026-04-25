@@ -13,13 +13,13 @@ export interface CreatePaymentIntentResult {
 
 export interface StripePaymentMetadata {
   tenantId: string
-  studentId: string    // Student.id (not User.id)
+  studentId: string
   feeAssignmentId: string
   studentName: string
   studentEmail: string
-  studentRollNo: string  // e.g. "GCUF-2024-CS-0042"
-  semesterName: string   // e.g. "Semester 4"
-  programName: string    // e.g. "BS Computer Science"
+  studentRollNo: string
+  semesterName: string
+  programName: string
 }
 
 export interface PaymentIntentApiResponse {

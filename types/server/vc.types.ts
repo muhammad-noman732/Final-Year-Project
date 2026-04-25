@@ -124,3 +124,15 @@ export interface VCAnalyticsData {
   semesterBreakdown: VCSemesterBreakdown[]
   paymentMethods: VCPaymentMethodBreakdown[]
 }
+
+export interface InsightItem {
+  id: string
+  type: string
+  message: string
+  actionLabel: string | null
+  actionType: string | null
+  priority: string
+  departmentId: string | null
+  createdAt: string
+  expiresAt: string
+}

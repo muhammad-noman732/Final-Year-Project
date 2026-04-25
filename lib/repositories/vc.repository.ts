@@ -1,4 +1,4 @@
-import { type Prisma, type PrismaClient } from "@/app/generated/prisma/client"
+import { FeeStatus, PaymentStatus, type Prisma, type PrismaClient } from "@/app/generated/prisma/client"
 
 const LIVE_PAYMENT_SELECT = {
   id: true,
@@ -71,7 +71,7 @@ const CURRENT_STATUS_ASSIGNMENT_SELECT = {
       currentSemester: true,
       enrollmentStatus: true,
       user: { select: { name: true, email: true } },
-      department: { select: { name: true, code: true } },
+      department: { select: { id: true, name: true, code: true } },
       program: { select: { name: true } },
       session: { select: { name: true } },
     },
@@ -247,6 +247,49 @@ export class VCRepository {
         { dueDate: "desc" },
         { createdAt: "desc" },
       ],
+    })
+  }
+
+  findNearestDeadline(tenantId: string) {
+    return this.db.feeAssignment.findFirst({
+      where: {
+        tenantId,
+        status: { notIn: [FeeStatus.PAID, FeeStatus.WAIVED] },
+        dueDate: { gte: new Date() },
+      },
+      select: { dueDate: true },
+      orderBy: { dueDate: "asc" },
+    })
+  }
+
+  findRecentPayments(tenantId: string, days: number) {
+    const since = new Date()
+    since.setDate(since.getDate() - days)
+    return this.db.payment.findMany({
+      where: {
+        tenantId,
+        status: PaymentStatus.COMPLETED,
+        paidAt: { gte: since },
+      },
+      select: { amount: true, paidAt: true },
+    })
+  }
+
+  findAtRiskStudents(tenantId: string) {
+    return this.db.student.findMany({
+      where: {
+        tenantId,
+        latePaymentCount: { gt: 2 },
+        feeStatus: FeeStatus.OVERDUE,
+      },
+      select: { id: true, studentId: true },
+    })
+  }
+
+  updateStudentRiskLevels(ids: string[], riskLevel: string) {
+    return this.db.student.updateMany({
+      where: { id: { in: ids } },
+      data: { riskLevel },
     })
   }
 }

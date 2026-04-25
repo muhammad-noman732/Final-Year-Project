@@ -9,7 +9,7 @@ export interface ApiError {
   message: string
   code?: string
   status: number
-  fields?: Record<string, string[]> // Preserving for validation errors
+  fields?: Record<string, string[]>
 }
 
 export interface ApiResponse<T = unknown> {

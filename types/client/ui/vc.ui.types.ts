@@ -36,4 +36,5 @@ export interface UseSSEReturn {
   connected: boolean
   latestEvent: SSEPaymentEvent | null
   clearLatestEvent: () => void
+  insightsUpdatedAt: number | null
 }

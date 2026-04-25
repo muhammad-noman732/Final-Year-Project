@@ -10,3 +10,7 @@ export interface SSEPaymentEvent {
     paidAt: string
   }
 }
+
+export interface SSEInsightsUpdatedEvent {
+  type: "InsightsUpdated"
+}

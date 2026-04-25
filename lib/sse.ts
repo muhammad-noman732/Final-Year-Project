@@ -26,3 +26,11 @@ export async function broadcastPayment(
     console.error("[SSE] Failed to broadcast payment event via Redis:", err)
   }
 }
+
+export async function broadcastInsightsUpdated(tenantId: string): Promise<void> {
+  try {
+    await redisPublisher.publish(sseChannel(tenantId), JSON.stringify({ type: "InsightsUpdated" }))
+  } catch (err) {
+    console.error("[SSE] Failed to broadcast insights:updated event via Redis:", err)
+  }
+}

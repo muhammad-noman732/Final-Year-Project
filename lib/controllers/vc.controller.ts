@@ -42,4 +42,18 @@ export class VCController {
 
     return successResponse(result)
   }
+
+  async getInsights(_req: NextRequest) {
+    const { tenantId } = await getTenantContext()
+    await requireRole("VC", "ADMIN")
+    const result = await this.vcService.getInsights(tenantId)
+    return successResponse(result)
+  }
+
+  async markInsightRead(_req: NextRequest, id: string) {
+    const { tenantId: _ } = await getTenantContext()
+    await requireRole("VC", "ADMIN")
+    await this.vcService.markInsightRead(id)
+    return successResponse({ marked: true })
+  }
 }

@@ -8,6 +8,7 @@ import VCOverviewCards from "@/components/vc/VCOverviewCards"
 import VCDashboardPanels from "@/components/vc/VCDashboardPanels"
 import VCAnalyticsPanels from "@/components/vc/VCAnalyticsPanels"
 import VCLiveFeed from "@/components/vc/VCLiveFeed"
+import InsightsPanel from "@/components/vc/InsightsPanel"
 import { useVCDashboard } from "@/hooks/vc/useVCDashboard"
 
 export default function VCDashboard() {
@@ -32,10 +33,14 @@ export default function VCDashboard() {
     handleDepartmentTracking,
     handleSemesterTracking,
     handleOverviewCardClick,
+    insightsUpdatedAt,
   } = useVCDashboard()
 
   return (
     <div className="space-y-6 pb-8">
+      {/* Intelligence Feed — rendered before everything else */}
+      <InsightsPanel insightsUpdatedAt={insightsUpdatedAt} />
+
       {/* Toast notification */}
       {showToast && (
         <div className="fixed top-4 right-4 z-50 animate-in slide-in-from-top-2 fade-in duration-300">

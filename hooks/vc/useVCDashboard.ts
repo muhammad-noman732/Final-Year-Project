@@ -40,6 +40,8 @@ export interface UseVCDashboardReturn {
   handleDepartmentTracking: (departmentId: string) => void
   handleSemesterTracking: (semester: number) => void
   handleOverviewCardClick: (tab: "paid" | "defaulters" | "payments") => void
+  // Insights SSE signal
+  insightsUpdatedAt: number | null
 }
 
 export function useVCDashboard(): UseVCDashboardReturn {
@@ -79,6 +81,7 @@ export function useVCDashboard(): UseVCDashboardReturn {
     connected: sseConnected,
     latestEvent,
     clearLatestEvent,
+    insightsUpdatedAt,
   } = useSSE()
 
   // Toast notification + KPI cache invalidation on new payment
@@ -184,5 +187,6 @@ export function useVCDashboard(): UseVCDashboardReturn {
     handleDepartmentTracking,
     handleSemesterTracking,
     handleOverviewCardClick,
+    insightsUpdatedAt,
   }
 }

@@ -11,8 +11,6 @@ export interface JWTPayload {
   isFirstLogin: boolean
 }
 
-// ─── Middleware → Controller (request context) ────────────────
-
 /** Extracted from middleware-injected x-user-* headers */
 export interface AuthUser {
   userId: string
@@ -22,8 +20,6 @@ export interface AuthUser {
   email: string
   isFirstLogin: boolean
 }
-
-// ─── Repository return shapes ─────────────────────────────────
 
 /** Returned by UserRepository.findByEmail — includes tenant info */
 export interface UserWithTenant {

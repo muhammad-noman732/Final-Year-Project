@@ -14,6 +14,7 @@ import { PaymentRepository } from "@/lib/repositories/payment.repository"
 import { WebhookRepository } from "@/lib/repositories/webhook.repository"
 import { VCRepository } from "@/lib/repositories/vc.repository"
 import { ActivityLogRepository } from "@/lib/repositories/activityLog.repository"
+import { InsightRepository } from "@/lib/repositories/insight.repository"
 
 // Services
 import { AuditService } from "@/lib/services/audit.service"
@@ -46,6 +47,7 @@ import { FeeAssignmentController } from "@/lib/controllers/feeAssignment.control
 import { PaymentController } from "@/lib/controllers/payment.controller"
 import { WebhookController } from "@/lib/controllers/webhook.controller"
 import { VCController } from "@/lib/controllers/vc.controller"
+import { CronController } from "@/lib/controllers/cron.controller"
 
 // Repositories 
 const userRepo = new UserRepository(prisma)
@@ -61,6 +63,7 @@ const paymentRepo = new PaymentRepository(prisma)
 const webhookRepo = new WebhookRepository(prisma)
 const vcRepo = new VCRepository(prisma)
 const activityLogRepo = new ActivityLogRepository(prisma)
+const insightRepo = new InsightRepository(prisma)
 
 // Services
 const auditService = new AuditService(auditRepo)
@@ -77,7 +80,7 @@ const feeAssignmentService = new FeeAssignmentService(studentRepo, feeStructureR
 const feeStructureService = new FeeStructureService(feeStructureRepo, programRepo, auditService, feeAssignmentService, feeAssignmentRepo, studentRepo)
 const paymentService = new PaymentService(paymentRepo, studentRepo)
 const webhookService = new WebhookService(paymentRepo, webhookRepo, studentRepo, activityLogRepo)
-const vcService = new VCService(vcRepo)
+export const vcService = new VCService(vcRepo, insightRepo)
 
 // Controllers
 export const authController = new AuthController(authService)
@@ -93,6 +96,7 @@ export const feeAssignmentController = new FeeAssignmentController(feeAssignment
 export const paymentController = new PaymentController(paymentService)
 export const webhookController = new WebhookController(webhookService)
 export const vcController = new VCController(vcService)
+export const cronController = new CronController(tenantService, vcService)
 
 
 
