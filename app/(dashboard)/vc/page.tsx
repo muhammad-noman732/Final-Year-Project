@@ -5,10 +5,11 @@ import { Clock, Zap, BarChart2, LayoutDashboard } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import VCFilterBar from "@/components/vc/VCFilterBar"
-import VCOverviewCards from "@/components/vc/VCOverviewCards"
+import VCHealthScoreBento from "@/components/vc/VCHealthScoreBento"
 import VCDashboardPanels from "@/components/vc/VCDashboardPanels"
 import VCAnalyticsPanels from "@/components/vc/VCAnalyticsPanels"
 import VCLiveFeed from "@/components/vc/VCLiveFeed"
+import VCVelocityCard from "@/components/vc/VCVelocityCard"
 import InsightsPanel from "@/components/vc/InsightsPanel"
 import { useVCDashboard } from "@/hooks/vc/useVCDashboard"
 
@@ -107,14 +108,20 @@ export default function VCDashboard() {
         showSearch={false}
       />
 
-      {/* ─── KPI Cards ───────────────────────────────────────────── */}
+      {/* ─── Health Score Bento ──────────────────────────────────── */}
       <Skeleton name="vc-overview-cards" loading={isLoading && !dashboard}>
         {dashboard ? (
-          <VCOverviewCards overview={dashboard.overview} onCardClick={handleOverviewCardClick} />
+          <VCHealthScoreBento
+            overview={dashboard.overview}
+            collectionTrend={dashboard.collectionTrend}
+            newAmountCollected={newAmountCollected}
+            sseConnected={sseConnected}
+            onCardClick={handleOverviewCardClick}
+          />
         ) : null}
       </Skeleton>
 
-      {/* ─── Main Content: Charts + Live Feed ────────────────────── */}
+      {/* ─── Main Content: Charts + Right Column ─────────────────── */}
       <div className="grid gap-4 xl:grid-cols-[1fr_320px]">
         {/* Charts column */}
         <Skeleton name="vc-dashboard-panels" loading={isLoading && !dashboard}>
@@ -131,14 +138,22 @@ export default function VCDashboard() {
           )}
         </Skeleton>
 
-        {/* Live feed — fixed width, fills height */}
-        <VCLiveFeed
-          transactions={liveTransactions}
-          initialTransactions={initialTransactions}
-          connected={sseConnected}
-          newPaymentsCount={newPaymentsCount}
-          newAmountCollected={newAmountCollected}
-        />
+        {/* Right column: Velocity card + Live feed */}
+        <div className="flex flex-col gap-4">
+          {dashboard && (
+            <VCVelocityCard
+              overview={dashboard.overview}
+              collectionTrend={dashboard.collectionTrend}
+            />
+          )}
+          <VCLiveFeed
+            transactions={liveTransactions}
+            initialTransactions={initialTransactions}
+            connected={sseConnected}
+            newPaymentsCount={newPaymentsCount}
+            newAmountCollected={newAmountCollected}
+          />
+        </div>
       </div>
 
       {/* ─── Advanced Analytics ──────────────────────────────────── */}

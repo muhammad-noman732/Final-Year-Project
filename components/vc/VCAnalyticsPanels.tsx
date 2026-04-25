@@ -4,13 +4,11 @@ import {
   Bar, BarChart, CartesianGrid, Line, LineChart,
   ResponsiveContainer, Tooltip, XAxis, YAxis,
 } from "recharts"
-import { TrendingUp, BarChart2, BookOpen } from "lucide-react"
+import { TrendingUp, BookOpen } from "lucide-react"
 import { Separator } from "@/components/ui/separator"
 import { formatCurrency, formatFullCurrency } from "@/config/constants"
-import type {
-  VCAnalyticsData,
-  VCDepartmentPerformance,
-} from "@/types/client/store/vc.store.types"
+import VCDepartmentHealthGrid from "@/components/vc/VCDepartmentHealthGrid"
+import type { VCAnalyticsData } from "@/types/client/store/vc.store.types"
 
 function ChartTooltip(props: {
   active?: boolean
@@ -62,12 +60,6 @@ export default function VCAnalyticsPanels({
   onDepartmentSelect?: (departmentId: string) => void
   onSemesterSelect?: (semester: number) => void
 }) {
-  const deptChartData = data.departmentPerformance.map((d) => ({
-    name: d.departmentCode,
-    paid: d.paidStudents,
-    defaulters: d.defaulters,
-  }))
-
   return (
     <div className="space-y-4">
       {/* Collection Timeline — full width */}
@@ -97,88 +89,56 @@ export default function VCAnalyticsPanels({
         )}
       </div>
 
-      {/* Two-column: Department Comparison + Semester Collections */}
-      <div className="grid gap-4 xl:grid-cols-2">
-        <div className="rounded-xl border border-white/[0.05] bg-navy-900 p-5">
-          <PanelHeader icon={BarChart2} iconClass="bg-violet-500/10 text-violet-400" title="Department Comparison" />
-          <div className="mb-3 flex items-center gap-3 text-[11px] text-muted-foreground">
-            <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-sm bg-emerald-500" />Paid</span>
-            <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-sm bg-rose-500" />Defaulters</span>
-          </div>
-          {deptChartData.length > 0 ? (
-            <>
-              <ResponsiveContainer width="100%" height={240}>
-                <BarChart data={deptChartData} barCategoryGap="30%">
-                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" vertical={false} />
-                  <XAxis dataKey="name" tick={{ fill: "#6b7a99", fontSize: 10 }} tickLine={false} axisLine={false} />
-                  <YAxis tick={{ fill: "#6b7a99", fontSize: 10 }} tickLine={false} axisLine={false} />
-                  <Tooltip content={<ChartTooltip />} cursor={{ fill: "rgba(255,255,255,0.02)" }} />
-                  <Bar dataKey="paid" name="Paid" fill="#10b981" radius={[4, 4, 0, 0]} />
-                  <Bar dataKey="defaulters" name="Defaulters" fill="#f43f5e" radius={[4, 4, 0, 0]} />
-                </BarChart>
-              </ResponsiveContainer>
-              {onDepartmentSelect && (
-                <div className="mt-3 flex flex-wrap gap-2">
-                  {data.departmentPerformance.map((d) => (
-                    <button
-                      key={d.departmentId} type="button"
-                      onClick={() => onDepartmentSelect(d.departmentId)}
-                      className="rounded-lg border border-white/[0.06] bg-white/[0.02] px-2.5 py-1 text-[11px] text-muted-foreground transition-colors hover:border-gold-500/25 hover:text-gold-300"
-                    >
-                      {d.departmentCode}
-                    </button>
-                  ))}
-                </div>
-              )}
-            </>
-          ) : (
-            <div className="flex h-40 items-center justify-center">
-              <p className="text-xs text-muted-foreground">No department data.</p>
-            </div>
-          )}
-        </div>
+      {/* Department Health Grid */}
+      <div className="rounded-xl border border-white/[0.05] bg-navy-900 p-5">
+        <PanelHeader icon={TrendingUp} iconClass="bg-violet-500/10 text-violet-400" title="Department Health" />
+        <VCDepartmentHealthGrid
+          departments={data.departmentPerformance}
+          onDepartmentSelect={onDepartmentSelect}
+        />
+      </div>
 
-        <div className="rounded-xl border border-white/[0.05] bg-navy-900 p-5">
-          <PanelHeader icon={BookOpen} iconClass="bg-sky-500/10 text-sky-400" title="Semester Collections" />
-          <div className="mb-3 flex items-center gap-3 text-[11px] text-muted-foreground">
-            <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-sm bg-sky-500" />Paid</span>
-            <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-sm bg-gold-500" />Outstanding</span>
-          </div>
-          {data.semesterBreakdown.length > 0 ? (
-            <>
-              <ResponsiveContainer width="100%" height={240}>
-                <BarChart data={data.semesterBreakdown} barCategoryGap="30%">
-                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" vertical={false} />
-                  <XAxis dataKey="semester" tick={{ fill: "#6b7a99", fontSize: 10 }} tickLine={false} axisLine={false} />
-                  <YAxis
-                    tick={{ fill: "#6b7a99", fontSize: 10 }} tickLine={false} axisLine={false}
-                    tickFormatter={(v) => `${Math.round(v / 1000)}K`}
-                  />
-                  <Tooltip content={<ChartTooltip />} cursor={{ fill: "rgba(255,255,255,0.02)" }} />
-                  <Bar dataKey="paidAmount" name="Paid" fill="#0ea5e9" radius={[4, 4, 0, 0]} />
-                  <Bar dataKey="unpaidAmount" name="Outstanding" fill="#d4a843" radius={[4, 4, 0, 0]} />
-                </BarChart>
-              </ResponsiveContainer>
-              {onSemesterSelect && (
-                <div className="mt-3 flex flex-wrap gap-2">
-                  {data.semesterBreakdown.map((s) => (
-                    <button
-                      key={s.semester} type="button"
-                      onClick={() => onSemesterSelect(s.semester)}
-                      className="rounded-lg border border-white/[0.06] bg-white/[0.02] px-2.5 py-1 text-[11px] text-muted-foreground transition-colors hover:border-gold-500/25 hover:text-gold-300"
-                    >
-                      Sem {s.semester}
-                    </button>
-                  ))}
-                </div>
-              )}
-            </>
-          ) : (
-            <div className="flex h-40 items-center justify-center">
-              <p className="text-xs text-muted-foreground">No semester data.</p>
-            </div>
-          )}
+      {/* Semester Collections */}
+      <div className="rounded-xl border border-white/[0.05] bg-navy-900 p-5">
+        <PanelHeader icon={BookOpen} iconClass="bg-sky-500/10 text-sky-400" title="Semester Collections" />
+        <div className="mb-3 flex items-center gap-3 text-[11px] text-muted-foreground">
+          <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-sm bg-sky-500" />Paid</span>
+          <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-sm bg-gold-500" />Outstanding</span>
         </div>
+        {data.semesterBreakdown.length > 0 ? (
+          <>
+            <ResponsiveContainer width="100%" height={240}>
+              <BarChart data={data.semesterBreakdown} barCategoryGap="30%">
+                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" vertical={false} />
+                <XAxis dataKey="semester" tick={{ fill: "#6b7a99", fontSize: 10 }} tickLine={false} axisLine={false} />
+                <YAxis
+                  tick={{ fill: "#6b7a99", fontSize: 10 }} tickLine={false} axisLine={false}
+                  tickFormatter={(v) => `${Math.round(v / 1000)}K`}
+                />
+                <Tooltip content={<ChartTooltip />} cursor={{ fill: "rgba(255,255,255,0.02)" }} />
+                <Bar dataKey="paidAmount" name="Paid" fill="#0ea5e9" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="unpaidAmount" name="Outstanding" fill="#d4a843" radius={[4, 4, 0, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+            {onSemesterSelect && (
+              <div className="mt-3 flex flex-wrap gap-2">
+                {data.semesterBreakdown.map((s) => (
+                  <button
+                    key={s.semester} type="button"
+                    onClick={() => onSemesterSelect(s.semester)}
+                    className="rounded-lg border border-white/[0.06] bg-white/[0.02] px-2.5 py-1 text-[11px] text-muted-foreground transition-colors hover:border-gold-500/25 hover:text-gold-300"
+                  >
+                    Sem {s.semester}
+                  </button>
+                ))}
+              </div>
+            )}
+          </>
+        ) : (
+          <div className="flex h-40 items-center justify-center">
+            <p className="text-xs text-muted-foreground">No semester data.</p>
+          </div>
+        )}
       </div>
     </div>
   )

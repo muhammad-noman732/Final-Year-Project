@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect, useCallback, useRef } from "react"
+import { useRouter } from "next/navigation"
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion"
 import {
   AlertTriangle,
@@ -11,10 +12,9 @@ import {
   X,
   ChevronRight,
   Activity,
+  CheckCheck,
 } from "lucide-react"
 import type { InsightItem } from "@/types/server/vc.types"
-
-// ─── Types ────────────────────────────────────────────────────────────────────
 
 interface InsightsPanelProps {
   insightsUpdatedAt?: number | null
@@ -28,6 +28,20 @@ type InsightConfig = {
   badgeText: string
   badgeClass: string
   dotColor: string
+}
+
+function getActionRoute(insight: InsightItem): string | null {
+  if (!insight.actionType) return null
+  if (insight.actionType === "SEND_REMINDER" || insight.actionType === "VIEW_DEFAULTERS") {
+    return "/vc/tracking?tab=defaulters"
+  }
+  if (insight.actionType === "VIEW_LIST" || insight.actionType === "VIEW_OVERVIEW") {
+    return "/vc/tracking?tab=overview"
+  }
+  if (insight.departmentId) {
+    return `/vc/tracking?scope=department&departmentId=${insight.departmentId}&tab=overview`
+  }
+  return "/vc/tracking?tab=overview"
 }
 
 // ─── Severity Config ──────────────────────────────────────────────────────────
@@ -116,10 +130,12 @@ function InsightCard({
   isDismissing: boolean
   index: number
 }) {
+  const router = useRouter()
   const shouldReduceMotion = useReducedMotion()
   const { Icon, iconColor, borderColor, hoverBg, badgeText, badgeClass, dotColor } =
     getConfig(insight)
   const isCritical = insight.priority === "CRITICAL"
+  const actionRoute = getActionRoute(insight)
 
   return (
     <motion.div
@@ -169,9 +185,10 @@ function InsightCard({
           </p>
 
           {/* Action CTA */}
-          {insight.actionLabel && (
+          {insight.actionLabel && actionRoute && (
             <button
               type="button"
+              onClick={() => router.push(actionRoute)}
               className="group/cta flex items-center gap-0.5 text-[11px] font-medium text-muted-foreground/45 transition-colors duration-100 hover:text-foreground/60 active:scale-[0.98]"
             >
               {insight.actionLabel}
@@ -259,6 +276,15 @@ export default function InsightsPanel({ insightsUpdatedAt }: InsightsPanelProps)
     }
   }, [])
 
+  const dismissAll = useCallback(async () => {
+    const ids = insights.map((i) => i.id)
+    ids.forEach((id) => setDismissingIds((prev) => new Set(prev).add(id)))
+    await Promise.allSettled(
+      ids.map((id) => fetch(`/api/vc/insights/${id}/read`, { method: "PATCH" })),
+    )
+    if (isMounted.current) setInsights([])
+  }, [insights])
+
   // Render nothing during initial fetch or when empty — no empty-state shell
   if (initialLoad || insights.length === 0) return null
 
@@ -278,18 +304,37 @@ export default function InsightsPanel({ insightsUpdatedAt }: InsightsPanelProps)
         <div className="flex h-5 w-5 items-center justify-center rounded bg-white/[0.04]">
           <Activity className="h-[11px] w-[11px] text-muted-foreground/50" strokeWidth={2} />
         </div>
-        <span className="text-[10.5px] font-semibold uppercase tracking-[0.18em] text-muted-foreground/55">
-          Intelligence Feed
-        </span>
-        <div className="ml-auto flex items-center gap-1.5">
+        <div className="flex flex-col">
+          <span className="text-[10.5px] font-semibold uppercase tracking-[0.18em] text-muted-foreground/55">
+            Intelligence Feed
+          </span>
+          <span className="text-[9.5px] text-muted-foreground/40">
+            {insights.length} insight{insights.length !== 1 ? "s" : ""}
+            {critical.length > 0 && (
+              <span className="ml-1 text-rose-400 font-semibold">· {critical.length} critical</span>
+            )}
+          </span>
+        </div>
+        <div className="ml-auto flex items-center gap-2">
+          {/* Mark all read */}
+          <button
+            type="button"
+            onClick={dismissAll}
+            className="flex items-center gap-1 rounded-md px-2 py-1 text-[10px] text-muted-foreground/40 hover:text-muted-foreground/70 hover:bg-white/[0.04] transition-colors duration-150"
+          >
+            <CheckCheck className="h-3 w-3" />
+            All read
+          </button>
           {/* Live indicator */}
-          <span className="relative flex h-1.5 w-1.5">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-50" />
-            <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-500" />
-          </span>
-          <span className="flex h-4 min-w-[1.25rem] items-center justify-center rounded-full bg-white/[0.05] px-1.5 text-[9.5px] font-semibold tabular-nums text-muted-foreground/55">
-            {insights.length}
-          </span>
+          <div className="flex items-center gap-1">
+            <span className="relative flex h-1.5 w-1.5">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-50" />
+              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-500" />
+            </span>
+            <span className="flex h-4 min-w-[1.25rem] items-center justify-center rounded-full bg-white/[0.05] px-1.5 text-[9.5px] font-semibold tabular-nums text-muted-foreground/55">
+              {insights.length}
+            </span>
+          </div>
         </div>
       </div>
 

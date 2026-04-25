@@ -3,8 +3,8 @@
 import { useState } from "react"
 import { CreditCard, GraduationCap, TrendingDown, TrendingUp } from "lucide-react"
 import {
-  Bar, BarChart, CartesianGrid, Cell, Pie, PieChart,
-  ResponsiveContainer, Tooltip, XAxis, YAxis,
+  Area, AreaChart, Bar, BarChart, CartesianGrid, Cell, Pie, PieChart,
+  ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis,
 } from "recharts"
 import { Separator } from "@/components/ui/separator"
 import { formatCurrency, formatFullCurrency } from "@/config/constants"
@@ -94,7 +94,13 @@ export default function VCDashboardPanels({
 
         {collectionTrend.length > 0 ? (
           <ResponsiveContainer width="100%" height={200}>
-            <BarChart data={collectionTrend} barCategoryGap="30%">
+            <AreaChart data={collectionTrend}>
+              <defs>
+                <linearGradient id="trendGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#d4a843" stopOpacity={0.22} />
+                  <stop offset="100%" stopColor="#d4a843" stopOpacity={0} />
+                </linearGradient>
+              </defs>
               <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" vertical={false} />
               <XAxis
                 dataKey="label" tick={{ fill: "#6b7a99", fontSize: 10 }}
@@ -104,9 +110,26 @@ export default function VCDashboardPanels({
                 tick={{ fill: "#6b7a99", fontSize: 10 }} tickLine={false} axisLine={false}
                 tickFormatter={(v) => `${Math.round(v / 1000)}K`}
               />
-              <Tooltip content={<ChartTooltip />} cursor={{ fill: "rgba(255,255,255,0.02)" }} />
-              <Bar dataKey="amount" name="Collected" fill="#d4a843" radius={[4, 4, 0, 0]} />
-            </BarChart>
+              <Tooltip content={<ChartTooltip />} cursor={{ stroke: "rgba(212,168,67,0.15)", strokeWidth: 1 }} />
+              {collectionTrend.length > 1 && (
+                <ReferenceLine
+                  y={Math.round(collectionTrend.reduce((s, p) => s + p.amount, 0) / collectionTrend.length)}
+                  stroke="rgba(212,168,67,0.3)"
+                  strokeDasharray="4 4"
+                  label={{ value: "avg", fill: "#6b7a99", fontSize: 9, position: "insideTopRight" }}
+                />
+              )}
+              <Area
+                type="monotone"
+                dataKey="amount"
+                name="Collected"
+                stroke="#d4a843"
+                strokeWidth={2}
+                fill="url(#trendGrad)"
+                dot={false}
+                activeDot={{ r: 4, fill: "#d4a843", strokeWidth: 0 }}
+              />
+            </AreaChart>
           </ResponsiveContainer>
         ) : (
           <div className="flex h-40 items-center justify-center">
