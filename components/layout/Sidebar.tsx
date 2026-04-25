@@ -56,18 +56,9 @@ export default function Sidebar({ items, role, roleLabel, open, onClose }: Sideb
                 <div className="px-5 h-14 flex items-center border-b border-white/[0.05]">
                     <div className="flex items-center justify-between w-full">
                         <div className="flex items-center gap-3">
-                            {/* Icon */}
                             <div className="relative w-9 h-9 rounded-xl bg-gradient-to-br from-gold-500 to-gold-700 flex items-center justify-center shadow-lg shadow-gold-500/25 flex-shrink-0">
                                 <GraduationCap className="w-4.5 h-4.5 text-[#050811]" />
                                 <div className="absolute inset-0 rounded-xl bg-gradient-to-t from-black/20 to-transparent" />
-                            </div>
-                            <div>
-                                <h1 className="text-sm font-bold text-gold-400 tracking-wide leading-tight">
-                                    GCUF
-                                </h1>
-                                <p className="text-[11px] text-slate-500 uppercase tracking-[0.18em] leading-tight">
-                                    Fee Management
-                                </p>
                             </div>
                         </div>
                         <button

@@ -1,174 +1,327 @@
-"use client";
-import { useMemo, useState } from "react";
-import { Users, Banknote, Clock, AlertTriangle, TrendingUp, TrendingDown, ArrowRight, Shield, Building2, GraduationCap, Calendar, Receipt, FileBarChart, LayoutGrid } from "lucide-react";
-import { Card } from "@/components/ui/card";
-import Link from "next/link";
-import { formatCurrency } from "@/config/constants";
-import { useGetStudentsQuery } from "@/store/api/admin/studentsApi";
-import { useGetVCDashboardQuery, useGetVCStudentsQuery } from "@/store/api/vc/vcApi";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+"use client"
 
-const quickLinks = [
-    { label: "Manage Students", href: "/admin/students", desc: "Enrollments & directory", col: "col-span-1 md:col-span-2 lg:col-span-2", icon: Users, gradient: "from-sky-500/10 via-transparent to-transparent", hoverGrad: "group-hover:from-sky-500/20", iconColor: "text-sky-400", border: "hover:border-sky-500/20" },
-    { label: "Fee Management", href: "/admin/fees", desc: "Structures & dues", col: "col-span-1 md:col-span-2 lg:col-span-2", icon: Banknote, gradient: "from-emerald-500/10 via-transparent to-transparent", hoverGrad: "group-hover:from-emerald-500/20", iconColor: "text-emerald-400", border: "hover:border-emerald-500/20" },
-    { label: "Staff", href: "/admin/users", desc: "VC, HOD profiles", col: "col-span-1", icon: Shield, gradient: "from-amber-500/10 via-transparent to-transparent", hoverGrad: "group-hover:from-amber-500/20", iconColor: "text-amber-400", border: "hover:border-amber-500/20" },
-    { label: "Departments", href: "/admin/departments", desc: "Academics", col: "col-span-1", icon: Building2, gradient: "from-purple-500/10 via-transparent to-transparent", hoverGrad: "group-hover:from-purple-500/20", iconColor: "text-purple-400", border: "hover:border-purple-500/20" },
-    { label: "Programs", href: "/admin/programs", desc: "Degrees offered", col: "col-span-1", icon: GraduationCap, gradient: "from-rose-500/10 via-transparent to-transparent", hoverGrad: "group-hover:from-rose-500/20", iconColor: "text-rose-400", border: "hover:border-rose-500/20" },
-    { label: "Sessions", href: "/admin/sessions", desc: "Academic terms", col: "col-span-1", icon: Calendar, gradient: "from-indigo-500/10 via-transparent to-transparent", hoverGrad: "group-hover:from-indigo-500/20", iconColor: "text-indigo-400", border: "hover:border-indigo-500/20" },
-    { label: "Payments", href: "/admin/payments", desc: "Transactions log", col: "col-span-1 md:col-span-2", icon: Receipt, gradient: "from-gold-500/10 via-transparent to-transparent", hoverGrad: "group-hover:from-gold-500/20", iconColor: "text-gold-400", border: "hover:border-gold-500/20" },
-    { label: "Reports", href: "/admin/reports", desc: "System analytics", col: "col-span-1 md:col-span-2", icon: FileBarChart, gradient: "from-blue-500/10 via-transparent to-transparent", hoverGrad: "group-hover:from-blue-500/20", iconColor: "text-blue-400", border: "hover:border-blue-500/20" },
-];
+import { Wifi, WifiOff, Zap, Clock, Users, Banknote, AlertTriangle, TrendingUp, LayoutDashboard, ArrowUpRight } from "lucide-react"
+import VCLiveFeed from "@/components/vc/VCLiveFeed"
+import AdminTransactionTable from "@/components/admin/AdminTransactionTable"
+import { useAdminDashboard } from "@/hooks/admin/useAdminDashboard"
+import { formatCurrency } from "@/config/constants"
 
 export default function AdminDashboard() {
-    const [statusTab, setStatusTab] = useState<"paid" | "unpaid" | "defaulters">("paid");
-    const { data: studentsData } = useGetStudentsQuery({ page: 1, limit: 1 });
-    const { data: vcData } = useGetVCDashboardQuery({ feeStatus: "ALL", range: "30d" });
-    const studentsByStatus = useGetVCStudentsQuery({
-        feeStatus: statusTab === "defaulters" ? "OVERDUE" : statusTab === "paid" ? "PAID" : "UNPAID",
-        page: 1,
-        limit: 8,
-        range: "30d",
-    });
+  const {
+    metrics,
+    isLoading,
+    liveTransactions,
+    initialTransactions,
+    sseConnected,
+    newPaymentsCount,
+    newAmountCollected,
+    showToast,
+    toastMessage,
+    transactions,
+    transactionsMeta,
+    isTransactionsLoading,
+    statusTab,
+    setStatusTab,
+    transactionsPage,
+    setTransactionsPage,
+    handleExportCSV,
+    lastUpdatedAt,
+  } = useAdminDashboard()
 
-    const totalStudents = studentsData?.data?.meta?.total ?? 0;
-    const overview = vcData?.data?.overview;
-    const totalCollected = overview?.totalCollected ?? 0;
-    const outstanding = overview?.outstandingAmount ?? 0;
-    const defaulters = overview?.defaulters ?? 0;
-    const unpaid = overview?.studentsUnpaid ?? 0;
-    const previewRows = studentsByStatus.data?.data?.data ?? [];
-    const statusLabel = useMemo(
-        () => (statusTab === "defaulters" ? "Defaulters" : statusTab === "paid" ? "Paid" : "Unpaid"),
-        [statusTab],
-    );
+  const collectionTotal = metrics.totalCollected + metrics.outstanding
+  const collectionProgress =
+    collectionTotal > 0 ? Math.round((metrics.totalCollected / collectionTotal) * 100) : 0
 
-    const stats = [
-        { label: "Total Students", value: String(totalStudents), change: "live", trend: "up" as const, icon: Users, color: "text-sky-400", bg: "bg-sky-500/10", border: "border-sky-500/20", glow: "group-hover:shadow-[0_0_20px_rgba(56,189,248,0.15)]" },
-        { label: "Total Fee Collected", value: formatCurrency(totalCollected), change: "live", trend: "up" as const, icon: Banknote, color: "text-emerald-400", bg: "bg-emerald-500/10", border: "border-emerald-500/20", glow: "group-hover:shadow-[0_0_20px_rgba(52,211,153,0.15)]" },
-        { label: "Outstanding Amount", value: formatCurrency(outstanding), change: "live", trend: "down" as const, icon: Clock, color: "text-amber-400", bg: "bg-amber-500/10", border: "border-amber-500/20", glow: "group-hover:shadow-[0_0_20px_rgba(251,191,36,0.15)]" },
-        { label: "Defaulters", value: String(defaulters), change: "live", trend: "up" as const, icon: AlertTriangle, color: "text-rose-400", bg: "bg-rose-500/10", border: "border-rose-500/20", glow: "group-hover:shadow-[0_0_20px_rgba(251,113,133,0.15)]" },
-    ];
+  return (
+    <div className="space-y-6 pb-10 animate-in fade-in duration-500">
 
-    return (
-        <div className="space-y-8 animate-in fade-in duration-500">
-            {/* Header Area */}
-            <div className="flex items-center justify-between">
-                <div>
-                    <h1 className="text-2xl font-bold text-foreground tracking-tight">
-                        Platform <span className="text-gold-400">Overview</span>
-                    </h1>
-                    <p className="text-sm text-muted-foreground mt-1.5 flex items-center gap-2">
-                        <LayoutGrid className="w-3.5 h-3.5 text-gold-500/50" />
-                        Comprehensive view of university administration
-                    </p>
-                </div>
+      {/* ─── Toast ──────────────────────────────────────────────────── */}
+      {showToast && (
+        <div className="fixed top-4 right-4 z-50 animate-in slide-in-from-top-2 fade-in duration-200">
+          <div className="flex items-center gap-3 rounded-2xl border border-emerald-500/15 bg-[#070b14]/90 backdrop-blur-xl px-4 py-3 shadow-2xl shadow-black/50">
+            <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-emerald-500/10 flex-shrink-0 border border-emerald-500/15">
+              <Zap className="h-4 w-4 text-emerald-400" />
             </div>
-
-            {/* Stats Row */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 stagger-children">
-                {stats.map((stat) => (
-                    <Card key={stat.label} className={`group relative overflow-hidden bg-navy-900/50 backdrop-blur-xl border border-white/5 p-5 hover:-translate-y-0.5 transition-all duration-300 ${stat.glow} ${stat.border}`}>
-                        {/* Subtle background flare */}
-                        <div className={`absolute -right-10 -top-10 w-32 h-32 rounded-full blur-[50px] opacity-20 group-hover:opacity-40 transition-opacity duration-300 ${stat.bg}`} />
-                        
-                        <div className="relative z-10 flex items-start justify-between mb-3">
-                            <div className={`w-11 h-11 rounded-2xl ${stat.bg} ${stat.border} border flex items-center justify-center transform group-hover:scale-105 transition-transform duration-300`}>
-                                <stat.icon className={`w-5 h-5 ${stat.color}`} />
-                            </div>
-                            <div className={`flex items-center gap-1.5 px-2 py-0.5 rounded-full text-xs font-semibold backdrop-blur-md border ${stat.trend === "up" && stat.label !== "Defaulters" ? "text-emerald-400 border-emerald-500/20 bg-emerald-500/10" : stat.label === "Defaulters" ? "text-rose-400 border-rose-500/20 bg-rose-500/10" : "text-emerald-400 border-emerald-500/20 bg-emerald-500/10"}`}>
-                                {stat.trend === "up" ? <TrendingUp className="w-3 h-3" /> : <TrendingDown className="w-3 h-3" />}
-                                {stat.change}
-                            </div>
-                        </div>
-                        <p className="relative z-10 text-[11px] text-muted-foreground uppercase tracking-widest font-semibold mb-1">{stat.label}</p>
-                        <p className="relative z-10 text-2xl font-bold text-foreground tracking-tight">
-                            {stat.value}
-                        </p>
-                    </Card>
-                ))}
-            </div>
-
-            {/* Bento Quick Links */}
             <div>
-                <h2 className="text-base font-bold text-foreground/90 mb-4 flex items-center gap-2 tracking-tight">
-                    <ArrowRight className="w-4 h-4 text-gold-500" /> Quick Actions
-                </h2>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 stagger-children">
-                    {quickLinks.map((link) => (
-                        <Link key={link.href} href={link.href} className={`${link.col}`}>
-                            <Card className={`group relative h-full overflow-hidden bg-navy-900/40 backdrop-blur-md border border-white/5 p-5 cursor-pointer transition-all duration-300 ${link.border} hover:shadow-xl hover:-translate-y-0.5`}>
-                                {/* Gradient Hover Background */}
-                                <div className={`absolute inset-0 bg-gradient-to-br opacity-50 transition-colors duration-300 ${link.gradient} ${link.hoverGrad}`} />
-                                
-                                <div className="relative z-10 flex flex-col h-full justify-between gap-5">
-                                    <div className="flex items-start justify-between">
-                                        <div className={`p-2.5 rounded-xl bg-navy-950/50 backdrop-blur-xl border border-white/5 group-hover:scale-105 transition-transform duration-300 shadow-inner`}>
-                                            <link.icon className={`w-5 h-5 ${link.iconColor}`} />
-                                        </div>
-                                        <div className="w-7 h-7 rounded-full bg-white/5 flex items-center justify-center opacity-0 group-hover:opacity-100 transform translate-x-[-8px] group-hover:translate-x-0 transition-all duration-300">
-                                            <ArrowRight className="w-3.5 h-3.5 text-white" />
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <h3 className="text-base font-bold text-foreground mb-1 tracking-tight">
-                                            {link.label}
-                                        </h3>
-                                        <p className="text-sm text-muted-foreground/70 group-hover:text-muted-foreground transition-colors duration-200">
-                                            {link.desc}
-                                        </p>
-                                    </div>
-                                </div>
-                            </Card>
-                        </Link>
-                    ))}
+              <p className="text-xs font-bold text-emerald-400 tracking-wide">Payment Received</p>
+              <p className="text-[11px] text-muted-foreground mt-0.5">{toastMessage}</p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ─── Page Header ────────────────────────────────────────────── */}
+      <div className="flex items-start justify-between gap-4">
+        <div className="flex items-center gap-3">
+          <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-gold-500/10 border border-gold-500/15 flex-shrink-0">
+            <LayoutDashboard className="h-5 w-5 text-gold-400" />
+          </div>
+          <div>
+            <h1 className="text-xl font-bold tracking-tight text-foreground">
+              Platform <span className="text-gold-400">Overview</span>
+            </h1>
+            <p className="text-xs text-muted-foreground mt-0.5">
+              Real-time university fee intelligence — live payments, ledger, and export.
+            </p>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-2 flex-shrink-0">
+          {lastUpdatedAt && (
+            <div className="hidden sm:flex items-center gap-1.5 text-[11px] text-muted-foreground/60">
+              <Clock className="h-3 w-3" />
+              <span>Updated {lastUpdatedAt}</span>
+            </div>
+          )}
+          <div
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-semibold border transition-all duration-300 ${
+              sseConnected
+                ? "border-emerald-500/20 bg-emerald-500/8 text-emerald-400"
+                : "border-white/[0.06] bg-white/[0.03] text-muted-foreground"
+            }`}
+          >
+            {sseConnected ? (
+              <>
+                <span className="relative flex h-1.5 w-1.5">
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-60" />
+                  <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-500" />
+                </span>
+                <Wifi className="h-3 w-3" />
+                Live
+              </>
+            ) : (
+              <>
+                <WifiOff className="h-3 w-3" />
+                Offline
+              </>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* ─── Bento Metrics ──────────────────────────────────────────── */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-6 gap-4">
+
+        {/* Hero: Total Collected (3 cols) */}
+        <div className="group col-span-1 sm:col-span-2 md:col-span-3 relative overflow-hidden rounded-2xl border border-white/[0.06] bg-navy-900/50 backdrop-blur-xl p-6 hover:-translate-y-0.5 hover:border-emerald-500/20 hover:shadow-[0_0_30px_rgba(52,211,153,0.08)] transition-all duration-300">
+          <div className="absolute -right-12 -top-12 w-40 h-40 rounded-full blur-[60px] opacity-10 group-hover:opacity-25 transition-opacity duration-500 bg-emerald-500" />
+          <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-emerald-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+          <div className="relative z-10">
+            <div className="flex items-center justify-between mb-5">
+              <div className="flex items-center gap-2.5">
+                <div className="w-9 h-9 rounded-xl bg-emerald-500/10 border border-emerald-500/15 flex items-center justify-center">
+                  <Banknote className="w-4.5 h-4.5 text-emerald-400" />
                 </div>
+                <span className="text-[10px] uppercase tracking-[0.2em] font-semibold text-muted-foreground/70">
+                  Total Fee Collected
+                </span>
+              </div>
+              {newAmountCollected > 0 && (
+                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/15">
+                  <ArrowUpRight className="w-3 h-3 text-emerald-400" />
+                  <span className="text-[11px] font-bold text-emerald-400">
+                    +{formatCurrency(newAmountCollected)} live
+                  </span>
+                </div>
+              )}
             </div>
 
-            <Card className="bg-navy-900/40 border border-white/5 p-5 space-y-4">
-                <div className="flex items-center justify-between">
-                    <h3 className="text-sm font-semibold text-foreground">Current Semester Student Status</h3>
-                    <Tabs value={statusTab} onValueChange={(value) => setStatusTab(value as "paid" | "unpaid" | "defaulters")}>
-                        <TabsList className="bg-white/[0.03]">
-                            <TabsTrigger value="paid">Paid</TabsTrigger>
-                            <TabsTrigger value="unpaid">Unpaid ({unpaid})</TabsTrigger>
-                            <TabsTrigger value="defaulters">Defaulters ({defaulters})</TabsTrigger>
-                        </TabsList>
-                    </Tabs>
-                </div>
+            {isLoading ? (
+              <div className="h-10 w-48 rounded-lg bg-white/[0.04] animate-pulse mb-2" />
+            ) : (
+              <p className="text-4xl md:text-5xl font-bold text-foreground tracking-tight tabular-nums">
+                {formatCurrency(metrics.totalCollected)}
+              </p>
+            )}
 
-                <div className="overflow-hidden rounded-xl border border-white/[0.06]">
-                    <table className="w-full text-sm">
-                        <thead className="bg-white/[0.03] text-muted-foreground">
-                            <tr>
-                                <th className="px-3 py-2 text-left font-medium">Student</th>
-                                <th className="px-3 py-2 text-left font-medium">Roll No</th>
-                                <th className="px-3 py-2 text-left font-medium">Department</th>
-                                <th className="px-3 py-2 text-left font-medium">Semester</th>
-                                <th className="px-3 py-2 text-left font-medium">Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {previewRows.length === 0 ? (
-                                <tr>
-                                    <td className="px-3 py-4 text-muted-foreground" colSpan={5}>
-                                        No {statusLabel.toLowerCase()} students in current scope.
-                                    </td>
-                                </tr>
-                            ) : (
-                                previewRows.map((row) => (
-                                    <tr key={row.assignmentId} className="border-t border-white/[0.06]">
-                                        <td className="px-3 py-2 text-foreground">{row.studentName}</td>
-                                        <td className="px-3 py-2 text-muted-foreground">{row.rollNumber}</td>
-                                        <td className="px-3 py-2 text-muted-foreground">{row.departmentCode}</td>
-                                        <td className="px-3 py-2 text-muted-foreground">{row.semester}</td>
-                                        <td className="px-3 py-2 text-foreground">{row.feeStatus}</td>
-                                    </tr>
-                                ))
-                            )}
-                        </tbody>
-                    </table>
-                </div>
-            </Card>
+            <div className="mt-5 space-y-2">
+              <div className="flex items-center justify-between text-[11px]">
+                <span className="text-muted-foreground/60">Collection progress</span>
+                <span className="font-semibold text-emerald-400">{collectionProgress}%</span>
+              </div>
+              <div className="h-1.5 rounded-full bg-white/[0.05] overflow-hidden">
+                <div
+                  className="h-full rounded-full bg-gradient-to-r from-emerald-600 to-emerald-400 transition-all duration-1000"
+                  style={{ width: `${collectionProgress}%` }}
+                />
+              </div>
+              <div className="flex items-center justify-between text-[10.5px] text-muted-foreground/50">
+                <span>Collected</span>
+                <span>Outstanding {formatCurrency(metrics.outstanding)}</span>
+              </div>
+            </div>
+          </div>
         </div>
-    );
+
+        {/* Today's Collection (2 cols) */}
+        <div className="group col-span-1 md:col-span-2 relative overflow-hidden rounded-2xl border border-white/[0.06] bg-navy-900/50 backdrop-blur-xl p-5 hover:-translate-y-0.5 hover:border-gold-500/20 hover:shadow-[0_0_20px_rgba(212,168,73,0.08)] transition-all duration-300">
+          <div className="absolute -right-8 -top-8 w-28 h-28 rounded-full blur-[50px] opacity-10 group-hover:opacity-20 transition-opacity duration-500 bg-gold-500" />
+          <div className="relative z-10">
+            <div className="flex items-center justify-between mb-4">
+              <div className="w-8 h-8 rounded-xl bg-gold-500/10 border border-gold-500/15 flex items-center justify-center">
+                <TrendingUp className="w-4 h-4 text-gold-400" />
+              </div>
+              <span className="text-[10px] uppercase tracking-[0.15em] font-semibold text-muted-foreground/50">
+                Today
+              </span>
+            </div>
+            <p className="text-[10px] uppercase tracking-widest font-semibold text-muted-foreground/60 mb-1.5">
+              Today&apos;s Collection
+            </p>
+            {isLoading ? (
+              <div className="h-8 w-32 rounded-lg bg-white/[0.04] animate-pulse" />
+            ) : (
+              <p className="text-2xl font-bold text-foreground tracking-tight tabular-nums">
+                {formatCurrency(metrics.collectedToday)}
+              </p>
+            )}
+            <p className="text-[11px] text-muted-foreground/50 mt-2">
+              {metrics.studentsPaid} payments completed
+            </p>
+          </div>
+        </div>
+
+        {/* Defaulters (1 col) */}
+        <div className="group col-span-1 md:col-span-1 relative overflow-hidden rounded-2xl border border-white/[0.06] bg-navy-900/50 backdrop-blur-xl p-5 hover:-translate-y-0.5 hover:border-rose-500/20 hover:shadow-[0_0_20px_rgba(251,113,133,0.08)] transition-all duration-300">
+          <div className="absolute -right-6 -top-6 w-24 h-24 rounded-full blur-[45px] opacity-10 group-hover:opacity-20 transition-opacity duration-500 bg-rose-500" />
+          <div className="relative z-10">
+            <div className="w-8 h-8 rounded-xl bg-rose-500/10 border border-rose-500/15 flex items-center justify-center mb-4">
+              <AlertTriangle className="w-4 h-4 text-rose-400" />
+            </div>
+            <p className="text-[10px] uppercase tracking-widest font-semibold text-muted-foreground/60 mb-1.5">
+              Defaulters
+            </p>
+            {isLoading ? (
+              <div className="h-8 w-16 rounded-lg bg-white/[0.04] animate-pulse" />
+            ) : (
+              <p className="text-2xl font-bold text-foreground tracking-tight tabular-nums">
+                {metrics.defaulters}
+              </p>
+            )}
+            <p className="text-[11px] text-rose-400/70 mt-2 font-medium">Overdue</p>
+          </div>
+        </div>
+
+        {/* Total Students (2 cols) */}
+        <div className="group col-span-1 md:col-span-2 relative overflow-hidden rounded-2xl border border-white/[0.06] bg-navy-900/50 backdrop-blur-xl p-5 hover:-translate-y-0.5 hover:border-sky-500/20 hover:shadow-[0_0_20px_rgba(56,189,248,0.08)] transition-all duration-300">
+          <div className="absolute -right-8 -bottom-8 w-28 h-28 rounded-full blur-[50px] opacity-8 group-hover:opacity-18 transition-opacity duration-500 bg-sky-500" />
+          <div className="relative z-10 flex items-center justify-between">
+            <div>
+              <div className="w-8 h-8 rounded-xl bg-sky-500/10 border border-sky-500/15 flex items-center justify-center mb-3">
+                <Users className="w-4 h-4 text-sky-400" />
+              </div>
+              <p className="text-[10px] uppercase tracking-widest font-semibold text-muted-foreground/60 mb-1.5">
+                Total Students
+              </p>
+              {isLoading ? (
+                <div className="h-7 w-20 rounded-lg bg-white/[0.04] animate-pulse" />
+              ) : (
+                <p className="text-xl font-bold text-foreground tracking-tight tabular-nums">
+                  {metrics.totalStudents.toLocaleString()}
+                </p>
+              )}
+            </div>
+            <div className="text-right">
+              <div className="text-[11px] text-emerald-400 font-semibold mb-1">
+                {metrics.studentsPaid} paid
+              </div>
+              <div className="text-[11px] text-amber-400/80 font-medium">
+                {metrics.studentsUnpaid} unpaid
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Outstanding Amount (2 cols) */}
+        <div className="group col-span-1 md:col-span-2 relative overflow-hidden rounded-2xl border border-white/[0.06] bg-navy-900/50 backdrop-blur-xl p-5 hover:-translate-y-0.5 hover:border-amber-500/20 hover:shadow-[0_0_20px_rgba(251,191,36,0.08)] transition-all duration-300">
+          <div className="absolute -right-8 -top-8 w-28 h-28 rounded-full blur-[50px] opacity-10 group-hover:opacity-20 transition-opacity duration-500 bg-amber-500" />
+          <div className="relative z-10">
+            <div className="flex items-start justify-between mb-3">
+              <div className="w-8 h-8 rounded-xl bg-amber-500/10 border border-amber-500/15 flex items-center justify-center">
+                <Clock className="w-4 h-4 text-amber-400" />
+              </div>
+              <span className="text-[10px] uppercase tracking-[0.15em] font-semibold text-amber-400/60 border border-amber-500/15 bg-amber-500/5 px-2 py-0.5 rounded-full">
+                Pending
+              </span>
+            </div>
+            <p className="text-[10px] uppercase tracking-widest font-semibold text-muted-foreground/60 mb-1.5">
+              Outstanding Amount
+            </p>
+            {isLoading ? (
+              <div className="h-7 w-28 rounded-lg bg-white/[0.04] animate-pulse" />
+            ) : (
+              <p className="text-xl font-bold text-foreground tracking-tight tabular-nums">
+                {formatCurrency(metrics.outstanding)}
+              </p>
+            )}
+          </div>
+        </div>
+
+        {/* Payment Rate (2 cols) */}
+        <div className="group col-span-1 sm:col-span-2 md:col-span-2 relative overflow-hidden rounded-2xl border border-white/[0.06] bg-navy-900/50 backdrop-blur-xl p-5 hover:-translate-y-0.5 hover:border-violet-500/20 hover:shadow-[0_0_20px_rgba(139,92,246,0.08)] transition-all duration-300">
+          <div className="absolute -left-8 -bottom-8 w-28 h-28 rounded-full blur-[50px] opacity-8 group-hover:opacity-18 transition-opacity duration-500 bg-violet-500" />
+          <div className="relative z-10 flex items-center justify-between">
+            <div>
+              <p className="text-[10px] uppercase tracking-widest font-semibold text-muted-foreground/60 mb-1.5">
+                Payment Rate
+              </p>
+              {isLoading ? (
+                <div className="h-7 w-20 rounded-lg bg-white/[0.04] animate-pulse" />
+              ) : (
+                <p className="text-xl font-bold text-foreground tracking-tight tabular-nums">
+                  {metrics.paymentRate.toFixed(1)}%
+                </p>
+              )}
+              <p className="text-[11px] text-muted-foreground/50 mt-1">of enrolled students</p>
+            </div>
+            <div className="relative w-14 h-14 flex-shrink-0">
+              <svg className="w-14 h-14 -rotate-90" viewBox="0 0 48 48">
+                <circle cx="24" cy="24" r="20" fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth="3" />
+                <circle
+                  cx="24"
+                  cy="24"
+                  r="20"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="3"
+                  strokeLinecap="round"
+                  strokeDasharray={`${2 * Math.PI * 20}`}
+                  strokeDashoffset={`${2 * Math.PI * 20 * (1 - metrics.paymentRate / 100)}`}
+                  className="text-violet-400 transition-all duration-1000"
+                />
+              </svg>
+              <span className="absolute inset-0 flex items-center justify-center text-[10px] font-bold text-violet-400">
+                {Math.round(metrics.paymentRate)}%
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* ─── Main Content: Transactions + Live Feed ─────────────────── */}
+      <div className="grid gap-4 xl:grid-cols-[1fr_320px]">
+        <AdminTransactionTable
+          transactions={transactions}
+          meta={transactionsMeta}
+          isLoading={isTransactionsLoading}
+          statusTab={statusTab}
+          onTabChange={setStatusTab}
+          page={transactionsPage}
+          onPageChange={setTransactionsPage}
+          onExportCSV={handleExportCSV}
+          unpaidCount={metrics.studentsUnpaid}
+          defaultersCount={metrics.defaulters}
+        />
+
+        <VCLiveFeed
+          transactions={liveTransactions}
+          initialTransactions={initialTransactions}
+          connected={sseConnected}
+          newPaymentsCount={newPaymentsCount}
+          newAmountCollected={newAmountCollected}
+        />
+      </div>
+    </div>
+  )
 }
