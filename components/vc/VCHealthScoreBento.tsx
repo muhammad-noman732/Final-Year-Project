@@ -2,7 +2,6 @@
 
 import { useEffect, useRef } from "react"
 import { motion } from "framer-motion"
-import { Banknote, Users, AlertTriangle, TrendingUp } from "lucide-react"
 import { formatCurrency, formatFullCurrency } from "@/config/constants"
 import { useVCHealthScore } from "@/hooks/vc/useVCHealthScore"
 import type { VCHealthScoreBentoProps, VCHealthTier } from "@/types/client/ui/vc.ui.types"
