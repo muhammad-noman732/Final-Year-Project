@@ -1,33 +1,21 @@
 "use client"
 
 import { useState } from "react"
-
-import { Building2, CreditCard, GraduationCap } from "lucide-react"
+import { CreditCard, GraduationCap, TrendingDown, TrendingUp } from "lucide-react"
 import {
-  Bar,
-  BarChart,
-  CartesianGrid,
-  Cell,
-  Pie,
-  PieChart,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
+  Bar, BarChart, CartesianGrid, Cell, Pie, PieChart,
+  ResponsiveContainer, Tooltip, XAxis, YAxis,
 } from "recharts"
-import { Card } from "@/components/ui/card"
+import { Separator } from "@/components/ui/separator"
 import { formatCurrency, formatFullCurrency } from "@/config/constants"
 import type {
-  VCDepartmentPerformance,
   VCSemesterBreakdown,
   VCTrendPoint,
 } from "@/types/client/store/vc.store.types"
 
 interface VCDashboardPanelsProps {
-  departmentPerformance: VCDepartmentPerformance[]
   semesterBreakdown: VCSemesterBreakdown[]
   collectionTrend: VCTrendPoint[]
-  onDepartmentSelect?: (departmentId: string) => void
   onSemesterSelect?: (semester: number) => void
 }
 
@@ -37,30 +25,28 @@ function ChartTooltip(props: {
   label?: string
 }) {
   if (!props.active || !props.payload?.length) return null
-
   return (
-    <div className="rounded-xl border border-gold-500/10 bg-[#0d1321] px-3 py-2 text-xs shadow-xl">
-      {props.label ? <p className="mb-1 text-gold-400">{props.label}</p> : null}
+    <div className="rounded-lg border border-white/[0.08] bg-navy-800 px-3 py-2 text-xs shadow-xl">
+      {props.label ? <p className="mb-1.5 font-semibold text-foreground">{props.label}</p> : null}
       {props.payload.map((entry) => (
-        <p key={`${entry.name}-${entry.color}`} className="text-foreground">
-          <span className="mr-1" style={{ color: entry.color }}>
-            ●
+        <div key={`${entry.name}-${entry.color}`} className="flex items-center gap-2 text-muted-foreground">
+          <span className="h-1.5 w-1.5 rounded-full flex-shrink-0" style={{ background: entry.color }} />
+          <span>{entry.name}:</span>
+          <span className="text-foreground font-medium">
+            {entry.value > 999 ? formatFullCurrency(entry.value) : entry.value}
           </span>
-          {entry.name}: {entry.value > 999 ? formatFullCurrency(entry.value) : entry.value}
-        </p>
+        </div>
       ))}
     </div>
   )
 }
 
 export default function VCDashboardPanels({
-  departmentPerformance,
   semesterBreakdown,
   collectionTrend,
-  onDepartmentSelect,
   onSemesterSelect,
 }: VCDashboardPanelsProps) {
-
+  // Monthly comparison from trend
   const monthlyComparison = Array.from(
     collectionTrend.reduce<Map<string, number>>((acc, item) => {
       const monthLabel = item.label.slice(0, 7)
@@ -71,165 +57,163 @@ export default function VCDashboardPanels({
 
   const currentMonth = monthlyComparison[monthlyComparison.length - 1]
   const previousMonth = monthlyComparison[monthlyComparison.length - 2]
-  const monthDeltaPct = currentMonth && previousMonth && previousMonth.amount > 0
-    ? Number((((currentMonth.amount - previousMonth.amount) / previousMonth.amount) * 100).toFixed(1))
-    : 0
+  const monthDeltaPct =
+    currentMonth && previousMonth && previousMonth.amount > 0
+      ? Number(
+          (((currentMonth.amount - previousMonth.amount) / previousMonth.amount) * 100).toFixed(1),
+        )
+      : 0
+  const isUp = monthDeltaPct >= 0
+
+  const [selectedMonthSlice, setSelectedMonthSlice] = useState<"Current" | "Previous">("Current")
   const monthComparisonData = [
     { name: "Current", value: currentMonth?.amount ?? 0, color: "#d4a843" },
     { name: "Previous", value: previousMonth?.amount ?? 0, color: "#0ea5e9" },
   ]
-  const [selectedMonthSlice, setSelectedMonthSlice] = useState<"Current" | "Previous">("Current")
-  const selectedSliceData = monthComparisonData.find((item) => item.name === selectedMonthSlice) ?? monthComparisonData[0]
-
-  // Department chart data for stacked bar
-  const deptChartData = departmentPerformance.map((d) => ({
-    name: d.departmentCode,
-    paid: d.paidStudents,
-    defaulters: d.defaulters,
-    collected: d.collectedAmount,
-    outstanding: d.outstandingAmount,
-    rate: d.paymentRate,
-  }))
+  const selectedSliceData =
+    monthComparisonData.find((item) => item.name === selectedMonthSlice) ?? monthComparisonData[0]
 
   return (
     <div className="grid gap-4">
-      {/* Department Performance — Horizontal Bar */}
-      {departmentPerformance.length > 0 ? (
-        <Card className="border-white/[0.05] bg-[#0a0e1a] p-5">
-          <div className="mb-4 flex items-center gap-2">
-            <Building2 className="h-4 w-4 text-gold-400" />
-            <h3 className="text-sm font-semibold text-foreground">Department Performance</h3>
+      {/* Collection Trend */}
+      <div className="rounded-xl border border-white/[0.05] bg-navy-900 p-5">
+        <div className="flex items-center justify-between mb-5">
+          <div className="flex items-center gap-2">
+            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-gold-500/10">
+              <CreditCard className="h-3.5 w-3.5 text-gold-400" />
+            </div>
+            <h3 className="text-sm font-semibold text-foreground">Collection Trend</h3>
           </div>
-          <ResponsiveContainer width="100%" height={Math.max(200, departmentPerformance.length * 50)}>
-            <BarChart data={deptChartData} layout="vertical">
-              <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" horizontal={false} />
+          {currentMonth && (
+            <div className={`flex items-center gap-1 text-xs font-medium ${isUp ? "text-emerald-400" : "text-rose-400"}`}>
+              {isUp ? <TrendingUp className="h-3.5 w-3.5" /> : <TrendingDown className="h-3.5 w-3.5" />}
+              {isUp ? "+" : ""}{monthDeltaPct}% vs last month
+            </div>
+          )}
+        </div>
+
+        {collectionTrend.length > 0 ? (
+          <ResponsiveContainer width="100%" height={200}>
+            <BarChart data={collectionTrend} barCategoryGap="30%">
+              <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" vertical={false} />
               <XAxis
-                type="number"
-                tick={{ fill: "#94a3b8", fontSize: 10 }}
-                tickLine={false}
-                axisLine={false}
+                dataKey="label" tick={{ fill: "#6b7a99", fontSize: 10 }}
+                tickLine={false} axisLine={false}
               />
               <YAxis
-                type="category"
-                dataKey="name"
-                tick={{ fill: "#94a3b8", fontSize: 10 }}
-                tickLine={false}
-                axisLine={false}
-                width={50}
+                tick={{ fill: "#6b7a99", fontSize: 10 }} tickLine={false} axisLine={false}
+                tickFormatter={(v) => `${Math.round(v / 1000)}K`}
               />
-              <Tooltip content={<ChartTooltip />} />
-              <Bar dataKey="paid" name="Paid Students" stackId="students" fill="#10b981" radius={[0, 0, 0, 0]} />
-              <Bar dataKey="defaulters" name="Defaulters" stackId="students" fill="#f43f5e" radius={[0, 4, 4, 0]} />
+              <Tooltip content={<ChartTooltip />} cursor={{ fill: "rgba(255,255,255,0.02)" }} />
+              <Bar dataKey="amount" name="Collected" fill="#d4a843" radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
-          {onDepartmentSelect ? (
-            <div className="mt-3 flex flex-wrap gap-2">
-              {departmentPerformance.map((dept) => (
-                <button
-                  key={dept.departmentId}
-                  type="button"
-                  className="rounded-lg border border-white/[0.08] bg-white/[0.02] px-2.5 py-1 text-[11px] text-slate-300 transition-colors hover:border-gold-400/30 hover:text-gold-300"
-                  onClick={() => onDepartmentSelect(dept.departmentId)}
-                >
-                  {dept.departmentCode} &middot; {dept.paymentRate}%
-                </button>
-              ))}
-            </div>
-          ) : null}
-        </Card>
-      ) : null}
-
-      {/* Collection Trend + Month Comparison */}
-      <Card className="border-white/[0.05] bg-[#0a0e1a] p-5">
-        <div className="mb-4 flex items-center gap-2">
-          <CreditCard className="h-4 w-4 text-gold-400" />
-          <h3 className="text-sm font-semibold text-foreground">Collection Trend</h3>
-        </div>
-        <ResponsiveContainer width="100%" height={240}>
-          <BarChart data={collectionTrend}>
-            <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" />
-            <XAxis dataKey="label" tick={{ fill: "#94a3b8", fontSize: 10 }} tickLine={false} axisLine={false} />
-            <YAxis tick={{ fill: "#94a3b8", fontSize: 10 }} tickLine={false} axisLine={false} tickFormatter={(value) => `${Math.round(value / 1000)}K`} />
-            <Tooltip content={<ChartTooltip />} />
-            <Bar dataKey="amount" name="Collected" fill="#d4a843" radius={[6, 6, 0, 0]} />
-          </BarChart>
-        </ResponsiveContainer>
-        {collectionTrend.length === 0 ? (
-          <p className="mt-2 text-xs text-muted-foreground">No trend data in selected range.</p>
-        ) : null}
-        <div className="mt-3 grid grid-cols-2 gap-3 rounded-xl border border-white/[0.05] bg-white/[0.02] p-3 text-xs">
-          <div>
-            <p className="text-muted-foreground">Monthly intelligence</p>
-            <p className="mt-1 text-foreground">
-              {currentMonth ? `Current month: ${formatCurrency(currentMonth.amount)}` : "No current month data"}
-            </p>
-            <p className={`mt-1 font-medium ${monthDeltaPct >= 0 ? "text-emerald-400" : "text-rose-400"}`}>
-              {monthDeltaPct >= 0 ? "+" : ""}
-              {monthDeltaPct}% vs previous month
-            </p>
-            <p className="mt-3 text-[11px] text-muted-foreground">
-              Selected: <span className="text-foreground">{selectedSliceData.name}</span> · {formatFullCurrency(selectedSliceData.value)}
-            </p>
+        ) : (
+          <div className="flex h-40 items-center justify-center">
+            <p className="text-xs text-muted-foreground">No trend data in selected range.</p>
           </div>
-          <ResponsiveContainer width="100%" height={110}>
-            <PieChart>
-              <Pie
-                data={monthComparisonData}
-                dataKey="value"
-                nameKey="name"
-                innerRadius={26}
-                outerRadius={44}
-                paddingAngle={2}
-                onClick={(_, index) => {
-                  const clicked = monthComparisonData[index]
-                  if (!clicked) return
-                  setSelectedMonthSlice(clicked.name as "Current" | "Previous")
-                }}
-              >
-                {monthComparisonData.map((entry) => (
-                  <Cell key={entry.name} fill={entry.color} />
-                ))}
-              </Pie>
-              <Tooltip content={<ChartTooltip />} />
-            </PieChart>
-          </ResponsiveContainer>
-        </div>
-      </Card>
+        )}
+
+        {/* Monthly intel */}
+        {currentMonth && (
+          <>
+            <Separator className="bg-white/[0.04] my-4" />
+            <div className="flex items-center justify-between">
+              <div className="space-y-1">
+                <p className="text-[11px] text-muted-foreground uppercase tracking-[0.16em]">Monthly Intelligence</p>
+                <p className="text-sm font-semibold text-foreground">
+                  {formatFullCurrency(currentMonth.amount)}
+                  <span className="ml-1.5 text-xs font-normal text-muted-foreground">current month</span>
+                </p>
+                <p className="text-xs">
+                  <span className="text-muted-foreground">Tracking </span>
+                  <span className="font-medium text-foreground">{selectedSliceData.name}</span>
+                  <span className="text-muted-foreground"> · {formatFullCurrency(selectedSliceData.value)}</span>
+                </p>
+              </div>
+              <ResponsiveContainer width={90} height={90}>
+                <PieChart>
+                  <Pie
+                    data={monthComparisonData}
+                    dataKey="value"
+                    nameKey="name"
+                    innerRadius={24}
+                    outerRadius={38}
+                    paddingAngle={2}
+                    onClick={(_, index) => {
+                      const clicked = monthComparisonData[index]
+                      if (clicked) setSelectedMonthSlice(clicked.name as "Current" | "Previous")
+                    }}
+                  >
+                    {monthComparisonData.map((entry) => (
+                      <Cell key={entry.name} fill={entry.color} opacity={selectedMonthSlice === entry.name ? 1 : 0.4} />
+                    ))}
+                  </Pie>
+                  <Tooltip content={<ChartTooltip />} />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+          </>
+        )}
+      </div>
 
       {/* Semester Breakdown */}
-      <Card className="border-white/[0.05] bg-[#0a0e1a] p-5">
-        <div className="mb-4 flex items-center gap-2">
-          <GraduationCap className="h-4 w-4 text-sky-400" />
-          <h3 className="text-sm font-semibold text-foreground">Semester Breakdown</h3>
-        </div>
-        <ResponsiveContainer width="100%" height={240}>
-          <BarChart data={semesterBreakdown}>
-            <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" />
-            <XAxis dataKey="semester" tick={{ fill: "#94a3b8", fontSize: 10 }} tickLine={false} axisLine={false} />
-            <YAxis tick={{ fill: "#94a3b8", fontSize: 10 }} tickLine={false} axisLine={false} tickFormatter={(value) => `${Math.round(value / 1000)}K`} />
-            <Tooltip content={<ChartTooltip />} />
-            <Bar dataKey="paidAmount" name="Paid" stackId="fees" fill="#10b981" radius={[0, 0, 0, 0]} />
-            <Bar dataKey="unpaidAmount" name="Unpaid" stackId="fees" fill="#f43f5e" radius={[4, 4, 0, 0]} />
-          </BarChart>
-        </ResponsiveContainer>
-        {semesterBreakdown.length === 0 ? (
-          <p className="mt-2 text-xs text-muted-foreground">No semester data for current filters.</p>
-        ) : null}
-        {onSemesterSelect ? (
-          <div className="mt-3 flex flex-wrap gap-2">
-            {semesterBreakdown.map((semester) => (
-              <button
-                key={semester.semester}
-                type="button"
-                className="rounded-lg border border-white/[0.08] bg-white/[0.02] px-2 py-1 text-[11px] text-slate-300 transition-colors hover:border-gold-400/30 hover:text-gold-300"
-                onClick={() => onSemesterSelect(semester.semester)}
-              >
-                Track Sem {semester.semester}
-              </button>
-            ))}
+      <div className="rounded-xl border border-white/[0.05] bg-navy-900 p-5">
+        <div className="flex items-center gap-2 mb-5">
+          <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-sky-500/10">
+            <GraduationCap className="h-3.5 w-3.5 text-sky-400" />
           </div>
-        ) : null}
-      </Card>
+          <h3 className="text-sm font-semibold text-foreground">Semester Breakdown</h3>
+          <div className="ml-auto flex items-center gap-3 text-[11px] text-muted-foreground">
+            <span className="flex items-center gap-1.5">
+              <span className="h-2 w-2 rounded-sm bg-emerald-500" />Paid
+            </span>
+            <span className="flex items-center gap-1.5">
+              <span className="h-2 w-2 rounded-sm bg-rose-500" />Unpaid
+            </span>
+          </div>
+        </div>
+
+        {semesterBreakdown.length > 0 ? (
+          <>
+            <ResponsiveContainer width="100%" height={200}>
+              <BarChart data={semesterBreakdown} barCategoryGap="25%">
+                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" vertical={false} />
+                <XAxis
+                  dataKey="semester" tick={{ fill: "#6b7a99", fontSize: 10 }}
+                  tickLine={false} axisLine={false}
+                />
+                <YAxis
+                  tick={{ fill: "#6b7a99", fontSize: 10 }} tickLine={false} axisLine={false}
+                  tickFormatter={(v) => `${Math.round(v / 1000)}K`}
+                />
+                <Tooltip content={<ChartTooltip />} cursor={{ fill: "rgba(255,255,255,0.02)" }} />
+                <Bar dataKey="paidAmount" name="Paid" stackId="fees" fill="#10b981" radius={[0, 0, 0, 0]} />
+                <Bar dataKey="unpaidAmount" name="Unpaid" stackId="fees" fill="#f43f5e" radius={[4, 4, 0, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+
+            {onSemesterSelect && (
+              <div className="mt-4 flex flex-wrap gap-2">
+                {semesterBreakdown.map((sem) => (
+                  <button
+                    key={sem.semester}
+                    type="button"
+                    onClick={() => onSemesterSelect(sem.semester)}
+                    className="rounded-lg border border-white/[0.06] bg-white/[0.02] px-2.5 py-1 text-[11px] text-muted-foreground transition-colors hover:border-gold-500/25 hover:text-gold-300"
+                  >
+                    Sem {sem.semester}
+                  </button>
+                ))}
+              </div>
+            )}
+          </>
+        ) : (
+          <div className="flex h-40 items-center justify-center">
+            <p className="text-xs text-muted-foreground">No semester data for current filters.</p>
+          </div>
+        )}
+      </div>
     </div>
   )
 }

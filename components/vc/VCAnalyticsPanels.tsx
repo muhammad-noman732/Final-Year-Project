@@ -1,40 +1,56 @@
 "use client"
 
-import { Bar, BarChart, CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts"
-import { Card } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
+import {
+  Bar, BarChart, CartesianGrid, Line, LineChart,
+  ResponsiveContainer, Tooltip, XAxis, YAxis,
+} from "recharts"
+import { TrendingUp, BarChart2, BookOpen } from "lucide-react"
+import { Separator } from "@/components/ui/separator"
 import { formatCurrency, formatFullCurrency } from "@/config/constants"
 import type {
   VCAnalyticsData,
   VCDepartmentPerformance,
 } from "@/types/client/store/vc.store.types"
 
-function TooltipCard(props: {
+function ChartTooltip(props: {
   active?: boolean
   payload?: Array<{ value: number; name: string; color?: string }>
   label?: string
 }) {
   if (!props.active || !props.payload?.length) return null
-
   return (
-    <div className="rounded-xl border border-gold-500/10 bg-[#0d1321] px-3 py-2 text-xs">
-      {props.label ? <p className="mb-1 text-gold-400">{props.label}</p> : null}
+    <div className="rounded-lg border border-white/[0.08] bg-navy-800 px-3 py-2 text-xs shadow-xl">
+      {props.label ? <p className="mb-1.5 font-semibold text-foreground">{props.label}</p> : null}
       {props.payload.map((entry) => (
-        <p key={`${entry.name}-${entry.color}`} className="text-foreground">
-          {entry.name}: {entry.value > 999 ? formatFullCurrency(entry.value) : entry.value}
-        </p>
+        <div key={`${entry.name}-${entry.color}`} className="flex items-center gap-2 text-muted-foreground">
+          <span className="h-1.5 w-1.5 rounded-full flex-shrink-0" style={{ background: entry.color }} />
+          <span>{entry.name}:</span>
+          <span className="text-foreground font-medium">
+            {entry.value > 999 ? formatFullCurrency(entry.value) : entry.value}
+          </span>
+        </div>
       ))}
     </div>
   )
 }
 
-function departmentChartData(departments: VCDepartmentPerformance[]) {
-  return departments.map((department) => ({
-    name: department.departmentCode,
-    paid: department.paidStudents,
-    defaulters: department.defaulters,
-    collected: department.collectedAmount,
-  }))
+function PanelHeader({
+  icon: Icon,
+  iconClass,
+  title,
+}: {
+  icon: typeof TrendingUp
+  iconClass: string
+  title: string
+}) {
+  return (
+    <div className="flex items-center gap-2 mb-5">
+      <div className={`flex h-7 w-7 items-center justify-center rounded-lg ${iconClass}`}>
+        <Icon className="h-3.5 w-3.5" />
+      </div>
+      <h3 className="text-sm font-semibold text-foreground">{title}</h3>
+    </div>
+  )
 }
 
 export default function VCAnalyticsPanels({
@@ -46,115 +62,124 @@ export default function VCAnalyticsPanels({
   onDepartmentSelect?: (departmentId: string) => void
   onSemesterSelect?: (semester: number) => void
 }) {
-  const chartData = departmentChartData(data.departmentPerformance)
+  const deptChartData = data.departmentPerformance.map((d) => ({
+    name: d.departmentCode,
+    paid: d.paidStudents,
+    defaulters: d.defaulters,
+  }))
 
   return (
-    <div className="grid gap-4 xl:grid-cols-2">
-      <Card className="border-white/[0.05] bg-[#0a0e1a] p-5 xl:col-span-2">
-        <h3 className="mb-4 text-sm font-semibold text-foreground">Collection Timeline</h3>
-        <ResponsiveContainer width="100%" height={280}>
-          <LineChart data={data.collectionTrend}>
-            <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" />
-            <XAxis dataKey="label" tick={{ fill: "#94a3b8", fontSize: 10 }} tickLine={false} axisLine={false} />
-            <YAxis tick={{ fill: "#94a3b8", fontSize: 10 }} tickLine={false} axisLine={false} tickFormatter={(value) => `${Math.round(value / 1000)}K`} />
-            <Tooltip content={<TooltipCard />} />
-            <Line type="monotone" dataKey="amount" name="Collected" stroke="#d4a843" strokeWidth={2.5} dot={false} />
-          </LineChart>
-        </ResponsiveContainer>
-      </Card>
-
-      <Card className="border-white/[0.05] bg-[#0a0e1a] p-5">
-        <h3 className="mb-4 text-sm font-semibold text-foreground">Department Comparison</h3>
-        <ResponsiveContainer width="100%" height={260}>
-          <BarChart data={chartData}>
-            <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" />
-            <XAxis dataKey="name" tick={{ fill: "#94a3b8", fontSize: 10 }} tickLine={false} axisLine={false} />
-            <YAxis tick={{ fill: "#94a3b8", fontSize: 10 }} tickLine={false} axisLine={false} />
-            <Tooltip content={<TooltipCard />} />
-            <Bar dataKey="paid" name="Paid" fill="#10b981" radius={[4, 4, 0, 0]} />
-            <Bar dataKey="defaulters" name="Defaulters" fill="#f43f5e" radius={[4, 4, 0, 0]} />
-          </BarChart>
-        </ResponsiveContainer>
-        {onDepartmentSelect ? (
-          <div className="mt-3 flex flex-wrap gap-2">
-            {data.departmentPerformance.map((department) => (
-              <Button
-                key={department.departmentId}
-                type="button"
-                size="sm"
-                variant="outline"
-                className="h-7 border-white/[0.08] bg-transparent px-2 text-[11px]"
-                onClick={() => onDepartmentSelect(department.departmentId)}
-              >
-                {department.departmentCode}
-              </Button>
-            ))}
+    <div className="space-y-4">
+      {/* Collection Timeline — full width */}
+      <div className="rounded-xl border border-white/[0.05] bg-navy-900 p-5">
+        <PanelHeader icon={TrendingUp} iconClass="bg-gold-500/10 text-gold-400" title="Collection Timeline" />
+        {data.collectionTrend.length > 0 ? (
+          <ResponsiveContainer width="100%" height={240}>
+            <LineChart data={data.collectionTrend}>
+              <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" vertical={false} />
+              <XAxis dataKey="label" tick={{ fill: "#6b7a99", fontSize: 10 }} tickLine={false} axisLine={false} />
+              <YAxis
+                tick={{ fill: "#6b7a99", fontSize: 10 }} tickLine={false} axisLine={false}
+                tickFormatter={(v) => `${Math.round(v / 1000)}K`}
+              />
+              <Tooltip content={<ChartTooltip />} />
+              <Line
+                type="monotone" dataKey="amount" name="Collected"
+                stroke="#d4a843" strokeWidth={2} dot={false}
+                activeDot={{ r: 4, fill: "#d4a843" }}
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        ) : (
+          <div className="flex h-40 items-center justify-center">
+            <p className="text-xs text-muted-foreground">No timeline data for selected range.</p>
           </div>
-        ) : null}
-      </Card>
+        )}
+      </div>
 
-      <Card className="border-white/[0.05] bg-[#0a0e1a] p-5">
-        <h3 className="mb-4 text-sm font-semibold text-foreground">Semester Collections</h3>
-        <ResponsiveContainer width="100%" height={260}>
-          <BarChart data={data.semesterBreakdown}>
-            <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" />
-            <XAxis dataKey="semester" tick={{ fill: "#94a3b8", fontSize: 10 }} tickLine={false} axisLine={false} />
-            <YAxis tick={{ fill: "#94a3b8", fontSize: 10 }} tickLine={false} axisLine={false} tickFormatter={(value) => `${Math.round(value / 1000)}K`} />
-            <Tooltip content={<TooltipCard />} />
-            <Bar dataKey="paidAmount" name="Paid" fill="#0ea5e9" radius={[4, 4, 0, 0]} />
-            <Bar dataKey="unpaidAmount" name="Outstanding" fill="#d4a843" radius={[4, 4, 0, 0]} />
-          </BarChart>
-        </ResponsiveContainer>
-        {onSemesterSelect ? (
-          <div className="mt-3 flex flex-wrap gap-2">
-            {data.semesterBreakdown.map((semester) => (
-              <Button
-                key={semester.semester}
-                type="button"
-                size="sm"
-                variant="outline"
-                className="h-7 border-white/[0.08] bg-transparent px-2 text-[11px]"
-                onClick={() => onSemesterSelect(semester.semester)}
-              >
-                Sem {semester.semester}
-              </Button>
-            ))}
+      {/* Two-column: Department Comparison + Semester Collections */}
+      <div className="grid gap-4 xl:grid-cols-2">
+        <div className="rounded-xl border border-white/[0.05] bg-navy-900 p-5">
+          <PanelHeader icon={BarChart2} iconClass="bg-violet-500/10 text-violet-400" title="Department Comparison" />
+          <div className="mb-3 flex items-center gap-3 text-[11px] text-muted-foreground">
+            <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-sm bg-emerald-500" />Paid</span>
+            <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-sm bg-rose-500" />Defaulters</span>
           </div>
-        ) : null}
-      </Card>
-
-      {/* Month comparison removed from Analytics as requested */}
-
-      <Card className="border-white/[0.05] bg-[#0a0e1a] p-5 xl:col-span-2">
-        <h3 className="mb-4 text-sm font-semibold text-foreground">Department Finance Summary</h3>
-        <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
-          {data.departmentPerformance.map((department) => (
-            <div
-              key={department.departmentId}
-              className="rounded-2xl border border-white/[0.05] bg-white/[0.02] p-4"
-            >
-              <p className="text-sm font-semibold text-foreground">{department.departmentName}</p>
-              <p className="mt-1 text-[11px] uppercase tracking-[0.25em] text-muted-foreground">
-                {department.departmentCode}
-              </p>
-              <div className="mt-4 space-y-2 text-xs">
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Collected</span>
-                  <span className="text-emerald-400">{formatCurrency(department.collectedAmount)}</span>
+          {deptChartData.length > 0 ? (
+            <>
+              <ResponsiveContainer width="100%" height={240}>
+                <BarChart data={deptChartData} barCategoryGap="30%">
+                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" vertical={false} />
+                  <XAxis dataKey="name" tick={{ fill: "#6b7a99", fontSize: 10 }} tickLine={false} axisLine={false} />
+                  <YAxis tick={{ fill: "#6b7a99", fontSize: 10 }} tickLine={false} axisLine={false} />
+                  <Tooltip content={<ChartTooltip />} cursor={{ fill: "rgba(255,255,255,0.02)" }} />
+                  <Bar dataKey="paid" name="Paid" fill="#10b981" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="defaulters" name="Defaulters" fill="#f43f5e" radius={[4, 4, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+              {onDepartmentSelect && (
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {data.departmentPerformance.map((d) => (
+                    <button
+                      key={d.departmentId} type="button"
+                      onClick={() => onDepartmentSelect(d.departmentId)}
+                      className="rounded-lg border border-white/[0.06] bg-white/[0.02] px-2.5 py-1 text-[11px] text-muted-foreground transition-colors hover:border-gold-500/25 hover:text-gold-300"
+                    >
+                      {d.departmentCode}
+                    </button>
+                  ))}
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Outstanding</span>
-                  <span className="text-gold-400">{formatCurrency(department.outstandingAmount)}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Rate</span>
-                  <span className="text-foreground">{department.paymentRate}%</span>
-                </div>
-              </div>
+              )}
+            </>
+          ) : (
+            <div className="flex h-40 items-center justify-center">
+              <p className="text-xs text-muted-foreground">No department data.</p>
             </div>
-          ))}
+          )}
         </div>
-      </Card>
+
+        <div className="rounded-xl border border-white/[0.05] bg-navy-900 p-5">
+          <PanelHeader icon={BookOpen} iconClass="bg-sky-500/10 text-sky-400" title="Semester Collections" />
+          <div className="mb-3 flex items-center gap-3 text-[11px] text-muted-foreground">
+            <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-sm bg-sky-500" />Paid</span>
+            <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-sm bg-gold-500" />Outstanding</span>
+          </div>
+          {data.semesterBreakdown.length > 0 ? (
+            <>
+              <ResponsiveContainer width="100%" height={240}>
+                <BarChart data={data.semesterBreakdown} barCategoryGap="30%">
+                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" vertical={false} />
+                  <XAxis dataKey="semester" tick={{ fill: "#6b7a99", fontSize: 10 }} tickLine={false} axisLine={false} />
+                  <YAxis
+                    tick={{ fill: "#6b7a99", fontSize: 10 }} tickLine={false} axisLine={false}
+                    tickFormatter={(v) => `${Math.round(v / 1000)}K`}
+                  />
+                  <Tooltip content={<ChartTooltip />} cursor={{ fill: "rgba(255,255,255,0.02)" }} />
+                  <Bar dataKey="paidAmount" name="Paid" fill="#0ea5e9" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="unpaidAmount" name="Outstanding" fill="#d4a843" radius={[4, 4, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+              {onSemesterSelect && (
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {data.semesterBreakdown.map((s) => (
+                    <button
+                      key={s.semester} type="button"
+                      onClick={() => onSemesterSelect(s.semester)}
+                      className="rounded-lg border border-white/[0.06] bg-white/[0.02] px-2.5 py-1 text-[11px] text-muted-foreground transition-colors hover:border-gold-500/25 hover:text-gold-300"
+                    >
+                      Sem {s.semester}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </>
+          ) : (
+            <div className="flex h-40 items-center justify-center">
+              <p className="text-xs text-muted-foreground">No semester data.</p>
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   )
 }

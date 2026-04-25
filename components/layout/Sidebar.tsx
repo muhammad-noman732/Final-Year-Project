@@ -5,13 +5,14 @@ import { usePathname } from "next/navigation";
 import {
     LayoutDashboard, Users, Banknote, Receipt, FileBarChart,
     CreditCard, User, TrendingUp, Activity, GraduationCap, X,
+    Building2, UserCog, Calendar, Building,
     type LucideIcon, LogOut,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const iconMap: Record<string, LucideIcon> = {
     LayoutDashboard, Users, Banknote, Receipt, FileBarChart,
-    CreditCard, User, TrendingUp, Activity,
+    CreditCard, User, TrendingUp, Activity, Building2, UserCog, Calendar, Building,
 };
 
 interface NavItem { label: string; href: string; icon: string; }

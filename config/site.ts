@@ -32,6 +32,7 @@ export const navItems = {
     vc: [
         { label: "Dashboard", href: "/vc", icon: "LayoutDashboard" },
         { label: "Tracking", href: "/vc/tracking", icon: "Activity" },
+        { label: "Departments", href: "/vc/departments", icon: "Building2" },
     ],
     hod: [
         { label: "Dashboard", href: "/hod", icon: "LayoutDashboard" },
