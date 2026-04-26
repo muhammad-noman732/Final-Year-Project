@@ -1,13 +1,14 @@
 import { NotFoundError, ConflictError } from "@/lib/utils/AppError"
-import type { StudentRepository } from "@/lib/repositories/student.repository"
+import type { StudentRepository, StudentRow } from "@/lib/repositories/student.repository"
 import type { FeeStructureRepository } from "@/lib/repositories/feeStructure.repository"
 import type { FeeAssignmentRepository } from "@/lib/repositories/feeAssignment.repository"
 import type { AuditService } from "@/lib/services/audit.service"
+import type { NotificationService } from "@/lib/services/notification.service"
 import { logger } from "@/lib/logger"
 
 import type { AssignFeeInput } from "@/lib/validators/feeAssignment.validators"
 
-//  Service 
+//  Service
 
 export class FeeAssignmentService {
   constructor(
@@ -15,6 +16,7 @@ export class FeeAssignmentService {
     private readonly feeStructureRepo: FeeStructureRepository,
     private readonly feeAssignmentRepo: FeeAssignmentRepository,
     private readonly auditService: AuditService,
+    private readonly notificationService: NotificationService,
   ) { }
 
   /**
@@ -48,11 +50,11 @@ export class FeeAssignmentService {
     }
 
     // 2. Resolve eligible students
-    let eligibleStudentIds: string[]
+    let eligibleStudents: StudentRow[] = []
 
     if (input.studentIds && input.studentIds.length > 0) {
       // Manual selection — still enforce eligibility
-      const { data: students } = await this.studentRepo.findMany({
+      const { data } = await this.studentRepo.findMany({
         where: {
           tenantId,
           id: { in: input.studentIds },
@@ -64,10 +66,10 @@ export class FeeAssignmentService {
         skip: 0,
         take: 5000,
       })
-      eligibleStudentIds = students.map((s) => s.id)
+      eligibleStudents = data
     } else {
       // Bulk assign — all active students in matching program + semester
-      const { data: students } = await this.studentRepo.findMany({
+      const { data } = await this.studentRepo.findMany({
         where: {
           tenantId,
           programId: feeStructure.program.id,
@@ -78,12 +80,14 @@ export class FeeAssignmentService {
         skip: 0,
         take: 5000,
       })
-      eligibleStudentIds = students.map((s) => s.id)
+      eligibleStudents = data
     }
 
-    if (eligibleStudentIds.length === 0) {
+    if (eligibleStudents.length === 0) {
       return { assigned: 0, skipped: 0 }
     }
+
+    const eligibleStudentIds = eligibleStudents.map((s) => s.id)
 
     // 3. Build assignment records
     const now = new Date()
@@ -105,7 +109,30 @@ export class FeeAssignmentService {
     const assigned = await this.feeAssignmentRepo.bulkCreate(records)
     const skipped = eligibleStudentIds.length - assigned
 
-    // 5. Audit log
+    // 5. Fire-and-forget notifications to each assigned student
+    const studentUserIds = eligibleStudents.map((s) => s.user.id)
+    this.notificationService
+      .fanOut({
+        tenantId,
+        userIds: studentUserIds,
+        type: "FEE_ASSIGNED",
+        title: "Fee Assigned",
+        body: `Your Semester ${feeStructure.semester} fee of PKR ${feeStructure.totalFee.toLocaleString()} has been assigned.`,
+        data: {
+          feeStructureId: input.feeStructureId,
+          programName: feeStructure.program.name,
+          semester: feeStructure.semester,
+          amountDue: feeStructure.totalFee,
+        },
+      })
+      .catch((err: unknown) => {
+        logger.error(
+          { event: "notification.fee_assigned.failed", err, tenantId },
+          "Failed to send fee assignment notifications",
+        )
+      })
+
+    // 6. Audit log
     this._audit({
       tenantId,
       userId: adminUserId,

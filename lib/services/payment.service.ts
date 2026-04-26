@@ -82,10 +82,10 @@ export class PaymentService {
             stripeResponse: existingPI as unknown as object,
             paidAt: new Date(),
           })
-          
+
           // Clear cache so the student dashboard is immediately correct
           void revalidateStudentFee(dto.tenantId, dto.userId)
-          
+
           throw new FeeAlreadyPaidError(dto.feeAssignmentId)
         }
 

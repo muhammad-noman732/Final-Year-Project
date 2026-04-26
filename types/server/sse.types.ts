@@ -14,3 +14,7 @@ export interface SSEPaymentEvent {
 export interface SSEInsightsUpdatedEvent {
   type: "InsightsUpdated"
 }
+
+export interface SSENotificationEvent {
+  type: "NewNotification"
+}

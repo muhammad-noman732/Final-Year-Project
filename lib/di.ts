@@ -15,6 +15,7 @@ import { WebhookRepository } from "@/lib/repositories/webhook.repository"
 import { VCRepository } from "@/lib/repositories/vc.repository"
 import { ActivityLogRepository } from "@/lib/repositories/activityLog.repository"
 import { InsightRepository } from "@/lib/repositories/insight.repository"
+import { NotificationRepository } from "@/lib/repositories/notification.repository"
 
 // Services
 import { AuditService } from "@/lib/services/audit.service"
@@ -32,6 +33,7 @@ import { FeeAssignmentService } from "@/lib/services/feeAssignment.service"
 import { PaymentService } from "@/lib/services/payment.service"
 import { WebhookService } from "@/lib/services/webhook.service"
 import { VCService } from "@/lib/services/vc.service"
+import { NotificationService } from "@/lib/services/notification.service"
 
 // Controllers
 import { AuthController } from "@/lib/controllers/auth.controller"
@@ -48,8 +50,9 @@ import { PaymentController } from "@/lib/controllers/payment.controller"
 import { WebhookController } from "@/lib/controllers/webhook.controller"
 import { VCController } from "@/lib/controllers/vc.controller"
 import { CronController } from "@/lib/controllers/cron.controller"
+import { NotificationController } from "@/lib/controllers/notification.controller"
 
-// Repositories 
+// Repositories
 const userRepo = new UserRepository(prisma)
 const auditRepo = new AuditRepository(prisma)
 const tenantRepo = new TenantRepository(prisma)
@@ -64,6 +67,7 @@ const webhookRepo = new WebhookRepository(prisma)
 const vcRepo = new VCRepository(prisma)
 const activityLogRepo = new ActivityLogRepository(prisma)
 const insightRepo = new InsightRepository(prisma)
+const notificationRepo = new NotificationRepository(prisma)
 
 // Services
 const auditService = new AuditService(auditRepo)
@@ -76,10 +80,11 @@ const sessionService = new AcademicSessionService(sessionRepo, auditService)
 const userService = new UserService(userRepo, deptRepo, tenantRepo, emailService, auditService)
 const studentService = new StudentService(studentRepo, deptRepo, programRepo, sessionRepo, tenantRepo, emailService, auditService)
 const studentFeeService = new StudentFeeService(studentRepo, feeAssignmentRepo)
-const feeAssignmentService = new FeeAssignmentService(studentRepo, feeStructureRepo, feeAssignmentRepo, auditService)
+const notificationService = new NotificationService(notificationRepo)
+const feeAssignmentService = new FeeAssignmentService(studentRepo, feeStructureRepo, feeAssignmentRepo, auditService, notificationService)
 const feeStructureService = new FeeStructureService(feeStructureRepo, programRepo, auditService, feeAssignmentService, feeAssignmentRepo, studentRepo)
 const paymentService = new PaymentService(paymentRepo, studentRepo)
-const webhookService = new WebhookService(paymentRepo, webhookRepo, studentRepo, activityLogRepo)
+const webhookService = new WebhookService(paymentRepo, webhookRepo, studentRepo, activityLogRepo, notificationService, userRepo)
 export const vcService = new VCService(vcRepo, insightRepo)
 
 // Controllers
@@ -97,55 +102,4 @@ export const paymentController = new PaymentController(paymentService)
 export const webhookController = new WebhookController(webhookService)
 export const vcController = new VCController(vcService)
 export const cronController = new CronController(tenantService, vcService)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+export const notificationController = new NotificationController(notificationService)

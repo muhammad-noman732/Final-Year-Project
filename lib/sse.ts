@@ -7,7 +7,7 @@
  * service calls broadcastPayment() to publish onto the shared channel.
  */
 
-import { redisPublisher, sseChannel } from "@/lib/redis"
+import { redisPublisher, sseChannel, notificationChannel } from "@/lib/redis"
 import type { SSEPaymentEvent } from "@/types/server/sse.types"
 
 export type { SSEPaymentEvent }
@@ -32,5 +32,21 @@ export async function broadcastInsightsUpdated(tenantId: string): Promise<void> 
     await redisPublisher.publish(sseChannel(tenantId), JSON.stringify({ type: "InsightsUpdated" }))
   } catch (err) {
     console.error("[SSE] Failed to broadcast insights:updated event via Redis:", err)
+  }
+}
+
+/**
+ * Publish a NewNotification ping to a specific user's SSE stream.
+ * The client reacts by invalidating its RTK Query notification cache.
+ * Errors are swallowed so notification failures never break payment processing.
+ */
+export async function broadcastNotification(userId: string, _payload: unknown): Promise<void> {
+  try {
+    await redisPublisher.publish(
+      notificationChannel(userId),
+      JSON.stringify({ type: "NewNotification" }),
+    )
+  } catch (err) {
+    console.error("[SSE] Failed to broadcast notification event via Redis:", err)
   }
 }

@@ -48,3 +48,8 @@ export function createRedisSubscriber(): Redis {
 export function sseChannel(tenantId: string): string {
   return `sse:payments:${tenantId}`
 }
+
+/** Redis pub/sub channel name for a given user's notification events. */
+export function notificationChannel(userId: string): string {
+  return `sse:notifications:${userId}`
+}

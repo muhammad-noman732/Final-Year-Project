@@ -21,6 +21,7 @@ export const baseApi = createApi({
     "Payment",
     "VCDashboard",
     "VCStudents",
+    "Notification",
   ],
 
   endpoints: () => ({}),

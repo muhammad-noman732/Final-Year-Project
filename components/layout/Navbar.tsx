@@ -1,7 +1,8 @@
 "use client";
 
-import { Bell, LogOut, Menu, Search } from "lucide-react";
+import { LogOut, Menu, Search } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { NotificationBell } from "@/components/layout/NotificationBell";
 import Link from "next/link";
 
 interface NavbarProps {
@@ -57,13 +58,7 @@ export default function Navbar({ title, userName, userRole, onMenuClick, showLiv
             {/* ── Right ── */}
             <div className="flex items-center gap-2">
                 {/* Bell */}
-                <button
-                    className="relative w-8 h-8 rounded-lg flex items-center justify-center text-slate-500 hover:text-slate-300 hover:bg-white/[0.05] transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-gold-500/50"
-                    aria-label="Notifications"
-                >
-                    <Bell className="w-4 h-4" />
-                    <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-rose-500" />
-                </button>
+                <NotificationBell />
 
                 {/* Divider */}
                 <div className="hidden sm:block w-px h-5 bg-white/[0.06] mx-0.5" aria-hidden="true" />

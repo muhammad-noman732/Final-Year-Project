@@ -5,6 +5,8 @@ import type { PaymentRepository } from "@/lib/repositories/payment.repository"
 import type { WebhookRepository } from "@/lib/repositories/webhook.repository"
 import type { StudentRepository } from "@/lib/repositories/student.repository"
 import type { ActivityLogRepository } from "@/lib/repositories/activityLog.repository"
+import type { UserRepository } from "@/lib/repositories/user.repository"
+import type { NotificationService } from "@/lib/services/notification.service"
 import {
   InvalidWebhookSignatureError,
   PaymentAmountMismatchError,
@@ -20,6 +22,8 @@ export class WebhookService {
     private readonly webhookRepository: WebhookRepository,
     private readonly studentRepo: StudentRepository,
     private readonly activityLogRepo: ActivityLogRepository,
+    private readonly notificationService: NotificationService,
+    private readonly userRepo: UserRepository,
   ) {}
 
   async processWebhookEvent(rawBody: string, signature: string): Promise<void> {
@@ -110,11 +114,13 @@ export class WebhookService {
       `Payment fulfilled: student=${meta.studentRollNo} amount=PKR ${pi.amount} pi=${pi.id}`,
     )
 
-    // Fetch student once for department name + cache revalidation
+    // Fetch student once for department name, cache revalidation, and notification userId
     let departmentName = ""
+    let studentUserId: string | null = null
     try {
       const student = await this.studentRepo.findById(meta.tenantId, meta.studentId)
       departmentName = student?.department?.name ?? ""
+      studentUserId = student?.user?.id ?? null
 
       if (student?.user?.id) {
         void revalidateStudentFee(meta.tenantId, student.user.id)
@@ -140,6 +146,49 @@ export class WebhookService {
           paidAt: new Date().toISOString(),
         },
       })
+
+      // Notify the student who paid (fire-and-forget)
+      if (studentUserId) {
+        this.notificationService
+          .notifyUser({
+            tenantId: meta.tenantId,
+            userId: studentUserId,
+            type: "PAYMENT_RECEIVED",
+            title: "Payment Confirmed",
+            body: `Your payment of PKR ${pi.amount.toLocaleString()} for ${meta.semesterName} has been received.`,
+            data: { paymentId: payment.id, amount: pi.amount },
+          })
+          .catch((err: unknown) => {
+            logger.error(
+              { event: "notification.payment_student.failed", err },
+              "Failed to notify student of payment",
+            )
+          })
+      }
+
+      // Notify all ADMIN and VC users in the tenant (fire-and-forget)
+      this.userRepo
+        .findIdsByRole(meta.tenantId, ["ADMIN" as const, "VC" as const])
+        .then((adminVcIds) =>
+          this.notificationService.fanOut({
+            tenantId: meta.tenantId,
+            userIds: adminVcIds,
+            type: "PAYMENT_RECEIVED",
+            title: "Payment Received",
+            body: `${meta.studentName} (${meta.studentRollNo}) paid PKR ${pi.amount.toLocaleString()} — ${meta.semesterName}.`,
+            data: {
+              paymentId: payment.id,
+              studentId: meta.studentId,
+              amount: pi.amount,
+            },
+          }),
+        )
+        .catch((err: unknown) => {
+          logger.error(
+            { event: "notification.payment_admin_vc.failed", err },
+            "Failed to notify admin/vc of payment",
+          )
+        })
 
       // Persist to ActivityLog so the VC feed has historical data on mount
       try {

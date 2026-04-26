@@ -1,9 +1,3 @@
-// ═══════════════════════════════════════════════════════════════
-//  Audit Log Helper
-//  Rule: Every important action creates an AuditLog record.
-//  This is append-only — records are NEVER updated or deleted.
-// ═══════════════════════════════════════════════════════════════
-
 import prisma from "@/lib/prisma"
 import { logger } from "@/lib/logger"
 

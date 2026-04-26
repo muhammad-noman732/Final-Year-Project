@@ -1,4 +1,4 @@
-import type { Prisma, PrismaClient } from "@/app/generated/prisma/client"
+import type { Prisma, PrismaClient, Role } from "@/app/generated/prisma/client"
 import type { UserWithTenant, UserBasic } from "@/types/server/auth.types"
 
 //Admin select shape (never includes passwordHash) 
@@ -129,5 +129,14 @@ export class UserRepository {
       data,
       select: ADMIN_USER_SELECT,
     })
+  }
+
+  /** Returns user IDs for all active users with the given roles in a tenant. */
+  async findIdsByRole(tenantId: string, roles: Role[]): Promise<string[]> {
+    const users = await this.db.user.findMany({
+      where: { tenantId, role: { in: roles }, isActive: true },
+      select: { id: true },
+    })
+    return users.map((u) => u.id)
   }
 }

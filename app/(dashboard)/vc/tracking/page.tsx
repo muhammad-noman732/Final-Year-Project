@@ -1,5 +1,6 @@
 "use client"
 
+import { Suspense } from "react"
 import { Skeleton } from "boneyard-js/react"
 import {
   Users, CheckCircle2, AlertTriangle, DollarSign,
@@ -121,8 +122,7 @@ function DeptGrid({
   )
 }
 
-// ─── Semester Grid ────────────────────────────────────────────────────────────
-
+// Semester Grid 
 function SemGrid({ semesters }: { semesters: VCSemesterBreakdown[] }) {
   if (semesters.length === 0) {
     return (
@@ -174,7 +174,7 @@ function SemGrid({ semesters }: { semesters: VCSemesterBreakdown[] }) {
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
-export default function VCTrackingPage() {
+function VCTrackingContent() {
   const {
     tab, scope, filters,
     departments, programs, sessions,
@@ -354,5 +354,22 @@ export default function VCTrackingPage() {
         </AnimatePresence>
       )}
     </div>
+  )
+}
+
+export default function VCTrackingPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex h-[50vh] flex-col items-center justify-center gap-4">
+          <div className="h-6 w-6 animate-spin rounded-full border-2 border-white/20 border-t-white/80" />
+          <p className="text-[11px] uppercase tracking-widest text-muted-foreground/60 animate-pulse font-medium">
+            Loading Tracking Data...
+          </p>
+        </div>
+      }
+    >
+      <VCTrackingContent />
+    </Suspense>
   )
 }
