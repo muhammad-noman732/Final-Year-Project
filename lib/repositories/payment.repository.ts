@@ -182,27 +182,18 @@ export class PaymentRepository {
 
 
 
-  //  Receipt number generation 
+  //  Receipt number generation
 
-  async generateReceiptNumber(tenantId: string): Promise<string> {
+  async generateReceiptNumber(tenantId: string, stripePaymentIntentId: string): Promise<string> {
     const year = new Date().getFullYear()
-    const count = await this.db.payment.count({
-      where: {
-        tenantId,
-        createdAt: {
-          gte: new Date(`${year}-01-01`),
-          lt: new Date(`${year + 1}-01-01`),
-        },
-      },
-    })
-
     const tenant = await this.db.tenant.findUnique({
       where: { id: tenantId },
       select: { shortName: true },
     })
-
     const prefix = tenant?.shortName?.toUpperCase() ?? "UNI"
-    const sequence = String(count + 1).padStart(5, "0")
-    return `${prefix}-${year}-${sequence}`
+    // Derive a unique suffix from the PI ID (globally unique per Stripe contract).
+    // This avoids the count+1 race that collapses under concurrent inserts.
+    const suffix = stripePaymentIntentId.replace(/[^A-Za-z0-9]/g, "").slice(-8).toUpperCase()
+    return `${prefix}-${year}-${suffix}`
   }
 }

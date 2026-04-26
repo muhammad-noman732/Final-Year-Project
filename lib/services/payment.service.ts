@@ -16,12 +16,35 @@ import Stripe from "stripe"
 import { logger } from "@/lib/logger"
 import { revalidateStudentFee } from "@/lib/cache"
 import type { StudentRepository } from "../repositories/student.repository"
+import { withRetry } from "@/lib/utils/retry"
+import { withTimeout } from "@/lib/utils/timeout"
+
+const STRIPE_TIMEOUT_MS = 10_000
+
+function isStripeRetryable(error: Error): boolean {
+  if (error instanceof Stripe.errors.StripeConnectionError) return true
+  if (error instanceof Stripe.errors.StripeError) {
+    const code = error.statusCode ?? 0
+    return code === 429 || code >= 500
+  }
+  const transient = ["ECONNRESET", "ECONNREFUSED", "ETIMEDOUT", "socket hang up"]
+  return transient.some((msg) => error.message.includes(msg))
+}
+
+function isPrismaP2002(err: unknown): boolean {
+  return (
+    typeof err === "object" &&
+    err !== null &&
+    "code" in err &&
+    (err as { code: string }).code === "P2002"
+  )
+}
 
 export class PaymentService {
   constructor(
     private readonly paymentRepository: PaymentRepository,
     private readonly studentRepo: StudentRepository,
-  ) { }
+  ) {}
 
   async createPaymentIntent(
     dto: CreatePaymentIntentPayload & { tenantId: string; userId: string },
@@ -62,13 +85,32 @@ export class PaymentService {
       )
 
     if (existingPayment?.stripePaymentIntentId) {
+      // Retrieve the PI outside of try/catch so FeeAlreadyPaidError propagates normally
+      let existingPI: Stripe.PaymentIntent | null = null
       try {
-        const existingPI = await stripe.paymentIntents.retrieve(
-          existingPayment.stripePaymentIntentId,
+        existingPI = await withRetry(
+          () =>
+            withTimeout(
+              stripe.paymentIntents.retrieve(existingPayment.stripePaymentIntentId!),
+              STRIPE_TIMEOUT_MS,
+              "stripe.paymentIntents.retrieve",
+            ),
+          "stripe.paymentIntents.retrieve",
+          { shouldRetry: isStripeRetryable },
         )
+      } catch (err) {
+        logger.error(
+          {
+            event: "payment.retrieve_pi_failed",
+            piId: existingPayment.stripePaymentIntentId,
+            err,
+          },
+          "Failed to retrieve existing PI; will attempt to create a new PI",
+        )
+      }
 
-        // If it's already succeeded but the status in our DB is not updated yet (due to localhost/no webhook),
-        // we shouldn't create a new one. This prevents the 409 error.
+      if (existingPI) {
+        // PI already collected — fulfil inline if DB is stale (e.g. webhook missed on localhost)
         if (existingPI.status === "succeeded") {
           logger.info(
             { event: "payment.inline_fulfil", pi: existingPI.id },
@@ -82,14 +124,11 @@ export class PaymentService {
             stripeResponse: existingPI as unknown as object,
             paidAt: new Date(),
           })
-
-          // Clear cache so the student dashboard is immediately correct
           void revalidateStudentFee(dto.tenantId, dto.userId)
-
           throw new FeeAlreadyPaidError(dto.feeAssignmentId)
         }
 
-        // Reuse if still in a confirmable state
+        // Reuse if still confirmable — no new PI needed
         if (
           existingPI.status === "requires_payment_method" ||
           existingPI.status === "requires_confirmation" ||
@@ -101,9 +140,6 @@ export class PaymentService {
             amountPkr: existingPI.amount,
           }
         }
-      } catch (err) {
-        // Log error but continue to create new PI if retrieval fails
-        console.error("[PaymentService] Failed to retrieve existing PI:", err)
       }
     }
 
@@ -120,28 +156,36 @@ export class PaymentService {
 
     const idempotencyKey = `pi-create-${dto.feeAssignmentId}-${dto.tenantId}`
 
-    const paymentIntent = await stripe.paymentIntents.create(
-      {
-        amount: assignment.amountDue,
-        currency: "pkr",
-        automatic_payment_methods: {
-          enabled: true,
-          allow_redirects: "never",
-        },
-        metadata: metadata as unknown as Stripe.MetadataParam,
-        receipt_email: assignment.student.user.email,
-        description: [
-          assignment.student.program.name,
-          `Semester ${assignment.feeStructure?.semester ?? ""}`,
-          student.studentId,
-        ].join(" — "),
-        setup_future_usage: "off_session",
-      },
-      { idempotencyKey },
+    const paymentIntent = await withRetry(
+      () =>
+        withTimeout(
+          stripe.paymentIntents.create(
+            {
+              amount: assignment.amountDue,
+              currency: "pkr",
+              automatic_payment_methods: {
+                enabled: true,
+                allow_redirects: "never",
+              },
+              metadata: metadata as unknown as Stripe.MetadataParam,
+              receipt_email: assignment.student.user.email,
+              description: [
+                assignment.student.program.name,
+                `Semester ${assignment.feeStructure?.semester ?? ""}`,
+                student.studentId,
+              ].join(" — "),
+              setup_future_usage: "off_session",
+            },
+            { idempotencyKey },
+          ),
+          STRIPE_TIMEOUT_MS,
+          "stripe.paymentIntents.create",
+        ),
+      "stripe.paymentIntents.create",
+      { shouldRetry: isStripeRetryable },
     )
 
-    // If we have an existing payment record but we just got an idempotency hit (same PI ID),
-    // we should NOT try to create it again.
+    // Stripe's idempotency key returned the same PI already in our DB — nothing to insert
     if (existingPayment?.stripePaymentIntentId === paymentIntent.id) {
       return {
         clientSecret: paymentIntent.client_secret!,
@@ -152,16 +196,42 @@ export class PaymentService {
 
     const receiptNumber = await this.paymentRepository.generateReceiptNumber(
       dto.tenantId,
+      paymentIntent.id,
     )
 
-    await this.paymentRepository.createPaymentRecord({
-      tenantId: dto.tenantId,
-      studentId: student.id,
-      feeAssignmentId: dto.feeAssignmentId,
-      stripePaymentIntentId: paymentIntent.id,
-      amount: assignment.amountDue,
-      receiptNumber,
-    })
+    try {
+      await this.paymentRepository.createPaymentRecord({
+        tenantId: dto.tenantId,
+        studentId: student.id,
+        feeAssignmentId: dto.feeAssignmentId,
+        stripePaymentIntentId: paymentIntent.id,
+        amount: assignment.amountDue,
+        receiptNumber,
+      })
+    } catch (err) {
+      // Concurrent request beat us to the insert — recover by returning the same PI payload
+      if (isPrismaP2002(err)) {
+        logger.info(
+          {
+            event: "payment.duplicate_insert_recovered",
+            feeAssignmentId: dto.feeAssignmentId,
+            piId: paymentIntent.id,
+          },
+          "P2002 on payment insert (concurrent request); returning existing PI payload",
+        )
+        const recovered = await this.paymentRepository.findPaymentByStripeIntentId(
+          paymentIntent.id,
+        )
+        if (recovered) {
+          return {
+            clientSecret: paymentIntent.client_secret!,
+            paymentIntentId: paymentIntent.id,
+            amountPkr: assignment.amountDue,
+          }
+        }
+      }
+      throw err
+    }
 
     return {
       clientSecret: paymentIntent.client_secret!,
@@ -169,6 +239,4 @@ export class PaymentService {
       amountPkr: assignment.amountDue,
     }
   }
-
-
 }
