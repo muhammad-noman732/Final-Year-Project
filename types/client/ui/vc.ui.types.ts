@@ -1,4 +1,4 @@
-import type { SSEPaymentEvent } from "@/types/server/sse.types"
+import type { SSEPaymentEvent, SSERegistrationImportedEvent } from "@/types/server/sse.types"
 import type { VCFeeStatus, VCTimeRange, VCDashboardOverview, VCDepartmentPerformance, VCTrendPoint } from "@/types/server/vc.types"
 
 export interface SSELiveTransaction {
@@ -37,6 +37,8 @@ export interface UseSSEReturn {
   latestEvent: SSEPaymentEvent | null
   clearLatestEvent: () => void
   insightsUpdatedAt: number | null
+  registrationImportedAt: number | null
+  latestRegistrationEvent: SSERegistrationImportedEvent | null
 }
 
 // ─── Health Score ──────────────────────────────────────────────────────────────

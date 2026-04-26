@@ -7,9 +7,13 @@ export class InsightRepository {
     return this.db.insight.createMany({ data })
   }
 
-  findUnread(tenantId: string) {
+  findUnread(tenantId: string, module?: string) {
     return this.db.insight.findMany({
-      where: { tenantId, isRead: false },
+      where: {
+        tenantId,
+        isRead: false,
+        ...(module ? { module } : {}),
+      },
       orderBy: { createdAt: "desc" },
     })
   }
@@ -21,6 +25,11 @@ export class InsightRepository {
     })
   }
 
+  deleteByModule(tenantId: string, module: string) {
+    return this.db.insight.deleteMany({ where: { tenantId, module } })
+  }
+
+  /** @deprecated — use deleteByModule to avoid cross-module deletion */
   deleteAllForTenant(tenantId: string) {
     return this.db.insight.deleteMany({ where: { tenantId } })
   }

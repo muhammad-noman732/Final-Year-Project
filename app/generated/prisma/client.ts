@@ -131,3 +131,13 @@ export type ActivityLog = Prisma.ActivityLogModel
  * 
  */
 export type Insight = Prisma.InsightModel
+/**
+ * Model Applicant
+ * 
+ */
+export type Applicant = Prisma.ApplicantModel
+/**
+ * Model ImportBatch
+ * 
+ */
+export type ImportBatch = Prisma.ImportBatchModel

@@ -16,6 +16,8 @@ import { VCRepository } from "@/lib/repositories/vc.repository"
 import { ActivityLogRepository } from "@/lib/repositories/activityLog.repository"
 import { InsightRepository } from "@/lib/repositories/insight.repository"
 import { NotificationRepository } from "@/lib/repositories/notification.repository"
+import { ApplicantRepository } from "@/lib/repositories/applicant.repository"
+import { ImportBatchRepository } from "@/lib/repositories/importBatch.repository"
 
 // Services
 import { AuditService } from "@/lib/services/audit.service"
@@ -34,6 +36,7 @@ import { PaymentService } from "@/lib/services/payment.service"
 import { WebhookService } from "@/lib/services/webhook.service"
 import { VCService } from "@/lib/services/vc.service"
 import { NotificationService } from "@/lib/services/notification.service"
+import { RegistrationService } from "@/lib/services/registration.service"
 
 // Controllers
 import { AuthController } from "@/lib/controllers/auth.controller"
@@ -51,6 +54,7 @@ import { WebhookController } from "@/lib/controllers/webhook.controller"
 import { VCController } from "@/lib/controllers/vc.controller"
 import { CronController } from "@/lib/controllers/cron.controller"
 import { NotificationController } from "@/lib/controllers/notification.controller"
+import { RegistrationController } from "@/lib/controllers/registration.controller"
 
 // Repositories
 const userRepo = new UserRepository(prisma)
@@ -68,6 +72,8 @@ const vcRepo = new VCRepository(prisma)
 const activityLogRepo = new ActivityLogRepository(prisma)
 const insightRepo = new InsightRepository(prisma)
 const notificationRepo = new NotificationRepository(prisma)
+const applicantRepo = new ApplicantRepository(prisma)
+const importBatchRepo = new ImportBatchRepository(prisma)
 
 // Services
 const auditService = new AuditService(auditRepo)
@@ -86,6 +92,7 @@ const feeStructureService = new FeeStructureService(feeStructureRepo, programRep
 const paymentService = new PaymentService(paymentRepo, studentRepo)
 const webhookService = new WebhookService(paymentRepo, webhookRepo, studentRepo, activityLogRepo, notificationService, userRepo)
 export const vcService = new VCService(vcRepo, insightRepo)
+const registrationService = new RegistrationService(applicantRepo, importBatchRepo, activityLogRepo, insightRepo, sessionRepo)
 
 // Controllers
 export const authController = new AuthController(authService)
@@ -101,5 +108,6 @@ export const feeAssignmentController = new FeeAssignmentController(feeAssignment
 export const paymentController = new PaymentController(paymentService)
 export const webhookController = new WebhookController(webhookService)
 export const vcController = new VCController(vcService)
-export const cronController = new CronController(tenantService, vcService)
+export const cronController = new CronController(tenantService, vcService, registrationService)
 export const notificationController = new NotificationController(notificationService)
+export const registrationController = new RegistrationController(registrationService)

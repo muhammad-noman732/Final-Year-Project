@@ -304,6 +304,8 @@ export type TenantWhereInput = {
   notifications?: Prisma.NotificationListRelationFilter
   auditLogs?: Prisma.AuditLogListRelationFilter
   subscription?: Prisma.XOR<Prisma.SubscriptionNullableScalarRelationFilter, Prisma.SubscriptionWhereInput> | null
+  applicants?: Prisma.ApplicantListRelationFilter
+  importBatches?: Prisma.ImportBatchListRelationFilter
 }
 
 export type TenantOrderByWithRelationInput = {
@@ -334,6 +336,8 @@ export type TenantOrderByWithRelationInput = {
   notifications?: Prisma.NotificationOrderByRelationAggregateInput
   auditLogs?: Prisma.AuditLogOrderByRelationAggregateInput
   subscription?: Prisma.SubscriptionOrderByWithRelationInput
+  applicants?: Prisma.ApplicantOrderByRelationAggregateInput
+  importBatches?: Prisma.ImportBatchOrderByRelationAggregateInput
 }
 
 export type TenantWhereUniqueInput = Prisma.AtLeast<{
@@ -367,6 +371,8 @@ export type TenantWhereUniqueInput = Prisma.AtLeast<{
   notifications?: Prisma.NotificationListRelationFilter
   auditLogs?: Prisma.AuditLogListRelationFilter
   subscription?: Prisma.XOR<Prisma.SubscriptionNullableScalarRelationFilter, Prisma.SubscriptionWhereInput> | null
+  applicants?: Prisma.ApplicantListRelationFilter
+  importBatches?: Prisma.ImportBatchListRelationFilter
 }, "id" | "slug" | "domain">
 
 export type TenantOrderByWithAggregationInput = {
@@ -441,6 +447,8 @@ export type TenantCreateInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
   subscription?: Prisma.SubscriptionCreateNestedOneWithoutTenantInput
+  applicants?: Prisma.ApplicantCreateNestedManyWithoutTenantInput
+  importBatches?: Prisma.ImportBatchCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateInput = {
@@ -471,6 +479,8 @@ export type TenantUncheckedCreateInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
   subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutTenantInput
+  applicants?: Prisma.ApplicantUncheckedCreateNestedManyWithoutTenantInput
+  importBatches?: Prisma.ImportBatchUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUpdateInput = {
@@ -501,6 +511,8 @@ export type TenantUpdateInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
   subscription?: Prisma.SubscriptionUpdateOneWithoutTenantNestedInput
+  applicants?: Prisma.ApplicantUpdateManyWithoutTenantNestedInput
+  importBatches?: Prisma.ImportBatchUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateInput = {
@@ -531,6 +543,8 @@ export type TenantUncheckedUpdateInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
   subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutTenantNestedInput
+  applicants?: Prisma.ApplicantUncheckedUpdateManyWithoutTenantNestedInput
+  importBatches?: Prisma.ImportBatchUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateManyInput = {
@@ -863,6 +877,34 @@ export type TenantUpdateOneRequiredWithoutSubscriptionNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutSubscriptionInput, Prisma.TenantUpdateWithoutSubscriptionInput>, Prisma.TenantUncheckedUpdateWithoutSubscriptionInput>
 }
 
+export type TenantCreateNestedOneWithoutApplicantsInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutApplicantsInput, Prisma.TenantUncheckedCreateWithoutApplicantsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutApplicantsInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutApplicantsNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutApplicantsInput, Prisma.TenantUncheckedCreateWithoutApplicantsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutApplicantsInput
+  upsert?: Prisma.TenantUpsertWithoutApplicantsInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutApplicantsInput, Prisma.TenantUpdateWithoutApplicantsInput>, Prisma.TenantUncheckedUpdateWithoutApplicantsInput>
+}
+
+export type TenantCreateNestedOneWithoutImportBatchesInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutImportBatchesInput, Prisma.TenantUncheckedCreateWithoutImportBatchesInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutImportBatchesInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutImportBatchesNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutImportBatchesInput, Prisma.TenantUncheckedCreateWithoutImportBatchesInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutImportBatchesInput
+  upsert?: Prisma.TenantUpsertWithoutImportBatchesInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutImportBatchesInput, Prisma.TenantUpdateWithoutImportBatchesInput>, Prisma.TenantUncheckedUpdateWithoutImportBatchesInput>
+}
+
 export type TenantCreateWithoutUsersInput = {
   id?: string
   name: string
@@ -890,6 +932,8 @@ export type TenantCreateWithoutUsersInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
   subscription?: Prisma.SubscriptionCreateNestedOneWithoutTenantInput
+  applicants?: Prisma.ApplicantCreateNestedManyWithoutTenantInput
+  importBatches?: Prisma.ImportBatchCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutUsersInput = {
@@ -919,6 +963,8 @@ export type TenantUncheckedCreateWithoutUsersInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
   subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutTenantInput
+  applicants?: Prisma.ApplicantUncheckedCreateNestedManyWithoutTenantInput
+  importBatches?: Prisma.ImportBatchUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutUsersInput = {
@@ -964,6 +1010,8 @@ export type TenantUpdateWithoutUsersInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
   subscription?: Prisma.SubscriptionUpdateOneWithoutTenantNestedInput
+  applicants?: Prisma.ApplicantUpdateManyWithoutTenantNestedInput
+  importBatches?: Prisma.ImportBatchUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutUsersInput = {
@@ -993,6 +1041,8 @@ export type TenantUncheckedUpdateWithoutUsersInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
   subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutTenantNestedInput
+  applicants?: Prisma.ApplicantUncheckedUpdateManyWithoutTenantNestedInput
+  importBatches?: Prisma.ImportBatchUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutAcademicSessionsInput = {
@@ -1022,6 +1072,8 @@ export type TenantCreateWithoutAcademicSessionsInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
   subscription?: Prisma.SubscriptionCreateNestedOneWithoutTenantInput
+  applicants?: Prisma.ApplicantCreateNestedManyWithoutTenantInput
+  importBatches?: Prisma.ImportBatchCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutAcademicSessionsInput = {
@@ -1051,6 +1103,8 @@ export type TenantUncheckedCreateWithoutAcademicSessionsInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
   subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutTenantInput
+  applicants?: Prisma.ApplicantUncheckedCreateNestedManyWithoutTenantInput
+  importBatches?: Prisma.ImportBatchUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutAcademicSessionsInput = {
@@ -1096,6 +1150,8 @@ export type TenantUpdateWithoutAcademicSessionsInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
   subscription?: Prisma.SubscriptionUpdateOneWithoutTenantNestedInput
+  applicants?: Prisma.ApplicantUpdateManyWithoutTenantNestedInput
+  importBatches?: Prisma.ImportBatchUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutAcademicSessionsInput = {
@@ -1125,6 +1181,8 @@ export type TenantUncheckedUpdateWithoutAcademicSessionsInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
   subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutTenantNestedInput
+  applicants?: Prisma.ApplicantUncheckedUpdateManyWithoutTenantNestedInput
+  importBatches?: Prisma.ImportBatchUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutDepartmentsInput = {
@@ -1154,6 +1212,8 @@ export type TenantCreateWithoutDepartmentsInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
   subscription?: Prisma.SubscriptionCreateNestedOneWithoutTenantInput
+  applicants?: Prisma.ApplicantCreateNestedManyWithoutTenantInput
+  importBatches?: Prisma.ImportBatchCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutDepartmentsInput = {
@@ -1183,6 +1243,8 @@ export type TenantUncheckedCreateWithoutDepartmentsInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
   subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutTenantInput
+  applicants?: Prisma.ApplicantUncheckedCreateNestedManyWithoutTenantInput
+  importBatches?: Prisma.ImportBatchUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutDepartmentsInput = {
@@ -1228,6 +1290,8 @@ export type TenantUpdateWithoutDepartmentsInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
   subscription?: Prisma.SubscriptionUpdateOneWithoutTenantNestedInput
+  applicants?: Prisma.ApplicantUpdateManyWithoutTenantNestedInput
+  importBatches?: Prisma.ImportBatchUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutDepartmentsInput = {
@@ -1257,6 +1321,8 @@ export type TenantUncheckedUpdateWithoutDepartmentsInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
   subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutTenantNestedInput
+  applicants?: Prisma.ApplicantUncheckedUpdateManyWithoutTenantNestedInput
+  importBatches?: Prisma.ImportBatchUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutProgramsInput = {
@@ -1286,6 +1352,8 @@ export type TenantCreateWithoutProgramsInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
   subscription?: Prisma.SubscriptionCreateNestedOneWithoutTenantInput
+  applicants?: Prisma.ApplicantCreateNestedManyWithoutTenantInput
+  importBatches?: Prisma.ImportBatchCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutProgramsInput = {
@@ -1315,6 +1383,8 @@ export type TenantUncheckedCreateWithoutProgramsInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
   subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutTenantInput
+  applicants?: Prisma.ApplicantUncheckedCreateNestedManyWithoutTenantInput
+  importBatches?: Prisma.ImportBatchUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutProgramsInput = {
@@ -1360,6 +1430,8 @@ export type TenantUpdateWithoutProgramsInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
   subscription?: Prisma.SubscriptionUpdateOneWithoutTenantNestedInput
+  applicants?: Prisma.ApplicantUpdateManyWithoutTenantNestedInput
+  importBatches?: Prisma.ImportBatchUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutProgramsInput = {
@@ -1389,6 +1461,8 @@ export type TenantUncheckedUpdateWithoutProgramsInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
   subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutTenantNestedInput
+  applicants?: Prisma.ApplicantUncheckedUpdateManyWithoutTenantNestedInput
+  importBatches?: Prisma.ImportBatchUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutStudentsInput = {
@@ -1418,6 +1492,8 @@ export type TenantCreateWithoutStudentsInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
   subscription?: Prisma.SubscriptionCreateNestedOneWithoutTenantInput
+  applicants?: Prisma.ApplicantCreateNestedManyWithoutTenantInput
+  importBatches?: Prisma.ImportBatchCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutStudentsInput = {
@@ -1447,6 +1523,8 @@ export type TenantUncheckedCreateWithoutStudentsInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
   subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutTenantInput
+  applicants?: Prisma.ApplicantUncheckedCreateNestedManyWithoutTenantInput
+  importBatches?: Prisma.ImportBatchUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutStudentsInput = {
@@ -1492,6 +1570,8 @@ export type TenantUpdateWithoutStudentsInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
   subscription?: Prisma.SubscriptionUpdateOneWithoutTenantNestedInput
+  applicants?: Prisma.ApplicantUpdateManyWithoutTenantNestedInput
+  importBatches?: Prisma.ImportBatchUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutStudentsInput = {
@@ -1521,6 +1601,8 @@ export type TenantUncheckedUpdateWithoutStudentsInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
   subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutTenantNestedInput
+  applicants?: Prisma.ApplicantUncheckedUpdateManyWithoutTenantNestedInput
+  importBatches?: Prisma.ImportBatchUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutFeeStructuresInput = {
@@ -1550,6 +1632,8 @@ export type TenantCreateWithoutFeeStructuresInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
   subscription?: Prisma.SubscriptionCreateNestedOneWithoutTenantInput
+  applicants?: Prisma.ApplicantCreateNestedManyWithoutTenantInput
+  importBatches?: Prisma.ImportBatchCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutFeeStructuresInput = {
@@ -1579,6 +1663,8 @@ export type TenantUncheckedCreateWithoutFeeStructuresInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
   subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutTenantInput
+  applicants?: Prisma.ApplicantUncheckedCreateNestedManyWithoutTenantInput
+  importBatches?: Prisma.ImportBatchUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutFeeStructuresInput = {
@@ -1624,6 +1710,8 @@ export type TenantUpdateWithoutFeeStructuresInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
   subscription?: Prisma.SubscriptionUpdateOneWithoutTenantNestedInput
+  applicants?: Prisma.ApplicantUpdateManyWithoutTenantNestedInput
+  importBatches?: Prisma.ImportBatchUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutFeeStructuresInput = {
@@ -1653,6 +1741,8 @@ export type TenantUncheckedUpdateWithoutFeeStructuresInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
   subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutTenantNestedInput
+  applicants?: Prisma.ApplicantUncheckedUpdateManyWithoutTenantNestedInput
+  importBatches?: Prisma.ImportBatchUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutFeeAssignmentsInput = {
@@ -1682,6 +1772,8 @@ export type TenantCreateWithoutFeeAssignmentsInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
   subscription?: Prisma.SubscriptionCreateNestedOneWithoutTenantInput
+  applicants?: Prisma.ApplicantCreateNestedManyWithoutTenantInput
+  importBatches?: Prisma.ImportBatchCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutFeeAssignmentsInput = {
@@ -1711,6 +1803,8 @@ export type TenantUncheckedCreateWithoutFeeAssignmentsInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
   subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutTenantInput
+  applicants?: Prisma.ApplicantUncheckedCreateNestedManyWithoutTenantInput
+  importBatches?: Prisma.ImportBatchUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutFeeAssignmentsInput = {
@@ -1756,6 +1850,8 @@ export type TenantUpdateWithoutFeeAssignmentsInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
   subscription?: Prisma.SubscriptionUpdateOneWithoutTenantNestedInput
+  applicants?: Prisma.ApplicantUpdateManyWithoutTenantNestedInput
+  importBatches?: Prisma.ImportBatchUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutFeeAssignmentsInput = {
@@ -1785,6 +1881,8 @@ export type TenantUncheckedUpdateWithoutFeeAssignmentsInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
   subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutTenantNestedInput
+  applicants?: Prisma.ApplicantUncheckedUpdateManyWithoutTenantNestedInput
+  importBatches?: Prisma.ImportBatchUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutPaymentsInput = {
@@ -1814,6 +1912,8 @@ export type TenantCreateWithoutPaymentsInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
   subscription?: Prisma.SubscriptionCreateNestedOneWithoutTenantInput
+  applicants?: Prisma.ApplicantCreateNestedManyWithoutTenantInput
+  importBatches?: Prisma.ImportBatchCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutPaymentsInput = {
@@ -1843,6 +1943,8 @@ export type TenantUncheckedCreateWithoutPaymentsInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
   subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutTenantInput
+  applicants?: Prisma.ApplicantUncheckedCreateNestedManyWithoutTenantInput
+  importBatches?: Prisma.ImportBatchUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutPaymentsInput = {
@@ -1888,6 +1990,8 @@ export type TenantUpdateWithoutPaymentsInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
   subscription?: Prisma.SubscriptionUpdateOneWithoutTenantNestedInput
+  applicants?: Prisma.ApplicantUpdateManyWithoutTenantNestedInput
+  importBatches?: Prisma.ImportBatchUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutPaymentsInput = {
@@ -1917,6 +2021,8 @@ export type TenantUncheckedUpdateWithoutPaymentsInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
   subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutTenantNestedInput
+  applicants?: Prisma.ApplicantUncheckedUpdateManyWithoutTenantNestedInput
+  importBatches?: Prisma.ImportBatchUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutEmailLogsInput = {
@@ -1946,6 +2052,8 @@ export type TenantCreateWithoutEmailLogsInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
   subscription?: Prisma.SubscriptionCreateNestedOneWithoutTenantInput
+  applicants?: Prisma.ApplicantCreateNestedManyWithoutTenantInput
+  importBatches?: Prisma.ImportBatchCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutEmailLogsInput = {
@@ -1975,6 +2083,8 @@ export type TenantUncheckedCreateWithoutEmailLogsInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
   subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutTenantInput
+  applicants?: Prisma.ApplicantUncheckedCreateNestedManyWithoutTenantInput
+  importBatches?: Prisma.ImportBatchUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutEmailLogsInput = {
@@ -2020,6 +2130,8 @@ export type TenantUpdateWithoutEmailLogsInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
   subscription?: Prisma.SubscriptionUpdateOneWithoutTenantNestedInput
+  applicants?: Prisma.ApplicantUpdateManyWithoutTenantNestedInput
+  importBatches?: Prisma.ImportBatchUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutEmailLogsInput = {
@@ -2049,6 +2161,8 @@ export type TenantUncheckedUpdateWithoutEmailLogsInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
   subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutTenantNestedInput
+  applicants?: Prisma.ApplicantUncheckedUpdateManyWithoutTenantNestedInput
+  importBatches?: Prisma.ImportBatchUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutNotificationsInput = {
@@ -2078,6 +2192,8 @@ export type TenantCreateWithoutNotificationsInput = {
   emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
   subscription?: Prisma.SubscriptionCreateNestedOneWithoutTenantInput
+  applicants?: Prisma.ApplicantCreateNestedManyWithoutTenantInput
+  importBatches?: Prisma.ImportBatchCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutNotificationsInput = {
@@ -2107,6 +2223,8 @@ export type TenantUncheckedCreateWithoutNotificationsInput = {
   emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
   subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutTenantInput
+  applicants?: Prisma.ApplicantUncheckedCreateNestedManyWithoutTenantInput
+  importBatches?: Prisma.ImportBatchUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutNotificationsInput = {
@@ -2152,6 +2270,8 @@ export type TenantUpdateWithoutNotificationsInput = {
   emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
   subscription?: Prisma.SubscriptionUpdateOneWithoutTenantNestedInput
+  applicants?: Prisma.ApplicantUpdateManyWithoutTenantNestedInput
+  importBatches?: Prisma.ImportBatchUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutNotificationsInput = {
@@ -2181,6 +2301,8 @@ export type TenantUncheckedUpdateWithoutNotificationsInput = {
   emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
   subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutTenantNestedInput
+  applicants?: Prisma.ApplicantUncheckedUpdateManyWithoutTenantNestedInput
+  importBatches?: Prisma.ImportBatchUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutAuditLogsInput = {
@@ -2210,6 +2332,8 @@ export type TenantCreateWithoutAuditLogsInput = {
   emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
   subscription?: Prisma.SubscriptionCreateNestedOneWithoutTenantInput
+  applicants?: Prisma.ApplicantCreateNestedManyWithoutTenantInput
+  importBatches?: Prisma.ImportBatchCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutAuditLogsInput = {
@@ -2239,6 +2363,8 @@ export type TenantUncheckedCreateWithoutAuditLogsInput = {
   emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
   subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutTenantInput
+  applicants?: Prisma.ApplicantUncheckedCreateNestedManyWithoutTenantInput
+  importBatches?: Prisma.ImportBatchUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutAuditLogsInput = {
@@ -2284,6 +2410,8 @@ export type TenantUpdateWithoutAuditLogsInput = {
   emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
   subscription?: Prisma.SubscriptionUpdateOneWithoutTenantNestedInput
+  applicants?: Prisma.ApplicantUpdateManyWithoutTenantNestedInput
+  importBatches?: Prisma.ImportBatchUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutAuditLogsInput = {
@@ -2313,6 +2441,8 @@ export type TenantUncheckedUpdateWithoutAuditLogsInput = {
   emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
   subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutTenantNestedInput
+  applicants?: Prisma.ApplicantUncheckedUpdateManyWithoutTenantNestedInput
+  importBatches?: Prisma.ImportBatchUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutSubscriptionInput = {
@@ -2342,6 +2472,8 @@ export type TenantCreateWithoutSubscriptionInput = {
   emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
+  applicants?: Prisma.ApplicantCreateNestedManyWithoutTenantInput
+  importBatches?: Prisma.ImportBatchCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutSubscriptionInput = {
@@ -2371,6 +2503,8 @@ export type TenantUncheckedCreateWithoutSubscriptionInput = {
   emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
+  applicants?: Prisma.ApplicantUncheckedCreateNestedManyWithoutTenantInput
+  importBatches?: Prisma.ImportBatchUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutSubscriptionInput = {
@@ -2416,6 +2550,8 @@ export type TenantUpdateWithoutSubscriptionInput = {
   emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
+  applicants?: Prisma.ApplicantUpdateManyWithoutTenantNestedInput
+  importBatches?: Prisma.ImportBatchUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutSubscriptionInput = {
@@ -2445,6 +2581,288 @@ export type TenantUncheckedUpdateWithoutSubscriptionInput = {
   emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
+  applicants?: Prisma.ApplicantUncheckedUpdateManyWithoutTenantNestedInput
+  importBatches?: Prisma.ImportBatchUncheckedUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantCreateWithoutApplicantsInput = {
+  id?: string
+  name: string
+  shortName: string
+  slug: string
+  domain?: string | null
+  logoUrl?: string | null
+  primaryColor?: string
+  accentColor?: string
+  plan?: $Enums.Plan
+  maxStudents?: number
+  isActive?: boolean
+  trialEndsAt?: Date | string | null
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserCreateNestedManyWithoutTenantInput
+  departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
+  programs?: Prisma.ProgramCreateNestedManyWithoutTenantInput
+  academicSessions?: Prisma.AcademicSessionCreateNestedManyWithoutTenantInput
+  students?: Prisma.StudentCreateNestedManyWithoutTenantInput
+  feeStructures?: Prisma.FeeStructureCreateNestedManyWithoutTenantInput
+  feeAssignments?: Prisma.FeeAssignmentCreateNestedManyWithoutTenantInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutTenantInput
+  emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
+  subscription?: Prisma.SubscriptionCreateNestedOneWithoutTenantInput
+  importBatches?: Prisma.ImportBatchCreateNestedManyWithoutTenantInput
+}
+
+export type TenantUncheckedCreateWithoutApplicantsInput = {
+  id?: string
+  name: string
+  shortName: string
+  slug: string
+  domain?: string | null
+  logoUrl?: string | null
+  primaryColor?: string
+  accentColor?: string
+  plan?: $Enums.Plan
+  maxStudents?: number
+  isActive?: boolean
+  trialEndsAt?: Date | string | null
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
+  departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
+  programs?: Prisma.ProgramUncheckedCreateNestedManyWithoutTenantInput
+  academicSessions?: Prisma.AcademicSessionUncheckedCreateNestedManyWithoutTenantInput
+  students?: Prisma.StudentUncheckedCreateNestedManyWithoutTenantInput
+  feeStructures?: Prisma.FeeStructureUncheckedCreateNestedManyWithoutTenantInput
+  feeAssignments?: Prisma.FeeAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutTenantInput
+  emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
+  subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutTenantInput
+  importBatches?: Prisma.ImportBatchUncheckedCreateNestedManyWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutApplicantsInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutApplicantsInput, Prisma.TenantUncheckedCreateWithoutApplicantsInput>
+}
+
+export type TenantUpsertWithoutApplicantsInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutApplicantsInput, Prisma.TenantUncheckedUpdateWithoutApplicantsInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutApplicantsInput, Prisma.TenantUncheckedCreateWithoutApplicantsInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutApplicantsInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutApplicantsInput, Prisma.TenantUncheckedUpdateWithoutApplicantsInput>
+}
+
+export type TenantUpdateWithoutApplicantsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  shortName?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  domain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  logoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  primaryColor?: Prisma.StringFieldUpdateOperationsInput | string
+  accentColor?: Prisma.StringFieldUpdateOperationsInput | string
+  plan?: Prisma.EnumPlanFieldUpdateOperationsInput | $Enums.Plan
+  maxStudents?: Prisma.IntFieldUpdateOperationsInput | number
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  trialEndsAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUpdateManyWithoutTenantNestedInput
+  departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
+  programs?: Prisma.ProgramUpdateManyWithoutTenantNestedInput
+  academicSessions?: Prisma.AcademicSessionUpdateManyWithoutTenantNestedInput
+  students?: Prisma.StudentUpdateManyWithoutTenantNestedInput
+  feeStructures?: Prisma.FeeStructureUpdateManyWithoutTenantNestedInput
+  feeAssignments?: Prisma.FeeAssignmentUpdateManyWithoutTenantNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutTenantNestedInput
+  emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
+  subscription?: Prisma.SubscriptionUpdateOneWithoutTenantNestedInput
+  importBatches?: Prisma.ImportBatchUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutApplicantsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  shortName?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  domain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  logoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  primaryColor?: Prisma.StringFieldUpdateOperationsInput | string
+  accentColor?: Prisma.StringFieldUpdateOperationsInput | string
+  plan?: Prisma.EnumPlanFieldUpdateOperationsInput | $Enums.Plan
+  maxStudents?: Prisma.IntFieldUpdateOperationsInput | number
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  trialEndsAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
+  departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
+  programs?: Prisma.ProgramUncheckedUpdateManyWithoutTenantNestedInput
+  academicSessions?: Prisma.AcademicSessionUncheckedUpdateManyWithoutTenantNestedInput
+  students?: Prisma.StudentUncheckedUpdateManyWithoutTenantNestedInput
+  feeStructures?: Prisma.FeeStructureUncheckedUpdateManyWithoutTenantNestedInput
+  feeAssignments?: Prisma.FeeAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutTenantNestedInput
+  emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
+  subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutTenantNestedInput
+  importBatches?: Prisma.ImportBatchUncheckedUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantCreateWithoutImportBatchesInput = {
+  id?: string
+  name: string
+  shortName: string
+  slug: string
+  domain?: string | null
+  logoUrl?: string | null
+  primaryColor?: string
+  accentColor?: string
+  plan?: $Enums.Plan
+  maxStudents?: number
+  isActive?: boolean
+  trialEndsAt?: Date | string | null
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserCreateNestedManyWithoutTenantInput
+  departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
+  programs?: Prisma.ProgramCreateNestedManyWithoutTenantInput
+  academicSessions?: Prisma.AcademicSessionCreateNestedManyWithoutTenantInput
+  students?: Prisma.StudentCreateNestedManyWithoutTenantInput
+  feeStructures?: Prisma.FeeStructureCreateNestedManyWithoutTenantInput
+  feeAssignments?: Prisma.FeeAssignmentCreateNestedManyWithoutTenantInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutTenantInput
+  emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
+  subscription?: Prisma.SubscriptionCreateNestedOneWithoutTenantInput
+  applicants?: Prisma.ApplicantCreateNestedManyWithoutTenantInput
+}
+
+export type TenantUncheckedCreateWithoutImportBatchesInput = {
+  id?: string
+  name: string
+  shortName: string
+  slug: string
+  domain?: string | null
+  logoUrl?: string | null
+  primaryColor?: string
+  accentColor?: string
+  plan?: $Enums.Plan
+  maxStudents?: number
+  isActive?: boolean
+  trialEndsAt?: Date | string | null
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
+  departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
+  programs?: Prisma.ProgramUncheckedCreateNestedManyWithoutTenantInput
+  academicSessions?: Prisma.AcademicSessionUncheckedCreateNestedManyWithoutTenantInput
+  students?: Prisma.StudentUncheckedCreateNestedManyWithoutTenantInput
+  feeStructures?: Prisma.FeeStructureUncheckedCreateNestedManyWithoutTenantInput
+  feeAssignments?: Prisma.FeeAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutTenantInput
+  emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
+  subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutTenantInput
+  applicants?: Prisma.ApplicantUncheckedCreateNestedManyWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutImportBatchesInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutImportBatchesInput, Prisma.TenantUncheckedCreateWithoutImportBatchesInput>
+}
+
+export type TenantUpsertWithoutImportBatchesInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutImportBatchesInput, Prisma.TenantUncheckedUpdateWithoutImportBatchesInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutImportBatchesInput, Prisma.TenantUncheckedCreateWithoutImportBatchesInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutImportBatchesInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutImportBatchesInput, Prisma.TenantUncheckedUpdateWithoutImportBatchesInput>
+}
+
+export type TenantUpdateWithoutImportBatchesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  shortName?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  domain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  logoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  primaryColor?: Prisma.StringFieldUpdateOperationsInput | string
+  accentColor?: Prisma.StringFieldUpdateOperationsInput | string
+  plan?: Prisma.EnumPlanFieldUpdateOperationsInput | $Enums.Plan
+  maxStudents?: Prisma.IntFieldUpdateOperationsInput | number
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  trialEndsAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUpdateManyWithoutTenantNestedInput
+  departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
+  programs?: Prisma.ProgramUpdateManyWithoutTenantNestedInput
+  academicSessions?: Prisma.AcademicSessionUpdateManyWithoutTenantNestedInput
+  students?: Prisma.StudentUpdateManyWithoutTenantNestedInput
+  feeStructures?: Prisma.FeeStructureUpdateManyWithoutTenantNestedInput
+  feeAssignments?: Prisma.FeeAssignmentUpdateManyWithoutTenantNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutTenantNestedInput
+  emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
+  subscription?: Prisma.SubscriptionUpdateOneWithoutTenantNestedInput
+  applicants?: Prisma.ApplicantUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutImportBatchesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  shortName?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  domain?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  logoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  primaryColor?: Prisma.StringFieldUpdateOperationsInput | string
+  accentColor?: Prisma.StringFieldUpdateOperationsInput | string
+  plan?: Prisma.EnumPlanFieldUpdateOperationsInput | $Enums.Plan
+  maxStudents?: Prisma.IntFieldUpdateOperationsInput | number
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  trialEndsAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
+  departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
+  programs?: Prisma.ProgramUncheckedUpdateManyWithoutTenantNestedInput
+  academicSessions?: Prisma.AcademicSessionUncheckedUpdateManyWithoutTenantNestedInput
+  students?: Prisma.StudentUncheckedUpdateManyWithoutTenantNestedInput
+  feeStructures?: Prisma.FeeStructureUncheckedUpdateManyWithoutTenantNestedInput
+  feeAssignments?: Prisma.FeeAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutTenantNestedInput
+  emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
+  subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutTenantNestedInput
+  applicants?: Prisma.ApplicantUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 
@@ -2464,6 +2882,8 @@ export type TenantCountOutputType = {
   emailLogs: number
   notifications: number
   auditLogs: number
+  applicants: number
+  importBatches: number
 }
 
 export type TenantCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2478,6 +2898,8 @@ export type TenantCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions
   emailLogs?: boolean | TenantCountOutputTypeCountEmailLogsArgs
   notifications?: boolean | TenantCountOutputTypeCountNotificationsArgs
   auditLogs?: boolean | TenantCountOutputTypeCountAuditLogsArgs
+  applicants?: boolean | TenantCountOutputTypeCountApplicantsArgs
+  importBatches?: boolean | TenantCountOutputTypeCountImportBatchesArgs
 }
 
 /**
@@ -2567,6 +2989,20 @@ export type TenantCountOutputTypeCountAuditLogsArgs<ExtArgs extends runtime.Type
   where?: Prisma.AuditLogWhereInput
 }
 
+/**
+ * TenantCountOutputType without action
+ */
+export type TenantCountOutputTypeCountApplicantsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ApplicantWhereInput
+}
+
+/**
+ * TenantCountOutputType without action
+ */
+export type TenantCountOutputTypeCountImportBatchesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ImportBatchWhereInput
+}
+
 
 export type TenantSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -2596,6 +3032,8 @@ export type TenantSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   notifications?: boolean | Prisma.Tenant$notificationsArgs<ExtArgs>
   auditLogs?: boolean | Prisma.Tenant$auditLogsArgs<ExtArgs>
   subscription?: boolean | Prisma.Tenant$subscriptionArgs<ExtArgs>
+  applicants?: boolean | Prisma.Tenant$applicantsArgs<ExtArgs>
+  importBatches?: boolean | Prisma.Tenant$importBatchesArgs<ExtArgs>
   _count?: boolean | Prisma.TenantCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["tenant"]>
 
@@ -2667,6 +3105,8 @@ export type TenantInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   notifications?: boolean | Prisma.Tenant$notificationsArgs<ExtArgs>
   auditLogs?: boolean | Prisma.Tenant$auditLogsArgs<ExtArgs>
   subscription?: boolean | Prisma.Tenant$subscriptionArgs<ExtArgs>
+  applicants?: boolean | Prisma.Tenant$applicantsArgs<ExtArgs>
+  importBatches?: boolean | Prisma.Tenant$importBatchesArgs<ExtArgs>
   _count?: boolean | Prisma.TenantCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type TenantIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -2687,6 +3127,8 @@ export type $TenantPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     notifications: Prisma.$NotificationPayload<ExtArgs>[]
     auditLogs: Prisma.$AuditLogPayload<ExtArgs>[]
     subscription: Prisma.$SubscriptionPayload<ExtArgs> | null
+    applicants: Prisma.$ApplicantPayload<ExtArgs>[]
+    importBatches: Prisma.$ImportBatchPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -3110,6 +3552,8 @@ export interface Prisma__TenantClient<T, Null = never, ExtArgs extends runtime.T
   notifications<T extends Prisma.Tenant$notificationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   auditLogs<T extends Prisma.Tenant$auditLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$auditLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   subscription<T extends Prisma.Tenant$subscriptionArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$subscriptionArgs<ExtArgs>>): Prisma.Prisma__SubscriptionClient<runtime.Types.Result.GetResult<Prisma.$SubscriptionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  applicants<T extends Prisma.Tenant$applicantsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$applicantsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ApplicantPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  importBatches<T extends Prisma.Tenant$importBatchesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$importBatchesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ImportBatchPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3827,6 +4271,54 @@ export type Tenant$subscriptionArgs<ExtArgs extends runtime.Types.Extensions.Int
    */
   include?: Prisma.SubscriptionInclude<ExtArgs> | null
   where?: Prisma.SubscriptionWhereInput
+}
+
+/**
+ * Tenant.applicants
+ */
+export type Tenant$applicantsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Applicant
+   */
+  select?: Prisma.ApplicantSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Applicant
+   */
+  omit?: Prisma.ApplicantOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ApplicantInclude<ExtArgs> | null
+  where?: Prisma.ApplicantWhereInput
+  orderBy?: Prisma.ApplicantOrderByWithRelationInput | Prisma.ApplicantOrderByWithRelationInput[]
+  cursor?: Prisma.ApplicantWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ApplicantScalarFieldEnum | Prisma.ApplicantScalarFieldEnum[]
+}
+
+/**
+ * Tenant.importBatches
+ */
+export type Tenant$importBatchesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ImportBatch
+   */
+  select?: Prisma.ImportBatchSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ImportBatch
+   */
+  omit?: Prisma.ImportBatchOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ImportBatchInclude<ExtArgs> | null
+  where?: Prisma.ImportBatchWhereInput
+  orderBy?: Prisma.ImportBatchOrderByWithRelationInput | Prisma.ImportBatchOrderByWithRelationInput[]
+  cursor?: Prisma.ImportBatchWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ImportBatchScalarFieldEnum | Prisma.ImportBatchScalarFieldEnum[]
 }
 
 /**

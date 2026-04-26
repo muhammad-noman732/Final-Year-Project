@@ -1,0 +1,16 @@
+fullName,email,phone,program,department,session,matricPercent,fscPercent,gender,city
+Ali Khan,ali.khan1@example.com,03001112233,BSCS,CS,2024-2028,88.5,85.0,Male,Faisalabad
+Ayesha Tariq,ayesha.t@example.com,03002223344,BSBio,Biology,2024-2028,91.0,93.5,Female,Lahore
+Usman Raza,usman.r@example.com,03003334455,BSPhysics,Physics,2024-2028,82.0,80.5,Male,Islamabad
+Fatima Noor,fatima.n@example.com,03004445566,BSMath,Math,2024-2028,95.5,96.0,Female,Faisalabad
+Bilal Ahmed,bilal.a@example.com,03005556677,BSCS,CS,2024-2028,78.0,82.0,Male,Multan
+Sana Aslam,sana.a@example.com,,BSCS,CS,2024-2028,85.0,88.5,Female,Faisalabad
+Zain Malik,zain.m@example.com,03007778899,BSBio,Biology,2024-2028,89.0,87.5,Male,Karachi
+Hira Jamil,hira.j@example.com,03008889900,BSPhysics,Physics,2024-2028,76.5,75.0,Female,Lahore
+Omar Farooq,omar.f@example.com,03009990011,BSMath,Math,2024-2028,81.0,83.0,Male,Rawalpindi
+Nida Qasim,nida.q@example.com,03001239876,BSCS,CS,2024-2028,92.5,91.0,Female,Faisalabad
+Hamza Ali,hamza.ali@example.com,03009871234,BSBio,Biology,2024-2028,88.0,86.5,Male,Gujranwala
+Rabia Yaseen,rabia.y@example.com,,BSPhysics,Physics,2024-2028,84.5,89.0,Female,Faisalabad
+Saad Hassan,saad.h@example.com,03004561239,BSMath,Math,2024-2028,79.0,78.5,Male,Sialkot
+Iqra Muneer,iqra.m@example.com,03007894561,BSCS,CS,2024-2028,94.0,95.5,Female,Faisalabad
+Kashif Mehmood,kashif.m@example.com,03001597534,BSCS,CS,2024-2028,87.0,84.5,Male,Chiniot

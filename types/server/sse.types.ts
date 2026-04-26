@@ -18,3 +18,13 @@ export interface SSEInsightsUpdatedEvent {
 export interface SSENotificationEvent {
   type: "NewNotification"
 }
+
+export interface SSERegistrationImportedEvent {
+  type: "RegistrationImported"
+  payload: {
+    batchId: string
+    count: number
+    program: string
+    session: string
+  }
+}

@@ -167,7 +167,7 @@ export class VCService {
     const now = new Date()
     const expiresAt = new Date(now.getTime() + 24 * 60 * 60 * 1000)
 
-    await this.insightRepo.deleteAllForTenant(tenantId)
+    await this.insightRepo.deleteByModule(tenantId, "FEE")
 
     const allAssignments = await this.vcRepo.findCurrentStatusAssignments({ tenantId })
     const canonicalAssignments = this.buildCanonicalAssignments(allAssignments)
@@ -195,6 +195,7 @@ export class VCService {
       if (lag >= 15) {
         insightRows.push({
           tenantId,
+          module: "FEE",
           type: "ALERT",
           priority: "HIGH",
           message: `${dept.deptName} department is ${Math.round(lag)}% below campus average. ${dept.total - dept.paid} students unpaid.`,
@@ -222,6 +223,7 @@ export class VCService {
           )
           insightRows.push({
             tenantId,
+            module: "FEE",
             type: "ALERT",
             priority: "CRITICAL",
             message: `Deadline in ${daysUntilDeadline} day${daysUntilDeadline !== 1 ? "s" : ""}. ${unpaid.length} students unpaid. Expected loss: PKR ${expectedLoss.toLocaleString()}.`,
@@ -237,6 +239,7 @@ export class VCService {
     if (overallRate > 90 && daysUntilDeadline !== null && daysUntilDeadline >= 5) {
       insightRows.push({
         tenantId,
+        module: "FEE",
         type: "SUCCESS",
         priority: "LOW",
         message: `${Math.round(overallRate)}% of students paid ${daysUntilDeadline} days before deadline. Best performance this session.`,
@@ -259,6 +262,7 @@ export class VCService {
           const formattedDate = targetDate.toLocaleDateString("en-US", { month: "short", day: "numeric" })
           insightRows.push({
             tenantId,
+            module: "FEE",
             type: "PREDICTION",
             priority: "MEDIUM",
             message: `At current rate of PKR ${Math.round(dailyRate).toLocaleString()}/day, full collection target will be reached by ${formattedDate}.`,
@@ -277,6 +281,7 @@ export class VCService {
       )
       insightRows.push({
         tenantId,
+        module: "FEE",
         type: "RISK",
         priority: "HIGH",
         message: `${atRiskStudents.length} student${atRiskStudents.length !== 1 ? "s" : ""} flagged HIGH RISK based on 3+ consecutive late payments.`,
@@ -291,8 +296,8 @@ export class VCService {
     }
   }
 
-  async getInsights(tenantId: string): Promise<InsightItem[]> {
-    const rows = await this.insightRepo.findUnread(tenantId)
+  async getInsights(tenantId: string, module?: string): Promise<InsightItem[]> {
+    const rows = await this.insightRepo.findUnread(tenantId, module)
     return rows
       .sort((a, b) => (PRIORITY_ORDER[a.priority] ?? 5) - (PRIORITY_ORDER[b.priority] ?? 5))
       .map((row) => ({

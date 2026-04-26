@@ -27,6 +27,7 @@ export type AggregateInsight = {
 export type InsightMinAggregateOutputType = {
   id: string | null
   tenantId: string | null
+  module: string | null
   type: string | null
   message: string | null
   actionLabel: string | null
@@ -41,6 +42,7 @@ export type InsightMinAggregateOutputType = {
 export type InsightMaxAggregateOutputType = {
   id: string | null
   tenantId: string | null
+  module: string | null
   type: string | null
   message: string | null
   actionLabel: string | null
@@ -55,6 +57,7 @@ export type InsightMaxAggregateOutputType = {
 export type InsightCountAggregateOutputType = {
   id: number
   tenantId: number
+  module: number
   type: number
   message: number
   actionLabel: number
@@ -71,6 +74,7 @@ export type InsightCountAggregateOutputType = {
 export type InsightMinAggregateInputType = {
   id?: true
   tenantId?: true
+  module?: true
   type?: true
   message?: true
   actionLabel?: true
@@ -85,6 +89,7 @@ export type InsightMinAggregateInputType = {
 export type InsightMaxAggregateInputType = {
   id?: true
   tenantId?: true
+  module?: true
   type?: true
   message?: true
   actionLabel?: true
@@ -99,6 +104,7 @@ export type InsightMaxAggregateInputType = {
 export type InsightCountAggregateInputType = {
   id?: true
   tenantId?: true
+  module?: true
   type?: true
   message?: true
   actionLabel?: true
@@ -186,6 +192,7 @@ export type InsightGroupByArgs<ExtArgs extends runtime.Types.Extensions.Internal
 export type InsightGroupByOutputType = {
   id: string
   tenantId: string
+  module: string
   type: string
   message: string
   actionLabel: string | null
@@ -221,6 +228,7 @@ export type InsightWhereInput = {
   NOT?: Prisma.InsightWhereInput | Prisma.InsightWhereInput[]
   id?: Prisma.StringFilter<"Insight"> | string
   tenantId?: Prisma.StringFilter<"Insight"> | string
+  module?: Prisma.StringFilter<"Insight"> | string
   type?: Prisma.StringFilter<"Insight"> | string
   message?: Prisma.StringFilter<"Insight"> | string
   actionLabel?: Prisma.StringNullableFilter<"Insight"> | string | null
@@ -235,6 +243,7 @@ export type InsightWhereInput = {
 export type InsightOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   tenantId?: Prisma.SortOrder
+  module?: Prisma.SortOrder
   type?: Prisma.SortOrder
   message?: Prisma.SortOrder
   actionLabel?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -252,6 +261,7 @@ export type InsightWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.InsightWhereInput[]
   NOT?: Prisma.InsightWhereInput | Prisma.InsightWhereInput[]
   tenantId?: Prisma.StringFilter<"Insight"> | string
+  module?: Prisma.StringFilter<"Insight"> | string
   type?: Prisma.StringFilter<"Insight"> | string
   message?: Prisma.StringFilter<"Insight"> | string
   actionLabel?: Prisma.StringNullableFilter<"Insight"> | string | null
@@ -266,6 +276,7 @@ export type InsightWhereUniqueInput = Prisma.AtLeast<{
 export type InsightOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   tenantId?: Prisma.SortOrder
+  module?: Prisma.SortOrder
   type?: Prisma.SortOrder
   message?: Prisma.SortOrder
   actionLabel?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -286,6 +297,7 @@ export type InsightScalarWhereWithAggregatesInput = {
   NOT?: Prisma.InsightScalarWhereWithAggregatesInput | Prisma.InsightScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Insight"> | string
   tenantId?: Prisma.StringWithAggregatesFilter<"Insight"> | string
+  module?: Prisma.StringWithAggregatesFilter<"Insight"> | string
   type?: Prisma.StringWithAggregatesFilter<"Insight"> | string
   message?: Prisma.StringWithAggregatesFilter<"Insight"> | string
   actionLabel?: Prisma.StringNullableWithAggregatesFilter<"Insight"> | string | null
@@ -300,6 +312,7 @@ export type InsightScalarWhereWithAggregatesInput = {
 export type InsightCreateInput = {
   id?: string
   tenantId: string
+  module?: string
   type: string
   message: string
   actionLabel?: string | null
@@ -314,6 +327,7 @@ export type InsightCreateInput = {
 export type InsightUncheckedCreateInput = {
   id?: string
   tenantId: string
+  module?: string
   type: string
   message: string
   actionLabel?: string | null
@@ -328,6 +342,7 @@ export type InsightUncheckedCreateInput = {
 export type InsightUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  module?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.StringFieldUpdateOperationsInput | string
   message?: Prisma.StringFieldUpdateOperationsInput | string
   actionLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -342,6 +357,7 @@ export type InsightUpdateInput = {
 export type InsightUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  module?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.StringFieldUpdateOperationsInput | string
   message?: Prisma.StringFieldUpdateOperationsInput | string
   actionLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -356,6 +372,7 @@ export type InsightUncheckedUpdateInput = {
 export type InsightCreateManyInput = {
   id?: string
   tenantId: string
+  module?: string
   type: string
   message: string
   actionLabel?: string | null
@@ -370,6 +387,7 @@ export type InsightCreateManyInput = {
 export type InsightUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  module?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.StringFieldUpdateOperationsInput | string
   message?: Prisma.StringFieldUpdateOperationsInput | string
   actionLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -384,6 +402,7 @@ export type InsightUpdateManyMutationInput = {
 export type InsightUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  module?: Prisma.StringFieldUpdateOperationsInput | string
   type?: Prisma.StringFieldUpdateOperationsInput | string
   message?: Prisma.StringFieldUpdateOperationsInput | string
   actionLabel?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -398,6 +417,7 @@ export type InsightUncheckedUpdateManyInput = {
 export type InsightCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   tenantId?: Prisma.SortOrder
+  module?: Prisma.SortOrder
   type?: Prisma.SortOrder
   message?: Prisma.SortOrder
   actionLabel?: Prisma.SortOrder
@@ -412,6 +432,7 @@ export type InsightCountOrderByAggregateInput = {
 export type InsightMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   tenantId?: Prisma.SortOrder
+  module?: Prisma.SortOrder
   type?: Prisma.SortOrder
   message?: Prisma.SortOrder
   actionLabel?: Prisma.SortOrder
@@ -426,6 +447,7 @@ export type InsightMaxOrderByAggregateInput = {
 export type InsightMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   tenantId?: Prisma.SortOrder
+  module?: Prisma.SortOrder
   type?: Prisma.SortOrder
   message?: Prisma.SortOrder
   actionLabel?: Prisma.SortOrder
@@ -442,6 +464,7 @@ export type InsightMinOrderByAggregateInput = {
 export type InsightSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   tenantId?: boolean
+  module?: boolean
   type?: boolean
   message?: boolean
   actionLabel?: boolean
@@ -456,6 +479,7 @@ export type InsightSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
 export type InsightSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   tenantId?: boolean
+  module?: boolean
   type?: boolean
   message?: boolean
   actionLabel?: boolean
@@ -470,6 +494,7 @@ export type InsightSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
 export type InsightSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   tenantId?: boolean
+  module?: boolean
   type?: boolean
   message?: boolean
   actionLabel?: boolean
@@ -484,6 +509,7 @@ export type InsightSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
 export type InsightSelectScalar = {
   id?: boolean
   tenantId?: boolean
+  module?: boolean
   type?: boolean
   message?: boolean
   actionLabel?: boolean
@@ -495,7 +521,7 @@ export type InsightSelectScalar = {
   expiresAt?: boolean
 }
 
-export type InsightOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "type" | "message" | "actionLabel" | "actionType" | "priority" | "isRead" | "departmentId" | "createdAt" | "expiresAt", ExtArgs["result"]["insight"]>
+export type InsightOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "module" | "type" | "message" | "actionLabel" | "actionType" | "priority" | "isRead" | "departmentId" | "createdAt" | "expiresAt", ExtArgs["result"]["insight"]>
 
 export type $InsightPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Insight"
@@ -503,6 +529,7 @@ export type $InsightPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     tenantId: string
+    module: string
     type: string
     message: string
     actionLabel: string | null
@@ -937,6 +964,7 @@ export interface Prisma__InsightClient<T, Null = never, ExtArgs extends runtime.
 export interface InsightFieldRefs {
   readonly id: Prisma.FieldRef<"Insight", 'String'>
   readonly tenantId: Prisma.FieldRef<"Insight", 'String'>
+  readonly module: Prisma.FieldRef<"Insight", 'String'>
   readonly type: Prisma.FieldRef<"Insight", 'String'>
   readonly message: Prisma.FieldRef<"Insight", 'String'>
   readonly actionLabel: Prisma.FieldRef<"Insight", 'String'>

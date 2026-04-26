@@ -1,7 +1,7 @@
 "use client"
 
 import { useCallback, useEffect, useRef, useState } from "react"
-import type { SSEPaymentEvent } from "@/types/server/sse.types"
+import type { SSEPaymentEvent, SSERegistrationImportedEvent } from "@/types/server/sse.types"
 import type { SSELiveTransaction, UseSSEReturn } from "@/types/client/ui/vc.ui.types"
 
 const INITIAL_RETRY_DELAY_MS = 5_000
@@ -18,6 +18,9 @@ export function useSSE(): UseSSEReturn {
   const [connected, setConnected] = useState(false)
   const [latestEvent, setLatestEvent] = useState<SSEPaymentEvent | null>(null)
   const [insightsUpdatedAt, setInsightsUpdatedAt] = useState<number | null>(null)
+  const [registrationImportedAt, setRegistrationImportedAt] = useState<number | null>(null)
+  const [latestRegistrationEvent, setLatestRegistrationEvent] =
+    useState<SSERegistrationImportedEvent | null>(null)
 
   const eventSourceRef = useRef<EventSource | null>(null)
   const retryTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -44,7 +47,7 @@ export function useSSE(): UseSSEReturn {
       es.onmessage = (event) => {
         if (cancelled) return
         try {
-          const data = JSON.parse(event.data) as SSEPaymentEvent | { type: "connected" | "InsightsUpdated" }
+          const data = JSON.parse(event.data) as SSEPaymentEvent | SSERegistrationImportedEvent | { type: "connected" | "InsightsUpdated" }
           if (data.type === "connected") return
 
           if (data.type === "PaymentSuccess") {
@@ -61,6 +64,11 @@ export function useSSE(): UseSSEReturn {
 
           if (data.type === "InsightsUpdated") {
             setInsightsUpdatedAt(Date.now())
+          }
+
+          if (data.type === "RegistrationImported") {
+            setRegistrationImportedAt(Date.now())
+            setLatestRegistrationEvent(data as SSERegistrationImportedEvent)
           }
         } catch {
           // Ignore malformed frames (e.g. keepalive comments)
@@ -94,5 +102,7 @@ export function useSSE(): UseSSEReturn {
     latestEvent,
     clearLatestEvent,
     insightsUpdatedAt,
+    registrationImportedAt,
+    latestRegistrationEvent,
   }
 }

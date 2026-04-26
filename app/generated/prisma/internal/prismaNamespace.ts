@@ -401,7 +401,9 @@ export const ModelName = {
   AuditLog: 'AuditLog',
   Subscription: 'Subscription',
   ActivityLog: 'ActivityLog',
-  Insight: 'Insight'
+  Insight: 'Insight',
+  Applicant: 'Applicant',
+  ImportBatch: 'ImportBatch'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -417,7 +419,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "tenant" | "user" | "refreshToken" | "passwordResetToken" | "academicSession" | "department" | "program" | "student" | "feeStructure" | "feeAssignment" | "payment" | "webhookEvent" | "emailLog" | "notification" | "auditLog" | "subscription" | "activityLog" | "insight"
+    modelProps: "tenant" | "user" | "refreshToken" | "passwordResetToken" | "academicSession" | "department" | "program" | "student" | "feeStructure" | "feeAssignment" | "payment" | "webhookEvent" | "emailLog" | "notification" | "auditLog" | "subscription" | "activityLog" | "insight" | "applicant" | "importBatch"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1753,6 +1755,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Applicant: {
+      payload: Prisma.$ApplicantPayload<ExtArgs>
+      fields: Prisma.ApplicantFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ApplicantFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ApplicantPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ApplicantFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ApplicantPayload>
+        }
+        findFirst: {
+          args: Prisma.ApplicantFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ApplicantPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ApplicantFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ApplicantPayload>
+        }
+        findMany: {
+          args: Prisma.ApplicantFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ApplicantPayload>[]
+        }
+        create: {
+          args: Prisma.ApplicantCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ApplicantPayload>
+        }
+        createMany: {
+          args: Prisma.ApplicantCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ApplicantCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ApplicantPayload>[]
+        }
+        delete: {
+          args: Prisma.ApplicantDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ApplicantPayload>
+        }
+        update: {
+          args: Prisma.ApplicantUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ApplicantPayload>
+        }
+        deleteMany: {
+          args: Prisma.ApplicantDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ApplicantUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ApplicantUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ApplicantPayload>[]
+        }
+        upsert: {
+          args: Prisma.ApplicantUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ApplicantPayload>
+        }
+        aggregate: {
+          args: Prisma.ApplicantAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateApplicant>
+        }
+        groupBy: {
+          args: Prisma.ApplicantGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ApplicantGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ApplicantCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ApplicantCountAggregateOutputType> | number
+        }
+      }
+    }
+    ImportBatch: {
+      payload: Prisma.$ImportBatchPayload<ExtArgs>
+      fields: Prisma.ImportBatchFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ImportBatchFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ImportBatchPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ImportBatchFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ImportBatchPayload>
+        }
+        findFirst: {
+          args: Prisma.ImportBatchFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ImportBatchPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ImportBatchFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ImportBatchPayload>
+        }
+        findMany: {
+          args: Prisma.ImportBatchFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ImportBatchPayload>[]
+        }
+        create: {
+          args: Prisma.ImportBatchCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ImportBatchPayload>
+        }
+        createMany: {
+          args: Prisma.ImportBatchCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ImportBatchCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ImportBatchPayload>[]
+        }
+        delete: {
+          args: Prisma.ImportBatchDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ImportBatchPayload>
+        }
+        update: {
+          args: Prisma.ImportBatchUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ImportBatchPayload>
+        }
+        deleteMany: {
+          args: Prisma.ImportBatchDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ImportBatchUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ImportBatchUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ImportBatchPayload>[]
+        }
+        upsert: {
+          args: Prisma.ImportBatchUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ImportBatchPayload>
+        }
+        aggregate: {
+          args: Prisma.ImportBatchAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateImportBatch>
+        }
+        groupBy: {
+          args: Prisma.ImportBatchGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ImportBatchGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ImportBatchCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ImportBatchCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -2113,6 +2263,7 @@ export type ActivityLogScalarFieldEnum = (typeof ActivityLogScalarFieldEnum)[key
 export const InsightScalarFieldEnum = {
   id: 'id',
   tenantId: 'tenantId',
+  module: 'module',
   type: 'type',
   message: 'message',
   actionLabel: 'actionLabel',
@@ -2125,6 +2276,41 @@ export const InsightScalarFieldEnum = {
 } as const
 
 export type InsightScalarFieldEnum = (typeof InsightScalarFieldEnum)[keyof typeof InsightScalarFieldEnum]
+
+
+export const ApplicantScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  importBatchId: 'importBatchId',
+  fullName: 'fullName',
+  email: 'email',
+  phone: 'phone',
+  program: 'program',
+  department: 'department',
+  session: 'session',
+  matricPercent: 'matricPercent',
+  fscPercent: 'fscPercent',
+  meritScore: 'meritScore',
+  gender: 'gender',
+  city: 'city',
+  importedAt: 'importedAt'
+} as const
+
+export type ApplicantScalarFieldEnum = (typeof ApplicantScalarFieldEnum)[keyof typeof ApplicantScalarFieldEnum]
+
+
+export const ImportBatchScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  fileName: 'fileName',
+  totalCount: 'totalCount',
+  program: 'program',
+  session: 'session',
+  importedBy: 'importedBy',
+  importedAt: 'importedAt'
+} as const
+
+export type ImportBatchScalarFieldEnum = (typeof ImportBatchScalarFieldEnum)[keyof typeof ImportBatchScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -2503,6 +2689,8 @@ export type GlobalOmitConfig = {
   subscription?: Prisma.SubscriptionOmit
   activityLog?: Prisma.ActivityLogOmit
   insight?: Prisma.InsightOmit
+  applicant?: Prisma.ApplicantOmit
+  importBatch?: Prisma.ImportBatchOmit
 }
 
 /* Types for Logging */

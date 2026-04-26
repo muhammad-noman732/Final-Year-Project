@@ -8,7 +8,7 @@
  */
 
 import { redisPublisher, sseChannel, notificationChannel } from "@/lib/redis"
-import type { SSEPaymentEvent } from "@/types/server/sse.types"
+import type { SSEPaymentEvent, SSERegistrationImportedEvent } from "@/types/server/sse.types"
 
 export type { SSEPaymentEvent }
 
@@ -40,6 +40,18 @@ export async function broadcastInsightsUpdated(tenantId: string): Promise<void> 
  * The client reacts by invalidating its RTK Query notification cache.
  * Errors are swallowed so notification failures never break payment processing.
  */
+export async function broadcastRegistrationImported(
+  tenantId: string,
+  payload: SSERegistrationImportedEvent["payload"],
+): Promise<void> {
+  try {
+    const event: SSERegistrationImportedEvent = { type: "RegistrationImported", payload }
+    await redisPublisher.publish(sseChannel(tenantId), JSON.stringify(event))
+  } catch (err) {
+    console.error("[SSE] Failed to broadcast registration:imported event via Redis:", err)
+  }
+}
+
 export async function broadcastNotification(userId: string, _payload: unknown): Promise<void> {
   try {
     await redisPublisher.publish(

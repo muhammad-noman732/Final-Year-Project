@@ -46,6 +46,8 @@
     notifications    Notification[]
     auditLogs        AuditLog[]
     subscription     Subscription?
+    applicants       Applicant[]
+    importBatches    ImportBatch[]
 
     @@index([slug])
   }
@@ -563,17 +565,65 @@ model WebhookEvent {
   model Insight {
     id           String   @id @default(cuid())
     tenantId     String
+    module       String   @default("FEE") // "FEE" | "REGISTRATION"
     type         String   // "ALERT" | "SUCCESS" | "PREDICTION" | "RISK"
-    message      String   
+    message      String
     actionLabel  String?  // e.g., "Send Reminders"
     actionType   String?  // "SEND_REMINDER" | "VIEW_LIST" | "EXPORT"
     priority     String   // "HIGH" | "MEDIUM" | "LOW"
     isRead       Boolean  @default(false)
-    departmentId String?  
+    departmentId String?
     createdAt    DateTime @default(now())
-    expiresAt    DateTime 
-    
+    expiresAt    DateTime
+
     @@index([tenantId, isRead, priority])
+    @@index([tenantId, module, isRead])
+  }
+
+  // ═══════════════════════════════════════════════
+  //  REGISTRATION MODULE — Applicant data (separate from enrolled Student)
+  // ═══════════════════════════════════════════════
+
+  model Applicant {
+    id            String      @id @default(cuid())
+    tenantId      String
+    tenant        Tenant      @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+    importBatchId String
+    importBatch   ImportBatch @relation(fields: [importBatchId], references: [id], onDelete: Cascade)
+
+    fullName      String
+    email         String
+    phone         String?
+    program       String   // "BSCS" | "BSBio" | "BSPhysics" | "BSMath"
+    department    String   // "CS" | "Biology" | "Physics" | "Math"
+    session       String   // "2024-2028"
+    matricPercent Float
+    fscPercent    Float
+    meritScore    Float    // auto-calculated: (matric×0.4) + (fsc×0.6)
+    gender        String?
+    city          String?
+    importedAt    DateTime @default(now())
+
+    @@index([tenantId])
+    @@index([tenantId, session])
+    @@index([tenantId, program])
+    @@index([importBatchId])
+  }
+
+  model ImportBatch {
+    id         String      @id @default(cuid())
+    tenantId   String
+    tenant     Tenant      @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+    fileName   String
+    totalCount Int
+    program    String
+    session    String
+    importedBy String      // User.id — snapshot, no FK (user may be deactivated later)
+    importedAt DateTime    @default(now())
+    applicants Applicant[]
+
+    @@index([tenantId])
+    @@index([tenantId, importedAt])
   }
 
   // ═══════════════════════════════════════════════

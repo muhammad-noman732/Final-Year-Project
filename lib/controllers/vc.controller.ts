@@ -43,10 +43,11 @@ export class VCController {
     return successResponse(result)
   }
 
-  async getInsights(_req: NextRequest) {
+  async getInsights(req: NextRequest) {
     const { tenantId } = await getTenantContext()
     await requireRole("VC", "ADMIN")
-    const result = await this.vcService.getInsights(tenantId)
+    const module = req.nextUrl.searchParams.get("module") ?? "FEE"
+    const result = await this.vcService.getInsights(tenantId, module)
     return successResponse(result)
   }
 

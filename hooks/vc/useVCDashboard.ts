@@ -12,6 +12,7 @@ import { buildVCQuery, defaultVCFilters } from "@/components/vc/vcFilters"
 import { formatFullCurrency } from "@/config/constants"
 import type { VCDashboardData, VCLivePaymentItem } from "@/types/server/vc.types"
 import type { VCFilterState, VCSelectOption, SSELiveTransaction } from "@/types/client/ui/vc.ui.types"
+import type { SSERegistrationImportedEvent } from "@/types/server/sse.types"
 
 export interface UseVCDashboardReturn {
   // Filters
@@ -42,6 +43,9 @@ export interface UseVCDashboardReturn {
   handleOverviewCardClick: (tab: "paid" | "defaulters" | "payments") => void
   // Insights SSE signal
   insightsUpdatedAt: number | null
+  // Registration SSE signals
+  registrationImportedAt: number | null
+  latestRegistrationEvent: SSERegistrationImportedEvent | null
 }
 
 export function useVCDashboard(): UseVCDashboardReturn {
@@ -82,6 +86,8 @@ export function useVCDashboard(): UseVCDashboardReturn {
     latestEvent,
     clearLatestEvent,
     insightsUpdatedAt,
+    registrationImportedAt,
+    latestRegistrationEvent,
   } = useSSE()
 
   // Toast notification + KPI cache invalidation on new payment
@@ -188,5 +194,7 @@ export function useVCDashboard(): UseVCDashboardReturn {
     handleSemesterTracking,
     handleOverviewCardClick,
     insightsUpdatedAt,
+    registrationImportedAt,
+    latestRegistrationEvent,
   }
 }

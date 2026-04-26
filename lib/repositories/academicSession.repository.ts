@@ -55,6 +55,13 @@ export class AcademicSessionRepository {
     return { data, total }
   }
 
+  async findCurrent(tenantId: string): Promise<{ name: string } | null> {
+    return this.db.academicSession.findFirst({
+      where: { tenantId, isCurrent: true },
+      select: { name: true },
+    })
+  }
+
   async create(data: Prisma.AcademicSessionUncheckedCreateInput): Promise<AcademicSessionRow> {
     return this.db.academicSession.create({ data, select: SESSION_SELECT })
   }

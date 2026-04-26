@@ -68,7 +68,9 @@ export const ModelName = {
   AuditLog: 'AuditLog',
   Subscription: 'Subscription',
   ActivityLog: 'ActivityLog',
-  Insight: 'Insight'
+  Insight: 'Insight',
+  Applicant: 'Applicant',
+  ImportBatch: 'ImportBatch'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -408,6 +410,7 @@ export type ActivityLogScalarFieldEnum = (typeof ActivityLogScalarFieldEnum)[key
 export const InsightScalarFieldEnum = {
   id: 'id',
   tenantId: 'tenantId',
+  module: 'module',
   type: 'type',
   message: 'message',
   actionLabel: 'actionLabel',
@@ -420,6 +423,41 @@ export const InsightScalarFieldEnum = {
 } as const
 
 export type InsightScalarFieldEnum = (typeof InsightScalarFieldEnum)[keyof typeof InsightScalarFieldEnum]
+
+
+export const ApplicantScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  importBatchId: 'importBatchId',
+  fullName: 'fullName',
+  email: 'email',
+  phone: 'phone',
+  program: 'program',
+  department: 'department',
+  session: 'session',
+  matricPercent: 'matricPercent',
+  fscPercent: 'fscPercent',
+  meritScore: 'meritScore',
+  gender: 'gender',
+  city: 'city',
+  importedAt: 'importedAt'
+} as const
+
+export type ApplicantScalarFieldEnum = (typeof ApplicantScalarFieldEnum)[keyof typeof ApplicantScalarFieldEnum]
+
+
+export const ImportBatchScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  fileName: 'fileName',
+  totalCount: 'totalCount',
+  program: 'program',
+  session: 'session',
+  importedBy: 'importedBy',
+  importedAt: 'importedAt'
+} as const
+
+export type ImportBatchScalarFieldEnum = (typeof ImportBatchScalarFieldEnum)[keyof typeof ImportBatchScalarFieldEnum]
 
 
 export const SortOrder = {
