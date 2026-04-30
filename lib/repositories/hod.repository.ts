@@ -19,7 +19,7 @@ const HOD_LIVE_PAYMENT_SELECT = {
   },
 } satisfies Prisma.PaymentSelect
 
-export type HODLivePaymentRow = Prisma.PaymentGetPayload<{ select: typeof HOD_LIVE_PAYMENT_SELECT }>
+export type HodLivePaymentRow = Prisma.PaymentGetPayload<{ select: typeof HOD_LIVE_PAYMENT_SELECT }>
 
 const HOD_ASSIGNMENT_SELECT = {
   id: true,
@@ -43,9 +43,9 @@ const HOD_ASSIGNMENT_SELECT = {
   },
 } satisfies Prisma.FeeAssignmentSelect
 
-export type HODAssignmentRow = Prisma.FeeAssignmentGetPayload<{ select: typeof HOD_ASSIGNMENT_SELECT }>
+export type HodAssignmentRow = Prisma.FeeAssignmentGetPayload<{ select: typeof HOD_ASSIGNMENT_SELECT }>
 
-export class HODRepository {
+export class HodRepository {
   constructor(private readonly db: PrismaClient) {}
 
   findUserWithDepartment(userId: string, tenantId: string) {

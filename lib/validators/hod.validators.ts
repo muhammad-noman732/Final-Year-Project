@@ -12,5 +12,5 @@ export const hodFiltersSchema = z.object({
 export const hodDashboardQuerySchema = hodFiltersSchema
 export const hodStudentsQuerySchema = paginationQuerySchema.extend(hodFiltersSchema.shape)
 
-export type HODFiltersInput = z.infer<typeof hodFiltersSchema>
-export type HODStudentsQuery = z.infer<typeof hodStudentsQuerySchema>
+export type HodFiltersInput = z.infer<typeof hodFiltersSchema>
+export type HodStudentsQuery = z.infer<typeof hodStudentsQuerySchema>

@@ -1,11 +1,11 @@
 import { type NextRequest } from "next/server"
 import { successResponse } from "@/lib/utils/ApiResponse"
 import { getTenantContext, requireRole } from "@/lib/auth"
-import type { HODService } from "@/lib/services/hod.service"
+import type { HodService } from "@/lib/services/hod.service"
 import { hodDashboardQuerySchema, hodStudentsQuerySchema } from "@/lib/validators/hod.validators"
 
-export class HODController {
-  constructor(private readonly hodService: HODService) {}
+export class HodController {
+  constructor(private readonly hodService: HodService) {}
 
   async getDashboard(req: NextRequest) {
     const { tenantId, userId } = await getTenantContext()

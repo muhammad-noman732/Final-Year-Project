@@ -1,30 +1,30 @@
 import { FeeStatus, PaymentStatus, type Prisma } from "@/app/generated/prisma/client"
-import type { HODAssignmentRow, HODLivePaymentRow, HODRepository } from "@/lib/repositories/hod.repository"
+import type { HodAssignmentRow, HodLivePaymentRow, HodRepository } from "@/lib/repositories/hod.repository"
 import { buildPaginationMeta, getPaginationParams } from "@/lib/utils/paginate"
 import { ForbiddenError } from "@/lib/utils/AppError"
 import type {
-  HODDashboardData,
-  HODDefaulterRow,
-  HODDepartmentInfo,
-  HODFilters,
-  HODLivePaymentItem,
-  HODOverview,
-  HODPaginatedStudents,
-  HODSemesterBreakdown,
-  HODStudentRow,
+  HodDashboardData,
+  HodDefaulterRow,
+  HodDepartmentInfo,
+  HodFilters,
+  HodLivePaymentItem,
+  HodOverview,
+  HodPaginatedStudents,
+  HodSemesterBreakdown,
+  HodStudentRow,
 } from "@/types/server/hod.types"
 
 type CanonicalStatus = "PAID" | "UNPAID" | "OVERDUE"
 
 interface CanonicalAssignment {
-  row: HODAssignmentRow
+  row: HodAssignmentRow
   status: CanonicalStatus
 }
 
-export class HODService {
-  constructor(private readonly hodRepo: HODRepository) {}
+export class HodService {
+  constructor(private readonly hodRepo: HodRepository) {}
 
-  async getHODDepartment(userId: string, tenantId: string): Promise<HODDepartmentInfo> {
+  async getHodDepartment(userId: string, tenantId: string): Promise<HodDepartmentInfo> {
     const user = await this.hodRepo.findUserWithDepartment(userId, tenantId)
     if (!user?.hodDepartment) throw new ForbiddenError("HOD department not assigned.")
     return user.hodDepartment
@@ -33,9 +33,9 @@ export class HODService {
   async getDashboard(
     tenantId: string,
     userId: string,
-    filters: HODFilters,
-  ): Promise<HODDashboardData> {
-    const department = await this.getHODDepartment(userId, tenantId)
+    filters: HodFilters,
+  ): Promise<HodDashboardData> {
+    const department = await this.getHodDepartment(userId, tenantId)
     const assignmentWhere = this.buildAssignmentWhere(tenantId, department.id, filters)
     const today = this.todayRange()
 
@@ -71,9 +71,9 @@ export class HODService {
   async getStudents(
     tenantId: string,
     userId: string,
-    filters: HODFilters,
-  ): Promise<HODPaginatedStudents> {
-    const department = await this.getHODDepartment(userId, tenantId)
+    filters: HodFilters,
+  ): Promise<HodPaginatedStudents> {
+    const department = await this.getHodDepartment(userId, tenantId)
     const { page = 1, limit = 20 } = filters
     const { skip } = getPaginationParams({ page, limit })
 
@@ -93,7 +93,7 @@ export class HODService {
   private buildAssignmentWhere(
     tenantId: string,
     departmentId: string,
-    filters: HODFilters,
+    filters: HodFilters,
     includeSearch = false,
   ): Prisma.FeeAssignmentWhereInput {
     const studentWhere: Prisma.StudentWhereInput = {
@@ -112,8 +112,8 @@ export class HODService {
     return { tenantId, student: { is: studentWhere } }
   }
 
-  private buildCanonical(rows: HODAssignmentRow[]): CanonicalAssignment[] {
-    const map = new Map<string, HODAssignmentRow>()
+  private buildCanonical(rows: HodAssignmentRow[]): CanonicalAssignment[] {
+    const map = new Map<string, HodAssignmentRow>()
     for (const row of rows) {
       if (row.feeStructure.semester !== row.student.currentSemester) continue
       const existing = map.get(row.student.id)
@@ -123,7 +123,7 @@ export class HODService {
     return Array.from(map.values()).map((row) => ({ row, status: this.normalizeStatus(row) }))
   }
 
-  private compareRecency(a: HODAssignmentRow, b: HODAssignmentRow): number {
+  private compareRecency(a: HodAssignmentRow, b: HodAssignmentRow): number {
     if (a.feeStructure.sessionYear !== b.feeStructure.sessionYear) {
       return a.feeStructure.sessionYear - b.feeStructure.sessionYear
     }
@@ -133,7 +133,7 @@ export class HODService {
     return a.createdAt.getTime() - b.createdAt.getTime()
   }
 
-  private normalizeStatus(row: HODAssignmentRow): CanonicalStatus {
+  private normalizeStatus(row: HodAssignmentRow): CanonicalStatus {
     if (row.status === FeeStatus.PAID) return "PAID"
     if (row.status === FeeStatus.OVERDUE || row.dueDate.getTime() < Date.now()) return "OVERDUE"
     return "UNPAID"
@@ -151,7 +151,7 @@ export class HODService {
     rows: CanonicalAssignment[],
     allTime: { _sum: { amount: number | null }; _count: { id: number } },
     today: { _sum: { amount: number | null }; _count: { id: number } },
-  ): HODOverview {
+  ): HodOverview {
     const totalStudents = rows.length
     const paidStudents = rows.filter((r) => r.status === "PAID").length
     const unpaidStudents = rows.filter((r) => r.status === "UNPAID").length
@@ -173,8 +173,8 @@ export class HODService {
     }
   }
 
-  private buildSemesterBreakdown(rows: CanonicalAssignment[]): HODSemesterBreakdown[] {
-    const map = new Map<number, HODSemesterBreakdown>()
+  private buildSemesterBreakdown(rows: CanonicalAssignment[]): HodSemesterBreakdown[] {
+    const map = new Map<number, HodSemesterBreakdown>()
     for (const { row, status } of rows) {
       const sem = row.student.currentSemester
       const cur = map.get(sem) ?? {
@@ -196,7 +196,7 @@ export class HODService {
     return Array.from(map.values()).sort((a, b) => a.semester - b.semester)
   }
 
-  private buildDefaulters(rows: CanonicalAssignment[]): HODDefaulterRow[] {
+  private buildDefaulters(rows: CanonicalAssignment[]): HodDefaulterRow[] {
     const now = Date.now()
     return rows
       .filter((r) => r.status === "OVERDUE" || r.status === "UNPAID")
@@ -222,7 +222,7 @@ export class HODService {
       .sort((a, b) => b.daysOverdue - a.daysOverdue)
   }
 
-  private mapLivePayment(row: HODLivePaymentRow): HODLivePaymentItem {
+  private mapLivePayment(row: HodLivePaymentRow): HodLivePaymentItem {
     return {
       id: row.id,
       studentName: row.student.user.name,
@@ -235,7 +235,7 @@ export class HODService {
     }
   }
 
-  private mapStudentRow({ row, status }: CanonicalAssignment): HODStudentRow {
+  private mapStudentRow({ row, status }: CanonicalAssignment): HodStudentRow {
     const now = Date.now()
     const daysOverdue =
       row.dueDate.getTime() < now && status !== "PAID"

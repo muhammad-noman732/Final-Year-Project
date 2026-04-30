@@ -6,7 +6,7 @@ export async function GET() {
   const { tenantId, userId } = await getTenantContext()
   await requireRole("HOD")
 
-  const department = await hodService.getHODDepartment(userId, tenantId)
+  const department = await hodService.getHodDepartment(userId, tenantId)
   const channel = sseChannel(tenantId)
   const subscriber = createRedisSubscriber()
   const encoder = new TextEncoder()
