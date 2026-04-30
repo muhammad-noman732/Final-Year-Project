@@ -21,6 +21,8 @@ export const baseApi = createApi({
     "Payment",
     "VCDashboard",
     "VCStudents",
+    "HODDashboard",
+    "HODStudents",
     "Notification",
     "Registration",
   ],

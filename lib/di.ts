@@ -13,6 +13,7 @@ import { FeeAssignmentRepository } from "@/lib/repositories/feeAssignment.reposi
 import { PaymentRepository } from "@/lib/repositories/payment.repository"
 import { WebhookRepository } from "@/lib/repositories/webhook.repository"
 import { VCRepository } from "@/lib/repositories/vc.repository"
+import { HODRepository } from "@/lib/repositories/hod.repository"
 import { ActivityLogRepository } from "@/lib/repositories/activityLog.repository"
 import { InsightRepository } from "@/lib/repositories/insight.repository"
 import { NotificationRepository } from "@/lib/repositories/notification.repository"
@@ -35,6 +36,7 @@ import { FeeAssignmentService } from "@/lib/services/feeAssignment.service"
 import { PaymentService } from "@/lib/services/payment.service"
 import { WebhookService } from "@/lib/services/webhook.service"
 import { VCService } from "@/lib/services/vc.service"
+import { HODService } from "@/lib/services/hod.service"
 import { NotificationService } from "@/lib/services/notification.service"
 import { RegistrationService } from "@/lib/services/registration.service"
 
@@ -52,6 +54,7 @@ import { FeeAssignmentController } from "@/lib/controllers/feeAssignment.control
 import { PaymentController } from "@/lib/controllers/payment.controller"
 import { WebhookController } from "@/lib/controllers/webhook.controller"
 import { VCController } from "@/lib/controllers/vc.controller"
+import { HODController } from "@/lib/controllers/hod.controller"
 import { CronController } from "@/lib/controllers/cron.controller"
 import { NotificationController } from "@/lib/controllers/notification.controller"
 import { RegistrationController } from "@/lib/controllers/registration.controller"
@@ -69,6 +72,7 @@ const feeAssignmentRepo = new FeeAssignmentRepository(prisma)
 const paymentRepo = new PaymentRepository(prisma)
 const webhookRepo = new WebhookRepository(prisma)
 const vcRepo = new VCRepository(prisma)
+const hodRepo = new HODRepository(prisma)
 const activityLogRepo = new ActivityLogRepository(prisma)
 const insightRepo = new InsightRepository(prisma)
 const notificationRepo = new NotificationRepository(prisma)
@@ -92,6 +96,7 @@ const feeStructureService = new FeeStructureService(feeStructureRepo, programRep
 const paymentService = new PaymentService(paymentRepo, studentRepo)
 const webhookService = new WebhookService(paymentRepo, webhookRepo, studentRepo, activityLogRepo, notificationService, userRepo)
 export const vcService = new VCService(vcRepo, insightRepo)
+export const hodService = new HODService(hodRepo)
 const registrationService = new RegistrationService(applicantRepo, importBatchRepo, activityLogRepo, insightRepo, sessionRepo)
 
 // Controllers
@@ -108,6 +113,7 @@ export const feeAssignmentController = new FeeAssignmentController(feeAssignment
 export const paymentController = new PaymentController(paymentService)
 export const webhookController = new WebhookController(webhookService)
 export const vcController = new VCController(vcService)
+export const hodController = new HODController(hodService)
 export const cronController = new CronController(tenantService, vcService, registrationService)
 export const notificationController = new NotificationController(notificationService)
 export const registrationController = new RegistrationController(registrationService)

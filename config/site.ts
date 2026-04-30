@@ -35,5 +35,7 @@ export const navItems = {
     ],
     hod: [
         { label: "Dashboard", href: "/hod", icon: "LayoutDashboard" },
+        { label: "Defaulters", href: "/hod/defaulters", icon: "AlertTriangle" },
+        { label: "Students", href: "/hod/students", icon: "Users" },
     ],
 } as const;

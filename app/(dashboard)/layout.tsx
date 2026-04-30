@@ -6,6 +6,7 @@ import Sidebar from "@/components/layout/Sidebar"
 import Navbar from "@/components/layout/Navbar"
 import { navItems } from "@/config/site"
 import { useAuth } from "@/hooks/useAuth"
+import { cn } from "@/lib/utils"
 
 // ─── Nav item shape (shared with Sidebar) ─────────────────────
 
@@ -84,9 +85,12 @@ export default function DashboardLayout({
   // Use real user name if available, otherwise fallback
   const userName = isLoading ? "Loading..." : user?.name || "User"
   const userRole = config.label
+  
+  // Specific styling for HOD route to give it full-width light background without layout padding
+  const isHOD = role === "hod"
 
   return (
-    <div className="min-h-[100dvh] flex">
+    <div className="h-[100dvh] flex bg-[#F4F6FA] dark:bg-[#050811] overflow-hidden transition-colors duration-300">
       <Sidebar
         items={config.items}
         role={role}
@@ -102,7 +106,12 @@ export default function DashboardLayout({
           onMenuClick={() => setSidebarOpen(true)}
           showLiveIndicator={config.showLive}
         />
-        <main className="flex-1 overflow-y-auto p-5 lg:p-8 scroll-smooth">{children}</main>
+        <main className={cn(
+          "flex-1 overflow-y-auto scroll-smooth",
+          isHOD ? "" : "p-5 lg:p-8 bg-slate-50 dark:bg-slate-950"
+        )}>
+          {children}
+        </main>
       </div>
     </div>
   )

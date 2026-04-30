@@ -7,23 +7,19 @@
     provider = "postgresql"
   }
 
-  //  TENANT — One row = one university
-
+ 
   model Tenant {
     id        String  @id @default(cuid())
-    name      String // "Government College University Faisalabad"
-    shortName String // "GCUF"
-    slug      String  @unique // "gcuf" — used in URL / JWT
-    domain    String? @unique // "fees.gcuf.edu.pk" — optional custom domain
+    name      String 
+    shortName String
+    slug      String  @unique 
+    domain    String? @unique 
     logoUrl   String?
-
-    // Per-tenant branding (white-label)
     primaryColor String @default("#d4a843")
     accentColor  String @default("#0a0e1a")
 
-    // Plan & limits — schema only, billing implemented later
     plan        Plan      @default(FREE)
-    maxStudents Int       @default(500) // enforced at student creation
+    maxStudents Int       @default(500) 
     isActive    Boolean   @default(true)
     trialEndsAt DateTime?
 
@@ -33,7 +29,6 @@
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
-    // ── Relations ──
     users            User[]
     departments      Department[]
     programs         Program[]
@@ -52,7 +47,6 @@
     @@index([slug])
   }
 
-  //  USER — All roles in one table (Admin, VC, HOD, Student, SuperAdmin)
 
   model User {
     id       String  @id @default(cuid())

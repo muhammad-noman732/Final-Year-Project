@@ -7,6 +7,8 @@ import _student_profile_header from './student-profile-header.bones.json'
 import _active_liabilities from './active-liabilities.bones.json'
 import _ledger_transactions from './ledger-transactions.bones.json'
 import _ledger_summary from './ledger-summary.bones.json'
+import _hod_stats_grid from './hod-stats-grid.bones.json'
+import _hod_semester_chart from './hod-semester-chart.bones.json'
 
 registerBones({
   "student-fee-card": _student_fee_card,
@@ -14,4 +16,6 @@ registerBones({
   "active-liabilities": _active_liabilities,
   "ledger-transactions": _ledger_transactions,
   "ledger-summary": _ledger_summary,
+  "hod-stats-grid": _hod_stats_grid,
+  "hod-semester-chart": _hod_semester_chart,
 })

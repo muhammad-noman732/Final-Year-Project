@@ -59,9 +59,9 @@ export const formatCurrency = (amount: number): string => {
     if (amount >= 1_000) {
         return `PKR ${(amount / 1_000).toFixed(0)}K`;
     }
-    return `PKR ${amount.toLocaleString()}`;
+    return `PKR ${amount.toLocaleString("en-US")}`;
 };
 
 export const formatFullCurrency = (amount: number): string => {
-    return `PKR ${amount.toLocaleString()}`;
+    return `PKR ${amount.toLocaleString("en-US")}`;
 };

@@ -80,6 +80,43 @@
 
 :root {
   --radius: 0.625rem;
+  --background: #F4F6FA;
+  --foreground: #0F172A;
+  --card: #FFFFFF;
+  --card-foreground: #0F172A;
+  --popover: #FFFFFF;
+  --popover-foreground: #0F172A;
+  --primary: #6366F1;
+  --primary-foreground: #FFFFFF;
+  --secondary: #F1F5F9;
+  --secondary-foreground: #0F172A;
+  --muted: #F8FAFC;
+  --muted-foreground: #64748B;
+  --accent: #F1F5F9;
+  --accent-foreground: #6366F1;
+  --destructive: #EF4444;
+  --border: #E2E8F0;
+  --input: #E2E8F0;
+  --ring: #6366F1;
+  --chart-1: #6366F1;
+  --chart-2: #22C55E;
+  --chart-3: #0EA5E9;
+  --chart-4: #F59E0B;
+  --chart-5: #EF4444;
+  --sidebar: #F4F6FA;
+  --sidebar-foreground: #64748B;
+  --sidebar-primary: #6366F1;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: #E2E8F0;
+  --sidebar-accent-foreground: #0F172A;
+  --sidebar-border: #E2E8F0;
+  --sidebar-ring: #6366F1;
+  
+  /* HOD Background Variable */
+  --hod-bg: #F4F6FA;
+}
+
+.dark {
   --background: #050811;
   --foreground: #e8e6e3;
   --card: #0d1321;
@@ -91,7 +128,6 @@
   --secondary: #1a2332;
   --secondary-foreground: #e8e6e3;
   --muted: #111827;
-  /* Improved muted-foreground: bumped from #94a3b8 to #a1b1c7 for better contrast on dark bg */
   --muted-foreground: #a1b1c7;
   --accent: #1a2332;
   --accent-foreground: #f5c542;
@@ -112,6 +148,9 @@
   --sidebar-accent-foreground: #f5c542;
   --sidebar-border: rgba(212, 168, 67, 0.1);
   --sidebar-ring: #d4a843;
+
+  /* HOD Background Variable */
+  --hod-bg: #050811;
 }
 
 /* ═══ Base ═══ */
@@ -425,8 +464,49 @@ input[type="checkbox"]:focus-visible {
   outline-offset: 2px;
 }
 
+.glass-hod {
+  background: linear-gradient(135deg, rgba(13, 19, 33, 0.85) 0%, rgba(26, 35, 50, 0.65) 100%);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.32),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.18);
+}
+
+/* Interactive hover lift for HOD glass panels */
+.glass-hod-hover {
+  transition:
+    transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.glass-hod-hover:hover {
+  border-color: rgba(212, 168, 67, 0.14);
+  box-shadow:
+    0 16px 48px rgba(0, 0, 0, 0.42),
+    inset 0 1px 0 rgba(212, 168, 67, 0.06),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.22);
+  transform: translateY(-2px);
+}
+
+/* Gold top-edge refraction line shared by all HOD panels */
+.hod-accent-line::before {
+  content: '';
+  position: absolute;
+  inset-inline: 0;
+  top: 0;
+  height: 1.5px;
+  border-radius: inherit;
+  background: linear-gradient(90deg, transparent 0%, rgba(212, 168, 67, 0.45) 50%, transparent 100%);
+  pointer-events: none;
+}
+
 /* ═══ Reduced Motion ═══ */
 @media (prefers-reduced-motion: reduce) {
+
   *,
   *::before,
   *::after {

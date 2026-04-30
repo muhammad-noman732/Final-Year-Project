@@ -21,6 +21,7 @@ export const metadata: Metadata = {
 };
 
 import { StoreProvider } from "@/store/provider";
+import { ThemeApplier } from "@/components/layout/ThemeApplier";
 import { Toaster } from "@/components/ui/sonner";
 
 export default function RootLayout({
@@ -29,9 +30,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en">
       <body className={`${dmSans.variable} ${geistMono.variable} font-sans antialiased bg-background min-h-[100dvh] text-foreground`}>
         <StoreProvider>
+          <ThemeApplier />
           {children}
           <Toaster position="top-right" richColors closeButton />
         </StoreProvider>
