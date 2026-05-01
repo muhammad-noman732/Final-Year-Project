@@ -16,11 +16,11 @@ interface VCStudentsTableProps {
 
 function SkeletonRow() {
   return (
-    <tr className="border-t border-white/[0.03]">
+    <tr className="border-t border-slate-200/50 dark:border-white/[0.03]">
       {Array.from({ length: 8 }).map((_, i) => (
         <td key={i} className="px-3 py-3">
           <div
-            className="h-3 rounded bg-white/[0.04] animate-pulse"
+            className="h-3 rounded bg-slate-200/50 dark:bg-white/[0.04] animate-pulse"
             style={{ width: `${50 + (i % 4) * 15}%` }}
           />
         </td>
@@ -41,11 +41,11 @@ function EmptyState({ tab }: { tab: TrackingTab }) {
     <tr>
       <td colSpan={9} className="px-6 py-16 text-center">
         <div className="flex flex-col items-center gap-2">
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white/[0.03]">
-            <FileText className="h-4 w-4 text-white/10" />
+          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-200/50 dark:bg-white/[0.03]">
+            <FileText className="h-4 w-4 text-[#64748B]/30 dark:text-white/10" />
           </div>
-          <p className="text-sm font-medium text-foreground/60">{title}</p>
-          <p className="text-xs text-muted-foreground/50">{desc}</p>
+          <p className="text-sm font-medium text-[#0F172A]/70 dark:text-foreground/60">{title}</p>
+          <p className="text-xs text-[#64748B]/80 dark:text-muted-foreground/50">{desc}</p>
         </div>
       </td>
     </tr>
@@ -64,23 +64,23 @@ export default function VCStudentsTable({
   const hasRows = rows.length > 0
 
   return (
-    <div className="relative overflow-hidden rounded-2xl border border-white/[0.06] bg-navy-900/40">
+    <div className="relative overflow-hidden rounded-2xl border border-white/60 dark:border-white/[0.06] bg-white/40 dark:bg-navy-900/40 backdrop-blur-md shadow-[0_8px_32px_rgba(0,0,0,0.04)]">
       {/* ── Loading overlay when refetching existing data ── */}
       {isLoading && hasRows && (
-        <div className="absolute inset-0 z-10 flex items-center justify-center bg-navy-900/60 backdrop-blur-[2px]">
-          <div className="flex items-center gap-2 rounded-xl border border-white/[0.06] bg-navy-800/90 px-4 py-2.5 shadow-xl">
-            <Loader2 className="h-3.5 w-3.5 animate-spin text-gold-400" />
-            <span className="text-[11px] font-medium text-muted-foreground">Updating results…</span>
+        <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/40 dark:bg-navy-900/60 backdrop-blur-sm">
+          <div className="flex items-center gap-2 rounded-xl border border-white/60 dark:border-white/[0.06] bg-white/80 dark:bg-navy-800/90 px-4 py-2.5 shadow-xl">
+            <Loader2 className="h-3.5 w-3.5 animate-spin text-gold-500 dark:text-gold-400" />
+            <span className="text-[11px] font-medium text-[#64748B] dark:text-muted-foreground">Updating results…</span>
           </div>
         </div>
       )}
 
       {/* ── Header ── */}
-      <div className="flex items-center justify-between gap-3 border-b border-white/[0.04] px-5 py-3.5">
+      <div className="flex items-center justify-between gap-3 border-b border-slate-200/50 dark:border-white/[0.04] px-5 py-3.5 bg-white/20 dark:bg-transparent">
         <div>
-          <p className="text-[12.5px] font-semibold text-foreground">Student Records</p>
+          <p className="text-[12.5px] font-semibold text-[#0F172A] dark:text-foreground">Student Records</p>
           {meta && (
-            <p className="text-[10.5px] text-muted-foreground/60 mt-0.5">
+            <p className="text-[10.5px] text-[#64748B] dark:text-muted-foreground/60 mt-0.5">
               {meta.total} record{meta.total !== 1 ? "s" : ""} · page {meta.page} of {meta.totalPages}
             </p>
           )}
@@ -89,7 +89,7 @@ export default function VCStudentsTable({
           <button
             type="button"
             onClick={onExport}
-            className="flex items-center gap-1.5 rounded-lg border border-white/[0.06] bg-white/[0.02] px-3 py-1.5 text-[11px] font-medium text-muted-foreground transition-colors hover:border-gold-500/20 hover:text-gold-400 active:scale-[0.97]"
+            className="flex items-center gap-1.5 rounded-lg border border-slate-200/80 dark:border-white/[0.06] bg-white/60 dark:bg-white/[0.02] px-3 py-1.5 text-[11px] font-medium text-[#64748B] dark:text-muted-foreground transition-colors hover:border-gold-500/40 hover:text-gold-600 dark:hover:border-gold-500/20 dark:hover:text-gold-400 active:scale-[0.97] shadow-sm"
           >
             <Download className="h-3 w-3" />
             CSV
@@ -101,13 +101,13 @@ export default function VCStudentsTable({
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
           <thead>
-            <tr className="border-b border-white/[0.04]">
+            <tr className="border-b border-slate-200/50 dark:border-white/[0.04]">
               {["Student", "Roll No", "Department", "Program", "Sem", "Status", "Due", "Paid", "Date"].map(
                 (h, i) => (
                   <th
                     key={h}
                     className={[
-                      "px-3 py-2.5 text-[10px] uppercase tracking-widest font-semibold text-muted-foreground/50 bg-white/[0.012]",
+                      "px-3 py-2.5 text-[10px] uppercase tracking-widest font-semibold text-[#64748B]/70 dark:text-muted-foreground/50 bg-white/30 dark:bg-white/[0.012]",
                       i === 0 ? "text-left pl-5" : i >= 6 ? "text-right" : "text-left",
                     ].join(" ")}
                   >
@@ -129,50 +129,50 @@ export default function VCStudentsTable({
                   : row.daysOverdue > 0
                     ? `+${row.daysOverdue}d overdue`
                     : new Date(row.dueDate).toLocaleDateString([], { day: "numeric", month: "short" })
-                const dateColor = row.daysOverdue > 0 && !row.paidAt ? "text-rose-400" : "text-muted-foreground"
+                const dateColor = row.daysOverdue > 0 && !row.paidAt ? "text-rose-600 dark:text-rose-400" : "text-[#64748B] dark:text-muted-foreground"
 
                 return (
                   <tr
                     key={row.assignmentId}
-                    className="group border-t border-white/[0.03] hover:bg-white/[0.015] transition-colors duration-100"
+                    className="group border-t border-slate-200/50 dark:border-white/[0.03] hover:bg-white/60 dark:hover:bg-white/[0.015] transition-colors duration-100"
                   >
                     <td className="pl-5 pr-3 py-2.5">
                       <div className="flex items-center gap-2.5">
-                        <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-white/[0.04] text-[10px] font-bold uppercase text-muted-foreground group-hover:bg-white/[0.07] transition-colors">
+                        <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-slate-200/50 dark:bg-white/[0.04] text-[10px] font-bold uppercase text-[#64748B] dark:text-muted-foreground group-hover:bg-slate-300/50 dark:group-hover:bg-white/[0.07] transition-colors">
                           {row.studentName.charAt(0)}
                         </div>
                         <div className="min-w-0">
-                          <p className="text-[12.5px] font-medium text-foreground truncate max-w-[130px]">
+                          <p className="text-[12.5px] font-medium text-[#0F172A] dark:text-foreground truncate max-w-[130px]">
                             {row.studentName}
                           </p>
-                          <p className="text-[10.5px] text-muted-foreground/60 truncate max-w-[130px]">
+                          <p className="text-[10.5px] text-[#64748B]/80 dark:text-muted-foreground/60 truncate max-w-[130px]">
                             {row.email}
                           </p>
                         </div>
                       </div>
                     </td>
-                    <td className="px-3 py-2.5 text-[11px] font-mono text-muted-foreground whitespace-nowrap">
+                    <td className="px-3 py-2.5 text-[11px] font-mono text-[#64748B] dark:text-muted-foreground whitespace-nowrap">
                       {row.rollNumber}
                     </td>
-                    <td className="px-3 py-2.5 text-[11.5px] text-muted-foreground whitespace-nowrap">
+                    <td className="px-3 py-2.5 text-[11.5px] text-[#64748B] dark:text-muted-foreground whitespace-nowrap">
                       {row.departmentCode}
                     </td>
-                    <td className="px-3 py-2.5 text-[11.5px] text-muted-foreground max-w-[120px] truncate">
+                    <td className="px-3 py-2.5 text-[11.5px] text-[#64748B] dark:text-muted-foreground max-w-[120px] truncate">
                       {row.programName}
                     </td>
-                    <td className="px-3 py-2.5 text-[11.5px] text-muted-foreground text-center">
+                    <td className="px-3 py-2.5 text-[11.5px] text-[#64748B] dark:text-muted-foreground text-center">
                       {row.semester}
                     </td>
                     <td className="px-3 py-2.5">
                       <StatusBadge status={row.feeStatus.toLowerCase()} />
                     </td>
                     <td className="px-3 py-2.5 text-right">
-                      <span className="text-[12px] font-semibold text-foreground font-mono tabular-nums">
+                      <span className="text-[12px] font-semibold text-[#0F172A] dark:text-foreground font-mono tabular-nums">
                         {formatFullCurrency(row.amountDue)}
                       </span>
                     </td>
                     <td className="px-3 py-2.5 text-right">
-                      <span className="text-[12px] font-semibold text-emerald-400 font-mono tabular-nums">
+                      <span className="text-[12px] font-semibold text-emerald-600 dark:text-emerald-400 font-mono tabular-nums">
                         {formatFullCurrency(row.amountPaid)}
                       </span>
                     </td>
@@ -191,8 +191,8 @@ export default function VCStudentsTable({
 
       {/* ── Pagination ── */}
       {meta && meta.totalPages > 1 && (
-        <div className="flex items-center justify-between border-t border-white/[0.04] px-5 py-3">
-          <span className="text-[10.5px] text-muted-foreground/60">
+        <div className="flex items-center justify-between border-t border-slate-200/50 dark:border-white/[0.04] px-5 py-3 bg-white/20 dark:bg-transparent">
+          <span className="text-[10.5px] text-[#64748B] dark:text-muted-foreground/60">
             Showing {(meta.page - 1) * 15 + 1}–{Math.min(meta.page * 15, meta.total)} of {meta.total}
           </span>
           <div className="flex items-center gap-1">
@@ -200,7 +200,7 @@ export default function VCStudentsTable({
               type="button"
               onClick={() => onPageChange(meta.page - 1)}
               disabled={meta.page <= 1 || isLoading}
-              className="flex h-7 w-7 items-center justify-center rounded-lg text-muted-foreground hover:bg-white/[0.05] hover:text-foreground disabled:opacity-30 transition-all"
+              className="flex h-7 w-7 items-center justify-center rounded-lg text-[#64748B] dark:text-muted-foreground hover:bg-slate-200/80 dark:hover:bg-white/[0.05] hover:text-[#0F172A] dark:hover:text-foreground disabled:opacity-30 transition-all"
             >
               <ChevronLeft className="h-3.5 w-3.5" />
             </button>
@@ -212,8 +212,8 @@ export default function VCStudentsTable({
                 className={[
                   "h-7 w-7 rounded-lg text-[11px] font-semibold transition-all duration-150",
                   p === meta.page
-                    ? "bg-gold-500/15 text-gold-400 border border-gold-500/20"
-                    : "text-muted-foreground hover:text-foreground hover:bg-white/[0.04]",
+                    ? "bg-gold-500/20 dark:bg-gold-500/15 text-gold-700 dark:text-gold-400 border border-gold-500/30 dark:border-gold-500/20"
+                    : "text-[#64748B] dark:text-muted-foreground hover:text-[#0F172A] dark:hover:text-foreground hover:bg-slate-200/80 dark:hover:bg-white/[0.04]",
                 ].join(" ")}
               >
                 {p}
@@ -223,7 +223,7 @@ export default function VCStudentsTable({
               type="button"
               onClick={() => onPageChange(meta.page + 1)}
               disabled={meta.page >= meta.totalPages || isLoading}
-              className="flex h-7 w-7 items-center justify-center rounded-lg text-muted-foreground hover:bg-white/[0.05] hover:text-foreground disabled:opacity-30 transition-all"
+              className="flex h-7 w-7 items-center justify-center rounded-lg text-[#64748B] dark:text-muted-foreground hover:bg-slate-200/80 dark:hover:bg-white/[0.05] hover:text-[#0F172A] dark:hover:text-foreground disabled:opacity-30 transition-all"
             >
               <ChevronRight className="h-3.5 w-3.5" />
             </button>

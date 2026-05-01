@@ -113,7 +113,7 @@ export default function VCRegistrationTab({
             />
           </div>
         ) : (
-          <div className="rounded-xl border border-white/[0.05] bg-[#080c18] px-5 py-10 text-center text-sm text-muted-foreground/40">
+          <div className="rounded-xl border border-white/60 dark:border-white/[0.05] bg-white/40 dark:bg-[#080c18] backdrop-blur-md shadow-sm px-5 py-10 text-center text-sm font-medium text-slate-500 dark:text-muted-foreground/40">
             Loading activity…
           </div>
         )}
@@ -124,14 +124,14 @@ export default function VCRegistrationTab({
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="flex flex-col items-center justify-center gap-3 rounded-xl border border-dashed border-white/[0.07] py-16 text-center"
+          className="flex flex-col items-center justify-center gap-3 rounded-xl border border-dashed border-slate-300 dark:border-white/[0.07] bg-white/40 dark:bg-transparent backdrop-blur-md shadow-sm dark:shadow-none py-16 text-center"
         >
           <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-violet-500/10">
-            <GraduationCap className="h-5 w-5 text-violet-400" strokeWidth={1.5} />
+            <GraduationCap className="h-5 w-5 text-violet-600 dark:text-violet-400" strokeWidth={1.5} />
           </div>
           <div>
-            <p className="text-sm font-medium text-foreground/70">No applicants imported yet</p>
-            <p className="mt-1 text-xs text-muted-foreground/40">
+            <p className="text-sm font-bold text-slate-800 dark:text-foreground/70">No applicants imported yet</p>
+            <p className="mt-1 text-xs font-medium text-slate-500 dark:text-muted-foreground/40">
               Ask an admin to upload a CSV file from the Registration section.
             </p>
           </div>

@@ -17,13 +17,13 @@ function ChartTooltip(props: {
 }) {
   if (!props.active || !props.payload?.length) return null
   return (
-    <div className="rounded-lg border border-white/[0.08] bg-navy-800 px-3 py-2 text-xs shadow-xl">
-      {props.label ? <p className="mb-1.5 font-semibold text-foreground">{props.label}</p> : null}
+    <div className="rounded-lg border border-white/60 dark:border-white/[0.08] bg-white/80 dark:bg-navy-800/80 backdrop-blur-md px-3 py-2 text-xs shadow-xl">
+      {props.label ? <p className="mb-1.5 font-semibold text-[#0F172A] dark:text-foreground">{props.label}</p> : null}
       {props.payload.map((entry) => (
-        <div key={`${entry.name}-${entry.color}`} className="flex items-center gap-2 text-muted-foreground">
+        <div key={`${entry.name}-${entry.color}`} className="flex items-center gap-2 text-[#64748B] dark:text-muted-foreground">
           <span className="h-1.5 w-1.5 rounded-full flex-shrink-0" style={{ background: entry.color }} />
           <span>{entry.name}:</span>
-          <span className="text-foreground font-medium">
+          <span className="text-[#0F172A] dark:text-foreground font-medium">
             {entry.value > 999 ? formatFullCurrency(entry.value) : entry.value}
           </span>
         </div>
@@ -46,7 +46,7 @@ function PanelHeader({
       <div className={`flex h-7 w-7 items-center justify-center rounded-lg ${iconClass}`}>
         <Icon className="h-3.5 w-3.5" />
       </div>
-      <h3 className="text-sm font-semibold text-foreground">{title}</h3>
+      <h3 className="text-sm font-semibold text-[#0F172A] dark:text-foreground">{title}</h3>
     </div>
   )
 }
@@ -63,7 +63,7 @@ export default function VCAnalyticsPanels({
   return (
     <div className="space-y-4">
       {/* Collection Timeline — full width */}
-      <div className="rounded-xl border border-white/[0.05] bg-navy-900 p-5">
+      <div className="rounded-xl border border-white/60 dark:border-white/[0.05] bg-white/40 dark:bg-slate-900/40 backdrop-blur-md p-5 shadow-[0_8px_32px_rgba(0,0,0,0.04)]">
         <PanelHeader icon={TrendingUp} iconClass="bg-gold-500/10 text-gold-400" title="Collection Timeline" />
         {data.collectionTrend.length > 0 ? (
           <ResponsiveContainer width="100%" height={240}>
@@ -84,13 +84,13 @@ export default function VCAnalyticsPanels({
           </ResponsiveContainer>
         ) : (
           <div className="flex h-40 items-center justify-center">
-            <p className="text-xs text-muted-foreground">No timeline data for selected range.</p>
+            <p className="text-xs text-[#64748B] dark:text-muted-foreground">No timeline data for selected range.</p>
           </div>
         )}
       </div>
 
       {/* Department Health Grid */}
-      <div className="rounded-xl border border-white/[0.05] bg-navy-900 p-5">
+      <div className="rounded-xl border border-white/60 dark:border-white/[0.05] bg-white/40 dark:bg-slate-900/40 backdrop-blur-md p-5 shadow-[0_8px_32px_rgba(0,0,0,0.04)]">
         <PanelHeader icon={TrendingUp} iconClass="bg-violet-500/10 text-violet-400" title="Department Health" />
         <VCDepartmentHealthGrid
           departments={data.departmentPerformance}
@@ -99,9 +99,9 @@ export default function VCAnalyticsPanels({
       </div>
 
       {/* Semester Collections */}
-      <div className="rounded-xl border border-white/[0.05] bg-navy-900 p-5">
+      <div className="rounded-xl border border-white/60 dark:border-white/[0.05] bg-white/40 dark:bg-slate-900/40 backdrop-blur-md p-5 shadow-[0_8px_32px_rgba(0,0,0,0.04)]">
         <PanelHeader icon={BookOpen} iconClass="bg-sky-500/10 text-sky-400" title="Semester Collections" />
-        <div className="mb-3 flex items-center gap-3 text-[11px] text-muted-foreground">
+        <div className="mb-3 flex items-center gap-3 text-[11px] text-[#64748B] dark:text-muted-foreground">
           <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-sm bg-sky-500" />Paid</span>
           <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-sm bg-gold-500" />Outstanding</span>
         </div>
@@ -126,7 +126,7 @@ export default function VCAnalyticsPanels({
                   <button
                     key={s.semester} type="button"
                     onClick={() => onSemesterSelect(s.semester)}
-                    className="rounded-lg border border-white/[0.06] bg-white/[0.02] px-2.5 py-1 text-[11px] text-muted-foreground transition-colors hover:border-gold-500/25 hover:text-gold-300"
+                    className="rounded-lg border border-slate-200/80 dark:border-white/[0.06] bg-white/60 dark:bg-white/[0.02] px-2.5 py-1 text-[11px] text-[#64748B] dark:text-muted-foreground transition-colors hover:border-gold-500/40 hover:text-[#0F172A] dark:hover:border-gold-500/25 dark:hover:text-gold-300"
                   >
                     Sem {s.semester}
                   </button>
@@ -136,7 +136,7 @@ export default function VCAnalyticsPanels({
           </>
         ) : (
           <div className="flex h-40 items-center justify-center">
-            <p className="text-xs text-muted-foreground">No semester data.</p>
+            <p className="text-xs text-[#64748B] dark:text-muted-foreground">No semester data.</p>
           </div>
         )}
       </div>

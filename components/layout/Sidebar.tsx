@@ -42,14 +42,14 @@ export default function Sidebar({ items, role, roleLabel, open, onClose }: Sideb
 
             <aside
                 className={cn(
-                    "fixed inset-y-0 left-0 z-50 w-64 flex flex-col transform bg-white dark:bg-[#050811] transition-all duration-300 ease-in-out lg:relative lg:translate-x-0 border-r border-slate-200 dark:border-white/5",
+                    "fixed inset-y-0 left-0 z-50 w-64 flex flex-col transform bg-white/60 dark:bg-[#050811]/60 backdrop-blur-md transition-all duration-300 ease-in-out lg:relative lg:translate-x-0 border-r border-white/40 dark:border-white/[0.02]",
                     open ? "translate-x-0" : "-translate-x-full"
                 )}
                 role="navigation"
                 aria-label="Main navigation"
             >
                 {/* ── Logo ── */}
-                <div className="px-5 h-14 flex items-center border-b border-slate-200 dark:border-slate-800">
+                <div className="px-5 h-14 flex items-center border-b border-white/40 dark:border-white/[0.02]">
                     <div className="flex items-center justify-between w-full">
                         <div className="flex items-center gap-3 w-full">
                             <div className="relative w-9 h-9 rounded-xl bg-gradient-to-br from-[#6366F1] to-indigo-700 flex items-center justify-center shadow-md shadow-indigo-500/20 flex-shrink-0">
@@ -70,7 +70,7 @@ export default function Sidebar({ items, role, roleLabel, open, onClose }: Sideb
                 </div>
 
                 {/* ── Role Badge ── */}
-                <div className="px-5 py-3 border-b border-slate-200 dark:border-slate-800">
+                <div className="px-5 py-3 border-b border-white/40 dark:border-white/[0.02]">
                     <span className={cn("inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold uppercase tracking-widest border shadow-sm", palette.badge)}>
                         <span className="w-1.5 h-1.5 rounded-full bg-current" />
                         {roleLabel}
@@ -93,7 +93,7 @@ export default function Sidebar({ items, role, roleLabel, open, onClose }: Sideb
                                     "transition-all duration-200",
                                     "focus-visible:outline-2 focus-visible:outline-[#6366F1] focus-visible:outline-offset-1",
                                     isActive
-                                        ? "bg-white dark:bg-slate-900 text-[#6366F1] dark:text-indigo-400 shadow-sm border border-slate-100 dark:border-slate-800"
+                                        ? "bg-white/80 dark:bg-slate-900/80 text-[#6366F1] dark:text-indigo-400 shadow-sm border border-white/60 dark:border-slate-800"
                                         : "text-[#64748B] dark:text-slate-400 hover:text-[#0F172A] dark:hover:text-slate-100 hover:bg-slate-200/50 dark:hover:bg-slate-800/50"
                                 )}
                                 aria-current={isActive ? "page" : undefined}
@@ -114,7 +114,7 @@ export default function Sidebar({ items, role, roleLabel, open, onClose }: Sideb
                 </nav>
 
                 {/* ── Footer ── */}
-                <div className="px-4 py-4 border-t border-slate-200 dark:border-slate-800">
+                <div className="px-4 py-4 border-t border-white/40 dark:border-white/[0.02]">
                     <button className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold text-[#64748B] dark:text-slate-400 hover:text-[#EF4444] dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors duration-150 group focus-visible:outline-2 focus-visible:outline-[#EF4444]">
                         <LogOut className="w-4 h-4 flex-shrink-0 group-hover:text-[#EF4444] transition-colors duration-150" />
                         <span>Sign Out</span>

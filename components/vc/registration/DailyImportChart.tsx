@@ -21,9 +21,9 @@ interface Props {
 function CustomTooltip({ active, payload, label }: { active?: boolean; payload?: Array<{ value: number }>; label?: string }) {
   if (!active || !payload?.length) return null
   return (
-    <div className="rounded-lg border border-white/[0.07] bg-[#0a0f1e] px-3 py-2 shadow-xl">
-      <p className="text-[10px] text-muted-foreground/50">{label}</p>
-      <p className="text-[13px] font-bold text-sky-400 tabular-nums">
+    <div className="rounded-lg border border-slate-200 dark:border-white/[0.07] bg-white/90 dark:bg-[#0a0f1e] backdrop-blur-md px-3 py-2 shadow-xl">
+      <p className="text-[10px] font-medium text-slate-500 dark:text-muted-foreground/50">{label}</p>
+      <p className="text-[13px] font-bold text-sky-600 dark:text-sky-400 tabular-nums">
         {(payload[0]?.value ?? 0).toLocaleString()} imports
       </p>
     </div>
@@ -49,18 +49,18 @@ export default function DailyImportChart({ data }: Props) {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.4, delay: 0.25 }}
-      className="rounded-xl border border-white/[0.05] bg-[#080c18] p-5"
+      className="rounded-xl border border-white/60 dark:border-white/[0.05] bg-gradient-to-br from-white/80 to-white/40 dark:from-[#080c18] dark:to-[#080c18] backdrop-blur-md shadow-sm p-5"
     >
       <div className="mb-4 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-white/[0.04]">
-            <TrendingUp className="h-3.5 w-3.5 text-muted-foreground/50" strokeWidth={1.8} />
+          <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-slate-200/50 dark:bg-white/[0.04]">
+            <TrendingUp className="h-3.5 w-3.5 text-slate-500 dark:text-muted-foreground/50" strokeWidth={1.8} />
           </div>
-          <span className="text-[11px] font-semibold uppercase tracking-[0.15em] text-muted-foreground/55">
+          <span className="text-[11px] font-bold uppercase tracking-[0.15em] text-slate-500 dark:text-muted-foreground/55">
             Daily Import Activity
           </span>
         </div>
-        <span className="text-[10px] text-muted-foreground/35">Last 30 days</span>
+        <span className="text-[10px] font-medium text-slate-400 dark:text-muted-foreground/35">Last 30 days</span>
       </div>
 
       {!hasAnyData ? (

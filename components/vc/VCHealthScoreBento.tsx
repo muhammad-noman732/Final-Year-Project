@@ -106,19 +106,19 @@ function MetricCard({
       onClick={onClick}
       disabled={!onClick}
       className={[
-        "group flex flex-col gap-1 rounded-xl border border-white/[0.05] bg-white/[0.02] p-3.5",
-        "text-left transition-all duration-200",
+        "group flex flex-col gap-1 rounded-xl border border-slate-200 dark:border-white/[0.05] bg-white dark:bg-white/[0.02] p-3.5",
+        "text-left transition-all duration-300 backdrop-blur-md shadow-[0_8px_32px_rgba(0,0,0,0.04)]",
         colSpan2 ? "col-span-2" : "",
         onClick
-          ? "cursor-pointer hover:border-white/[0.1] hover:bg-white/[0.035] active:scale-[0.985]"
+          ? "cursor-pointer hover:bg-white/80 dark:hover:bg-white/[0.035] hover:border-white/60 dark:hover:border-white/[0.1] hover:-translate-y-0.5 hover:shadow-lg active:scale-[0.985]"
           : "cursor-default",
       ]
         .join(" ")
         .trim()}
     >
       <p className={`text-[9.5px] font-bold uppercase tracking-[0.2em] ${accent}`}>{label}</p>
-      <p className="text-xl font-bold tabular-nums tracking-tight text-foreground">{value}</p>
-      {sub && <p className="text-[11px] text-muted-foreground">{sub}</p>}
+      <p className="text-xl font-bold tabular-nums tracking-tight text-[#0F172A] dark:text-foreground">{value}</p>
+      {sub && <p className="text-[11px] text-[#64748B] dark:text-muted-foreground">{sub}</p>}
     </button>
   )
 }
@@ -156,7 +156,7 @@ export default function VCHealthScoreBento({
   return (
     <div
       ref={flashRef}
-      className="flex flex-col xl:flex-row gap-4 rounded-2xl border border-white/[0.06] bg-navy-900/60 p-5 transition-all duration-500"
+      className="flex flex-col xl:flex-row gap-4 rounded-2xl border border-white/60 dark:border-white/[0.06] bg-white/40 dark:bg-navy-900/60 backdrop-blur-md shadow-[0_8px_32px_rgba(0,0,0,0.04)] p-5 transition-all duration-500"
     >
       {/* ── Left: Gauge ── */}
       <div className="flex flex-col items-center gap-3 xl:w-[220px] shrink-0">
@@ -187,7 +187,8 @@ export default function VCHealthScoreBento({
               x={CX}
               y={CY - 6}
               textAnchor="middle"
-              fill="white"
+              className="text-[#0F172A] dark:text-white"
+              fill="currentColor"
               fontSize="28"
               fontWeight="700"
               fontFamily="monospace"
@@ -198,7 +199,8 @@ export default function VCHealthScoreBento({
               x={CX}
               y={CY + 14}
               textAnchor="middle"
-              fill="rgba(148,163,184,0.7)"
+              className="text-[#64748B] dark:text-slate-400/70"
+              fill="currentColor"
               fontSize="9"
               fontWeight="600"
               letterSpacing="2"
@@ -217,7 +219,7 @@ export default function VCHealthScoreBento({
 
         {/* Reason */}
         {healthScore && (
-          <p className="text-center text-[11.5px] text-muted-foreground/80 max-w-[160px]">
+          <p className="text-center text-[11.5px] text-[#64748B]/80 dark:text-muted-foreground/80 max-w-[160px]">
             {healthScore.reason}
           </p>
         )}
@@ -226,7 +228,7 @@ export default function VCHealthScoreBento({
         {sparkPoints.length > 1 && (
           <div className="flex flex-col items-center gap-1">
             <Sparkline points={sparkPoints} />
-            <p className="text-[10px] text-muted-foreground/50">7-day collection</p>
+            <p className="text-[10px] text-[#64748B]/50 dark:text-muted-foreground/50">7-day collection</p>
           </div>
         )}
 
@@ -240,7 +242,7 @@ export default function VCHealthScoreBento({
               className={`relative inline-flex h-1.5 w-1.5 rounded-full ${sseConnected ? "bg-emerald-500" : "bg-zinc-600"}`}
             />
           </span>
-          <span className="text-[10px] text-muted-foreground/50">
+          <span className="text-[10px] text-[#64748B]/50 dark:text-muted-foreground/50">
             {sseConnected ? "Live" : "Offline"}
           </span>
         </div>

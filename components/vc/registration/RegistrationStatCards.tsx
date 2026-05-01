@@ -47,10 +47,11 @@ function StatCard({
       animate={{ opacity: 1, y: 0 }}
       transition={{ type: "spring", stiffness: 300, damping: 28, delay: index * 0.07 }}
       className={[
-        "relative overflow-hidden rounded-xl border p-5",
-        "bg-[#080c18] transition-all duration-200",
-        "hover:-translate-y-[1px] hover:shadow-lg hover:shadow-black/30",
-        card.borderClass,
+        "group relative overflow-hidden rounded-xl border p-5",
+        "bg-gradient-to-br from-white/80 to-white/40 dark:from-[#080c18] dark:to-[#080c18] backdrop-blur-md transition-all duration-300",
+        "hover:-translate-y-1 hover:shadow-lg hover:from-white hover:to-white/60 dark:hover:from-[#0a0f1e] dark:hover:to-[#0a0f1e]",
+        "border-white/60 dark:border-white/[0.05] hover:border-white/80 dark:hover:border-white/[0.10]",
+        "shadow-sm dark:shadow-none",
       ].join(" ")}
     >
       {/* Ambient glow */}
@@ -63,7 +64,7 @@ function StatCard({
 
       <div className="flex items-start justify-between">
         <div className="flex flex-col gap-1">
-          <span className="text-[11px] font-semibold uppercase tracking-[0.15em] text-muted-foreground/55">
+          <span className="text-[11px] font-bold uppercase tracking-[0.15em] text-slate-500 dark:text-muted-foreground/55">
             {card.label}
           </span>
           <div className={`text-3xl font-bold tabular-nums tracking-tight ${card.accentClass}`}>
@@ -77,7 +78,7 @@ function StatCard({
               useEasing
             />
           </div>
-          <p className="text-[11px] text-muted-foreground/40 leading-tight mt-0.5">
+          <p className="text-[11px] font-medium text-slate-500 dark:text-muted-foreground/40 leading-tight mt-0.5">
             {card.description}
           </p>
         </div>
@@ -86,7 +87,7 @@ function StatCard({
           className={[
             "flex h-9 w-9 shrink-0 items-center justify-center rounded-xl",
             card.bgClass,
-            "bg-opacity-15",
+            "bg-opacity-15 dark:bg-opacity-15",
           ].join(" ")}
         >
           <Icon className={`h-4 w-4 ${card.accentClass}`} strokeWidth={1.8} />
@@ -108,27 +109,24 @@ export default function RegistrationStatCards({
       label: "Total Registered",
       value: totalRegistered,
       icon: Users,
-      accentClass: "text-violet-400",
+      accentClass: "text-violet-600 dark:text-violet-400",
       bgClass: "bg-violet-500",
-      borderClass: "border-violet-500/10",
       description: "All programs, all sessions",
     },
     {
       label: "This Session",
       value: registeredThisSession,
       icon: CalendarCheck,
-      accentClass: "text-sky-400",
+      accentClass: "text-sky-600 dark:text-sky-400",
       bgClass: "bg-sky-500",
-      borderClass: "border-sky-500/10",
       description: "Current academic session",
     },
     {
       label: "Today's Imports",
       value: todayImports,
       icon: Upload,
-      accentClass: "text-emerald-400",
+      accentClass: "text-emerald-600 dark:text-emerald-400",
       bgClass: "bg-emerald-500",
-      borderClass: "border-emerald-500/10",
       description: "Uploaded today via CSV",
     },
     {
@@ -136,10 +134,8 @@ export default function RegistrationStatCards({
       value: programsNearCapacity,
       suffix: " programs",
       icon: AlertTriangle,
-      accentClass: programsNearCapacity > 0 ? "text-amber-400" : "text-muted-foreground/40",
-      bgClass: programsNearCapacity > 0 ? "bg-amber-500" : "bg-zinc-600",
-      borderClass:
-        programsNearCapacity > 0 ? "border-amber-500/15" : "border-white/[0.05]",
+      accentClass: programsNearCapacity > 0 ? "text-amber-600 dark:text-amber-400" : "text-slate-400 dark:text-muted-foreground/40",
+      bgClass: programsNearCapacity > 0 ? "bg-amber-500" : "bg-slate-300 dark:bg-zinc-600",
       description: "Above 85% of seat capacity",
     },
   ]

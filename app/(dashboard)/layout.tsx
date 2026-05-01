@@ -86,11 +86,19 @@ export default function DashboardLayout({
   const userName = isLoading ? "Loading..." : user?.name || "User"
   const userRole = config.label
   
-  // Specific styling for HOD route to give it full-width light background without layout padding
-  const isHOD = role === "hod"
+  // Specific styling for HOD and VC routes to give full-width light background without layout padding
+  const isHOD = role === "hod" || role === "vc"
 
   return (
-    <div className="h-[100dvh] flex bg-[#F4F6FA] dark:bg-[#050811] overflow-hidden transition-colors duration-300">
+    <div className="h-[100dvh] flex bg-[#F4F6FA] dark:bg-[#050811] overflow-hidden transition-colors duration-300 relative isolate">
+      {/* Fantasy UI Mesh Gradient Background for VC/HOD */}
+      {isHOD && (
+        <div className="absolute inset-0 -z-10 overflow-hidden pointer-events-none bg-gradient-to-br from-[#E2E8F0] via-[#F1F5F9] to-[#E2E8F0] dark:from-[#050811] dark:via-[#0A0E1A] dark:to-[#050811]">
+          <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-[#b8c6e5] dark:bg-[#312e81] rounded-full blur-[100px] opacity-40 dark:opacity-20" />
+          <div className="absolute top-[20%] right-[10%] w-[45%] h-[50%] bg-[#f0e4c8] dark:bg-[#1e1b4b] rounded-full blur-[100px] opacity-40 dark:opacity-20" />
+          <div className="absolute bottom-[-10%] left-[20%] w-[40%] h-[50%] bg-[#e5d4ed] dark:bg-[#3730a3] rounded-full blur-[100px] opacity-40 dark:opacity-20" />
+        </div>
+      )}
       <Sidebar
         items={config.items}
         role={role}

@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useMemo, useState } from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
 import { useGetHodDashboardQuery, useGetHodStudentsQuery } from "@/store/api/hod/hodApi"
 import { useHodSSE } from "@/hooks/hod/useHodSSE"
 import { formatFullCurrency } from "@/config/constants"
@@ -35,17 +35,25 @@ export function useHodDashboard(
   const skipDashboard = !options.fetchDashboard || (isDefaultFilters && initialData !== null)
   const skipStudents = !options.fetchStudents || (isDefaultFilters && studentsPage === 1 && initialStudentsData != null)
 
-  const dashboardQuery = useGetHodDashboardQuery(buildQuery(filters), {
+  const dashboardQueryArgs = useMemo(() => buildQuery(filters), [filters])
+  const dashboardQuery = useGetHodDashboardQuery(dashboardQueryArgs, {
     skip: skipDashboard,
   })
 
-  const studentsQuery = useGetHodStudentsQuery(
-    { ...buildQuery(filters), page: studentsPage, limit: 20 },
-    { skip: skipStudents },
-  )
+  const studentsQueryArgs = useMemo(() => ({
+    ...buildQuery(filters),
+    page: studentsPage,
+    limit: 20
+  }), [filters, studentsPage])
+
+  const studentsQuery = useGetHodStudentsQuery(studentsQueryArgs, {
+    skip: skipStudents,
+  })
 
   const { transactions, newPaymentsCount, newAmountCollected, connected, latestEvent, clearLatestEvent } =
     useHodSSE()
+
+  const { refetch: refetchDashboard } = dashboardQuery
 
   useEffect(() => {
     if (latestEvent?.type !== "PaymentSuccess") return
@@ -53,21 +61,23 @@ export function useHodDashboard(
     setToastMessage(`${p.studentName} paid ${formatFullCurrency(p.amount)}`)
     setShowToast(true)
     clearLatestEvent()
-    void dashboardQuery.refetch()
+    void refetchDashboard()
     const timer = setTimeout(() => setShowToast(false), 4_000)
     return () => clearTimeout(timer)
-  }, [latestEvent, clearLatestEvent, dashboardQuery])
+  }, [latestEvent, clearLatestEvent, refetchDashboard])
 
-  const dashboard = dashboardQuery.data?.data ?? initialData
-  const studentsData = studentsQuery.data?.data ?? initialStudentsData
+  const dashboard = useMemo(() => dashboardQuery.data?.data ?? initialData, [dashboardQuery.data, initialData])
+  const studentsData = useMemo(() => studentsQuery.data?.data ?? initialStudentsData, [studentsQuery.data, initialStudentsData])
 
-  const lastUpdatedAt = dashboardQuery.fulfilledTimeStamp
-    ? new Date(dashboardQuery.fulfilledTimeStamp).toLocaleTimeString("en-US", {
-      hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit",
-    })
-    : null
+  const lastUpdatedAt = useMemo(() => {
+    return dashboardQuery.fulfilledTimeStamp
+      ? new Date(dashboardQuery.fulfilledTimeStamp).toLocaleTimeString("en-US", {
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+      })
+      : null
+  }, [dashboardQuery.fulfilledTimeStamp])
 
   const initialTransactions = useMemo<HodSSELiveTransaction[]>(() => {
     if (!dashboard?.livePayments) return []
@@ -82,19 +92,33 @@ export function useHodDashboard(
     }))
   }, [dashboard?.livePayments])
 
-  const handleFilterChange = (key: keyof HodFilterState, value: string) => {
+  const handleFilterChange = useCallback((key: keyof HodFilterState, value: string) => {
     setFilters((prev) => ({ ...prev, [key]: value }))
     setStudentsPage(1)
-  }
+  }, [])
 
-  const handleReset = () => {
+  const handleReset = useCallback(() => {
     setFilters(defaultFilters)
     setStudentsPage(1)
-  }
+  }, [])
+
+  const fallbackOverview = useMemo(() => ({
+    totalStudents: 0,
+    paidStudents: 0,
+    unpaidStudents: 0,
+    defaulters: 0,
+    paymentRate: 0,
+    totalCollected: 0,
+    collectedToday: 0,
+    outstandingAmount: 0,
+    paymentsToday: 0
+  }), [])
+
+  const overview = useMemo(() => dashboard?.overview ?? fallbackOverview, [dashboard?.overview, fallbackOverview])
 
   return {
     department: dashboard?.department ?? { id: "", name: "", code: "" },
-    overview: dashboard?.overview ?? { totalStudents: 0, paidStudents: 0, unpaidStudents: 0, defaulters: 0, paymentRate: 0, totalCollected: 0, collectedToday: 0, outstandingAmount: 0, paymentsToday: 0 },
+    overview,
     semesterBreakdown: dashboard?.semesterBreakdown ?? [],
     defaulters: dashboard?.defaulters ?? [],
     liveTransactions: transactions,

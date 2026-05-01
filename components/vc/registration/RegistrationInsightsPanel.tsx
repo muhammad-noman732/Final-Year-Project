@@ -23,29 +23,29 @@ interface Props {
 function getConfig(insight: InsightItem) {
   const { type, priority } = insight
   if (priority === "CRITICAL") return {
-    Icon: AlertTriangle, iconColor: "text-red-400", borderColor: "border-l-red-500",
-    hoverBg: "hover:bg-red-950/20", badgeText: "CRITICAL",
-    badgeClass: "bg-red-950/60 text-red-400 ring-1 ring-red-500/25", dotColor: "bg-red-500",
+    Icon: AlertTriangle, iconColor: "text-red-500 dark:text-red-400", borderColor: "border-l-red-500",
+    hoverBg: "hover:bg-red-50 dark:hover:bg-red-950/20", badgeText: "CRITICAL",
+    badgeClass: "bg-red-100 dark:bg-red-950/60 text-red-600 dark:text-red-400 ring-1 ring-red-500/25", dotColor: "bg-red-500",
   }
   if (type === "RISK") return {
-    Icon: ShieldAlert, iconColor: "text-rose-400", borderColor: "border-l-rose-500",
-    hoverBg: "hover:bg-rose-950/15", badgeText: "RISK",
-    badgeClass: "bg-rose-950/60 text-rose-400 ring-1 ring-rose-500/25", dotColor: "bg-rose-500",
+    Icon: ShieldAlert, iconColor: "text-rose-500 dark:text-rose-400", borderColor: "border-l-rose-500",
+    hoverBg: "hover:bg-rose-50 dark:hover:bg-rose-950/15", badgeText: "RISK",
+    badgeClass: "bg-rose-100 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400 ring-1 ring-rose-500/25", dotColor: "bg-rose-500",
   }
   if (priority === "HIGH") return {
-    Icon: AlertCircle, iconColor: "text-orange-400", borderColor: "border-l-orange-500",
-    hoverBg: "hover:bg-orange-950/15", badgeText: "ALERT",
-    badgeClass: "bg-orange-950/60 text-orange-400 ring-1 ring-orange-500/25", dotColor: "bg-orange-500",
+    Icon: AlertCircle, iconColor: "text-orange-500 dark:text-orange-400", borderColor: "border-l-orange-500",
+    hoverBg: "hover:bg-orange-50 dark:hover:bg-orange-950/15", badgeText: "ALERT",
+    badgeClass: "bg-orange-100 dark:bg-orange-950/60 text-orange-600 dark:text-orange-400 ring-1 ring-orange-500/25", dotColor: "bg-orange-500",
   }
   if (type === "PREDICTION" || priority === "MEDIUM") return {
-    Icon: TrendingUp, iconColor: "text-yellow-400", borderColor: "border-l-yellow-500/70",
-    hoverBg: "hover:bg-yellow-950/10", badgeText: "FORECAST",
-    badgeClass: "bg-yellow-950/60 text-yellow-400 ring-1 ring-yellow-500/20", dotColor: "bg-yellow-500",
+    Icon: TrendingUp, iconColor: "text-amber-500 dark:text-yellow-400", borderColor: "border-l-amber-500 dark:border-l-yellow-500/70",
+    hoverBg: "hover:bg-amber-50 dark:hover:bg-yellow-950/10", badgeText: "FORECAST",
+    badgeClass: "bg-amber-100 dark:bg-yellow-950/60 text-amber-600 dark:text-yellow-400 ring-1 ring-amber-500/30 dark:ring-yellow-500/20", dotColor: "bg-amber-500",
   }
   return {
-    Icon: CheckCircle2, iconColor: "text-emerald-400", borderColor: "border-l-emerald-500/70",
-    hoverBg: "hover:bg-emerald-950/10", badgeText: "SUCCESS",
-    badgeClass: "bg-emerald-950/60 text-emerald-400 ring-1 ring-emerald-500/20", dotColor: "bg-emerald-500",
+    Icon: CheckCircle2, iconColor: "text-emerald-500 dark:text-emerald-400", borderColor: "border-l-emerald-500 dark:border-l-emerald-500/70",
+    hoverBg: "hover:bg-emerald-50 dark:hover:bg-emerald-950/10", badgeText: "SUCCESS",
+    badgeClass: "bg-emerald-100 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 ring-1 ring-emerald-500/30 dark:ring-emerald-500/20", dotColor: "bg-emerald-500",
   }
 }
 
@@ -72,7 +72,7 @@ function InsightCard({ insight, onDismiss, isDismissing, index }: {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, x: 12, transition: { duration: 0.18 } }}
       transition={{ type: "spring", stiffness: 380, damping: 36, delay: index * 0.055 }}
-      className={`group relative rounded-r-md px-4 py-3 transition-colors duration-150 border border-l-2 border-white/[0.03] ${borderColor} ${hoverBg}`}
+      className={`group relative rounded-r-md px-4 py-3 transition-colors duration-150 border border-l-2 border-white/60 dark:border-white/[0.03] bg-white/40 dark:bg-transparent shadow-sm dark:shadow-none ${borderColor} ${hoverBg}`}
     >
       <div className="flex items-start gap-3">
         <div className="mt-[3px] shrink-0">
@@ -85,12 +85,12 @@ function InsightCard({ insight, onDismiss, isDismissing, index }: {
             </span>
             {isCritical && <PulseDot color={dotColor} />}
           </div>
-          <p className="text-[12.5px] leading-[1.5] text-foreground/70">{insight.message}</p>
+          <p className="text-[12.5px] leading-[1.5] text-[#0F172A] dark:text-foreground/70 font-medium dark:font-normal">{insight.message}</p>
           {insight.actionLabel && (
             <button
               type="button"
               onClick={() => router.push("/vc")}
-              className="group/cta flex items-center gap-0.5 text-[11px] font-medium text-muted-foreground/45 transition-colors hover:text-foreground/60 active:scale-[0.98]"
+              className="group/cta flex items-center gap-0.5 text-[11px] font-medium text-slate-500 dark:text-muted-foreground/45 transition-colors hover:text-slate-800 dark:hover:text-foreground/60 active:scale-[0.98]"
             >
               {insight.actionLabel}
               <ChevronRight className="h-3 w-3 transition-transform group-hover/cta:translate-x-0.5" strokeWidth={2.5} />
@@ -104,7 +104,7 @@ function InsightCard({ insight, onDismiss, isDismissing, index }: {
           whileHover={{ scale: 1.08 }}
           whileTap={{ scale: 0.92 }}
           transition={{ type: "spring", stiffness: 500, damping: 30 }}
-          className="mt-[3px] shrink-0 rounded p-[3px] text-muted-foreground/20 opacity-0 transition-colors hover:bg-white/[0.05] hover:text-muted-foreground/55 group-hover:opacity-100 disabled:cursor-not-allowed"
+          className="mt-[3px] shrink-0 rounded p-[3px] text-slate-400 dark:text-muted-foreground/20 opacity-0 transition-colors hover:bg-slate-200 dark:hover:bg-white/[0.05] hover:text-slate-700 dark:hover:text-muted-foreground/55 group-hover:opacity-100 disabled:cursor-not-allowed"
           aria-label="Dismiss"
         >
           <X className="h-3.5 w-3.5" strokeWidth={2.2} />
@@ -172,17 +172,17 @@ export default function RegistrationInsightsPanel({ insightsUpdatedAt }: Props) 
       initial={{ opacity: 0, y: -4 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ type: "spring", stiffness: 340, damping: 32 }}
-      className="overflow-hidden rounded-lg border border-white/[0.05] bg-zinc-950"
+      className="overflow-hidden rounded-lg border border-white/60 dark:border-white/[0.05] bg-white/40 dark:bg-zinc-950 backdrop-blur-md shadow-[0_8px_32px_rgba(0,0,0,0.04)] dark:shadow-none"
     >
-      <div className="flex items-center gap-2.5 border-b border-white/[0.04] px-4 py-2.5">
-        <div className="flex h-5 w-5 items-center justify-center rounded bg-white/[0.04]">
-          <Lightbulb className="h-[11px] w-[11px] text-muted-foreground/50" strokeWidth={2} />
+      <div className="flex items-center gap-2.5 border-b border-white/60 dark:border-white/[0.04] px-4 py-2.5">
+        <div className="flex h-5 w-5 items-center justify-center rounded bg-slate-200/50 dark:bg-white/[0.04]">
+          <Lightbulb className="h-[11px] w-[11px] text-slate-500 dark:text-muted-foreground/50" strokeWidth={2} />
         </div>
         <div className="flex flex-col">
-          <span className="text-[10.5px] font-semibold uppercase tracking-[0.18em] text-muted-foreground/55">
+          <span className="text-[10.5px] font-bold uppercase tracking-[0.18em] text-slate-500 dark:text-muted-foreground/55">
             Registration Intelligence
           </span>
-          <span className="text-[9.5px] text-muted-foreground/40">
+          <span className="text-[9.5px] font-medium text-slate-400 dark:text-muted-foreground/40">
             {insights.length} insight{insights.length !== 1 ? "s" : ""}
           </span>
         </div>
@@ -190,7 +190,7 @@ export default function RegistrationInsightsPanel({ insightsUpdatedAt }: Props) 
           <button
             type="button"
             onClick={dismissAll}
-            className="flex items-center gap-1 rounded-md px-2 py-1 text-[10px] text-muted-foreground/40 hover:text-muted-foreground/70 hover:bg-white/[0.04] transition-colors"
+            className="flex items-center gap-1 rounded-md px-2 py-1 text-[10px] font-medium text-slate-500 dark:text-muted-foreground/40 hover:text-slate-800 dark:hover:text-muted-foreground/70 hover:bg-slate-200/50 dark:hover:bg-white/[0.04] transition-colors"
           >
             <CheckCheck className="h-3 w-3" />
             All read
@@ -200,20 +200,20 @@ export default function RegistrationInsightsPanel({ insightsUpdatedAt }: Props) 
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-violet-400 opacity-50" />
               <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-violet-500" />
             </span>
-            <span className="flex h-4 min-w-[1.25rem] items-center justify-center rounded-full bg-white/[0.05] px-1.5 text-[9.5px] font-semibold text-muted-foreground/55">
+            <span className="flex h-4 min-w-[1.25rem] items-center justify-center rounded-full bg-slate-200/50 dark:bg-white/[0.05] px-1.5 text-[9.5px] font-bold text-slate-600 dark:text-muted-foreground/55">
               {insights.length}
             </span>
           </div>
         </div>
       </div>
 
-      <div className="space-y-[1px] bg-white/[0.012] p-3">
+      <div className="space-y-[1px] bg-slate-100/30 dark:bg-white/[0.012] p-3">
         <AnimatePresence mode="popLayout" initial={false}>
           {critical.map((insight, i) => (
             <InsightCard key={insight.id} insight={insight} onDismiss={dismiss} isDismissing={dismissingIds.has(insight.id)} index={i} />
           ))}
         </AnimatePresence>
-        {critical.length > 0 && rest.length > 0 && <div className="my-1 h-px bg-white/[0.06]" />}
+        {critical.length > 0 && rest.length > 0 && <div className="my-1 h-px bg-white/60 dark:bg-white/[0.06]" />}
         <AnimatePresence mode="popLayout" initial={false}>
           {rest.map((insight, i) => (
             <InsightCard key={insight.id} insight={insight} onDismiss={dismiss} isDismissing={dismissingIds.has(insight.id)} index={critical.length + i} />

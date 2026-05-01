@@ -80,6 +80,23 @@ export class HodRepository {
     })
   }
 
+  countAssignments(where: Prisma.FeeAssignmentWhereInput) {
+    return this.db.feeAssignment.count({ where })
+  }
+
+  aggregateDepartmentStats(tenantId: string, departmentId: string) {
+    return this.db.feeAssignment.aggregate({
+      where: {
+        tenantId,
+        student: { is: { departmentId } }
+      },
+      _sum: {
+        amountDue: true,
+        amountPaid: true
+      }
+    })
+  }
+
   findLivePayments(departmentId: string, tenantId: string) {
     return this.db.payment.findMany({
       where: {

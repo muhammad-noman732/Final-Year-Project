@@ -31,11 +31,11 @@ function StatCard(props: {
       onClick={props.onClick}
       disabled={!clickable}
       className={[
-        "group relative rounded-xl border p-5 text-left transition-all duration-200",
+        "group relative rounded-xl border p-5 text-left transition-all duration-300",
         props.bgClass,
         props.borderClass,
         clickable
-          ? "cursor-pointer hover:brightness-110 active:scale-[0.985]"
+          ? "cursor-pointer hover:bg-white/60 dark:hover:bg-slate-800/60 hover:-translate-y-1 hover:shadow-lg active:scale-[0.985]"
           : "cursor-default",
       ].join(" ")}
     >
@@ -44,21 +44,21 @@ function StatCard(props: {
         <div className={`flex h-9 w-9 items-center justify-center rounded-lg ${props.iconClass}`}>
           <Icon className="h-4 w-4" />
         </div>
-        <p className="text-[10.5px] font-semibold uppercase tracking-[0.22em] text-muted-foreground">
+        <p className="text-[10.5px] font-semibold uppercase tracking-[0.22em] text-[#64748B] dark:text-muted-foreground">
           {props.label}
         </p>
       </div>
 
       {/* Value */}
-      <p className="text-2xl font-bold tabular-nums tracking-tight text-foreground">
+      <p className="text-2xl font-bold tabular-nums tracking-tight text-[#0F172A] dark:text-foreground">
         {props.primary}
       </p>
-      <p className="mt-0.5 text-xs font-medium text-muted-foreground">{props.secondary}</p>
+      <p className="mt-0.5 text-xs font-medium text-[#64748B] dark:text-muted-foreground">{props.secondary}</p>
 
-      <Separator className="bg-white/[0.04] my-3" />
+      <Separator className="bg-slate-200/50 dark:bg-white/[0.04] my-3" />
 
       {/* Sub */}
-      <p className="text-[11px] text-muted-foreground">{props.sub}</p>
+      <p className="text-[11px] text-[#64748B] dark:text-muted-foreground">{props.sub}</p>
     </button>
   )
 }
@@ -76,8 +76,8 @@ export default function VCOverviewCards({ overview, onCardClick }: VCOverviewCar
         sub={`${formatFullCurrency(overview.collectedInRange)} in selected range`}
         icon={Banknote}
         iconClass="bg-emerald-500/10 text-emerald-400"
-        bgClass="bg-navy-900"
-        borderClass="border-white/[0.05] hover:border-emerald-500/20"
+        bgClass="bg-white/40 dark:bg-slate-900/40 backdrop-blur-md shadow-[0_8px_32px_rgba(0,0,0,0.04)]"
+        borderClass="border-white/60 dark:border-white/10 hover:border-emerald-500/40 dark:hover:border-emerald-500/20"
         onClick={onCardClick ? () => onCardClick("payments") : undefined}
       />
 
@@ -91,8 +91,8 @@ export default function VCOverviewCards({ overview, onCardClick }: VCOverviewCar
         sub={`${overview.totalStudents - overview.studentsPaid} students pending`}
         icon={Users}
         iconClass="bg-sky-500/10 text-sky-400"
-        bgClass="bg-navy-900"
-        borderClass="border-white/[0.05] hover:border-sky-500/20"
+        bgClass="bg-white/40 dark:bg-slate-900/40 backdrop-blur-md shadow-[0_8px_32px_rgba(0,0,0,0.04)]"
+        borderClass="border-white/60 dark:border-white/10 hover:border-sky-500/40 dark:hover:border-sky-500/20"
         onClick={onCardClick ? () => onCardClick("paid") : undefined}
       />
 
@@ -103,8 +103,8 @@ export default function VCOverviewCards({ overview, onCardClick }: VCOverviewCar
         sub="Overdue or unpaid fee assignments"
         icon={AlertTriangle}
         iconClass="bg-rose-500/10 text-rose-400"
-        bgClass="bg-navy-900"
-        borderClass="border-white/[0.05] hover:border-rose-500/20"
+        bgClass="bg-white/40 dark:bg-slate-900/40 backdrop-blur-md shadow-[0_8px_32px_rgba(0,0,0,0.04)]"
+        borderClass="border-white/60 dark:border-white/10 hover:border-rose-500/40 dark:hover:border-rose-500/20"
         onClick={onCardClick ? () => onCardClick("defaulters") : undefined}
       />
 
@@ -115,8 +115,8 @@ export default function VCOverviewCards({ overview, onCardClick }: VCOverviewCar
         sub="Across all semesters in range"
         icon={Receipt}
         iconClass="bg-gold-500/10 text-gold-400"
-        bgClass="bg-navy-900"
-        borderClass="border-white/[0.05] hover:border-gold-500/20"
+        bgClass="bg-white/40 dark:bg-slate-900/40 backdrop-blur-md shadow-[0_8px_32px_rgba(0,0,0,0.04)]"
+        borderClass="border-white/60 dark:border-white/10 hover:border-gold-500/40 dark:hover:border-gold-500/20"
         onClick={onCardClick ? () => onCardClick("payments") : undefined}
       />
     </div>

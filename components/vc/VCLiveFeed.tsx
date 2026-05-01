@@ -28,7 +28,7 @@ export default function VCLiveFeed({
   ].slice(0, 50)
 
   return (
-    <div className="flex h-full flex-col overflow-hidden rounded-xl border border-white/[0.05] bg-navy-900">
+    <div className="flex h-full flex-col overflow-hidden rounded-xl border border-white/60 dark:border-white/[0.05] bg-white/40 dark:bg-slate-900/40 backdrop-blur-md shadow-[0_8px_32px_rgba(0,0,0,0.04)]">
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-3.5 flex-shrink-0">
         <div className="flex items-center gap-2">
@@ -41,7 +41,7 @@ export default function VCLiveFeed({
               </span>
             )}
           </div>
-          <span className="text-sm font-semibold text-foreground">Live Feed</span>
+          <span className="text-sm font-semibold text-[#0F172A] dark:text-foreground">Live Feed</span>
         </div>
 
         <div className="flex items-center gap-2">
@@ -50,10 +50,10 @@ export default function VCLiveFeed({
               +{newPaymentsCount}
             </span>
           )}
-          <div className={`flex items-center gap-1.5 text-[11px] font-medium ${connected ? "text-emerald-400" : "text-muted-foreground"}`}>
+          <div className={`flex items-center gap-1.5 text-[11px] font-medium ${connected ? "text-emerald-400" : "text-[#64748B] dark:text-muted-foreground"}`}>
             {connected
               ? <Wifi className="h-3 w-3" />
-              : <WifiOff className="h-3 w-3 text-muted-foreground" />}
+              : <WifiOff className="h-3 w-3 text-[#64748B] dark:text-muted-foreground" />}
             {connected ? "Live" : "Offline"}
           </div>
         </div>
@@ -70,22 +70,22 @@ export default function VCLiveFeed({
         </>
       )}
 
-      <Separator className="bg-white/[0.04]" />
+      <Separator className="bg-slate-200/50 dark:bg-white/[0.04]" />
 
       {/* Feed */}
       <div className="flex-1 overflow-y-auto">
         {merged.length === 0 ? (
           <div className="flex flex-col items-center justify-center px-5 py-14 text-center">
-            <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-white/[0.03]">
-              <Activity className="h-4 w-4 text-white/10" />
+            <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-slate-200/50 dark:bg-white/[0.03]">
+              <Activity className="h-4 w-4 text-[#64748B]/40 dark:text-white/10" />
             </div>
-            <p className="text-sm text-muted-foreground">No transactions yet</p>
-            <p className="mt-1 text-xs text-muted-foreground/60">
+            <p className="text-sm text-[#64748B] dark:text-muted-foreground">No transactions yet</p>
+            <p className="mt-1 text-xs text-[#64748B]/60 dark:text-muted-foreground/60">
               Payments will appear here in real-time
             </p>
           </div>
         ) : (
-          <div className="divide-y divide-white/[0.03]">
+          <div className="divide-y divide-slate-200/50 dark:divide-white/[0.03]">
             {merged.map((tx, i) => (
               <LiveTransactionRow key={tx.id} tx={tx} isNew={i < transactions.length} />
             ))}
@@ -113,26 +113,26 @@ function LiveTransactionRow({ tx, isNew }: { tx: SSELiveTransaction; isNew: bool
   return (
     <div
       className={`flex items-start gap-3 px-4 py-3 transition-colors duration-700 ${
-        highlight ? "bg-emerald-500/[0.05]" : "hover:bg-white/[0.015]"
+        highlight ? "bg-emerald-500/[0.05]" : "hover:bg-white/60 dark:hover:bg-white/[0.015]"
       }`}
     >
       {/* Avatar placeholder */}
-      <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-white/[0.04] text-[11px] font-bold text-muted-foreground uppercase">
+      <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-slate-200/50 dark:bg-white/[0.04] text-[11px] font-bold text-[#64748B] dark:text-muted-foreground uppercase">
         {tx.studentName.charAt(0)}
       </div>
 
       <div className="min-w-0 flex-1">
         <div className="flex items-center justify-between gap-2">
-          <p className="truncate text-[12.5px] font-semibold text-foreground">{tx.studentName}</p>
+          <p className="truncate text-[12.5px] font-semibold text-[#0F172A] dark:text-foreground">{tx.studentName}</p>
           <p className="flex-shrink-0 text-[12.5px] font-bold text-emerald-400">
             {formatFullCurrency(tx.amount)}
           </p>
         </div>
         <div className="flex items-center justify-between mt-0.5">
-          <p className="truncate text-[11px] text-muted-foreground">
+          <p className="truncate text-[11px] text-[#64748B] dark:text-muted-foreground">
             {tx.rollNumber} · {tx.program} · {tx.semester}
           </p>
-          <p className="flex-shrink-0 text-[11px] text-muted-foreground ml-2">{time}</p>
+          <p className="flex-shrink-0 text-[11px] text-[#64748B] dark:text-muted-foreground ml-2">{time}</p>
         </div>
       </div>
     </div>

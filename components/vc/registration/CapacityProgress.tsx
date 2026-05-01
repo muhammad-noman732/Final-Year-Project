@@ -19,21 +19,21 @@ interface Props {
 const STATUS_CONFIG = {
   critical: {
     bar: "bg-red-500",
-    text: "text-red-400",
+    text: "text-red-600 dark:text-red-400",
     label: "Almost Full",
-    labelClass: "bg-red-950/60 text-red-400 ring-red-500/25",
+    labelClass: "bg-red-100 dark:bg-red-950/60 text-red-600 dark:text-red-400 ring-red-500/25",
   },
   warning: {
     bar: "bg-amber-500",
-    text: "text-amber-400",
+    text: "text-amber-600 dark:text-amber-400",
     label: "Filling Fast",
-    labelClass: "bg-amber-950/60 text-amber-400 ring-amber-500/25",
+    labelClass: "bg-amber-100 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 ring-amber-500/25",
   },
   good: {
     bar: "bg-emerald-500",
-    text: "text-emerald-400",
+    text: "text-emerald-600 dark:text-emerald-400",
     label: "Available",
-    labelClass: "bg-emerald-950/60 text-emerald-400 ring-emerald-500/25",
+    labelClass: "bg-emerald-100 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 ring-emerald-500/25",
   },
 } as const
 
@@ -54,13 +54,13 @@ export default function CapacityProgress({ data }: Props) {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.4, delay: 0.2 }}
-      className="rounded-xl border border-white/[0.05] bg-[#080c18] p-5"
+      className="rounded-xl border border-white/60 dark:border-white/[0.05] bg-gradient-to-br from-white/80 to-white/40 dark:from-[#080c18] dark:to-[#080c18] backdrop-blur-md shadow-sm p-5"
     >
       <div className="mb-4 flex items-center gap-2">
-        <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-white/[0.04]">
-          <Gauge className="h-3.5 w-3.5 text-muted-foreground/50" strokeWidth={1.8} />
+        <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-slate-200/50 dark:bg-white/[0.04]">
+          <Gauge className="h-3.5 w-3.5 text-slate-500 dark:text-muted-foreground/50" strokeWidth={1.8} />
         </div>
-        <span className="text-[11px] font-semibold uppercase tracking-[0.15em] text-muted-foreground/55">
+        <span className="text-[11px] font-bold uppercase tracking-[0.15em] text-slate-500 dark:text-muted-foreground/55">
           Program Capacity
         </span>
       </div>
@@ -79,7 +79,7 @@ export default function CapacityProgress({ data }: Props) {
             >
               <div className="flex items-center justify-between gap-3">
                 <div className="flex items-center gap-2 min-w-0">
-                  <span className="truncate text-[12.5px] font-medium text-foreground/80">
+                  <span className="truncate text-[12.5px] font-bold text-[#0F172A] dark:text-foreground/80">
                     {entry.program}
                   </span>
                   <span
@@ -92,7 +92,7 @@ export default function CapacityProgress({ data }: Props) {
                   <span className={`text-[12px] font-bold tabular-nums ${cfg.text}`}>
                     {entry.percentage}%
                   </span>
-                  <span className="ml-1 text-[10px] text-muted-foreground/35">
+                  <span className="ml-1 text-[10px] font-medium text-slate-400 dark:text-muted-foreground/35">
                     {entry.count.toLocaleString()}/{entry.capacity.toLocaleString()}
                   </span>
                 </div>
@@ -108,7 +108,7 @@ export default function CapacityProgress({ data }: Props) {
                 />
               </div>
 
-              <p className="text-[10px] text-muted-foreground/35">
+              <p className="text-[10px] font-medium text-slate-400 dark:text-muted-foreground/35">
                 {remaining > 0
                   ? `${remaining.toLocaleString()} seat${remaining !== 1 ? "s" : ""} remaining`
                   : "Capacity reached"}

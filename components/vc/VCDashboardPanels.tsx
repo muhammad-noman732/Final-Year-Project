@@ -26,13 +26,13 @@ function ChartTooltip(props: {
 }) {
   if (!props.active || !props.payload?.length) return null
   return (
-    <div className="rounded-lg border border-white/[0.08] bg-navy-800 px-3 py-2 text-xs shadow-xl">
-      {props.label ? <p className="mb-1.5 font-semibold text-foreground">{props.label}</p> : null}
+    <div className="rounded-lg border border-white/60 dark:border-white/[0.08] bg-white/80 dark:bg-navy-800/80 backdrop-blur-md px-3 py-2 text-xs shadow-xl">
+      {props.label ? <p className="mb-1.5 font-semibold text-[#0F172A] dark:text-foreground">{props.label}</p> : null}
       {props.payload.map((entry) => (
-        <div key={`${entry.name}-${entry.color}`} className="flex items-center gap-2 text-muted-foreground">
+        <div key={`${entry.name}-${entry.color}`} className="flex items-center gap-2 text-[#64748B] dark:text-muted-foreground">
           <span className="h-1.5 w-1.5 rounded-full flex-shrink-0" style={{ background: entry.color }} />
           <span>{entry.name}:</span>
-          <span className="text-foreground font-medium">
+          <span className="text-[#0F172A] dark:text-foreground font-medium">
             {entry.value > 999 ? formatFullCurrency(entry.value) : entry.value}
           </span>
         </div>
@@ -76,13 +76,13 @@ export default function VCDashboardPanels({
   return (
     <div className="grid gap-4">
       {/* Collection Trend */}
-      <div className="rounded-xl border border-white/[0.05] bg-navy-900 p-5">
+      <div className="rounded-xl border border-white/60 dark:border-white/[0.05] bg-white/40 dark:bg-slate-900/40 backdrop-blur-md p-5 shadow-[0_8px_32px_rgba(0,0,0,0.04)]">
         <div className="flex items-center justify-between mb-5">
           <div className="flex items-center gap-2">
             <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-gold-500/10">
               <CreditCard className="h-3.5 w-3.5 text-gold-400" />
             </div>
-            <h3 className="text-sm font-semibold text-foreground">Collection Trend</h3>
+            <h3 className="text-sm font-semibold text-[#0F172A] dark:text-foreground">Collection Trend</h3>
           </div>
           {currentMonth && (
             <div className={`flex items-center gap-1 text-xs font-medium ${isUp ? "text-emerald-400" : "text-rose-400"}`}>
@@ -133,25 +133,25 @@ export default function VCDashboardPanels({
           </ResponsiveContainer>
         ) : (
           <div className="flex h-40 items-center justify-center">
-            <p className="text-xs text-muted-foreground">No trend data in selected range.</p>
+            <p className="text-xs text-[#64748B] dark:text-muted-foreground">No trend data in selected range.</p>
           </div>
         )}
 
         {/* Monthly intel */}
         {currentMonth && (
           <>
-            <Separator className="bg-white/[0.04] my-4" />
+            <Separator className="bg-slate-200/50 dark:bg-white/[0.04] my-4" />
             <div className="flex items-center justify-between">
               <div className="space-y-1">
-                <p className="text-[11px] text-muted-foreground uppercase tracking-[0.16em]">Monthly Intelligence</p>
-                <p className="text-sm font-semibold text-foreground">
+                <p className="text-[11px] text-[#64748B] dark:text-muted-foreground uppercase tracking-[0.16em]">Monthly Intelligence</p>
+                <p className="text-sm font-semibold text-[#0F172A] dark:text-foreground">
                   {formatFullCurrency(currentMonth.amount)}
-                  <span className="ml-1.5 text-xs font-normal text-muted-foreground">current month</span>
+                  <span className="ml-1.5 text-xs font-normal text-[#64748B] dark:text-muted-foreground">current month</span>
                 </p>
                 <p className="text-xs">
-                  <span className="text-muted-foreground">Tracking </span>
-                  <span className="font-medium text-foreground">{selectedSliceData.name}</span>
-                  <span className="text-muted-foreground"> · {formatFullCurrency(selectedSliceData.value)}</span>
+                  <span className="text-[#64748B] dark:text-muted-foreground">Tracking </span>
+                  <span className="font-medium text-[#0F172A] dark:text-foreground">{selectedSliceData.name}</span>
+                  <span className="text-[#64748B] dark:text-muted-foreground"> · {formatFullCurrency(selectedSliceData.value)}</span>
                 </p>
               </div>
               <ResponsiveContainer width={90} height={90}>
@@ -181,13 +181,13 @@ export default function VCDashboardPanels({
       </div>
 
       {/* Semester Breakdown */}
-      <div className="rounded-xl border border-white/[0.05] bg-navy-900 p-5">
+      <div className="rounded-xl border border-white/60 dark:border-white/[0.05] bg-white/40 dark:bg-slate-900/40 backdrop-blur-md p-5 shadow-[0_8px_32px_rgba(0,0,0,0.04)]">
         <div className="flex items-center gap-2 mb-5">
           <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-sky-500/10">
             <GraduationCap className="h-3.5 w-3.5 text-sky-400" />
           </div>
-          <h3 className="text-sm font-semibold text-foreground">Semester Breakdown</h3>
-          <div className="ml-auto flex items-center gap-3 text-[11px] text-muted-foreground">
+          <h3 className="text-sm font-semibold text-[#0F172A] dark:text-foreground">Semester Breakdown</h3>
+          <div className="ml-auto flex items-center gap-3 text-[11px] text-[#64748B] dark:text-muted-foreground">
             <span className="flex items-center gap-1.5">
               <span className="h-2 w-2 rounded-sm bg-emerald-500" />Paid
             </span>
@@ -223,7 +223,7 @@ export default function VCDashboardPanels({
                     key={sem.semester}
                     type="button"
                     onClick={() => onSemesterSelect(sem.semester)}
-                    className="rounded-lg border border-white/[0.06] bg-white/[0.02] px-2.5 py-1 text-[11px] text-muted-foreground transition-colors hover:border-gold-500/25 hover:text-gold-300"
+                    className="rounded-lg border border-slate-200/80 dark:border-white/[0.06] bg-white/60 dark:bg-white/[0.02] px-2.5 py-1 text-[11px] text-[#64748B] dark:text-muted-foreground transition-colors hover:border-gold-500/40 hover:text-[#0F172A] dark:hover:border-gold-500/25 dark:hover:text-gold-300"
                   >
                     Sem {sem.semester}
                   </button>
@@ -233,7 +233,7 @@ export default function VCDashboardPanels({
           </>
         ) : (
           <div className="flex h-40 items-center justify-center">
-            <p className="text-xs text-muted-foreground">No semester data for current filters.</p>
+            <p className="text-xs text-[#64748B] dark:text-muted-foreground">No semester data for current filters.</p>
           </div>
         )}
       </div>

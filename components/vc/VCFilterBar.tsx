@@ -59,10 +59,10 @@ function SelectField(props: {
 }) {
   return (
     <Select value={props.value} onValueChange={props.onValueChange}>
-      <SelectTrigger className="h-8 border-white/[0.07] bg-white/[0.03] text-xs text-slate-300 focus:ring-gold-500/30">
+      <SelectTrigger className="h-8 border-slate-200/50 dark:border-white/[0.07] bg-white/60 dark:bg-white/[0.03] text-xs text-[#0F172A] dark:text-slate-300 focus:ring-gold-500/30 shadow-sm">
         <SelectValue placeholder={props.placeholder} />
       </SelectTrigger>
-      <SelectContent className="border-white/[0.08] bg-navy-800 text-slate-200">
+      <SelectContent className="border-white/60 dark:border-white/[0.08] bg-white/90 dark:bg-navy-800 text-[#0F172A] dark:text-slate-200 backdrop-blur-md">
         {props.includeAllOption !== false && (
           <SelectItem value="all" className="text-xs">All</SelectItem>
         )}
@@ -88,12 +88,12 @@ export default function VCFilterBar({
   showSearch = true,
 }: VCFilterBarProps) {
   return (
-    <div className="rounded-xl border border-white/[0.05] bg-navy-900 p-4">
+    <div className="rounded-xl border border-white/60 dark:border-white/[0.05] bg-white/40 dark:bg-navy-900/40 backdrop-blur-md shadow-[0_8px_32px_rgba(0,0,0,0.04)] p-4">
       {/* Header row */}
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
           <Filter className="h-3.5 w-3.5 text-gold-400" />
-          <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-muted-foreground">
+          <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#64748B] dark:text-muted-foreground">
             Filters
           </span>
         </div>
@@ -101,7 +101,7 @@ export default function VCFilterBar({
           {onExport && (
             <Button
               type="button" variant="ghost" size="sm"
-              className="h-7 px-2.5 text-[11px] text-muted-foreground hover:text-emerald-400"
+              className="h-7 px-2.5 text-[11px] text-[#64748B] dark:text-muted-foreground hover:text-emerald-500 dark:hover:text-emerald-400"
               onClick={onExport}
             >
               <Download className="mr-1.5 h-3 w-3" />
@@ -110,7 +110,7 @@ export default function VCFilterBar({
           )}
           <Button
             type="button" variant="ghost" size="sm"
-            className="h-7 px-2.5 text-[11px] text-muted-foreground hover:text-gold-400"
+            className="h-7 px-2.5 text-[11px] text-[#64748B] dark:text-muted-foreground hover:text-gold-500 dark:hover:text-gold-400"
             onClick={onReset}
           >
             <RotateCcw className="mr-1.5 h-3 w-3" />
@@ -119,7 +119,7 @@ export default function VCFilterBar({
         </div>
       </div>
 
-      <Separator className="bg-white/[0.04] mb-3" />
+      <Separator className="bg-slate-200/50 dark:bg-white/[0.04] mb-3" />
 
       {/* Filters grid */}
       <div className="grid gap-2 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-6">
@@ -156,8 +156,8 @@ export default function VCFilterBar({
             onValueChange={(v) => onChange("feeStatus", v)}
           />
         ) : (
-          <div className="flex items-center rounded-md border border-white/[0.05] bg-white/[0.02] px-2.5 py-1.5">
-            <span className="text-[11px] text-muted-foreground">Status from tab</span>
+          <div className="flex items-center rounded-md border border-slate-200/50 dark:border-white/[0.05] bg-white/60 dark:bg-white/[0.02] px-2.5 py-1.5 shadow-sm">
+            <span className="text-[11px] text-[#64748B] dark:text-muted-foreground">Status from tab</span>
           </div>
         )}
         <SelectField
@@ -176,7 +176,7 @@ export default function VCFilterBar({
             value={filters.search}
             onChange={(e) => onChange("search", e.target.value)}
             placeholder="Search student, roll number, or email..."
-            className="h-8 border-white/[0.07] bg-white/[0.03] text-xs placeholder:text-muted-foreground/50"
+            className="h-8 border-slate-200/50 dark:border-white/[0.07] bg-white/60 dark:bg-white/[0.03] text-xs placeholder:text-[#64748B]/50 dark:placeholder:text-muted-foreground/50 shadow-sm text-[#0F172A] dark:text-foreground"
           />
         </div>
       )}
@@ -186,13 +186,13 @@ export default function VCFilterBar({
             type="date"
             value={filters.from}
             onChange={(e) => onChange("from", e.target.value)}
-            className="h-8 border-white/[0.07] bg-white/[0.03] text-xs"
+            className="h-8 border-slate-200/50 dark:border-white/[0.07] bg-white/60 dark:bg-white/[0.03] text-xs shadow-sm text-[#0F172A] dark:text-foreground"
           />
           <Input
             type="date"
             value={filters.to}
             onChange={(e) => onChange("to", e.target.value)}
-            className="h-8 border-white/[0.07] bg-white/[0.03] text-xs"
+            className="h-8 border-slate-200/50 dark:border-white/[0.07] bg-white/60 dark:bg-white/[0.03] text-xs shadow-sm text-[#0F172A] dark:text-foreground"
           />
         </div>
       )}

@@ -31,11 +31,11 @@ function CustomTooltip({ active, payload }: { active?: boolean; payload?: Array<
   const d = payload[0]!.payload
   const color = DEPT_COLORS[d.department] ?? DEFAULT_COLOR
   return (
-    <div className="rounded-lg border border-white/[0.07] bg-[#0a0f1e] px-3 py-2 shadow-xl">
-      <p className="text-[11px] font-semibold" style={{ color }}>
+    <div className="rounded-lg border border-slate-200 dark:border-white/[0.07] bg-white/90 dark:bg-[#0a0f1e] backdrop-blur-md px-3 py-2 shadow-xl">
+      <p className="text-[11px] font-bold" style={{ color }}>
         {d.program}
       </p>
-      <p className="text-[13px] font-bold text-foreground tabular-nums">
+      <p className="text-[13px] font-bold text-slate-900 dark:text-foreground tabular-nums">
         {d.count.toLocaleString()} applicants
       </p>
     </div>
@@ -56,13 +56,13 @@ export default function RegistrationBarChart({ data }: Props) {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.4, delay: 0.15 }}
-      className="rounded-xl border border-white/[0.05] bg-[#080c18] p-5"
+      className="rounded-xl border border-white/60 dark:border-white/[0.05] bg-gradient-to-br from-white/80 to-white/40 dark:from-[#080c18] dark:to-[#080c18] backdrop-blur-md shadow-sm p-5"
     >
       <div className="mb-4 flex items-center gap-2">
-        <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-white/[0.04]">
-          <BarChart2 className="h-3.5 w-3.5 text-muted-foreground/50" strokeWidth={1.8} />
+        <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-slate-200/50 dark:bg-white/[0.04]">
+          <BarChart2 className="h-3.5 w-3.5 text-slate-500 dark:text-muted-foreground/50" strokeWidth={1.8} />
         </div>
-        <span className="text-[11px] font-semibold uppercase tracking-[0.15em] text-muted-foreground/55">
+        <span className="text-[11px] font-bold uppercase tracking-[0.15em] text-slate-500 dark:text-muted-foreground/55">
           Registrations by Program
         </span>
       </div>

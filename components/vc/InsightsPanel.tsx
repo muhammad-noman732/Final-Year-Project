@@ -155,8 +155,8 @@ function InsightCard({
       }}
       className={[
         "group relative rounded-r-md px-4 py-3",
-        "transition-colors duration-150",
-        "border border-l-2 border-white/[0.03]",
+        "transition-all duration-300 backdrop-blur-md shadow-[0_8px_32px_rgba(0,0,0,0.04)]",
+        "border border-l-2 border-white/60 dark:border-white/[0.03] bg-white/40 dark:bg-transparent",
         borderColor,
         hoverBg,
       ].join(" ")}
@@ -180,7 +180,7 @@ function InsightCard({
           </div>
 
           {/* Message */}
-          <p className="text-[12.5px] leading-[1.5] text-foreground/70">
+          <p className="text-[12.5px] leading-[1.5] text-[#0F172A] dark:text-foreground/80">
             {insight.message}
           </p>
 
@@ -189,7 +189,7 @@ function InsightCard({
             <button
               type="button"
               onClick={() => router.push(actionRoute)}
-              className="group/cta flex items-center gap-0.5 text-[11px] font-medium text-muted-foreground/45 transition-colors duration-100 hover:text-foreground/60 active:scale-[0.98]"
+              className="group/cta flex items-center gap-0.5 text-[11px] font-semibold text-[#475569] dark:text-muted-foreground/45 transition-colors duration-100 hover:text-[#0F172A] dark:hover:text-foreground/60 active:scale-[0.98]"
             >
               {insight.actionLabel}
               <ChevronRight
@@ -297,18 +297,18 @@ export default function InsightsPanel({ insightsUpdatedAt }: InsightsPanelProps)
       initial={{ opacity: 0, y: -4 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ type: "spring", stiffness: 340, damping: 32 }}
-      className="overflow-hidden rounded-lg border border-white/[0.05] bg-zinc-950"
+      className="overflow-hidden rounded-lg border border-white/60 dark:border-white/[0.05] bg-white/40 dark:bg-zinc-950/40 backdrop-blur-md shadow-[0_8px_32px_rgba(0,0,0,0.04)]"
     >
       {/* ── Header ── */}
-      <div className="flex items-center gap-2.5 border-b border-white/[0.04] px-4 py-2.5">
-        <div className="flex h-5 w-5 items-center justify-center rounded bg-white/[0.04]">
-          <Activity className="h-[11px] w-[11px] text-muted-foreground/50" strokeWidth={2} />
+      <div className="flex items-center gap-2.5 border-b border-slate-200/50 dark:border-white/[0.04] px-4 py-2.5 bg-white/20 dark:bg-transparent">
+        <div className="flex h-5 w-5 items-center justify-center rounded bg-slate-200/50 dark:bg-white/[0.04]">
+          <Activity className="h-[11px] w-[11px] text-[#64748B]/70 dark:text-muted-foreground/50" strokeWidth={2} />
         </div>
         <div className="flex flex-col">
-          <span className="text-[10.5px] font-semibold uppercase tracking-[0.18em] text-muted-foreground/55">
+          <span className="text-[10.5px] font-bold uppercase tracking-[0.18em] text-[#475569] dark:text-muted-foreground/55">
             Intelligence Feed
           </span>
-          <span className="text-[9.5px] text-muted-foreground/40">
+          <span className="text-[9.5px] font-medium text-[#64748B] dark:text-muted-foreground/40">
             {insights.length} insight{insights.length !== 1 ? "s" : ""}
             {critical.length > 0 && (
               <span className="ml-1 text-rose-400 font-semibold">· {critical.length} critical</span>
@@ -320,7 +320,7 @@ export default function InsightsPanel({ insightsUpdatedAt }: InsightsPanelProps)
           <button
             type="button"
             onClick={dismissAll}
-            className="flex items-center gap-1 rounded-md px-2 py-1 text-[10px] text-muted-foreground/40 hover:text-muted-foreground/70 hover:bg-white/[0.04] transition-colors duration-150"
+            className="flex items-center gap-1 rounded-md px-2 py-1 text-[10px] font-medium text-[#64748B] dark:text-muted-foreground/40 hover:text-[#0F172A] dark:hover:text-muted-foreground/70 hover:bg-slate-200/80 dark:hover:bg-white/[0.04] transition-colors duration-150"
           >
             <CheckCheck className="h-3 w-3" />
             All read
@@ -331,7 +331,7 @@ export default function InsightsPanel({ insightsUpdatedAt }: InsightsPanelProps)
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-50" />
               <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-500" />
             </span>
-            <span className="flex h-4 min-w-[1.25rem] items-center justify-center rounded-full bg-white/[0.05] px-1.5 text-[9.5px] font-semibold tabular-nums text-muted-foreground/55">
+            <span className="flex h-4 min-w-[1.25rem] items-center justify-center rounded-full bg-white/60 dark:bg-white/[0.05] px-1.5 text-[9.5px] font-bold tabular-nums text-[#0F172A] dark:text-muted-foreground/55 shadow-sm">
               {insights.length}
             </span>
           </div>
@@ -339,7 +339,7 @@ export default function InsightsPanel({ insightsUpdatedAt }: InsightsPanelProps)
       </div>
 
       {/* ── Cards ── */}
-      <div className="space-y-[1px] bg-white/[0.012] p-3">
+      <div className="space-y-[1px] bg-white/30 dark:bg-white/[0.012] p-3">
         <AnimatePresence mode="popLayout" initial={false}>
           {/* CRITICAL first */}
           {critical.map((insight, i) => (
@@ -355,7 +355,7 @@ export default function InsightsPanel({ insightsUpdatedAt }: InsightsPanelProps)
 
         {/* Separator between critical and the rest */}
         {critical.length > 0 && rest.length > 0 && (
-          <div className="my-1 h-px bg-white/[0.06]" />
+          <div className="my-1 h-px bg-slate-200/50 dark:bg-white/[0.06]" />
         )}
 
         <AnimatePresence mode="popLayout" initial={false}>

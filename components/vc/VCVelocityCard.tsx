@@ -25,14 +25,14 @@ export default function VCVelocityCard({ overview, collectionTrend }: VCVelocity
   const deltaAbs = Math.abs(velocity.deltaPercent)
 
   return (
-    <div className="rounded-xl border border-white/[0.06] bg-navy-900/60 p-4">
+    <div className="rounded-xl border border-white/60 dark:border-white/[0.06] bg-white/40 dark:bg-navy-900/60 backdrop-blur-md shadow-[0_8px_32px_rgba(0,0,0,0.04)] p-4">
       {/* Header */}
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
           <div className="flex h-6 w-6 items-center justify-center rounded-lg bg-gold-500/10">
             <Zap className="h-3 w-3 text-gold-400" />
           </div>
-          <span className="text-[11px] font-semibold text-foreground">Payment Velocity</span>
+          <span className="text-[11px] font-semibold text-[#0F172A] dark:text-foreground">Payment Velocity</span>
         </div>
         <div className={`flex items-center gap-1 text-[10.5px] font-semibold ${trendCfg.color}`}>
           <TrendIcon className="h-3 w-3" />
@@ -42,17 +42,17 @@ export default function VCVelocityCard({ overview, collectionTrend }: VCVelocity
 
       {/* Main stat */}
       <div className="flex items-end gap-1.5 mb-1">
-        <span className="text-2xl font-bold tabular-nums tracking-tight text-foreground">
+        <span className="text-2xl font-bold tabular-nums tracking-tight text-[#0F172A] dark:text-foreground">
           {velocity.paymentsPerHourToday}
         </span>
-        <span className="text-[11px] text-muted-foreground mb-0.5">payments/hr today</span>
+        <span className="text-[11px] text-[#64748B] dark:text-muted-foreground mb-0.5">payments/hr today</span>
       </div>
 
       {/* vs yesterday */}
       {velocity.paymentsPerHourYesterday > 0 && (
-        <p className="text-[11px] text-muted-foreground mb-3">
+        <p className="text-[11px] text-[#64748B] dark:text-muted-foreground mb-3">
           vs{" "}
-          <span className="font-medium text-foreground/80">
+          <span className="font-medium text-[#0F172A]/80 dark:text-foreground/80">
             {velocity.paymentsPerHourYesterday}
           </span>{" "}
           yesterday
@@ -66,17 +66,17 @@ export default function VCVelocityCard({ overview, collectionTrend }: VCVelocity
       )}
 
       {/* Projection row */}
-      <div className="flex items-center justify-between pt-3 border-t border-white/[0.04]">
+      <div className="flex items-center justify-between pt-3 border-t border-slate-200/50 dark:border-white/[0.04]">
         <div>
-          <p className="text-[9.5px] uppercase tracking-[0.14em] text-muted-foreground/50 mb-0.5">
+          <p className="text-[9.5px] uppercase tracking-[0.14em] text-[#64748B]/50 dark:text-muted-foreground/50 mb-0.5">
             Projected Today
           </p>
-          <p className="text-sm font-bold tabular-nums text-foreground">
+          <p className="text-sm font-bold tabular-nums text-[#0F172A] dark:text-foreground">
             {formatCurrency(velocity.projectedDailyAmount)}
           </p>
         </div>
         <div className="text-right">
-          <p className="text-[9.5px] uppercase tracking-[0.14em] text-muted-foreground/50 mb-0.5">
+          <p className="text-[9.5px] uppercase tracking-[0.14em] text-[#64748B]/50 dark:text-muted-foreground/50 mb-0.5">
             Daily Avg
           </p>
           <p

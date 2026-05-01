@@ -53,11 +53,13 @@ export default function VCDashboard() {
   } = useVCDashboard()
 
   return (
-    <div className="space-y-5 pb-10">
+    <div className="relative isolate space-y-6 pb-10 min-h-[calc(100dvh-3.5rem)] p-5 lg:p-8 transition-colors duration-300">
+
+      {/* Mesh gradient is now provided globally by layout.tsx */}
 
       {showToast && (
         <div className="fixed top-4 right-4 z-50 animate-in slide-in-from-top-2 fade-in duration-200">
-          <div className="flex items-center gap-3 rounded-xl border border-emerald-500/15 bg-navy-800 px-4 py-3 shadow-2xl shadow-black/40">
+          <div className="flex items-center gap-3 rounded-xl border border-emerald-500/15 bg-white/80 dark:bg-navy-800/80 backdrop-blur-md px-4 py-3 shadow-2xl shadow-black/40">
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-500/10 flex-shrink-0">
               <Zap className="h-4 w-4 text-emerald-400" />
             </div>
@@ -70,7 +72,7 @@ export default function VCDashboard() {
       )}
 
       {/*  Tab Bar  */}
-      <div className="flex items-center gap-1 rounded-xl border border-white/[0.06] bg-[#080c18] p-1">
+      <div className="flex items-center gap-1 rounded-xl bg-white/40 dark:bg-[#080c18] backdrop-blur-md p-1 shadow-[0_8px_32px_rgba(0,0,0,0.04)]">
         {TABS.map(({ id, label, Icon }) => {
           const isActive = activeTab === id
           return (
@@ -81,14 +83,14 @@ export default function VCDashboard() {
               className={[
                 "relative flex flex-1 items-center justify-center gap-2 rounded-lg px-4 py-2 text-[12.5px] font-medium transition-colors duration-150",
                 isActive
-                  ? "text-foreground"
-                  : "text-muted-foreground/50 hover:text-muted-foreground/80",
+                  ? "text-[#0F172A] dark:text-foreground"
+                  : "text-[#64748B]/50 dark:text-muted-foreground/50 hover:text-[#64748B]/80 dark:hover:text-muted-foreground/80",
               ].join(" ")}
             >
               {isActive && (
                 <motion.div
                   layoutId="vc-tab-pill"
-                  className="absolute inset-0 rounded-lg bg-white/[0.06]"
+                  className="absolute inset-0 rounded-lg bg-black/5 dark:bg-white/[0.06]"
                   transition={{ type: "spring", stiffness: 400, damping: 34 }}
                 />
               )}
@@ -120,8 +122,8 @@ export default function VCDashboard() {
                   <LayoutDashboard className="h-4.5 w-4.5 text-violet-400" />
                 </div>
                 <div>
-                  <h1 className="text-lg font-bold tracking-tight text-foreground">VC Dashboard</h1>
-                  <p className="text-xs text-muted-foreground mt-0.5">
+                  <h1 className="text-lg font-bold tracking-tight text-[#0F172A] dark:text-foreground">VC Dashboard</h1>
+                  <p className="text-xs text-[#64748B] dark:text-muted-foreground mt-0.5">
                     Tenant-wide payment visibility — filter by department, semester, session, status.
                   </p>
                 </div>
@@ -129,7 +131,7 @@ export default function VCDashboard() {
 
               <div className="flex items-center gap-2 flex-shrink-0">
                 {lastUpdatedAt && (
-                  <div className="hidden sm:flex items-center gap-1.5 text-[11px] text-muted-foreground/60">
+                  <div className="hidden sm:flex items-center gap-1.5 text-[11px] text-[#64748B]/60 dark:text-muted-foreground/60">
                     <Clock className="h-3 w-3" />
                     <span>Updated {lastUpdatedAt}</span>
                   </div>
@@ -140,7 +142,7 @@ export default function VCDashboard() {
                   size="sm"
                   className={`h-8 text-xs border transition-colors ${filters.range === "today"
                       ? "border-emerald-500/20 bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/15"
-                      : "border-white/[0.08] bg-transparent text-muted-foreground hover:text-foreground"
+                      : "border-slate-200/50 dark:border-white/[0.08] bg-white/40 dark:bg-transparent text-[#64748B] dark:text-muted-foreground hover:text-[#0F172A] dark:hover:text-foreground backdrop-blur-md shadow-[0_8px_32px_rgba(0,0,0,0.04)]"
                     }`}
                   onClick={handleTodayToggle}
                 >
@@ -177,16 +179,12 @@ export default function VCDashboard() {
             {/* Charts + Right Column */}
             <div className="grid gap-4 xl:grid-cols-[1fr_320px]">
               <Skeleton name="vc-dashboard-panels" loading={isLoading && !dashboard}>
-                {dashboard ? (
+                {dashboard && (
                   <VCDashboardPanels
                     semesterBreakdown={dashboard.semesterBreakdown}
                     collectionTrend={dashboard.collectionTrend}
                     onSemesterSelect={handleSemesterTracking}
                   />
-                ) : (
-                  <div className="rounded-xl border border-white/[0.05] bg-navy-900 px-5 py-10 text-sm text-muted-foreground text-center">
-                    Loading chart data...
-                  </div>
                 )}
               </Skeleton>
 
@@ -211,8 +209,8 @@ export default function VCDashboard() {
             <div>
               <div className="flex items-center gap-2 mb-4">
                 <BarChart2 className="h-4 w-4 text-gold-400" />
-                <h2 className="text-sm font-semibold text-foreground">Advanced Analytics</h2>
-                <Separator className="flex-1 bg-white/[0.04]" />
+                <h2 className="text-sm font-semibold text-[#0F172A] dark:text-foreground">Advanced Analytics</h2>
+                <Separator className="flex-1 bg-slate-200/50 dark:bg-white/[0.04]" />
               </div>
 
               <Skeleton name="vc-analytics-panels-inline" loading={isLoading && !dashboard}>

@@ -18,7 +18,7 @@ export default function Navbar({ title, userName, userRole, onMenuClick, showLiv
     const initials = userName.split(" ").map((n) => n[0]).join("").toUpperCase().slice(0, 2);
 
     return (
-        <header className="sticky top-0 z-30 w-full h-14 flex items-center justify-between px-5 lg:px-6 border-b border-slate-200 dark:border-slate-800 bg-white/90 dark:bg-[#0F172A]/90 backdrop-blur-xl shadow-sm transition-colors duration-300">
+        <header className="sticky top-0 z-30 w-full h-14 flex items-center justify-between px-5 lg:px-6 border-b border-white/40 dark:border-white/[0.02] bg-white/60 dark:bg-[#050811]/60 backdrop-blur-md shadow-sm transition-colors duration-300">
             {/* ── Left ── */}
             <div className="flex items-center gap-3">
                 <button
@@ -50,7 +50,7 @@ export default function Navbar({ title, userName, userRole, onMenuClick, showLiv
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#64748B] dark:text-slate-500" />
                     <input
                         placeholder="Search..."
-                        className="w-full h-9 pl-9 pr-3 rounded-xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 text-sm text-[#0F172A] dark:text-slate-200 placeholder:text-[#64748B] dark:placeholder:text-slate-500 outline-none focus:border-[#6366F1]/50 dark:focus:border-indigo-500/50 focus:ring-2 focus:ring-[#6366F1]/20 dark:focus:ring-indigo-500/10 transition-all duration-200 font-medium shadow-sm"
+                        className="w-full h-9 pl-9 pr-3 rounded-xl bg-white/40 dark:bg-slate-900/50 border border-white/60 dark:border-slate-800 text-sm text-[#0F172A] dark:text-slate-200 placeholder:text-[#64748B] dark:placeholder:text-slate-500 outline-none focus:border-[#6366F1]/50 dark:focus:border-indigo-500/50 focus:ring-2 focus:ring-[#6366F1]/20 dark:focus:ring-indigo-500/10 transition-all duration-200 font-medium shadow-sm"
                         aria-label="Search"
                     />
                 </div>
@@ -65,11 +65,11 @@ export default function Navbar({ title, userName, userRole, onMenuClick, showLiv
                 <NotificationBell />
 
                 {/* Divider */}
-                <div className="hidden sm:block w-px h-6 bg-slate-200 dark:bg-slate-800 mx-1" aria-hidden="true" />
+                <div className="hidden sm:block w-px h-6 bg-slate-200/50 dark:bg-slate-800/50 mx-1" aria-hidden="true" />
 
                 {/* User */}
                 <div className="hidden sm:flex items-center gap-3">
-                    <Avatar className="w-8 h-8 border border-slate-200 dark:border-slate-800 shadow-sm">
+                    <Avatar className="w-8 h-8 border border-white/60 dark:border-slate-800 shadow-sm">
                         <AvatarFallback className="bg-indigo-50 dark:bg-indigo-900/30 text-[#6366F1] dark:text-indigo-400 text-[11px] font-bold">
                             {initials}
                         </AvatarFallback>

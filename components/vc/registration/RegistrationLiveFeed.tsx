@@ -58,14 +58,14 @@ export default function RegistrationLiveFeed({
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.4, delay: 0.3 }}
-      className="rounded-xl border border-white/[0.05] bg-[#080c18]"
+      className="rounded-xl border border-white/60 dark:border-white/[0.05] bg-gradient-to-br from-white/80 to-white/40 dark:from-[#080c18] dark:to-[#080c18] backdrop-blur-md shadow-sm"
     >
       {/* Header */}
-      <div className="flex items-center gap-2.5 border-b border-white/[0.04] px-4 py-2.5">
-        <div className="flex h-5 w-5 items-center justify-center rounded bg-white/[0.04]">
-          <Upload className="h-[11px] w-[11px] text-muted-foreground/50" strokeWidth={2} />
+      <div className="flex items-center gap-2.5 border-b border-slate-200/80 dark:border-white/[0.04] px-4 py-2.5">
+        <div className="flex h-5 w-5 items-center justify-center rounded bg-slate-200/50 dark:bg-white/[0.04]">
+          <Upload className="h-[11px] w-[11px] text-slate-500 dark:text-muted-foreground/50" strokeWidth={2} />
         </div>
-        <span className="text-[10.5px] font-semibold uppercase tracking-[0.18em] text-muted-foreground/55">
+        <span className="text-[10.5px] font-bold uppercase tracking-[0.18em] text-slate-500 dark:text-muted-foreground/55">
           Import Activity
         </span>
         <div className="ml-auto flex items-center gap-1.5">
@@ -77,7 +77,7 @@ export default function RegistrationLiveFeed({
               className={`relative inline-flex h-1.5 w-1.5 rounded-full ${connected ? "bg-sky-500" : "bg-zinc-600"}`}
             />
           </span>
-          <span className="text-[9.5px] text-muted-foreground/40">
+          <span className="text-[9.5px] font-medium text-slate-400 dark:text-muted-foreground/40">
             {connected ? "Live" : "Offline"}
           </span>
         </div>
@@ -86,7 +86,7 @@ export default function RegistrationLiveFeed({
       {/* Feed entries */}
       <div className="max-h-64 overflow-y-auto p-3 space-y-[1px]">
         {feed.length === 0 ? (
-          <div className="flex h-24 items-center justify-center gap-2 text-[12px] text-muted-foreground/30">
+          <div className="flex h-24 items-center justify-center gap-2 text-[12px] font-medium text-slate-400 dark:text-muted-foreground/30">
             <Radio className="h-3.5 w-3.5" strokeWidth={1.5} />
             Waiting for import events…
           </div>
@@ -102,20 +102,20 @@ export default function RegistrationLiveFeed({
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, x: 8 }}
                   transition={{ type: "spring", stiffness: 380, damping: 32 }}
-                  className="flex items-start gap-3 rounded-md border border-white/[0.03] px-3 py-2.5 hover:bg-white/[0.02] transition-colors"
+                  className="flex items-start gap-3 rounded-md border border-slate-200/80 dark:border-white/[0.03] px-3 py-2.5 hover:bg-slate-200/50 dark:hover:bg-white/[0.02] transition-colors"
                 >
                   <div className="mt-[3px] flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-sky-500/10">
                     <Upload className="h-3 w-3 text-sky-400" strokeWidth={2} />
                   </div>
                   <div className="min-w-0 flex-1">
-                    <p className="text-[12px] leading-[1.4] text-foreground/70">{entry.message}</p>
+                    <p className="text-[12px] leading-[1.4] font-medium text-[#0F172A] dark:text-foreground/70">{entry.message}</p>
                     {Boolean(meta?.batchId) && (
-                      <p className="mt-0.5 font-mono text-[9.5px] text-muted-foreground/30">
+                      <p className="mt-0.5 font-mono text-[9.5px] text-slate-400 dark:text-muted-foreground/30">
                         batch #{String(meta!.batchId as string).slice(-8)}
                       </p>
                     )}
                   </div>
-                  <time className="shrink-0 text-[10px] text-muted-foreground/35 tabular-nums">
+                  <time className="shrink-0 text-[10px] font-medium text-slate-400 dark:text-muted-foreground/35 tabular-nums">
                     {formatRelative(entry.createdAt)}
                   </time>
                 </motion.div>
