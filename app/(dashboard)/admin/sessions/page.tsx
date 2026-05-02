@@ -35,10 +35,10 @@ export default function SessionsPage() {
     };
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-6 p-5 lg:p-8 pb-10">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div>
-                    <h1 className="text-2xl font-bold text-foreground tracking-tight">Academic Sessions</h1>
+                    <h1 className="text-2xl font-bold text-[#0F172A] dark:text-foreground tracking-tight">Academic Sessions</h1>
                     <p className="text-sm text-muted-foreground mt-1">{meta.total} sessions</p>
                 </div>
                 <Button onClick={() => setIsAddOpen(true)} className="bg-gradient-to-r from-gold-600 to-gold-500 hover:from-gold-500 hover:to-gold-400 text-navy-950 font-semibold">

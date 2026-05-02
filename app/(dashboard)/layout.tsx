@@ -86,8 +86,8 @@ export default function DashboardLayout({
   const userName = isLoading ? "Loading..." : user?.name || "User"
   const userRole = config.label
   
-  // Specific styling for HOD and VC routes to give full-width light background without layout padding
-  const isHOD = role === "hod" || role === "vc"
+  // Specific styling for HOD, VC, and Admin routes to give full-width light background without layout padding
+  const isHOD = role === "hod" || role === "vc" || role === "admin"
 
   return (
     <div className="h-[100dvh] flex bg-[#F4F6FA] dark:bg-[#050811] overflow-hidden transition-colors duration-300 relative isolate">

@@ -77,7 +77,7 @@ export default function VCOverviewCards({ overview, onCardClick }: VCOverviewCar
         icon={Banknote}
         iconClass="bg-emerald-500/10 text-emerald-400"
         bgClass="bg-white/40 dark:bg-slate-900/40 backdrop-blur-md shadow-[0_8px_32px_rgba(0,0,0,0.04)]"
-        borderClass="border-white/60 dark:border-white/10 hover:border-emerald-500/40 dark:hover:border-emerald-500/20"
+        borderClass="border-white/60 dark:border-white/10"
         onClick={onCardClick ? () => onCardClick("payments") : undefined}
       />
 
@@ -92,7 +92,7 @@ export default function VCOverviewCards({ overview, onCardClick }: VCOverviewCar
         icon={Users}
         iconClass="bg-sky-500/10 text-sky-400"
         bgClass="bg-white/40 dark:bg-slate-900/40 backdrop-blur-md shadow-[0_8px_32px_rgba(0,0,0,0.04)]"
-        borderClass="border-white/60 dark:border-white/10 hover:border-sky-500/40 dark:hover:border-sky-500/20"
+        borderClass="border-white/60 dark:border-white/10"
         onClick={onCardClick ? () => onCardClick("paid") : undefined}
       />
 
@@ -104,7 +104,7 @@ export default function VCOverviewCards({ overview, onCardClick }: VCOverviewCar
         icon={AlertTriangle}
         iconClass="bg-rose-500/10 text-rose-400"
         bgClass="bg-white/40 dark:bg-slate-900/40 backdrop-blur-md shadow-[0_8px_32px_rgba(0,0,0,0.04)]"
-        borderClass="border-white/60 dark:border-white/10 hover:border-rose-500/40 dark:hover:border-rose-500/20"
+        borderClass="border-white/60 dark:border-white/10"
         onClick={onCardClick ? () => onCardClick("defaulters") : undefined}
       />
 
@@ -116,7 +116,7 @@ export default function VCOverviewCards({ overview, onCardClick }: VCOverviewCar
         icon={Receipt}
         iconClass="bg-gold-500/10 text-gold-400"
         bgClass="bg-white/40 dark:bg-slate-900/40 backdrop-blur-md shadow-[0_8px_32px_rgba(0,0,0,0.04)]"
-        borderClass="border-white/60 dark:border-white/10 hover:border-gold-500/40 dark:hover:border-gold-500/20"
+        borderClass="border-white/60 dark:border-white/10"
         onClick={onCardClick ? () => onCardClick("payments") : undefined}
       />
     </div>

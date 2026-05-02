@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState } from "react"
 import { motion } from "framer-motion"
 import { GraduationCap, RefreshCw } from "lucide-react"
-import { Skeleton } from "boneyard-js/react"
 import { useRegistrationStats } from "@/hooks/vc/useRegistrationStats"
 import type { SSERegistrationImportedEvent } from "@/types/server/sse.types"
 import RegistrationStatCards from "./RegistrationStatCards"
@@ -79,45 +78,39 @@ export default function VCRegistrationTab({
       </div>
 
       {/* KPI Cards */}
-      <Skeleton name="reg-stat-cards" loading={isLoading && !stats}>
-        {stats ? (
-          <RegistrationStatCards
-            totalRegistered={stats.totalRegistered}
-            registeredThisSession={stats.registeredThisSession}
-            todayImports={stats.todayImports}
-            programsNearCapacity={stats.programsNearCapacity}
-            animateKey={animateKey}
-          />
-        ) : null}
-      </Skeleton>
+      {stats ? (
+        <RegistrationStatCards
+          totalRegistered={stats.totalRegistered}
+          registeredThisSession={stats.registeredThisSession}
+          todayImports={stats.todayImports}
+          programsNearCapacity={stats.programsNearCapacity}
+          animateKey={animateKey}
+        />
+      ) : null}
 
       {/* Bar chart + Capacity side-by-side on xl */}
-      <Skeleton name="reg-charts" loading={isLoading && !stats}>
-        {stats ? (
-          <div className="grid gap-4 xl:grid-cols-2">
-            <RegistrationBarChart data={stats.byProgram} />
-            <CapacityProgress data={stats.capacityData} />
-          </div>
-        ) : null}
-      </Skeleton>
+      {stats ? (
+        <div className="grid gap-4 xl:grid-cols-2">
+          <RegistrationBarChart data={stats.byProgram} />
+          <CapacityProgress data={stats.capacityData} />
+        </div>
+      ) : null}
 
       {/* Daily trend + Live feed side-by-side on xl */}
-      <Skeleton name="reg-activity" loading={isLoading && !stats}>
-        {stats ? (
-          <div className="grid gap-4 xl:grid-cols-[1fr_360px]">
-            <DailyImportChart data={stats.dailyActivity} />
-            <RegistrationLiveFeed
-              initialActivity={recentActivity}
-              latestRegistrationEvent={latestRegistrationEvent}
-              connected={sseConnected}
-            />
-          </div>
-        ) : (
-          <div className="rounded-xl border border-white/60 dark:border-white/[0.05] bg-white/40 dark:bg-[#080c18] backdrop-blur-md shadow-sm px-5 py-10 text-center text-sm font-medium text-slate-500 dark:text-muted-foreground/40">
-            Loading activity…
-          </div>
-        )}
-      </Skeleton>
+      {stats ? (
+        <div className="grid gap-4 xl:grid-cols-[1fr_360px]">
+          <DailyImportChart data={stats.dailyActivity} />
+          <RegistrationLiveFeed
+            initialActivity={recentActivity}
+            latestRegistrationEvent={latestRegistrationEvent}
+            connected={sseConnected}
+          />
+        </div>
+      ) : (
+        <div className="rounded-xl border border-white/60 dark:border-white/[0.05] bg-white/40 dark:bg-[#080c18] backdrop-blur-md shadow-sm px-5 py-10 text-center text-sm font-medium text-slate-500 dark:text-muted-foreground/40">
+          Loading activity…
+        </div>
+      )}
 
       {/* Empty state */}
       {!isLoading && stats?.totalRegistered === 0 && (

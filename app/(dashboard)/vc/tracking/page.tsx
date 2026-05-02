@@ -49,14 +49,14 @@ function KPICard({ card }: { card: TrackingKPICard }) {
       initial={{ opacity: 0, y: 6 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ type: "spring", stiffness: 320, damping: 30 }}
-      className="flex flex-col gap-3 rounded-xl border border-slate-200/50 dark:border-white/[0.06] bg-white/60 dark:bg-white/[0.02] p-4 shadow-[0_8px_32px_rgba(0,0,0,0.04)]"
+      className="flex flex-col gap-3 rounded-xl border border-slate-200/60 dark:border-white/[0.06] bg-white/70 dark:bg-white/[0.03] shadow-sm backdrop-blur-sm p-4"
     >
       <div className="flex items-center justify-between">
-        <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#64748B]/90 dark:text-muted-foreground/70">
+        <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-500 dark:text-muted-foreground/70">
           {card.label}
         </p>
-        <div className="flex h-6 w-6 items-center justify-center rounded-lg bg-slate-200/50 dark:bg-white/[0.04]">
-          <Icon className="h-3 w-3 text-[#64748B] dark:text-muted-foreground/50" />
+        <div className="flex h-6 w-6 items-center justify-center rounded-lg bg-slate-100 dark:bg-white/[0.06]">
+          <Icon className="h-3 w-3 text-slate-400 dark:text-muted-foreground/50" />
         </div>
       </div>
       <p className={`text-2xl font-bold tabular-nums tracking-tight ${card.tone}`}>
@@ -75,8 +75,8 @@ function DeptGrid({
 }) {
   if (departments.length === 0) {
     return (
-      <div className="flex h-32 items-center justify-center rounded-xl border border-dashed border-slate-300 dark:border-white/[0.06]">
-        <p className="text-xs text-[#64748B] dark:text-muted-foreground">No department data for current filters.</p>
+      <div className="flex h-32 items-center justify-center rounded-xl border border-dashed border-slate-200 dark:border-white/[0.06]">
+        <p className="text-xs text-muted-foreground">No department data for current filters.</p>
       </div>
     )
   }
@@ -92,26 +92,26 @@ function DeptGrid({
             initial={{ opacity: 0, y: 6 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.04 }}
-            className="rounded-xl border border-white/60 dark:border-white/[0.06] bg-gradient-to-br from-white/80 to-white/40 dark:from-white/[0.02] dark:to-transparent backdrop-blur-md p-4 space-y-3 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-0.5"
+            className="rounded-xl border border-slate-200/60 dark:border-white/[0.06] bg-white/70 dark:bg-white/[0.018] shadow-sm backdrop-blur-sm p-4 space-y-3"
           >
             <div>
-              <p className="text-[12.5px] font-semibold text-[#0F172A] dark:text-foreground">{dept.departmentName}</p>
-              <p className="text-[10.5px] font-mono text-[#64748B] dark:text-muted-foreground/60">{dept.departmentCode}</p>
+              <p className="text-[12.5px] font-semibold text-slate-800 dark:text-foreground">{dept.departmentName}</p>
+              <p className="text-[10.5px] font-mono text-slate-400 dark:text-muted-foreground/60">{dept.departmentCode}</p>
             </div>
             <div className="flex items-center justify-between text-[11px]">
               <span className={`text-lg font-bold tabular-nums ${rateColor}`}>{rate}%</span>
-              <span className="text-[#64748B] dark:text-muted-foreground">{dept.paidStudents}/{dept.totalStudents}</span>
+              <span className="text-slate-500 dark:text-muted-foreground">{dept.paidStudents}/{dept.totalStudents}</span>
             </div>
-            <div className="h-1.5 rounded-full bg-slate-200/50 dark:bg-white/[0.04] overflow-hidden">
+            <div className="h-1.5 rounded-full bg-slate-100 dark:bg-white/[0.04] overflow-hidden">
               <div className={`h-full rounded-full ${barColor} transition-all duration-700`} style={{ width: `${rate}%` }} />
             </div>
-            <div className="grid grid-cols-2 gap-2 pt-1 border-t border-slate-200/80 dark:border-white/[0.04]">
+            <div className="grid grid-cols-2 gap-2 pt-1 border-t border-slate-100 dark:border-white/[0.04]">
               <div>
-                <p className="text-[9.5px] text-[#64748B]/70 dark:text-muted-foreground/50 uppercase tracking-[0.12em]">Collected</p>
+                <p className="text-[9.5px] text-slate-400 dark:text-muted-foreground/50 uppercase tracking-[0.12em]">Collected</p>
                 <p className="text-[11.5px] font-semibold text-emerald-600 dark:text-emerald-400 tabular-nums">{formatCurrency(dept.collectedAmount)}</p>
               </div>
               <div>
-                <p className="text-[9.5px] text-[#64748B]/70 dark:text-muted-foreground/50 uppercase tracking-[0.12em]">Outstanding</p>
+                <p className="text-[9.5px] text-slate-400 dark:text-muted-foreground/50 uppercase tracking-[0.12em]">Outstanding</p>
                 <p className="text-[11.5px] font-semibold text-amber-600 dark:text-amber-400 tabular-nums">{formatCurrency(dept.outstandingAmount)}</p>
               </div>
             </div>
@@ -126,8 +126,8 @@ function DeptGrid({
 function SemGrid({ semesters }: { semesters: VCSemesterBreakdown[] }) {
   if (semesters.length === 0) {
     return (
-      <div className="flex h-32 items-center justify-center rounded-xl border border-dashed border-slate-300 dark:border-white/[0.06]">
-        <p className="text-xs text-[#64748B] dark:text-muted-foreground">No semester data for current filters.</p>
+      <div className="flex h-32 items-center justify-center rounded-xl border border-dashed border-slate-200 dark:border-white/[0.06]">
+        <p className="text-xs text-muted-foreground">No semester data for current filters.</p>
       </div>
     )
   }
@@ -142,27 +142,27 @@ function SemGrid({ semesters }: { semesters: VCSemesterBreakdown[] }) {
             initial={{ opacity: 0, scale: 0.97 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: i * 0.04 }}
-            className="rounded-xl border border-white/60 dark:border-white/[0.06] bg-gradient-to-br from-white/80 to-white/40 dark:from-white/[0.02] dark:to-transparent backdrop-blur-md p-4 space-y-2.5 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-0.5"
+            className="rounded-xl border border-slate-200/60 dark:border-white/[0.06] bg-white/70 dark:bg-white/[0.018] shadow-sm backdrop-blur-sm p-4 space-y-2.5"
           >
             <div className="flex items-center justify-between">
-              <p className="text-[13px] font-bold text-[#0F172A] dark:text-foreground">Semester {sem.semester}</p>
-              <span className="text-[10px] font-semibold text-sky-400">{pct}%</span>
+              <p className="text-[13px] font-bold text-slate-800 dark:text-foreground">Semester {sem.semester}</p>
+              <span className="text-[10px] font-semibold text-sky-600 dark:text-sky-400">{pct}%</span>
             </div>
-            <div className="h-1 rounded-full bg-slate-200/50 dark:bg-white/[0.04] overflow-hidden">
+            <div className="h-1 rounded-full bg-slate-100 dark:bg-white/[0.04] overflow-hidden">
               <div className="h-full rounded-full bg-sky-500 transition-all duration-700" style={{ width: `${pct}%` }} />
             </div>
             <div className="space-y-1 pt-1">
               <div className="flex justify-between text-[11px]">
-                <span className="text-[#64748B] dark:text-muted-foreground/60">Paid</span>
+                <span className="text-slate-400 dark:text-muted-foreground/60">Paid</span>
                 <span className="text-emerald-600 dark:text-emerald-400 tabular-nums font-medium">{formatCurrency(sem.paidAmount)}</span>
               </div>
               <div className="flex justify-between text-[11px]">
-                <span className="text-[#64748B] dark:text-muted-foreground/60">Outstanding</span>
+                <span className="text-slate-400 dark:text-muted-foreground/60">Outstanding</span>
                 <span className="text-amber-600 dark:text-amber-400 tabular-nums font-medium">{formatCurrency(sem.unpaidAmount)}</span>
               </div>
-              <div className="flex justify-between text-[11px] pt-1 border-t border-slate-200/80 dark:border-white/[0.04]">
-                <span className="text-[#64748B] dark:text-muted-foreground/60">{sem.paidStudents} paid</span>
-                <span className="text-[#64748B] dark:text-muted-foreground/60">{sem.unpaidStudents} unpaid</span>
+              <div className="flex justify-between text-[11px] pt-1 border-t border-slate-100 dark:border-white/[0.04]">
+                <span className="text-slate-400 dark:text-muted-foreground/60">{sem.paidStudents} paid</span>
+                <span className="text-slate-400 dark:text-muted-foreground/60">{sem.unpaidStudents} unpaid</span>
               </div>
             </div>
           </motion.div>
@@ -187,18 +187,18 @@ function VCTrackingContent() {
   } = useVCTracking()
 
   return (
-    <div className="space-y-5 pb-10 p-5 lg:p-8">
+    <div className="relative isolate space-y-5 pb-10 min-h-[calc(100dvh-3.5rem)] p-5 lg:p-8 transition-colors duration-300">
 
       {/* ── Header ── */}
       <div className="flex items-start justify-between gap-4">
         <div>
-          <h1 className="text-lg font-bold tracking-tight text-[#0F172A] dark:text-foreground">Tracking Center</h1>
-          <p className="mt-0.5 text-xs text-[#64748B] dark:text-muted-foreground/70">
+          <h1 className="text-lg font-bold tracking-tight text-slate-900 dark:text-foreground">Tracking Center</h1>
+          <p className="mt-0.5 text-xs text-slate-500 dark:text-muted-foreground/70">
             Operational view — paid, unpaid, defaulters across departments and semesters.
           </p>
         </div>
         {lastUpdatedAt && (
-          <div className="flex items-center gap-1.5 text-[10.5px] text-[#64748B] dark:text-muted-foreground/50 flex-shrink-0 mt-0.5">
+          <div className="flex items-center gap-1.5 text-[10.5px] text-slate-400 dark:text-muted-foreground/50 flex-shrink-0 mt-0.5">
             <Clock className="h-3 w-3" />
             {lastUpdatedAt}
           </div>
@@ -206,7 +206,7 @@ function VCTrackingContent() {
       </div>
 
       {/* ── Status Tabs ── */}
-      <div className="flex items-center gap-1 p-1 rounded-xl bg-white/60 dark:bg-white/[0.025] border border-slate-200/80 dark:border-white/[0.04] w-fit shadow-sm">
+      <div className="flex items-center gap-1 p-1 rounded-xl bg-white/60 dark:bg-white/[0.025] border border-slate-200/60 dark:border-white/[0.04] shadow-sm backdrop-blur-sm w-fit">
         {STATUS_TABS.map((t) => (
           <button
             key={t.value}
@@ -216,7 +216,7 @@ function VCTrackingContent() {
               "rounded-[9px] px-4 py-1.5 text-xs font-semibold border transition-all duration-200",
               tab === t.value
                 ? t.activeClass
-                : "border-transparent text-[#64748B] dark:text-muted-foreground hover:text-[#0F172A] dark:hover:text-foreground/80",
+                : "border-transparent text-slate-500 dark:text-muted-foreground hover:text-slate-800 dark:hover:text-foreground/80",
             ].join(" ")}
           >
             {t.label}
@@ -227,10 +227,10 @@ function VCTrackingContent() {
       {/* ── Scope Toggle (only on Overview) ── */}
       {tab === "overview" && (
         <div className="flex items-center gap-1.5">
-          <span className="text-[10px] uppercase tracking-[0.18em] text-[#64748B]/70 dark:text-muted-foreground/50 font-semibold">
+          <span className="text-[10px] uppercase tracking-[0.18em] text-slate-400 dark:text-muted-foreground/50 font-semibold">
             Scope:
           </span>
-          <div className="flex items-center gap-1 p-0.5 rounded-lg bg-white/60 dark:bg-white/[0.025] border border-slate-200/80 dark:border-white/[0.04] shadow-sm">
+          <div className="flex items-center gap-1 p-0.5 rounded-lg bg-white/60 dark:bg-white/[0.025] border border-slate-200/60 dark:border-white/[0.04] shadow-sm backdrop-blur-sm">
             {SCOPE_TABS.map((s) => (
               <button
                 key={s.value}
@@ -239,8 +239,8 @@ function VCTrackingContent() {
                 className={[
                   "flex items-center gap-1.5 rounded-md px-3 py-1 text-xs font-medium transition-all duration-200",
                   scope === s.value
-                    ? "bg-white/80 dark:bg-white/[0.07] text-[#0F172A] dark:text-foreground shadow-sm"
-                    : "text-[#64748B] dark:text-muted-foreground hover:text-[#0F172A] dark:hover:text-foreground/70",
+                    ? "bg-white dark:bg-white/[0.07] text-slate-800 dark:text-foreground shadow-sm"
+                    : "text-slate-500 dark:text-muted-foreground hover:text-slate-700 dark:hover:text-foreground/70",
                 ].join(" ")}
               >
                 <s.Icon className="h-3 w-3" />
@@ -310,7 +310,7 @@ function VCTrackingContent() {
               exit={{ opacity: 0 }}
               className="space-y-3"
             >
-              <h3 className="text-[10.5px] uppercase tracking-[0.2em] text-[#64748B] dark:text-muted-foreground/60 font-semibold">
+              <h3 className="text-[10.5px] uppercase tracking-[0.2em] text-slate-400 dark:text-muted-foreground/60 font-semibold">
                 Department Performance
               </h3>
               <DeptGrid departments={departmentPerformance} />
@@ -325,7 +325,7 @@ function VCTrackingContent() {
               exit={{ opacity: 0 }}
               className="space-y-3"
             >
-              <h3 className="text-[10.5px] uppercase tracking-[0.2em] text-[#64748B] dark:text-muted-foreground/60 font-semibold">
+              <h3 className="text-[10.5px] uppercase tracking-[0.2em] text-slate-400 dark:text-muted-foreground/60 font-semibold">
                 Semester Breakdown
               </h3>
               <SemGrid semesters={semesterBreakdown} />
@@ -338,14 +338,14 @@ function VCTrackingContent() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="flex items-center justify-center rounded-xl border border-dashed border-slate-300 dark:border-white/[0.05] py-10"
+              className="flex items-center justify-center rounded-xl border border-dashed border-slate-200 dark:border-white/[0.05] py-10"
             >
               <div className="text-center">
-                <div className="mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-slate-200/50 dark:bg-white/[0.03]">
-                  <BarChart3 className="h-4.5 w-4.5 text-[#64748B]/50 dark:text-muted-foreground/40" />
+                <div className="mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-slate-100 dark:bg-white/[0.03]">
+                  <BarChart3 className="h-4.5 w-4.5 text-slate-400 dark:text-muted-foreground/40" />
                 </div>
-                <p className="text-[12.5px] font-medium text-[#0F172A]/70 dark:text-foreground/60">University-wide overview</p>
-                <p className="mt-1 text-xs text-[#64748B]/80 dark:text-muted-foreground/50">
+                <p className="text-[12.5px] font-medium text-slate-600 dark:text-foreground/60">University-wide overview</p>
+                <p className="mt-1 text-xs text-slate-400 dark:text-muted-foreground/50">
                   Switch to Department or Semester scope for detailed breakdowns.
                 </p>
               </div>
@@ -362,8 +362,8 @@ export default function VCTrackingPage() {
     <Suspense
       fallback={
         <div className="flex h-[50vh] flex-col items-center justify-center gap-4">
-          <div className="h-6 w-6 animate-spin rounded-full border-2 border-white/20 border-t-white/80" />
-          <p className="text-[11px] uppercase tracking-widest text-muted-foreground/60 animate-pulse font-medium">
+          <div className="h-6 w-6 animate-spin rounded-full border-2 border-slate-200 dark:border-white/20 border-t-violet-500 dark:border-t-white/80" />
+          <p className="text-[11px] uppercase tracking-widest text-slate-400 dark:text-muted-foreground/60 animate-pulse font-medium">
             Loading Tracking Data...
           </p>
         </div>

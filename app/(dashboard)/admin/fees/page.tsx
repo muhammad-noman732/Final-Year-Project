@@ -87,11 +87,11 @@ export default function FeesPage() {
     ] as const;
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-6 p-5 lg:p-8 pb-10">
             {/* ═══ HEADER ═══ */}
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div>
-                    <h1 className="text-2xl font-bold text-foreground tracking-tight">Fee Management</h1>
+                    <h1 className="text-2xl font-bold text-[#0F172A] dark:text-foreground tracking-tight">Fee Management</h1>
                     <p className="text-sm text-muted-foreground mt-1">Manage fee structures and track assignments</p>
                 </div>
             </div>
@@ -137,11 +137,11 @@ export default function FeesPage() {
             </div>
 
             <Tabs defaultValue="structures" className="space-y-4">
-                <TabsList className="bg-navy-800/50 border border-gold-500/8">
-                    <TabsTrigger value="structures" className="data-[state=active]:bg-gold-500/10 data-[state=active]:text-gold-400">
+                <TabsList className="bg-white/60 dark:bg-navy-800/50 border border-slate-200/80 dark:border-gold-500/8">
+                    <TabsTrigger value="structures" className="data-[state=active]:bg-white dark:data-[state=active]:bg-gold-500/10 data-[state=active]:text-amber-600 dark:data-[state=active]:text-gold-400 data-[state=active]:shadow-sm">
                         Fee Structures
                     </TabsTrigger>
-                    <TabsTrigger value="defaulters" className="data-[state=active]:bg-gold-500/10 data-[state=active]:text-gold-400">
+                    <TabsTrigger value="defaulters" className="data-[state=active]:bg-white dark:data-[state=active]:bg-gold-500/10 data-[state=active]:text-amber-600 dark:data-[state=active]:text-gold-400 data-[state=active]:shadow-sm">
                         Defaulters
                         <span className="ml-2 px-1.5 py-0.5 text-[11px] font-bold rounded-full bg-rose-500/15 text-rose-400">
                             0

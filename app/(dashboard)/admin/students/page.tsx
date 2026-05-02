@@ -64,11 +64,11 @@ export default function StudentsPage() {
     const suspendedCount = students.filter(s => s.enrollmentStatus === "SUSPENDED").length;
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-6 p-5 lg:p-8 pb-10">
             {/* ═══ HEADER ═══ */}
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div>
-                    <h1 className="text-2xl font-bold text-foreground tracking-tight">
+                    <h1 className="text-2xl font-bold text-[#0F172A] dark:text-foreground tracking-tight">
                         Students Management
                     </h1>
                     <p className="text-sm text-muted-foreground mt-1">{meta.total} total students enrolled</p>
@@ -130,16 +130,16 @@ export default function StudentsPage() {
                             placeholder="Search by name, roll number, or email..."
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
-                            className="pl-10 bg-navy-800/50 border-gold-500/10 focus:border-gold-500/30"
+                            className="pl-10 bg-white/80 dark:bg-navy-800/50 border-slate-200 dark:border-gold-500/10 focus:border-amber-400 dark:focus:border-gold-500/30"
                         />
                     </div>
                     <div className="flex flex-wrap gap-2">
                         <Select value={selectedDept} onValueChange={handleDeptChange}>
-                            <SelectTrigger className="w-[160px] bg-navy-800/50 border-gold-500/10">
+                            <SelectTrigger className="w-[160px] bg-white/80 dark:bg-navy-800/50 border-slate-200 dark:border-gold-500/10">
                                 <Filter className="w-3 h-3 mr-2 text-muted-foreground" />
                                 <SelectValue placeholder="Department" />
                             </SelectTrigger>
-                            <SelectContent className="bg-navy-800 border-gold-500/10">
+                            <SelectContent className="bg-white dark:bg-navy-800 border-slate-200 dark:border-gold-500/10">
                                 <SelectItem value="all">All Departments</SelectItem>
                                 {departments.map((d) => (
                                     <SelectItem key={d.id} value={d.id}>{d.name}</SelectItem>
@@ -147,10 +147,10 @@ export default function StudentsPage() {
                             </SelectContent>
                         </Select>
                         <Select value={selectedProgram} onValueChange={handleProgramChange}>
-                            <SelectTrigger className="w-[160px] bg-navy-800/50 border-gold-500/10">
+                            <SelectTrigger className="w-[160px] bg-white/80 dark:bg-navy-800/50 border-slate-200 dark:border-gold-500/10">
                                 <SelectValue placeholder="Program" />
                             </SelectTrigger>
-                            <SelectContent className="bg-navy-800 border-gold-500/10">
+                            <SelectContent className="bg-white dark:bg-navy-800 border-slate-200 dark:border-gold-500/10">
                                 <SelectItem value="all">All Programs</SelectItem>
                                 {programs.map((p) => (
                                     <SelectItem key={p.id} value={p.id}>{p.code}</SelectItem>
@@ -158,10 +158,10 @@ export default function StudentsPage() {
                             </SelectContent>
                         </Select>
                         <Select value={selectedSemester} onValueChange={handleSemesterChange}>
-                            <SelectTrigger className="w-[140px] bg-navy-800/50 border-gold-500/10">
+                            <SelectTrigger className="w-[140px] bg-white/80 dark:bg-navy-800/50 border-slate-200 dark:border-gold-500/10">
                                 <SelectValue placeholder="Semester" />
                             </SelectTrigger>
-                            <SelectContent className="bg-navy-800 border-gold-500/10">
+                            <SelectContent className="bg-white dark:bg-navy-800 border-slate-200 dark:border-gold-500/10">
                                 <SelectItem value="all">All Semesters</SelectItem>
                                 {semesters.map((s) => (
                                     <SelectItem key={String(s)} value={String(s)}>Semester {s}</SelectItem>
@@ -169,10 +169,10 @@ export default function StudentsPage() {
                             </SelectContent>
                         </Select>
                         <Select value={selectedSession} onValueChange={handleSessionChange}>
-                            <SelectTrigger className="w-[140px] bg-navy-800/50 border-gold-500/10">
+                            <SelectTrigger className="w-[140px] bg-white/80 dark:bg-navy-800/50 border-slate-200 dark:border-gold-500/10">
                                 <SelectValue placeholder="Session" />
                             </SelectTrigger>
-                            <SelectContent className="bg-navy-800 border-gold-500/10">
+                            <SelectContent className="bg-white dark:bg-navy-800 border-slate-200 dark:border-gold-500/10">
                                 <SelectItem value="all">All Sessions</SelectItem>
                                 {sessions.map((s) => (
                                     <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>
@@ -205,23 +205,23 @@ export default function StudentsPage() {
                     <div className="overflow-x-auto">
                         <Table>
                             <TableHeader>
-                                <TableRow className="border-gold-500/5 hover:bg-transparent">
+                                <TableRow className="border-slate-200/80 dark:border-gold-500/5 hover:bg-transparent">
                                     <TableHead className="w-10">
                                         <input
                                             type="checkbox"
                                             checked={selectedRows.size === students.length && students.length > 0}
                                             onChange={toggleAll}
-                                            className="w-4 h-4 rounded border-gold-500/20 bg-navy-800"
+                                            className="w-4 h-4 rounded border-slate-300 dark:border-gold-500/20"
                                         />
                                     </TableHead>
-                                    <TableHead className="text-gold-500/60 text-xs uppercase tracking-wider">Student ID</TableHead>
-                                    <TableHead className="text-gold-500/60 text-xs uppercase tracking-wider">Name</TableHead>
-                                    <TableHead className="text-gold-500/60 text-xs uppercase tracking-wider">Email</TableHead>
-                                    <TableHead className="text-gold-500/60 text-xs uppercase tracking-wider">Department</TableHead>
-                                    <TableHead className="text-gold-500/60 text-xs uppercase tracking-wider">Program</TableHead>
-                                    <TableHead className="text-gold-500/60 text-xs uppercase tracking-wider">Semester</TableHead>
-                                    <TableHead className="text-gold-500/60 text-xs uppercase tracking-wider">Status</TableHead>
-                                    <TableHead className="text-gold-500/60 text-xs uppercase tracking-wider">Actions</TableHead>
+                                    <TableHead className="text-slate-500 dark:text-gold-500/60 text-xs uppercase tracking-wider">Student ID</TableHead>
+                                    <TableHead className="text-slate-500 dark:text-gold-500/60 text-xs uppercase tracking-wider">Name</TableHead>
+                                    <TableHead className="text-slate-500 dark:text-gold-500/60 text-xs uppercase tracking-wider">Email</TableHead>
+                                    <TableHead className="text-slate-500 dark:text-gold-500/60 text-xs uppercase tracking-wider">Department</TableHead>
+                                    <TableHead className="text-slate-500 dark:text-gold-500/60 text-xs uppercase tracking-wider">Program</TableHead>
+                                    <TableHead className="text-slate-500 dark:text-gold-500/60 text-xs uppercase tracking-wider">Semester</TableHead>
+                                    <TableHead className="text-slate-500 dark:text-gold-500/60 text-xs uppercase tracking-wider">Status</TableHead>
+                                    <TableHead className="text-slate-500 dark:text-gold-500/60 text-xs uppercase tracking-wider">Actions</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>

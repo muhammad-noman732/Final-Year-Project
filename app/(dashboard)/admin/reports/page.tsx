@@ -29,8 +29,8 @@ export default function ReportsPage() {
     const [format, setFormat] = useState("pdf");
 
     return (
-        <div className="space-y-6">
-            <h1 className="text-2xl font-bold text-foreground tracking-tight">Reports</h1>
+        <div className="space-y-6 p-5 lg:p-8 pb-10">
+            <h1 className="text-2xl font-bold text-[#0F172A] dark:text-foreground tracking-tight">Reports</h1>
 
             {/* Report Type Cards */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -38,7 +38,9 @@ export default function ReportsPage() {
                     <Card
                         key={type.id}
                         onClick={() => setSelectedType(type.id)}
-                        className={`glass-card border-0 p-5 cursor-pointer transition-all duration-300 hover:border-gold-500/20 ${selectedType === type.id ? "ring-1 ring-gold-500/30 border-gold-500/20" : ""
+                        className={`glass-card glass-card-hover border-0 p-5 cursor-pointer transition-all duration-300 ${selectedType === type.id
+                                ? "ring-2 ring-amber-400/30 dark:ring-gold-500/30 shadow-md shadow-amber-100 dark:shadow-gold-500/5"
+                                : "hover:shadow-md"
                             }`}
                     >
                         <div className="flex items-start gap-4">
@@ -65,19 +67,19 @@ export default function ReportsPage() {
                     <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
                         <div className="space-y-2">
                             <Label className="text-xs text-muted-foreground">Start Date</Label>
-                            <Input type="date" className="bg-navy-800/50 border-gold-500/10 focus:border-gold-500/30" />
+                            <Input type="date" className="bg-white/80 dark:bg-navy-800/50 border-slate-200 dark:border-gold-500/10 focus:border-amber-400 dark:focus:border-gold-500/30" />
                         </div>
                         <div className="space-y-2">
                             <Label className="text-xs text-muted-foreground">End Date</Label>
-                            <Input type="date" className="bg-navy-800/50 border-gold-500/10 focus:border-gold-500/30" />
+                            <Input type="date" className="bg-white/80 dark:bg-navy-800/50 border-slate-200 dark:border-gold-500/10 focus:border-amber-400 dark:focus:border-gold-500/30" />
                         </div>
                         <div className="space-y-2">
                             <Label className="text-xs text-muted-foreground">Department</Label>
                             <Select>
-                                <SelectTrigger className="bg-navy-800/50 border-gold-500/10">
+                                <SelectTrigger className="bg-white/80 dark:bg-navy-800/50 border-slate-200 dark:border-gold-500/10">
                                     <SelectValue placeholder="All" />
                                 </SelectTrigger>
-                                <SelectContent className="bg-navy-800 border-gold-500/10">
+                                <SelectContent className="bg-white dark:bg-navy-800 border-slate-200 dark:border-gold-500/10">
                                     <SelectItem value="all">All Departments</SelectItem>
                                     {DEPARTMENTS.map((d) => <SelectItem key={d} value={d}>{d}</SelectItem>)}
                                 </SelectContent>
@@ -86,10 +88,10 @@ export default function ReportsPage() {
                         <div className="space-y-2">
                             <Label className="text-xs text-muted-foreground">Semester</Label>
                             <Select>
-                                <SelectTrigger className="bg-navy-800/50 border-gold-500/10">
+                                <SelectTrigger className="bg-white/80 dark:bg-navy-800/50 border-slate-200 dark:border-gold-500/10">
                                     <SelectValue placeholder="All" />
                                 </SelectTrigger>
-                                <SelectContent className="bg-navy-800 border-gold-500/10">
+                                <SelectContent className="bg-white dark:bg-navy-800 border-slate-200 dark:border-gold-500/10">
                                     <SelectItem value="all">All Semesters</SelectItem>
                                     {SEMESTERS.map((s) => <SelectItem key={s} value={s}>{s}</SelectItem>)}
                                 </SelectContent>
@@ -128,25 +130,23 @@ export default function ReportsPage() {
 
             {/* Recent Reports */}
             <Card className="glass-card border-0 overflow-hidden">
-                <div className="px-6 py-4 border-b border-gold-500/5">
-                    <h3 className="text-sm font-semibold text-foreground tracking-tight">
-                        Recent Reports
-                    </h3>
+                <div className="px-6 py-4 border-b border-slate-200/80 dark:border-gold-500/5">
+                    <h3 className="text-sm font-semibold text-[#0F172A] dark:text-foreground tracking-tight">Recent Reports</h3>
                 </div>
                 <div className="overflow-x-auto">
                     <Table>
                         <TableHeader>
-                            <TableRow className="border-gold-500/5 hover:bg-transparent">
-                                <TableHead className="text-gold-500/60 text-xs uppercase tracking-wider">Report Name</TableHead>
-                                <TableHead className="text-gold-500/60 text-xs uppercase tracking-wider">Generated On</TableHead>
-                                <TableHead className="text-gold-500/60 text-xs uppercase tracking-wider">Format</TableHead>
-                                <TableHead className="text-gold-500/60 text-xs uppercase tracking-wider">Size</TableHead>
-                                <TableHead className="text-gold-500/60 text-xs uppercase tracking-wider">Download</TableHead>
+                            <TableRow className="border-slate-200/80 dark:border-gold-500/5 hover:bg-transparent">
+                                <TableHead className="text-slate-500 dark:text-gold-500/60 text-xs uppercase tracking-wider">Report Name</TableHead>
+                                <TableHead className="text-slate-500 dark:text-gold-500/60 text-xs uppercase tracking-wider">Generated On</TableHead>
+                                <TableHead className="text-slate-500 dark:text-gold-500/60 text-xs uppercase tracking-wider">Format</TableHead>
+                                <TableHead className="text-slate-500 dark:text-gold-500/60 text-xs uppercase tracking-wider">Size</TableHead>
+                                <TableHead className="text-slate-500 dark:text-gold-500/60 text-xs uppercase tracking-wider">Download</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
                             {recentReports.map((report) => (
-                                <TableRow key={report.name} className="border-gold-500/5 hover:bg-navy-700/20">
+                                <TableRow key={report.name} className="border-slate-200/60 dark:border-gold-500/5 hover:bg-slate-50/80 dark:hover:bg-navy-700/20">
                                     <TableCell className="text-sm font-medium">{report.name}</TableCell>
                                     <TableCell className="text-sm text-muted-foreground">{report.generatedOn}</TableCell>
                                     <TableCell>

@@ -1,7 +1,6 @@
 "use client"
 
 import { useState } from "react"
-import { Skeleton } from "boneyard-js/react"
 import { Clock, Zap, BarChart2, LayoutDashboard, GraduationCap } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Button } from "@/components/ui/button"
@@ -164,29 +163,25 @@ export default function VCDashboard() {
             />
 
             {/* Health Score Bento */}
-            <Skeleton name="vc-overview-cards" loading={isLoading && !dashboard}>
-              {dashboard ? (
-                <VCHealthScoreBento
-                  overview={dashboard.overview}
-                  collectionTrend={dashboard.collectionTrend}
-                  newAmountCollected={newAmountCollected}
-                  sseConnected={sseConnected}
-                  onCardClick={handleOverviewCardClick}
-                />
-              ) : null}
-            </Skeleton>
+            {dashboard ? (
+              <VCHealthScoreBento
+                overview={dashboard.overview}
+                collectionTrend={dashboard.collectionTrend}
+                newAmountCollected={newAmountCollected}
+                sseConnected={sseConnected}
+                onCardClick={handleOverviewCardClick}
+              />
+            ) : null}
 
             {/* Charts + Right Column */}
             <div className="grid gap-4 xl:grid-cols-[1fr_320px]">
-              <Skeleton name="vc-dashboard-panels" loading={isLoading && !dashboard}>
-                {dashboard && (
-                  <VCDashboardPanels
-                    semesterBreakdown={dashboard.semesterBreakdown}
-                    collectionTrend={dashboard.collectionTrend}
-                    onSemesterSelect={handleSemesterTracking}
-                  />
-                )}
-              </Skeleton>
+              {dashboard && (
+                <VCDashboardPanels
+                  semesterBreakdown={dashboard.semesterBreakdown}
+                  collectionTrend={dashboard.collectionTrend}
+                  onSemesterSelect={handleSemesterTracking}
+                />
+              )}
 
               <div className="flex flex-col gap-4">
                 {dashboard && (
@@ -213,21 +208,19 @@ export default function VCDashboard() {
                 <Separator className="flex-1 bg-slate-200/50 dark:bg-white/[0.04]" />
               </div>
 
-              <Skeleton name="vc-analytics-panels-inline" loading={isLoading && !dashboard}>
-                {dashboard ? (
-                  <VCAnalyticsPanels
-                    data={{
-                      overview: dashboard.overview,
-                      collectionTrend: dashboard.collectionTrend,
-                      departmentPerformance: dashboard.departmentPerformance,
-                      semesterBreakdown: dashboard.semesterBreakdown,
-                      paymentMethods: dashboard.paymentMethods,
-                    }}
-                    onDepartmentSelect={handleDepartmentTracking}
-                    onSemesterSelect={handleSemesterTracking}
-                  />
-                ) : null}
-              </Skeleton>
+              {dashboard ? (
+                <VCAnalyticsPanels
+                  data={{
+                    overview: dashboard.overview,
+                    collectionTrend: dashboard.collectionTrend,
+                    departmentPerformance: dashboard.departmentPerformance,
+                    semesterBreakdown: dashboard.semesterBreakdown,
+                    paymentMethods: dashboard.paymentMethods,
+                  }}
+                  onDepartmentSelect={handleDepartmentTracking}
+                  onSemesterSelect={handleSemesterTracking}
+                />
+              ) : null}
             </div>
           </motion.div>
         )}

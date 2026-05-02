@@ -64,22 +64,22 @@ export default function PaymentsPage() {
     }, []);
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-6 p-5 lg:p-8 pb-10">
             <div className="flex items-center justify-between">
-                <h1 className="text-2xl font-bold text-foreground tracking-tight">Payments</h1>
+                <h1 className="text-2xl font-bold text-[#0F172A] dark:text-foreground tracking-tight">Payments</h1>
             </div>
 
             {/* Stats */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 stagger-children">
                 {stats.map((stat) => (
-                    <Card key={stat.label} className="glass-card border-0 p-5">
+                    <Card key={stat.label} className="glass-card glass-card-hover border-0 p-5 cursor-default transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
                         <div className="flex items-start justify-between mb-3">
                             <div className={`w-10 h-10 rounded-xl ${stat.bg} flex items-center justify-center`}>
                                 <stat.icon className={`w-5 h-5 ${stat.color}`} />
                             </div>
                         </div>
                         <p className="text-xs text-muted-foreground uppercase tracking-wider mb-1">{stat.label}</p>
-                        <p className="text-2xl font-bold text-foreground tracking-tight">{stat.value}</p>
+                        <p className="text-2xl font-bold text-[#0F172A] dark:text-foreground tracking-tight">{stat.value}</p>
                     </Card>
                 ))}
             </div>
@@ -87,7 +87,7 @@ export default function PaymentsPage() {
             <div className="grid lg:grid-cols-3 gap-6">
                 {/* ═══ LIVE FEED ═══ */}
                 <Card className="glass-card border-0 lg:col-span-1 overflow-hidden">
-                    <div className="px-4 py-3 border-b border-gold-500/5 flex items-center gap-2">
+                    <div className="px-4 py-3 border-b border-slate-200/80 dark:border-gold-500/5 flex items-center gap-2">
                         <div className="relative w-2 h-2">
                             <div className="absolute inset-0 rounded-full bg-emerald-400 animate-ping opacity-75" />
                             <div className="relative w-2 h-2 rounded-full bg-emerald-400" />
@@ -101,7 +101,7 @@ export default function PaymentsPage() {
                                     key={event.id}
                                     className={`p-3 rounded-lg border transition-all duration-500 ${event.status === "failed"
                                             ? "bg-rose-500/5 border-rose-500/15"
-                                            : "bg-navy-700/20 border-gold-500/5"
+                                            : "bg-slate-50 dark:bg-navy-700/20 border-slate-200/70 dark:border-gold-500/5"
                                         }`}
                                 >
                                     <div className="flex items-center justify-between mb-1">
@@ -127,12 +127,12 @@ export default function PaymentsPage() {
 
                 {/* ═══ PAYMENTS TABLE ═══ */}
                 <Card className="glass-card border-0 lg:col-span-2 overflow-hidden">
-                    <div className="px-4 py-3 border-b border-gold-500/5 flex flex-wrap items-center gap-3">
+                    <div className="px-4 py-3 border-b border-slate-200/80 dark:border-gold-500/5 flex flex-wrap items-center gap-3">
                         <Select defaultValue="all">
-                            <SelectTrigger className="w-[120px] bg-navy-800/50 border-gold-500/10 text-sm h-8">
+                            <SelectTrigger className="w-[120px] bg-white/80 dark:bg-navy-800/50 border-slate-200 dark:border-gold-500/10 text-sm h-8">
                                 <SelectValue />
                             </SelectTrigger>
-                            <SelectContent className="bg-navy-800 border-gold-500/10">
+                            <SelectContent className="bg-white dark:bg-navy-800 border-slate-200 dark:border-gold-500/10">
                                 <SelectItem value="all">All Status</SelectItem>
                                 <SelectItem value="paid">Paid</SelectItem>
                                 <SelectItem value="pending">Pending</SelectItem>
@@ -140,10 +140,10 @@ export default function PaymentsPage() {
                             </SelectContent>
                         </Select>
                         <Select defaultValue="all">
-                            <SelectTrigger className="w-[120px] bg-navy-800/50 border-gold-500/10 text-sm h-8">
+                            <SelectTrigger className="w-[120px] bg-white/80 dark:bg-navy-800/50 border-slate-200 dark:border-gold-500/10 text-sm h-8">
                                 <SelectValue />
                             </SelectTrigger>
-                            <SelectContent className="bg-navy-800 border-gold-500/10">
+                            <SelectContent className="bg-white dark:bg-navy-800 border-slate-200 dark:border-gold-500/10">
                                 <SelectItem value="all">All Methods</SelectItem>
                                 <SelectItem value="stripe">Stripe</SelectItem>
                                 <SelectItem value="jazzcash">JazzCash</SelectItem>
@@ -155,19 +155,19 @@ export default function PaymentsPage() {
                     <div className="overflow-x-auto">
                         <Table>
                             <TableHeader>
-                                <TableRow className="border-gold-500/5 hover:bg-transparent">
-                                    <TableHead className="text-gold-500/60 text-xs uppercase tracking-wider">Transaction ID</TableHead>
-                                    <TableHead className="text-gold-500/60 text-xs uppercase tracking-wider">Student</TableHead>
-                                    <TableHead className="text-gold-500/60 text-xs uppercase tracking-wider">Department</TableHead>
-                                    <TableHead className="text-gold-500/60 text-xs uppercase tracking-wider">Amount</TableHead>
-                                    <TableHead className="text-gold-500/60 text-xs uppercase tracking-wider">Method</TableHead>
-                                    <TableHead className="text-gold-500/60 text-xs uppercase tracking-wider">Date & Time</TableHead>
-                                    <TableHead className="text-gold-500/60 text-xs uppercase tracking-wider">Status</TableHead>
+                                <TableRow className="border-slate-200/80 dark:border-gold-500/5 hover:bg-transparent">
+                                    <TableHead className="text-slate-500 dark:text-gold-500/60 text-xs uppercase tracking-wider">Transaction ID</TableHead>
+                                    <TableHead className="text-slate-500 dark:text-gold-500/60 text-xs uppercase tracking-wider">Student</TableHead>
+                                    <TableHead className="text-slate-500 dark:text-gold-500/60 text-xs uppercase tracking-wider">Department</TableHead>
+                                    <TableHead className="text-slate-500 dark:text-gold-500/60 text-xs uppercase tracking-wider">Amount</TableHead>
+                                    <TableHead className="text-slate-500 dark:text-gold-500/60 text-xs uppercase tracking-wider">Method</TableHead>
+                                    <TableHead className="text-slate-500 dark:text-gold-500/60 text-xs uppercase tracking-wider">Date & Time</TableHead>
+                                    <TableHead className="text-slate-500 dark:text-gold-500/60 text-xs uppercase tracking-wider">Status</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
                                 {payments.map((p) => (
-                                    <TableRow key={p.id} className="border-gold-500/5 hover:bg-navy-700/20">
+                                    <TableRow key={p.id} className="border-slate-200/60 dark:border-gold-500/5 hover:bg-slate-50/80 dark:hover:bg-navy-700/20">
                                         <TableCell className="text-xs font-mono text-muted-foreground">{p.id}</TableCell>
                                         <TableCell className="text-sm font-medium">{p.student}</TableCell>
                                         <TableCell className="text-sm text-muted-foreground">{p.department}</TableCell>

@@ -9,6 +9,11 @@ import _ledger_transactions from './ledger-transactions.bones.json'
 import _ledger_summary from './ledger-summary.bones.json'
 import _hod_stats_grid from './hod-stats-grid.bones.json'
 import _hod_semester_chart from './hod-semester-chart.bones.json'
+import _students_table from './students-table.bones.json'
+import _users_table from './users-table.bones.json'
+import _departments_table from './departments-table.bones.json'
+import _programs_table from './programs-table.bones.json'
+import _sessions_table from './sessions-table.bones.json'
 
 registerBones({
   "student-fee-card": _student_fee_card,
@@ -18,4 +23,13 @@ registerBones({
   "ledger-summary": _ledger_summary,
   "hod-stats-grid": _hod_stats_grid,
   "hod-semester-chart": _hod_semester_chart,
+  "students-table": _students_table,
+  "users-table": _users_table,
+  "departments-table": _departments_table,
+  "programs-table": _programs_table,
+  "sessions-table": _sessions_table,
+  "fee-structures-table": _students_table, // Placeholder for admin
+  "admin-metrics": _hod_stats_grid, // Placeholder for admin
+  "admin-transactions": _ledger_transactions, // Placeholder for admin
+  "reports-table": _users_table, // Placeholder for admin
 })

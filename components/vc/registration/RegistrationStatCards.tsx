@@ -50,7 +50,7 @@ function StatCard({
         "group relative overflow-hidden rounded-xl border p-5",
         "bg-gradient-to-br from-white/80 to-white/40 dark:from-[#080c18] dark:to-[#080c18] backdrop-blur-md transition-all duration-300",
         "hover:-translate-y-1 hover:shadow-lg hover:from-white hover:to-white/60 dark:hover:from-[#0a0f1e] dark:hover:to-[#0a0f1e]",
-        "border-white/60 dark:border-white/[0.05] hover:border-white/80 dark:hover:border-white/[0.10]",
+        "border-white/60 dark:border-white/[0.05]",
         "shadow-sm dark:shadow-none",
       ].join(" ")}
     >

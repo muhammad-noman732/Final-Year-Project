@@ -134,7 +134,7 @@ export default function VCDepartmentPage({ departments, onDepartmentSelect }: Pr
               key={dept.departmentId}
               type="button"
               onClick={() => onDepartmentSelect?.(dept.departmentId)}
-              className="group rounded-xl border border-white/60 dark:border-white/[0.05] bg-gradient-to-br from-white/80 to-white/40 dark:from-[#080c18] dark:to-[#080c18] p-4 text-left transition-all duration-300 hover:from-white hover:to-white/60 dark:hover:from-[#0a0f1e] dark:hover:to-[#0a0f1e] hover:border-white/80 dark:hover:border-white/[0.10] hover:-translate-y-1 hover:shadow-lg active:scale-[0.99] backdrop-blur-md shadow-sm"
+              className="group rounded-xl border border-white/60 dark:border-white/[0.05] bg-gradient-to-br from-white/80 to-white/40 dark:from-[#080c18] dark:to-[#080c18] p-4 text-left transition-all duration-300 hover:from-white hover:to-white/60 dark:hover:from-[#0a0f1e] dark:hover:to-[#0a0f1e] hover:-translate-y-1 hover:shadow-lg active:scale-[0.99] backdrop-blur-md shadow-sm"
             >
               <div className="flex items-start justify-between gap-2 mb-3">
                 <div>

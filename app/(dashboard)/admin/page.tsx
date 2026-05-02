@@ -33,18 +33,18 @@ export default function AdminDashboard() {
     collectionTotal > 0 ? Math.round((metrics.totalCollected / collectionTotal) * 100) : 0
 
   return (
-    <div className="space-y-6 pb-10 animate-in fade-in duration-500">
+    <div className="space-y-6 pb-10 p-5 lg:p-8 animate-in fade-in duration-500">
 
       {/* ─── Toast ──────────────────────────────────────────────────── */}
       {showToast && (
         <div className="fixed top-4 right-4 z-50 animate-in slide-in-from-top-2 fade-in duration-200">
-          <div className="flex items-center gap-3 rounded-2xl border border-emerald-500/15 bg-[#070b14]/90 backdrop-blur-xl px-4 py-3 shadow-2xl shadow-black/50">
+          <div className="flex items-center gap-3 rounded-2xl border border-emerald-500/15 bg-white/90 dark:bg-[#070b14]/90 backdrop-blur-xl px-4 py-3 shadow-2xl shadow-black/10 dark:shadow-black/50">
             <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-emerald-500/10 flex-shrink-0 border border-emerald-500/15">
               <Zap className="h-4 w-4 text-emerald-400" />
             </div>
             <div>
               <p className="text-xs font-bold text-emerald-400 tracking-wide">Payment Received</p>
-              <p className="text-[11px] text-muted-foreground mt-0.5">{toastMessage}</p>
+              <p className="text-[11px] text-slate-500 dark:text-muted-foreground mt-0.5">{toastMessage}</p>
             </div>
           </div>
         </div>
@@ -57,10 +57,10 @@ export default function AdminDashboard() {
             <LayoutDashboard className="h-5 w-5 text-gold-400" />
           </div>
           <div>
-            <h1 className="text-xl font-bold tracking-tight text-foreground">
-              Platform <span className="text-gold-400">Overview</span>
+            <h1 className="text-xl font-bold tracking-tight text-[#0F172A] dark:text-foreground">
+              Platform <span className="text-amber-500 dark:text-gold-400">Overview</span>
             </h1>
-            <p className="text-xs text-muted-foreground mt-0.5">
+            <p className="text-xs font-medium text-slate-500 dark:text-muted-foreground mt-0.5">
               Real-time university fee intelligence — live payments, ledger, and export.
             </p>
           </div>
@@ -74,11 +74,10 @@ export default function AdminDashboard() {
             </div>
           )}
           <div
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-semibold border transition-all duration-300 ${
-              sseConnected
-                ? "border-emerald-500/20 bg-emerald-500/8 text-emerald-400"
-                : "border-white/[0.06] bg-white/[0.03] text-muted-foreground"
-            }`}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-semibold border transition-all duration-300 ${sseConnected
+                ? "border-emerald-500/20 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
+                : "border-slate-200 dark:border-white/[0.06] bg-white/40 dark:bg-white/[0.03] text-slate-500 dark:text-muted-foreground"
+              }`}
           >
             {sseConnected ? (
               <>
@@ -100,200 +99,225 @@ export default function AdminDashboard() {
       </div>
 
       {/* ─── Bento Metrics ──────────────────────────────────────────── */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-6 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
 
-        {/* Hero: Total Collected (3 cols) */}
-        <div className="group col-span-1 sm:col-span-2 md:col-span-3 relative overflow-hidden rounded-2xl border border-white/[0.06] bg-navy-900/50 backdrop-blur-xl p-6 hover:-translate-y-0.5 hover:border-emerald-500/20 hover:shadow-[0_0_30px_rgba(52,211,153,0.08)] transition-all duration-300">
-          <div className="absolute -right-12 -top-12 w-40 h-40 rounded-full blur-[60px] opacity-10 group-hover:opacity-25 transition-opacity duration-500 bg-emerald-500" />
-          <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-emerald-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-
-          <div className="relative z-10">
-            <div className="flex items-center justify-between mb-5">
-              <div className="flex items-center gap-2.5">
-                <div className="w-9 h-9 rounded-xl bg-emerald-500/10 border border-emerald-500/15 flex items-center justify-center">
-                  <Banknote className="w-4.5 h-4.5 text-emerald-400" />
+        {/* Total Fee Collected (2 cols) */}
+        <div
+          className="group lg:col-span-2 relative overflow-hidden rounded-2xl border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-navy-900/40 p-5 transition-all duration-300 hover:shadow-xl hover:shadow-emerald-500/5"
+          style={{
+            backgroundImage: `radial-gradient(circle at 0% 0%, rgba(16, 185, 129, 0.03) 0%, transparent 50%), radial-gradient(circle at 100% 100%, rgba(16, 185, 129, 0.03) 0%, transparent 50%)`
+          }}
+        >
+          <div className="relative z-10 flex flex-col h-full justify-between">
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/10 border border-emerald-500/20">
+                  <Banknote className="h-5 w-5 text-emerald-500" />
                 </div>
-                <span className="text-[10px] uppercase tracking-[0.2em] font-semibold text-muted-foreground/70">
-                  Total Fee Collected
-                </span>
+                <div>
+                  <p className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-muted-foreground/60">
+                    Total Revenue
+                  </p>
+                  <p className="text-[11px] font-medium text-emerald-600 dark:text-emerald-400">Lifetime Collection</p>
+                </div>
               </div>
               {newAmountCollected > 0 && (
-                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/15">
-                  <ArrowUpRight className="w-3 h-3 text-emerald-400" />
-                  <span className="text-[11px] font-bold text-emerald-400">
-                    +{formatCurrency(newAmountCollected)} live
+                <div className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20">
+                  <span className="relative flex h-1.5 w-1.5">
+                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+                    <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-500" />
                   </span>
+                  <span className="text-[10px] font-bold text-emerald-500">+{formatCurrency(newAmountCollected)} Live</span>
                 </div>
               )}
             </div>
 
-            {isLoading ? (
-              <div className="h-10 w-48 rounded-lg bg-white/[0.04] animate-pulse mb-2" />
-            ) : (
-              <p className="text-4xl md:text-5xl font-bold text-foreground tracking-tight tabular-nums">
-                {formatCurrency(metrics.totalCollected)}
-              </p>
-            )}
-
-            <div className="mt-5 space-y-2">
-              <div className="flex items-center justify-between text-[11px]">
-                <span className="text-muted-foreground/60">Collection progress</span>
-                <span className="font-semibold text-emerald-400">{collectionProgress}%</span>
+            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+              <div>
+                {isLoading ? (
+                  <div className="h-9 w-40 rounded-lg bg-slate-100 dark:bg-white/[0.05] animate-pulse" />
+                ) : (
+                  <h2 className="text-3xl font-bold text-[#0F172A] dark:text-foreground tracking-tight tabular-nums">
+                    {formatCurrency(metrics.totalCollected)}
+                  </h2>
+                )}
               </div>
-              <div className="h-1.5 rounded-full bg-white/[0.05] overflow-hidden">
-                <div
-                  className="h-full rounded-full bg-gradient-to-r from-emerald-600 to-emerald-400 transition-all duration-1000"
-                  style={{ width: `${collectionProgress}%` }}
-                />
-              </div>
-              <div className="flex items-center justify-between text-[10.5px] text-muted-foreground/50">
-                <span>Collected</span>
-                <span>Outstanding {formatCurrency(metrics.outstanding)}</span>
+              <div className="flex-1 max-w-[240px] space-y-1.5">
+                <div className="flex items-center justify-between text-[11px]">
+                  <span className="text-slate-500 dark:text-muted-foreground/60">Progress</span>
+                  <span className="font-bold text-emerald-600 dark:text-emerald-400">{collectionProgress}%</span>
+                </div>
+                <div className="h-1.5 w-full rounded-full bg-slate-100 dark:bg-white/[0.05] overflow-hidden">
+                  <div
+                    className="h-full bg-gradient-to-r from-emerald-500 to-emerald-400 transition-all duration-1000"
+                    style={{ width: `${collectionProgress}%` }}
+                  />
+                </div>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Today's Collection (2 cols) */}
-        <div className="group col-span-1 md:col-span-2 relative overflow-hidden rounded-2xl border border-white/[0.06] bg-navy-900/50 backdrop-blur-xl p-5 hover:-translate-y-0.5 hover:border-gold-500/20 hover:shadow-[0_0_20px_rgba(212,168,73,0.08)] transition-all duration-300">
-          <div className="absolute -right-8 -top-8 w-28 h-28 rounded-full blur-[50px] opacity-10 group-hover:opacity-20 transition-opacity duration-500 bg-gold-500" />
-          <div className="relative z-10">
-            <div className="flex items-center justify-between mb-4">
-              <div className="w-8 h-8 rounded-xl bg-gold-500/10 border border-gold-500/15 flex items-center justify-center">
-                <TrendingUp className="w-4 h-4 text-gold-400" />
-              </div>
-              <span className="text-[10px] uppercase tracking-[0.15em] font-semibold text-muted-foreground/50">
-                Today
-              </span>
+        {/* Today's Collection (1 col) */}
+        <div
+          className="group relative overflow-hidden rounded-2xl border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-navy-900/40 p-5 transition-all duration-300 hover:shadow-xl hover:shadow-gold-500/5"
+          style={{
+            backgroundImage: `radial-gradient(circle at 0% 0%, rgba(212, 168, 73, 0.03) 0%, transparent 50%), radial-gradient(circle at 100% 100%, rgba(212, 168, 73, 0.03) 0%, transparent 50%)`
+          }}
+        >
+          <div className="flex items-center gap-3 mb-4">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gold-500/10 border border-gold-500/20">
+              <TrendingUp className="h-4.5 w-4.5 text-gold-500" />
             </div>
-            <p className="text-[10px] uppercase tracking-widest font-semibold text-muted-foreground/60 mb-1.5">
-              Today&apos;s Collection
-            </p>
-            {isLoading ? (
-              <div className="h-8 w-32 rounded-lg bg-white/[0.04] animate-pulse" />
-            ) : (
-              <p className="text-2xl font-bold text-foreground tracking-tight tabular-nums">
-                {formatCurrency(metrics.collectedToday)}
-              </p>
-            )}
-            <p className="text-[11px] text-muted-foreground/50 mt-2">
-              {metrics.studentsPaid} payments completed
+            <p className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-muted-foreground/60">
+              Today
             </p>
           </div>
+          {isLoading ? (
+            <div className="h-8 w-28 rounded-lg bg-slate-100 dark:bg-white/[0.05] animate-pulse" />
+          ) : (
+            <h3 className="text-2xl font-bold text-[#0F172A] dark:text-foreground tracking-tight tabular-nums">
+              {formatCurrency(metrics.collectedToday)}
+            </h3>
+          )}
+          <p className="mt-2 text-[11px] font-medium text-slate-500 dark:text-muted-foreground/50">
+            <span className="text-emerald-500 font-bold">{metrics.studentsPaid}</span> payments completed
+          </p>
         </div>
 
         {/* Defaulters (1 col) */}
-        <div className="group col-span-1 md:col-span-1 relative overflow-hidden rounded-2xl border border-white/[0.06] bg-navy-900/50 backdrop-blur-xl p-5 hover:-translate-y-0.5 hover:border-rose-500/20 hover:shadow-[0_0_20px_rgba(251,113,133,0.08)] transition-all duration-300">
-          <div className="absolute -right-6 -top-6 w-24 h-24 rounded-full blur-[45px] opacity-10 group-hover:opacity-20 transition-opacity duration-500 bg-rose-500" />
-          <div className="relative z-10">
-            <div className="w-8 h-8 rounded-xl bg-rose-500/10 border border-rose-500/15 flex items-center justify-center mb-4">
-              <AlertTriangle className="w-4 h-4 text-rose-400" />
+        <div
+          className="group relative overflow-hidden rounded-2xl border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-navy-900/40 p-5 transition-all duration-300 hover:shadow-xl hover:shadow-rose-500/5"
+          style={{
+            backgroundImage: `radial-gradient(circle at 0% 0%, rgba(244, 63, 94, 0.03) 0%, transparent 50%), radial-gradient(circle at 100% 100%, rgba(244, 63, 94, 0.03) 0%, transparent 50%)`
+          }}
+        >
+          <div className="flex items-center gap-3 mb-4">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-rose-500/10 border border-rose-500/20">
+              <AlertTriangle className="h-4.5 w-4.5 text-rose-500" />
             </div>
-            <p className="text-[10px] uppercase tracking-widest font-semibold text-muted-foreground/60 mb-1.5">
-              Defaulters
+            <p className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-muted-foreground/60">
+              Critical
             </p>
-            {isLoading ? (
-              <div className="h-8 w-16 rounded-lg bg-white/[0.04] animate-pulse" />
-            ) : (
-              <p className="text-2xl font-bold text-foreground tracking-tight tabular-nums">
-                {metrics.defaulters}
-              </p>
-            )}
-            <p className="text-[11px] text-rose-400/70 mt-2 font-medium">Overdue</p>
+          </div>
+          {isLoading ? (
+            <div className="h-8 w-16 rounded-lg bg-slate-100 dark:bg-white/[0.05] animate-pulse" />
+          ) : (
+            <h3 className="text-2xl font-bold text-[#0F172A] dark:text-foreground tracking-tight tabular-nums">
+              {metrics.defaulters}
+            </h3>
+          )}
+          <p className="mt-2 text-[11px] font-bold text-rose-500 uppercase tracking-tighter">Defaulters List</p>
+        </div>
+
+        {/* Total Students (1 col) */}
+        <div
+          className="group relative overflow-hidden rounded-2xl border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-navy-900/40 p-5 transition-all duration-300 hover:shadow-xl hover:shadow-sky-500/5"
+          style={{
+            backgroundImage: `radial-gradient(circle at 0% 0%, rgba(14, 165, 233, 0.03) 0%, transparent 50%), radial-gradient(circle at 100% 100%, rgba(14, 165, 233, 0.03) 0%, transparent 50%)`
+          }}
+        >
+          <div className="flex items-center gap-3 mb-4">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-sky-500/10 border border-sky-500/20">
+              <Users className="h-4.5 w-4.5 text-sky-500" />
+            </div>
+            <p className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-muted-foreground/60">
+              Enrollment
+            </p>
+          </div>
+          {isLoading ? (
+            <div className="h-8 w-24 rounded-lg bg-slate-100 dark:bg-white/[0.05] animate-pulse" />
+          ) : (
+            <h3 className="text-2xl font-bold text-[#0F172A] dark:text-foreground tracking-tight tabular-nums">
+              {metrics.totalStudents.toLocaleString()}
+            </h3>
+          )}
+          <div className="mt-2 flex items-center gap-2">
+            <span className="text-[10px] font-bold text-emerald-500 bg-emerald-500/10 px-1.5 py-0.5 rounded-md">
+              {metrics.studentsPaid} Paid
+            </span>
+            <span className="text-[10px] font-bold text-slate-400 bg-slate-100 dark:bg-white/5 px-1.5 py-0.5 rounded-md">
+              {metrics.studentsUnpaid} Pending
+            </span>
           </div>
         </div>
 
-        {/* Total Students (2 cols) */}
-        <div className="group col-span-1 md:col-span-2 relative overflow-hidden rounded-2xl border border-white/[0.06] bg-navy-900/50 backdrop-blur-xl p-5 hover:-translate-y-0.5 hover:border-sky-500/20 hover:shadow-[0_0_20px_rgba(56,189,248,0.08)] transition-all duration-300">
-          <div className="absolute -right-8 -bottom-8 w-28 h-28 rounded-full blur-[50px] opacity-8 group-hover:opacity-18 transition-opacity duration-500 bg-sky-500" />
-          <div className="relative z-10 flex items-center justify-between">
-            <div>
-              <div className="w-8 h-8 rounded-xl bg-sky-500/10 border border-sky-500/15 flex items-center justify-center mb-3">
-                <Users className="w-4 h-4 text-sky-400" />
-              </div>
-              <p className="text-[10px] uppercase tracking-widest font-semibold text-muted-foreground/60 mb-1.5">
-                Total Students
-              </p>
-              {isLoading ? (
-                <div className="h-7 w-20 rounded-lg bg-white/[0.04] animate-pulse" />
-              ) : (
-                <p className="text-xl font-bold text-foreground tracking-tight tabular-nums">
-                  {metrics.totalStudents.toLocaleString()}
-                </p>
-              )}
+        {/* Outstanding Amount (1 col) */}
+        <div
+          className="group relative overflow-hidden rounded-2xl border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-navy-900/40 p-5 transition-all duration-300 hover:shadow-xl hover:shadow-amber-500/5"
+          style={{
+            backgroundImage: `radial-gradient(circle at 0% 0%, rgba(245, 158, 11, 0.03) 0%, transparent 50%), radial-gradient(circle at 100% 100%, rgba(245, 158, 11, 0.03) 0%, transparent 50%)`
+          }}
+        >
+          <div className="flex items-center gap-3 mb-4">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-amber-500/10 border border-amber-500/20">
+              <Clock className="h-4.5 w-4.5 text-amber-500" />
             </div>
-            <div className="text-right">
-              <div className="text-[11px] text-emerald-400 font-semibold mb-1">
-                {metrics.studentsPaid} paid
-              </div>
-              <div className="text-[11px] text-amber-400/80 font-medium">
-                {metrics.studentsUnpaid} unpaid
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Outstanding Amount (2 cols) */}
-        <div className="group col-span-1 md:col-span-2 relative overflow-hidden rounded-2xl border border-white/[0.06] bg-navy-900/50 backdrop-blur-xl p-5 hover:-translate-y-0.5 hover:border-amber-500/20 hover:shadow-[0_0_20px_rgba(251,191,36,0.08)] transition-all duration-300">
-          <div className="absolute -right-8 -top-8 w-28 h-28 rounded-full blur-[50px] opacity-10 group-hover:opacity-20 transition-opacity duration-500 bg-amber-500" />
-          <div className="relative z-10">
-            <div className="flex items-start justify-between mb-3">
-              <div className="w-8 h-8 rounded-xl bg-amber-500/10 border border-amber-500/15 flex items-center justify-center">
-                <Clock className="w-4 h-4 text-amber-400" />
-              </div>
-              <span className="text-[10px] uppercase tracking-[0.15em] font-semibold text-amber-400/60 border border-amber-500/15 bg-amber-500/5 px-2 py-0.5 rounded-full">
-                Pending
-              </span>
-            </div>
-            <p className="text-[10px] uppercase tracking-widest font-semibold text-muted-foreground/60 mb-1.5">
-              Outstanding Amount
+            <p className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-muted-foreground/60">
+              Arrears
             </p>
-            {isLoading ? (
-              <div className="h-7 w-28 rounded-lg bg-white/[0.04] animate-pulse" />
-            ) : (
-              <p className="text-xl font-bold text-foreground tracking-tight tabular-nums">
-                {formatCurrency(metrics.outstanding)}
-              </p>
-            )}
           </div>
+          {isLoading ? (
+            <div className="h-8 w-28 rounded-lg bg-slate-100 dark:bg-white/[0.05] animate-pulse" />
+          ) : (
+            <h3 className="text-2xl font-bold text-[#0F172A] dark:text-foreground tracking-tight tabular-nums">
+              {formatCurrency(metrics.outstanding)}
+            </h3>
+          )}
+          <p className="mt-2 text-[11px] font-medium text-amber-600 dark:text-amber-400/70">Total Pending Dues</p>
         </div>
 
         {/* Payment Rate (2 cols) */}
-        <div className="group col-span-1 sm:col-span-2 md:col-span-2 relative overflow-hidden rounded-2xl border border-white/[0.06] bg-navy-900/50 backdrop-blur-xl p-5 hover:-translate-y-0.5 hover:border-violet-500/20 hover:shadow-[0_0_20px_rgba(139,92,246,0.08)] transition-all duration-300">
-          <div className="absolute -left-8 -bottom-8 w-28 h-28 rounded-full blur-[50px] opacity-8 group-hover:opacity-18 transition-opacity duration-500 bg-violet-500" />
-          <div className="relative z-10 flex items-center justify-between">
+        <div
+          className="group lg:col-span-2 relative overflow-hidden rounded-2xl border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-navy-900/40 p-5 transition-all duration-300 hover:shadow-xl hover:shadow-violet-500/5"
+          style={{
+            backgroundImage: `radial-gradient(circle at 0% 0%, rgba(139, 92, 246, 0.03) 0%, transparent 50%), radial-gradient(circle at 100% 100%, rgba(139, 92, 246, 0.03) 0%, transparent 50%)`
+          }}
+        >
+          <div className="flex items-center justify-between h-full">
             <div>
-              <p className="text-[10px] uppercase tracking-widest font-semibold text-muted-foreground/60 mb-1.5">
-                Payment Rate
-              </p>
-              {isLoading ? (
-                <div className="h-7 w-20 rounded-lg bg-white/[0.04] animate-pulse" />
-              ) : (
-                <p className="text-xl font-bold text-foreground tracking-tight tabular-nums">
-                  {metrics.paymentRate.toFixed(1)}%
+              <div className="flex items-center gap-3 mb-4">
+                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-violet-500/10 border border-violet-500/20">
+                  <Zap className="h-4.5 w-4.5 text-violet-500" />
+                </div>
+                <p className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-muted-foreground/60">
+                  Efficiency
                 </p>
+              </div>
+              <p className="text-[10px] font-bold text-slate-500 dark:text-muted-foreground/60 mb-1">Payment Success Rate</p>
+              {isLoading ? (
+                <div className="h-8 w-20 rounded-lg bg-slate-100 dark:bg-white/[0.05] animate-pulse" />
+              ) : (
+                <h3 className="text-3xl font-bold text-[#0F172A] dark:text-foreground tracking-tight tabular-nums">
+                  {metrics.paymentRate.toFixed(1)}%
+                </h3>
               )}
-              <p className="text-[11px] text-muted-foreground/50 mt-1">of enrolled students</p>
             </div>
-            <div className="relative w-14 h-14 flex-shrink-0">
-              <svg className="w-14 h-14 -rotate-90" viewBox="0 0 48 48">
-                <circle cx="24" cy="24" r="20" fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth="3" />
-                <circle
-                  cx="24"
-                  cy="24"
-                  r="20"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="3"
-                  strokeLinecap="round"
-                  strokeDasharray={`${2 * Math.PI * 20}`}
-                  strokeDashoffset={`${2 * Math.PI * 20 * (1 - metrics.paymentRate / 100)}`}
-                  className="text-violet-400 transition-all duration-1000"
-                />
-              </svg>
-              <span className="absolute inset-0 flex items-center justify-center text-[10px] font-bold text-violet-400">
-                {Math.round(metrics.paymentRate)}%
-              </span>
+
+            <div className="flex flex-col items-end gap-3">
+              <div className="relative w-16 h-16">
+                <svg className="w-16 h-16 -rotate-90" viewBox="0 0 48 48">
+                  <circle cx="24" cy="24" r="20" fill="none" stroke="currentColor" className="text-slate-100 dark:text-white/5" strokeWidth="4" />
+                  <circle
+                    cx="24"
+                    cy="24"
+                    r="20"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                    strokeLinecap="round"
+                    strokeDasharray={`${2 * Math.PI * 20}`}
+                    strokeDashoffset={`${2 * Math.PI * 20 * (1 - metrics.paymentRate / 100)}`}
+                    className="text-violet-500 transition-all duration-1000"
+                  />
+                </svg>
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <span className="text-xs font-bold text-[#0F172A] dark:text-foreground">{Math.round(metrics.paymentRate)}%</span>
+                </div>
+              </div>
+              <p className="text-[10px] font-medium text-slate-400 dark:text-muted-foreground/40 text-right max-w-[120px]">
+                Overall collection efficiency across all programs
+              </p>
             </div>
           </div>
         </div>

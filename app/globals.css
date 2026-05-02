@@ -111,7 +111,7 @@
   --sidebar-accent-foreground: #0F172A;
   --sidebar-border: #E2E8F0;
   --sidebar-ring: #6366F1;
-  
+
   /* HOD Background Variable */
   --hod-bg: #F4F6FA;
 }
@@ -196,10 +196,18 @@
   letter-spacing: -0.025em;
 }
 
-/* Glass card effect */
+/* Glass card effect — light mode: frosted white; dark mode: deep navy */
 .glass-card {
-  background: linear-gradient(135deg, rgba(13, 19, 33, 0.9) 0%, rgba(26, 35, 50, 0.7) 100%);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.85) 0%, rgba(241, 245, 249, 0.70) 100%);
   backdrop-filter: blur(20px);
+  border: 1px solid rgba(226, 232, 240, 0.80);
+  box-shadow:
+    0 4px 24px rgba(15, 23, 42, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+.dark .glass-card {
+  background: linear-gradient(135deg, rgba(13, 19, 33, 0.9) 0%, rgba(26, 35, 50, 0.7) 100%);
   border: 1px solid rgba(255, 255, 255, 0.04);
   box-shadow:
     0 8px 32px rgba(0, 0, 0, 0.3),
@@ -208,15 +216,20 @@
 
 .glass-card-hover {
   transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
-    border-color 0.25s ease,
     box-shadow 0.25s ease;
 }
 
 .glass-card-hover:hover {
-  border-color: rgba(212, 168, 67, 0.18);
+  box-shadow:
+    0 8px 32px rgba(15, 23, 42, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  transform: translateY(-2px);
+}
+
+.dark .glass-card-hover:hover {
   box-shadow:
     0 12px 40px rgba(0, 0, 0, 0.4),
-    inset 0 1px 0 rgba(212, 168, 67, 0.06);
+    inset 0 1px 0 rgba(255, 255, 255, 0.03);
   transform: translateY(-2px);
 }
 
@@ -389,15 +402,27 @@ button:not(:disabled):active,
 }
 
 ::-webkit-scrollbar-track {
-  background: #0a0e1a;
+  background: #f1f5f9;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(212, 168, 67, 0.2);
+  background: rgba(100, 116, 139, 0.25);
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
+  background: rgba(100, 116, 139, 0.4);
+}
+
+.dark ::-webkit-scrollbar-track {
+  background: #0a0e1a;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: rgba(212, 168, 67, 0.2);
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
   background: rgba(212, 168, 67, 0.35);
 }
 
@@ -435,11 +460,16 @@ input[type="checkbox"] {
   width: 1rem;
   height: 1rem;
   border-radius: 0.25rem;
-  border: 1.5px solid rgba(212, 168, 67, 0.25);
-  background: rgba(13, 19, 33, 0.6);
+  border: 1.5px solid rgba(100, 116, 139, 0.35);
+  background: rgba(255, 255, 255, 0.8);
   cursor: pointer;
   position: relative;
   transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.dark input[type="checkbox"] {
+  border-color: rgba(212, 168, 67, 0.25);
+  background: rgba(13, 19, 33, 0.6);
 }
 
 input[type="checkbox"]:checked {
@@ -520,7 +550,8 @@ input[type="checkbox"]:focus-visible {
     animation: none;
   }
 
-  .glass-card-hover:hover {
+  .glass-card-hover:hover,
+  .dark .glass-card-hover:hover {
     transform: none;
   }
 
@@ -531,4 +562,128 @@ input[type="checkbox"]:focus-visible {
   .animate-ping {
     animation: none;
   }
+}
+
+/* ── Inputs & Selects (bg-navy-800/50) ── */
+:root:not(.dark) .bg-navy-800\/50 {
+  background-color: rgba(248, 250, 252, 0.95) !important;
+  border-color: rgba(203, 213, 225, 0.9) !important;
+}
+
+/* ── Select content dropdowns (bg-navy-800) ── */
+:root:not(.dark) .bg-navy-800 {
+  background-color: #ffffff !important;
+  border-color: rgba(203, 213, 225, 0.9) !important;
+}
+
+/* ── Sheet / Dialog panel backgrounds (bg-navy-900) ── */
+:root:not(.dark) .bg-navy-900 {
+  background-color: #ffffff !important;
+}
+
+/* ── Table row hover (hover:bg-navy-700/20) ── */
+:root:not(.dark) .hover\:bg-navy-700\/20:hover {
+  background-color: rgba(241, 245, 249, 0.85) !important;
+}
+
+/* ── Live feed event cards (bg-navy-700/20) ── */
+:root:not(.dark) .bg-navy-700\/20 {
+  background-color: rgba(241, 245, 249, 0.7) !important;
+  border-color: rgba(203, 213, 225, 0.8) !important;
+}
+
+/* ── Table borders (border-gold-500/5) ── */
+:root:not(.dark) .border-gold-500\/5 {
+  border-color: rgba(203, 213, 225, 0.9) !important;
+}
+
+/* ── Table header text color (text-gold-500/60) ── */
+:root:not(.dark) .text-gold-500\/60 {
+  color: #64748b !important;
+}
+
+/* ── Subtle border (border-gold-500/10) ── */
+:root:not(.dark) .border-gold-500\/10 {
+  border-color: rgba(203, 213, 225, 0.8) !important;
+}
+
+/* ── Sheet left border ── */
+:root:not(.dark) .border-l.border-gold-500\/10 {
+  border-color: rgba(203, 213, 225, 0.9) !important;
+}
+
+/* ── Registration page hard-coded dark backgrounds ── */
+:root:not(.dark) .bg-\[\#080c18\] {
+  background-color: rgba(248, 250, 252, 0.95) !important;
+}
+
+/* ── Student department badge ── */
+:root:not(.dark) .bg-navy-700\/50 {
+  background-color: rgba(226, 232, 240, 0.8) !important;
+  color: #374151 !important;
+}
+
+/* ── View/details sub-panel backgrounds ── */
+:root:not(.dark) .bg-navy-800\/40 {
+  background-color: rgba(241, 245, 249, 0.95) !important;
+  border-color: rgba(203, 213, 225, 0.7) !important;
+}
+
+:root:not(.dark) .bg-navy-800\/30 {
+  background-color: rgba(248, 250, 252, 0.9) !important;
+  border-color: rgba(203, 213, 225, 0.6) !important;
+}
+
+/* ── Fee breakdown panel border ── */
+:root:not(.dark) .border-gold-500\/5,
+:root:not(.dark) .border-gold-500\/8 {
+  border-color: rgba(203, 213, 225, 0.8) !important;
+}
+
+/* ── Tab list background ── */
+:root:not(.dark) .bg-navy-800\/50.border.border-gold-500\/8 {
+  background-color: rgba(241, 245, 249, 0.9) !important;
+}
+
+/* ── Payments live feed card header border ── */
+:root:not(.dark) .border-b.border-gold-500\/5 {
+  border-color: rgba(203, 213, 225, 0.9) !important;
+}
+
+/* ── Registration page dropzone ── */
+:root:not(.dark) .border-white\/\[0\.08\] {
+  border-color: rgba(203, 213, 225, 0.8) !important;
+}
+
+:root:not(.dark) .hover\:border-white\/\[0\.14\]:hover {
+  border-color: rgba(148, 163, 184, 0.6) !important;
+}
+
+:root:not(.dark) .border-white\/\[0\.05\],
+:root:not(.dark) .border-white\/\[0\.04\] {
+  border-color: rgba(203, 213, 225, 0.7) !important;
+}
+
+/* ── Registration result panel ── */
+:root:not(.dark) .bg-white\/\[0\.03\] {
+  background-color: rgba(241, 245, 249, 0.8) !important;
+}
+
+:root:not(.dark) .border-white\/\[0\.06\] {
+  border-color: rgba(203, 213, 225, 0.8) !important;
+}
+
+/* ── Registration code pills ── */
+:root:not(.dark) .bg-white\/\[0\.05\] {
+  background-color: rgba(226, 232, 240, 0.7) !important;
+}
+
+/* ── step number circles ── */
+:root:not(.dark) .bg-white\/\[0\.05\].text-muted-foreground\/40 {
+  background-color: rgba(226, 232, 240, 0.9) !important;
+}
+
+/* ── Reports: selected report type ring ── */
+:root:not(.dark) .ring-gold-500\/30 {
+  --tw-ring-color: rgba(212, 168, 67, 0.35) !important;
 }

@@ -110,7 +110,7 @@ function MetricCard({
         "text-left transition-all duration-300 backdrop-blur-md shadow-[0_8px_32px_rgba(0,0,0,0.04)]",
         colSpan2 ? "col-span-2" : "",
         onClick
-          ? "cursor-pointer hover:bg-white/80 dark:hover:bg-white/[0.035] hover:border-white/60 dark:hover:border-white/[0.1] hover:-translate-y-0.5 hover:shadow-lg active:scale-[0.985]"
+          ? "cursor-pointer hover:bg-white/80 dark:hover:bg-white/[0.035] hover:-translate-y-0.5 hover:shadow-lg active:scale-[0.985]"
           : "cursor-default",
       ]
         .join(" ")
