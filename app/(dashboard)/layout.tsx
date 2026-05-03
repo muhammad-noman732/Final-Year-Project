@@ -86,13 +86,13 @@ export default function DashboardLayout({
   const userName = isLoading ? "Loading..." : user?.name || "User"
   const userRole = config.label
   
-  // Specific styling for HOD, VC, and Admin routes to give full-width light background without layout padding
-  const isHOD = role === "hod" || role === "vc" || role === "admin"
+  // Specific styling for HOD, VC, Admin, and Student routes to give full-width background with mesh gradients
+  const isInteractive = role === "hod" || role === "vc" || role === "admin" || role === "student"
 
   return (
     <div className="h-[100dvh] flex bg-[#F4F6FA] dark:bg-[#050811] overflow-hidden transition-colors duration-300 relative isolate">
-      {/* Fantasy UI Mesh Gradient Background for VC/HOD */}
-      {isHOD && (
+      {/* Fantasy UI Mesh Gradient Background for Interactive Panels */}
+      {isInteractive && (
         <div className="absolute inset-0 -z-10 overflow-hidden pointer-events-none bg-gradient-to-br from-[#E2E8F0] via-[#F1F5F9] to-[#E2E8F0] dark:from-[#050811] dark:via-[#0A0E1A] dark:to-[#050811]">
           <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-[#b8c6e5] dark:bg-[#312e81] rounded-full blur-[100px] opacity-40 dark:opacity-20" />
           <div className="absolute top-[20%] right-[10%] w-[45%] h-[50%] bg-[#f0e4c8] dark:bg-[#1e1b4b] rounded-full blur-[100px] opacity-40 dark:opacity-20" />
@@ -116,7 +116,7 @@ export default function DashboardLayout({
         />
         <main className={cn(
           "flex-1 overflow-y-auto scroll-smooth",
-          isHOD ? "" : "p-5 lg:p-8 bg-slate-50 dark:bg-slate-950"
+          isInteractive ? "" : "p-5 lg:p-8 bg-slate-50 dark:bg-slate-950"
         )}>
           {children}
         </main>
