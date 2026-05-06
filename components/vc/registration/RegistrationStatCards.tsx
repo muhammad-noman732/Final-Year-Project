@@ -50,7 +50,7 @@ function StatCard({
         "group relative overflow-hidden rounded-xl border p-5",
         "bg-gradient-to-br from-white/80 to-white/40 dark:from-[#080c18] dark:to-[#080c18] backdrop-blur-md transition-all duration-300",
         "hover:-translate-y-1 hover:shadow-lg hover:from-white hover:to-white/60 dark:hover:from-[#0a0f1e] dark:hover:to-[#0a0f1e]",
-        "border-white/60 dark:border-white/[0.05]",
+        card.borderClass,
         "shadow-sm dark:shadow-none",
       ].join(" ")}
     >
@@ -111,6 +111,7 @@ export default function RegistrationStatCards({
       icon: Users,
       accentClass: "text-violet-600 dark:text-violet-400",
       bgClass: "bg-violet-500",
+      borderClass: "border-white/60 dark:border-white/[0.05]",
       description: "All programs, all sessions",
     },
     {
@@ -119,6 +120,7 @@ export default function RegistrationStatCards({
       icon: CalendarCheck,
       accentClass: "text-sky-600 dark:text-sky-400",
       bgClass: "bg-sky-500",
+      borderClass: "border-white/60 dark:border-white/[0.05]",
       description: "Current academic session",
     },
     {
@@ -127,6 +129,7 @@ export default function RegistrationStatCards({
       icon: Upload,
       accentClass: "text-emerald-600 dark:text-emerald-400",
       bgClass: "bg-emerald-500",
+      borderClass: "border-white/60 dark:border-white/[0.05]",
       description: "Uploaded today via CSV",
     },
     {
@@ -136,6 +139,7 @@ export default function RegistrationStatCards({
       icon: AlertTriangle,
       accentClass: programsNearCapacity > 0 ? "text-amber-600 dark:text-amber-400" : "text-slate-400 dark:text-muted-foreground/40",
       bgClass: programsNearCapacity > 0 ? "bg-amber-500" : "bg-slate-300 dark:bg-zinc-600",
+      borderClass: "border-white/60 dark:border-white/[0.05]",
       description: "Above 85% of seat capacity",
     },
   ]
