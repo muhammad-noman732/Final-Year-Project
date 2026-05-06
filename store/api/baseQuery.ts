@@ -2,11 +2,10 @@ import { fetchBaseQuery } from "@reduxjs/toolkit/query"
 import type {
   BaseQueryFn,
   FetchArgs,
-  FetchBaseQueryError,
+  FetchBaseQueryError
 } from "@reduxjs/toolkit/query"
 
-// In Next.js App Router, we just hit the local API routes
-const API_BASE_URL = process.env.NEXT_PUBLIC_APP_URL ? `${process.env.NEXT_PUBLIC_APP_URL}/api` : "/api"
+const API_BASE_URL = "/api"
 
 const baseQuery = fetchBaseQuery({
   baseUrl: API_BASE_URL,
