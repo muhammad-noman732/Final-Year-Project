@@ -16,8 +16,42 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Fee Management System",
-  description: "University Registration & Fee Management System",
+  metadataBase: new URL("https://uni-ync.vercel.app"),
+  title: {
+    default: "UniSync | GCUF Fee Management",
+    template: "%s | UniSync",
+  },
+  description: "Next-generation University Registration & Fee Management System for GCUF. Streamlined, secure, and intelligent academic administration.",
+  keywords: ["GCUF", "University Management", "Fee Management", "Student Portal", "UniSync"],
+  authors: [{ name: "UniSync Team" }],
+  creator: "UniSync",
+  icons: {
+    icon: "/favicon.png",
+    shortcut: "/favicon.png",
+    apple: "/favicon.png",
+  },
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: "https://uni-ync.vercel.app",
+    title: "UniSync | GCUF Fee Management",
+    description: "Intelligent University Registration & Fee Management System",
+    siteName: "UniSync",
+    images: [
+      {
+        url: "/logo.png",
+        width: 1200,
+        height: 1200,
+        alt: "UniSync Logo",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "UniSync | GCUF Fee Management",
+    description: "Intelligent University Registration & Fee Management System",
+    images: ["/logo.png"],
+  },
 };
 
 import { StoreProvider } from "@/store/provider";
