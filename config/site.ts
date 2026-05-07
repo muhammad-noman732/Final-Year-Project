@@ -1,11 +1,11 @@
 export const siteConfig = {
-    name: "GCUF Fee Management System",
-    shortName: "GCUF FMS",
+    name: "UniSync Management System",
+    shortName: "UniSync",
     description: "Intelligent Real-Time University Registration & Fee Management System",
-    university: "Government College University Faisalabad",
-    universityShort: "GCUF",
+    university: "UniSync Global Academy",
+    universityShort: "UniSync",
     tagline: "Excellence in Education, Innovation in Management",
-    url: "https://fees.gcuf.edu.pk",
+    url: "https://unisync.com",
 };
 
 export const navItems = {

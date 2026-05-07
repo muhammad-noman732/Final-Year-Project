@@ -15,9 +15,9 @@ export class EmailService {
 
     constructor() {
         this.isConfigured = !!env.SENDGRID_API_KEY && env.SENDGRID_API_KEY !== "dummy";
-        this.fromEmail = env.FROM_EMAIL || "noreply@gcuf.edu.pk";
+        this.fromEmail = env.FROM_EMAIL || "noreply@unisync.com";
         this.appUrl = env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
-        this.fromName = 'GCUF Management System';
+        this.fromName = 'UniSync Management System';
 
         if (this.isConfigured) {
             sgMail.setApiKey(env.SENDGRID_API_KEY as string);
@@ -59,7 +59,7 @@ export class EmailService {
                     sgMail.send({
                         to: params.to,
                         from: { email: this.fromEmail, name: this.fromName },
-                        subject: `Welcome to GCUF - Your ${params.role.replace("_", " ")} Account Credentials`,
+                        subject: `Welcome to UniSync - Your ${params.role.replace("_", " ")} Account Credentials`,
                         html: htmlContent,
                     }),
                     10000, // 10s timeout for SendGrid
@@ -113,7 +113,7 @@ export class EmailService {
                     sgMail.send({
                         to: params.to,
                         from: { email: this.fromEmail, name: this.fromName },
-                        subject: 'Action Required: Password Reset - GCUF Management',
+                        subject: 'Action Required: Password Reset - UniSync Management',
                         html: htmlContent,
                     }),
                     10000,

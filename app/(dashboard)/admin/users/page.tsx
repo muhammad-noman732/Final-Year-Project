@@ -146,7 +146,7 @@ export default function UsersPage() {
                         </div>
                         <div className="space-y-2">
                             <Label className="text-sm text-foreground/80">Email</Label>
-                            <Input {...register("email")} type="email" placeholder="admin@gcuf.edu.pk" className="bg-navy-800/50 border-gold-500/10" />
+                            <Input {...register("email")} type="email" placeholder="admin@unisync.com" className="bg-navy-800/50 border-gold-500/10" />
                             {errors.email && <p className="text-xs text-rose-400">{errors.email.message}</p>}
                         </div>
                         <div className="space-y-2">

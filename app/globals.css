@@ -5,7 +5,7 @@
 @custom-variant dark (&:is(.dark *));
 
 /* ═══════════════════════════════════════════════════════════════
-   GCUF Fee Management System — Dark Institutional Theme
+   UniSync Management System — Dark Institutional Theme
    Deep Navy + Gold/Amber + DM Sans
    ═══════════════════════════════════════════════════════════════ */
 
@@ -15,7 +15,7 @@
   --font-sans: var(--font-dm-sans);
   --font-mono: var(--font-geist-mono);
 
-  /* GCUF Custom Colors */
+  /* UniSync Custom Colors */
   --color-navy-950: #050811;
   --color-navy-900: #0a0e1a;
   --color-navy-800: #0d1321;

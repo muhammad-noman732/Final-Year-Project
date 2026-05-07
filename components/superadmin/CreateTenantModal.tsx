@@ -50,7 +50,7 @@ export function CreateTenantModal() {
               </label>
               <Input
                 {...register("universityName")}
-                placeholder="e.g. Government College University Faisalabad"
+                placeholder="e.g. UniSync Global Academy"
                 className="w-full bg-white dark:bg-slate-900 border-slate-300 dark:border-slate-800"
               />
               {errors.universityName && <p className="text-xs text-red-500">{errors.universityName.message}</p>}
@@ -63,7 +63,7 @@ export function CreateTenantModal() {
                 </label>
                 <Input
                   {...register("shortName")}
-                  placeholder="e.g. GCUF"
+                  placeholder="e.g. UniSync"
                   className="w-full bg-white dark:bg-slate-900 border-slate-300 dark:border-slate-800"
                 />
                 {errors.shortName && <p className="text-xs text-red-500">{errors.shortName.message}</p>}
@@ -75,7 +75,7 @@ export function CreateTenantModal() {
                 </label>
                 <Input
                   {...register("domain")}
-                  placeholder="fee.gcuf.edu.pk"
+                  placeholder="fee.unisync.com"
                   className="w-full bg-white dark:bg-slate-900 border-slate-300 dark:border-slate-800"
                 />
               </div>
@@ -104,7 +104,7 @@ export function CreateTenantModal() {
                   </label>
                   <Input
                     {...register("adminEmail")}
-                    placeholder="admin@gcuf.edu.pk"
+                    placeholder="admin@unisync.com"
                     className="w-full bg-white dark:bg-slate-900 border-slate-300 dark:border-slate-800"
                   />
                   {errors.adminEmail && <p className="text-xs text-red-500">{errors.adminEmail.message}</p>}

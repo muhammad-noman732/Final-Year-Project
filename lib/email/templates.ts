@@ -13,7 +13,7 @@ export function welcomeEmailTemplate(
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Welcome to GCUF Fee Management</title>
+            <title>Welcome to UniSync Management</title>
         </head>
         <body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f4f4f4;">
             <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f4f4f4; padding: 20px;">
@@ -59,7 +59,7 @@ export function welcomeEmailTemplate(
                                 <td style="background-color: #f9fafb; padding: 20px 30px; border-top: 1px solid #e5e7eb;">
                                     <p style="color: #6b7280; font-size: 12px; line-height: 1.5; margin: 0; text-align: center;">
                                         This is an automated system email. Please do not reply.<br>
-                                        © ${new Date().getFullYear()} GCUF Fee Management & Registration. All rights reserved.
+                                        © ${new Date().getFullYear()} UniSync Management & Registration. All rights reserved.
                                     </p>
                                 </td>
                             </tr>
@@ -122,7 +122,7 @@ export function passwordResetEmailTemplate(userName: string, resetToken: string,
                                   <td style="background-color: #f9fafb; padding: 20px 30px; border-top: 1px solid #e5e7eb;">
                                       <p style="color: #6b7280; font-size: 12px; line-height: 1.5; margin: 0; text-align: center;">
                                           This is an automated system email. Please do not reply.<br>
-                                          © ${new Date().getFullYear()} GCUF Fee Management & Registration. All rights reserved.
+                                          © ${new Date().getFullYear()} UniSync Management & Registration. All rights reserved.
                                       </p>
                                   </td>
                               </tr>

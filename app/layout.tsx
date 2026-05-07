@@ -18,11 +18,11 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL("https://uni-ync.vercel.app"),
   title: {
-    default: "UniSync | GCUF Fee Management",
+    default: "UniSync | Management System",
     template: "%s | UniSync",
   },
-  description: "Next-generation University Registration & Fee Management System for GCUF. Streamlined, secure, and intelligent academic administration.",
-  keywords: ["GCUF", "University Management", "Fee Management", "Student Portal", "UniSync"],
+  description: "Next-generation University Registration & Fee Management System. Streamlined, secure, and intelligent academic administration.",
+  keywords: ["UniSync", "University Management", "Fee Management", "Student Portal", "SaaS"],
   authors: [{ name: "UniSync Team" }],
   creator: "UniSync",
   icons: {
@@ -34,7 +34,7 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     url: "https://uni-ync.vercel.app",
-    title: "UniSync | GCUF Fee Management",
+    title: "UniSync | Fee Management System",
     description: "Intelligent University Registration & Fee Management System",
     siteName: "UniSync",
     images: [
@@ -48,7 +48,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "UniSync | GCUF Fee Management",
+    title: "UniSync | Fee Management System",
     description: "Intelligent University Registration & Fee Management System",
     images: ["/logo.png"],
   },

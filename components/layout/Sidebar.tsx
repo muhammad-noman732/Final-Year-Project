@@ -56,7 +56,7 @@ export default function Sidebar({ items, role, roleLabel, open, onClose }: Sideb
                                 <GraduationCap className="w-4.5 h-4.5 text-white" />
                             </div>
                             <span className="text-sm font-bold tracking-tight text-[#0F172A] dark:text-slate-100 truncate">
-                                GCUF Fees
+                                UniSync
                             </span>
                         </div>
                         <button
@@ -120,7 +120,7 @@ export default function Sidebar({ items, role, roleLabel, open, onClose }: Sideb
                         <span>Sign Out</span>
                     </button>
                     <p className="text-[11px] text-[#64748B] dark:text-slate-500 text-center mt-3 tracking-wider uppercase font-medium">
-                        v2.0.0 &middot; GCUF 2026
+                        v2.0.0 &middot; UniSync 2026
                     </p>
                 </div>
             </aside>

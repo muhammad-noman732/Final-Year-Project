@@ -476,7 +476,7 @@ export default function StudentsPage() {
                         </div>
                         <div className="space-y-2">
                             <Label className="text-sm text-foreground/80">Email</Label>
-                            <Input {...addRegister("email")} type="email" placeholder="student@gcuf.edu.pk" className="bg-navy-800/50 border-gold-500/10 focus:border-gold-500/30" />
+                            <Input {...addRegister("email")} type="email" placeholder="student@unisync.com" className="bg-navy-800/50 border-gold-500/10 focus:border-gold-500/30" />
                             {addErrors.email && <p className="text-xs text-rose-400">{addErrors.email.message}</p>}
                         </div>
                         <div className="space-y-2">
@@ -491,7 +491,7 @@ export default function StudentsPage() {
                         </div>
                         <div className="space-y-2">
                             <Label className="text-sm text-foreground/80">Student Roll Number</Label>
-                            <Input {...addRegister("studentId")} placeholder="GCUF-2024-CS-0001" className="bg-navy-800/50 border-gold-500/10 focus:border-gold-500/30" />
+                            <Input {...addRegister("studentId")} placeholder="UNISYNC-2026-CS-0001" className="bg-navy-800/50 border-gold-500/10 focus:border-gold-500/30" />
                             {addErrors.studentId && <p className="text-xs text-rose-400">{addErrors.studentId.message}</p>}
                         </div>
                         <div className="space-y-2">

@@ -3,7 +3,7 @@ import pino from "pino"
 const logger = pino(
   {
     level: process.env.NODE_ENV === "production" ? "info" : "debug",
-    base: { service: "gcuf-fee-management" },
+    base: { service: "unisync-management" },
     timestamp: pino.stdTimeFunctions.isoTime,
     redact: {
       paths: ["password", "passwordHash", "token", "tokenHash", "authorization", "cookie"],
