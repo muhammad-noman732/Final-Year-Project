@@ -49,3 +49,10 @@ next-env.d.ts
 # Logs
 *.log
 npm-debug.log*
+
+# Documentation & Context
+project-context.md
+component_diagram_doc.md
+CLAUDE.md
+rules.md
+fyp-intelligent-roadmap.md
