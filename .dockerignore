@@ -8,9 +8,7 @@ out
 build
 
 # Environment files
-.env
-.env.*
-*.env
+.env.local
 
 # Git
 .git
@@ -51,7 +49,6 @@ README.md
 
 # Scratch and dev files
 scratch
-bones
 
 # Generated (will be generated fresh)
 app/generated
