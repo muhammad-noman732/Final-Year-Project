@@ -2,12 +2,16 @@ import { fetchBaseQuery } from "@reduxjs/toolkit/query"
 import type {
   BaseQueryFn,
   FetchArgs,
-  FetchBaseQueryError
+  FetchBaseQueryError,
 } from "@reduxjs/toolkit/query"
+import { Mutex } from "async-mutex"
+import { logout } from "@/store/slices/authSlice"
 
 const API_BASE_URL = "/api"
 
-const baseQuery = fetchBaseQuery({
+const refreshMutex = new Mutex()
+
+const rawBaseQuery = fetchBaseQuery({
   baseUrl: API_BASE_URL,
   credentials: "include",
 })
@@ -17,32 +21,40 @@ export const baseQueryWithReauth: BaseQueryFn<
   unknown,
   FetchBaseQueryError
 > = async (args, api, extraOptions) => {
-  // 1. Initial request execution
-  let result = await baseQuery(args, api, extraOptions)
+  const url = typeof args === "string" ? args : args.url
+  if (url.includes("/auth/refresh")) {
+    return rawBaseQuery(args, api, extraOptions)
+  }
 
-  // 2. Intercept 401 Unauthorized errors (Token Expired)
-  if (result.error && result.error.status === 401) {
-    const uri = typeof args === "string" ? args : args.url
+  await refreshMutex.waitForUnlock()
 
-    // If the failure was already trying to refresh, do not loop infinitely
-    if (uri.includes('/auth/refresh')) {
-      return result
-    }
+  let result = await rawBaseQuery(args, api, extraOptions)
 
-    // 3. Attempt to fetch a new Access Token using the HttpOnly Refresh Token
-    const refreshResult = await baseQuery(
-      { url: "/auth/refresh", method: "POST" },
-      api,
-      extraOptions
-    )
+  if (result.error?.status === 401) {
+    if (!refreshMutex.isLocked()) {
+      const release = await refreshMutex.acquire()
 
-    // 4. If refresh succeeded, seamlessly retry the original request
-    if (refreshResult.data) {
-      result = await baseQuery(args, api, extraOptions)
+      try {
+        const refreshResult = await rawBaseQuery(
+          { url: "/auth/refresh", method: "POST" },
+          api,
+          extraOptions,
+        )
+
+        if (refreshResult.data) {
+          result = await rawBaseQuery(args, api, extraOptions)
+        } else {
+          api.dispatch(logout())
+          if (typeof window !== "undefined") {
+            window.location.replace("/login")
+          }
+        }
+      } finally {
+        release()
+      }
     } else {
-      // If refresh failed, the user is permanently logged out.
-      // You can dispatch a logout action to the authSlice here if needed!
-      // api.dispatch(logout()); 
+      await refreshMutex.waitForUnlock()
+      result = await rawBaseQuery(args, api, extraOptions)
     }
   }
 

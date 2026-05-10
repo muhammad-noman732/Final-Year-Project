@@ -1,7 +1,5 @@
-
 import type { Role } from "./shared.types"
 
-// ─── JWT 
 export interface JWTPayload {
   userId: string
   tenantId: string | null
@@ -11,7 +9,6 @@ export interface JWTPayload {
   isFirstLogin: boolean
 }
 
-/** Extracted from middleware-injected x-user-* headers */
 export interface AuthUser {
   userId: string
   tenantId: string | null
@@ -21,7 +18,6 @@ export interface AuthUser {
   isFirstLogin: boolean
 }
 
-/** Returned by UserRepository.findByEmail — includes tenant info */
 export interface UserWithTenant {
   id: string
   tenantId: string | null
@@ -40,7 +36,6 @@ export interface UserWithTenant {
   } | null
 }
 
-/** Returned by UserRepository.findById — minimal fields for password ops */
 export interface UserBasic {
   id: string
   passwordHash: string
@@ -50,15 +45,14 @@ export interface UserBasic {
   email: string
 }
 
-// ─── Service input/output DTOs ────────────────────────────────
-
 export interface LoginInput {
   email: string
   password: string
 }
 
 export interface LoginResult {
-  token: string
+  accessToken: string
+  refreshToken: string
   redirectTo: string
   user: {
     id: string
@@ -72,6 +66,11 @@ export interface LoginResult {
   }
 }
 
+export interface RefreshResult {
+  accessToken: string
+  refreshToken: string
+}
+
 export interface ChangePasswordInput {
   currentPassword: string
   newPassword: string
@@ -79,11 +78,10 @@ export interface ChangePasswordInput {
 }
 
 export interface ChangePasswordResult {
-  token: string
+  accessToken: string
+  refreshToken: string
   redirectTo: string
 }
-
-// ─── Audit ────────────────────────────────────────────────────
 
 export interface CreateAuditLogInput {
   tenantId?: string | null
@@ -98,8 +96,6 @@ export interface CreateAuditLogInput {
   ipAddress?: string | null
   reason?: string | null
 }
-
-// ─── Email ────────────────────────────────────────────────────
 
 export interface WelcomeEmailParams {
   to: string

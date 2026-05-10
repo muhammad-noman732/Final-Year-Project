@@ -32,7 +32,7 @@ VC dashboard updates live without refresh → sees everything happening now
 
 | Layer | Technology |
 |---|---|
-| Framework | Next.js 14 App Router + TypeScript (strict mode) |
+| Framework | Next.js 16 App Router + TypeScript (strict mode) |
 | Database | PostgreSQL + Prisma ORM |
 | Cache / Pub-Sub | Redis (ioredis) |
 | Background Jobs | BullMQ (runs on VPS as persistent process) |

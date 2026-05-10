@@ -16,6 +16,7 @@ const AUTH_COOKIE = "auth-token"
 const PUBLIC_PATHS = [
   "/login",
   "/api/auth/login",
+  "/api/auth/refresh",  // authenticated by refresh-token cookie, not JWT
   "/api/webhooks/stripe",
   "/",
 ]

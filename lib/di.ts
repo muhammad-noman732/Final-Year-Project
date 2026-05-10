@@ -1,4 +1,5 @@
 import prisma from "@/lib/prisma"
+import { redisPublisher } from "@/lib/redis"
 
 // Repositories
 import { UserRepository } from "@/lib/repositories/user.repository"
@@ -19,6 +20,7 @@ import { InsightRepository } from "@/lib/repositories/insight.repository"
 import { NotificationRepository } from "@/lib/repositories/notification.repository"
 import { ApplicantRepository } from "@/lib/repositories/applicant.repository"
 import { ImportBatchRepository } from "@/lib/repositories/importBatch.repository"
+import { RefreshTokenRepository } from "@/lib/repositories/refreshToken.repository"
 
 // Services
 import { AuditService } from "@/lib/services/audit.service"
@@ -78,11 +80,12 @@ const insightRepo = new InsightRepository(prisma)
 const notificationRepo = new NotificationRepository(prisma)
 const applicantRepo = new ApplicantRepository(prisma)
 const importBatchRepo = new ImportBatchRepository(prisma)
+const refreshTokenRepo = new RefreshTokenRepository(redisPublisher)
 
 // Services
 const auditService = new AuditService(auditRepo)
 export const emailService = new EmailService()
-const authService = new AuthService(userRepo, auditService)
+const authService = new AuthService(userRepo, refreshTokenRepo, auditService)
 export const tenantService = new TenantService(tenantRepo, emailService, auditService)
 const deptService = new DepartmentService(deptRepo, auditService)
 const programService = new ProgramService(programRepo, deptRepo, auditService)
