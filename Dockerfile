@@ -25,9 +25,6 @@ RUN npx prisma generate
 ENV NEXT_TELEMETRY_DISABLED=1
 RUN NODE_OPTIONS="--max-old-space-size=1536" npm run build
 
-# ════════════════════════════════════════════
-# RUNNER
-# ════════════════════════════════════════════
 FROM base AS runner
 RUN apk add --no-cache dumb-init
 WORKDIR /app
@@ -57,6 +54,11 @@ COPY --from=builder --chown=nextjs:nodejs /app/app/generated ./app/generated
 
 # Copy prisma folder for migrations
 COPY --from=builder --chown=nextjs:nodejs /app/prisma ./prisma
+COPY --from=builder --chown=nextjs:nodejs /app/prisma.config.ts ./prisma.config.ts
+COPY --from=builder --chown=nextjs:nodejs /app/node_modules/.prisma ./node_modules/.prisma
+COPY --from=builder --chown=nextjs:nodejs /app/node_modules/@prisma ./node_modules/@prisma
+COPY --from=builder --chown=nextjs:nodejs /app/node_modules/pg ./node_modules/pg
+COPY --from=builder --chown=nextjs:nodejs /app/node_modules/dotenv ./node_modules/dotenv
 
 # Fix home directory permissions
 RUN chown -R nextjs:nodejs /home/nextjs
