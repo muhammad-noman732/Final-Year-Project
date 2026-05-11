@@ -1,46 +1,35 @@
+# ════════════════════════════════════════════
+# BASE
+# ════════════════════════════════════════════
 FROM node:20-alpine AS base
 
+# ════════════════════════════════════════════
+# DEPS
+# ════════════════════════════════════════════
 FROM base AS deps
-
 RUN apk add --no-cache libc6-compat
-
 WORKDIR /app
-
 COPY package.json package-lock.json ./
-
 COPY prisma ./prisma/
-
-# Install all dependencies
 RUN npm ci
 
+# ════════════════════════════════════════════
+# BUILDER
+# ════════════════════════════════════════════
 FROM base AS builder
-
 WORKDIR /app
-
-# Get node_modules from deps
 COPY --from=deps /app/node_modules ./node_modules
-
-# Copy prisma folder
 COPY prisma ./prisma/
-
-# Copy rest of source code
 COPY . .
-
-# Generate Prisma client
-# Uses non-standard output: app/generated/prisma
 RUN npx prisma generate
-
-# Disable telemetry
 ENV NEXT_TELEMETRY_DISABLED=1
+RUN NODE_OPTIONS="--max-old-space-size=1536" npm run build
 
-# Build Next.js
-RUN npm run build
-
-
+# ════════════════════════════════════════════
+# RUNNER
+# ════════════════════════════════════════════
 FROM base AS runner
-
 RUN apk add --no-cache dumb-init
-
 WORKDIR /app
 
 ENV NODE_ENV=production
@@ -48,46 +37,42 @@ ENV NEXT_TELEMETRY_DISABLED=1
 ENV PORT=3000
 ENV HOSTNAME=0.0.0.0
 
-# Create group and user
+# Create home directory for nextjs user
+RUN mkdir -p /home/nextjs
+
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser \
     --system \
     --uid 1001 \
     --ingroup nodejs \
-    --no-create-home \
+    --home /home/nextjs \
     --shell /bin/false \
     nextjs
 
-# Copy public folder
+# Copy built output
 COPY --from=builder /app/public ./public
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+COPY --from=builder --chown=nextjs:nodejs /app/app/generated ./app/generated
 
-# Copy standalone server
-COPY --from=builder \
-    --chown=nextjs:nodejs \
-    /app/.next/standalone ./
+# Copy prisma folder for migrations
+COPY --from=builder --chown=nextjs:nodejs /app/prisma ./prisma
+COPY --from=builder --chown=nextjs:nodejs /app/node_modules/.prisma ./node_modules/.prisma
+COPY --from=builder --chown=nextjs:nodejs /app/node_modules/@prisma ./node_modules/@prisma
 
-# Copy static files
-COPY --from=builder \
-    --chown=nextjs:nodejs \
-    /app/.next/static \
-    ./.next/static
+# Fix home directory permissions
+RUN chown -R nextjs:nodejs /home/nextjs
 
+ENV HOME=/home/nextjs
 
-# Your schema outputs to app/generated/prisma
-COPY --from=builder \
-    --chown=nextjs:nodejs \
-    /app/app/generated ./app/generated
-
-# Switch to non-root user
 USER nextjs
-
 EXPOSE 3000
 
 HEALTHCHECK \
     --interval=30s \
     --timeout=10s \
-    --start-period=40s \
+    --start-period=60s \
     --retries=3 \
-    CMD wget -qO- http://localhost:3000/api/health || exit 1
+    CMD node -e "require('http').get('http://127.0.0.1:3000', (res) => process.exit(res.statusCode < 500 ? 0 : 1)).on('error', () => process.exit(1))"
 
 CMD ["dumb-init", "node", "server.js"]
