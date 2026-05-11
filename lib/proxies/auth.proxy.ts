@@ -18,6 +18,7 @@ const PUBLIC_PATHS = [
   "/api/auth/login",
   "/api/auth/refresh",  // authenticated by refresh-token cookie, not JWT
   "/api/webhooks/stripe",
+  "/api/health",
   "/",
 ]
 
