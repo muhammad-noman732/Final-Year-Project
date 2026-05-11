@@ -25,14 +25,20 @@ RUN npx prisma generate
 ENV NEXT_TELEMETRY_DISABLED=1
 RUN NODE_OPTIONS="--max-old-space-size=1536" npm run build
 
-FROM base AS runner
+# ════════════════════════════════════════════
+# RUNNER
+# ════════════════════════════════════════════
+FROM node:20-alpine AS runner
+
 RUN apk add --no-cache dumb-init
+
 WORKDIR /app
 
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV PORT=3000
 ENV HOSTNAME=0.0.0.0
+ENV HOME=/home/nextjs
 
 # Create home directory for nextjs user
 RUN mkdir -p /home/nextjs
@@ -46,26 +52,29 @@ RUN adduser \
     --shell /bin/false \
     nextjs
 
-# Copy built output
+# Copy built Next.js output
 COPY --from=builder /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+
+# Copy generated Prisma client (custom output location)
 COPY --from=builder --chown=nextjs:nodejs /app/app/generated ./app/generated
 
-# Copy prisma folder for migrations
+# Copy prisma schema and config for migrations
 COPY --from=builder --chown=nextjs:nodejs /app/prisma ./prisma
 COPY --from=builder --chown=nextjs:nodejs /app/prisma.config.ts ./prisma.config.ts
-COPY --from=builder --chown=nextjs:nodejs /app/node_modules/.prisma ./node_modules/.prisma
-COPY --from=builder --chown=nextjs:nodejs /app/node_modules/@prisma ./node_modules/@prisma
+
+# Copy only the packages needed for migrations
 COPY --from=builder --chown=nextjs:nodejs /app/node_modules/pg ./node_modules/pg
 COPY --from=builder --chown=nextjs:nodejs /app/node_modules/dotenv ./node_modules/dotenv
+COPY --from=builder --chown=nextjs:nodejs /app/node_modules/@prisma ./node_modules/@prisma
+COPY --from=builder --chown=nextjs:nodejs /app/node_modules/prisma ./node_modules/prisma
 
-# Fix home directory permissions
+# Fix permissions
 RUN chown -R nextjs:nodejs /home/nextjs
 
-ENV HOME=/home/nextjs
-
 USER nextjs
+
 EXPOSE 3000
 
 HEALTHCHECK \
