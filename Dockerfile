@@ -15,7 +15,17 @@ COPY prisma ./prisma/
 COPY . .
 
 # Prisma 7 needs DATABASE_URL during generate
+# Dummy values for build time only
 ENV DATABASE_URL="postgresql://placeholder:placeholder@localhost:5432/placeholder"
+ENV REDIS_URL="redis://placeholder:6379"
+ENV JWT_SECRET="placeholder-secret-for-build-only"
+ENV NEXTAUTH_SECRET="placeholder-secret-for-build-only"
+ENV NEXT_PUBLIC_APP_URL="https://nomandev.dev"
+ENV NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY="pk_test_placeholder"
+ENV STRIPE_SECRET_KEY="sk_test_placeholder"
+ENV STRIPE_WEBHOOK_SECRET="whsec_placeholder"
+ENV SENDGRID_API_KEY="SG.placeholder"
+ENV FROM_EMAIL="noreply@nomandev.dev"
 RUN npx prisma generate
 
 ENV NEXT_TELEMETRY_DISABLED=1
