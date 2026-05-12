@@ -52,18 +52,18 @@ export default function VCDashboard() {
   } = useVCDashboard()
 
   return (
-    <div className="relative isolate space-y-6 pb-10 min-h-[calc(100dvh-3.5rem)] p-5 lg:p-8 transition-colors duration-300">
+    <div className="relative isolate space-y-6 pb-10 min-h-[calc(100dvh-3.5rem)] transition-colors duration-300">
 
       {/* Mesh gradient is now provided globally by layout.tsx */}
 
       {showToast && (
         <div className="fixed top-4 right-4 z-50 animate-in slide-in-from-top-2 fade-in duration-200">
-          <div className="flex items-center gap-3 rounded-xl border border-emerald-500/15 bg-white/80 dark:bg-navy-800/80 backdrop-blur-md px-4 py-3 shadow-2xl shadow-black/40">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-500/10 flex-shrink-0">
-              <Zap className="h-4 w-4 text-emerald-400" />
+          <div className="flex items-center gap-3 rounded-xl border border-primary/20 bg-white/80 dark:bg-navy-800/80 backdrop-blur-md px-4 py-3 shadow-2xl shadow-black/40">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 flex-shrink-0">
+              <Zap className="h-4 w-4 text-primary" />
             </div>
             <div>
-              <p className="text-xs font-semibold text-emerald-400">Payment Received</p>
+              <p className="text-xs font-semibold text-primary">Payment Received</p>
               <p className="text-[11px] text-muted-foreground">{toastMessage}</p>
             </div>
           </div>
@@ -117,8 +117,8 @@ export default function VCDashboard() {
             {/* Page Header */}
             <div className="flex items-start justify-between gap-4">
               <div className="flex items-center gap-3">
-                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-violet-500/10 flex-shrink-0">
-                  <LayoutDashboard className="h-4.5 w-4.5 text-violet-400" />
+                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10 flex-shrink-0">
+                  <LayoutDashboard className="h-4.5 w-4.5 text-primary" />
                 </div>
                 <div>
                   <h1 className="text-lg font-bold tracking-tight text-[#0F172A] dark:text-foreground">VC Dashboard</h1>
@@ -203,7 +203,7 @@ export default function VCDashboard() {
             {/* Advanced Analytics */}
             <div>
               <div className="flex items-center gap-2 mb-4">
-                <BarChart2 className="h-4 w-4 text-gold-400" />
+                <BarChart2 className="h-4 w-4 text-primary" />
                 <h2 className="text-sm font-semibold text-[#0F172A] dark:text-foreground">Advanced Analytics</h2>
                 <Separator className="flex-1 bg-slate-200/50 dark:bg-white/[0.04]" />
               </div>

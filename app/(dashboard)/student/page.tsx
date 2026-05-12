@@ -50,7 +50,7 @@
    const recentPayments = allPayments.slice(0, 3)
  
    return (
-     <div className="relative isolate space-y-6 pb-10 p-5 lg:p-8">
+     <div className="relative isolate space-y-6 pb-10">
  
        <div className="max-w-5xl mx-auto space-y-5">
  
@@ -59,7 +59,7 @@
            <header className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
              <div className="flex items-center gap-4">
                <div className="relative flex-shrink-0">
-                 <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-gold-400/90 to-gold-600/90 flex items-center justify-center text-navy-950 font-bold text-lg shadow-lg shadow-gold-500/20">
+                 <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary/80 to-primary flex items-center justify-center text-white font-bold text-lg shadow-lg shadow-primary/20">
                    {profile?.user.name.charAt(0) ?? "S"}
                  </div>
                  <span className="absolute -bottom-0.5 -right-0.5 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-emerald-500 ring-2 ring-white dark:ring-navy-950">
@@ -93,13 +93,13 @@
              <div className="flex flex-wrap items-center gap-2">
                {profile?.currentSemester && (
                  <div className="flex items-center gap-1.5 rounded-lg border border-zinc-200 dark:border-white/[0.06] bg-white/50 dark:bg-white/[0.025] backdrop-blur-md px-2.5 py-1.5 shadow-sm">
-                   <Layers className="h-3 w-3 text-sky-600 dark:text-sky-400" />
+                   <Layers className="h-3 w-3 text-primary" />
                    <span className="text-[11px] text-zinc-600 dark:text-zinc-300 font-bold">{ordinal(profile.currentSemester)} Sem</span>
                  </div>
                )}
                {profile?.session?.name && (
                  <div className="flex items-center gap-1.5 rounded-lg border border-zinc-200 dark:border-white/[0.06] bg-white/50 dark:bg-white/[0.025] backdrop-blur-md px-2.5 py-1.5 shadow-sm">
-                   <Calendar className="h-3 w-3 text-violet-600 dark:text-violet-400" />
+                   <Calendar className="h-3 w-3 text-primary" />
                    <span className="text-[11px] text-zinc-600 dark:text-zinc-300 font-bold">{profile.session.name}</span>
                  </div>
                )}
@@ -127,21 +127,21 @@
                  "rounded-2xl border overflow-hidden shadow-sm backdrop-blur-md",
                  isOverdue
                    ? "border-rose-200 dark:border-rose-500/20 bg-white/40 dark:bg-rose-950/[0.08]"
-                   : "border-zinc-200/50 dark:border-white/[0.07] bg-white/40 dark:bg-white/[0.015]",
+                   : "border-zinc-200 dark:border-white/[0.1] bg-white/40 dark:bg-white/[0.015]",
                ].join(" ")}
              >
                <div className={[
                  "flex items-center gap-2 px-6 py-2.5 border-b",
                  isOverdue
                    ? "border-rose-200 dark:border-rose-500/15 bg-rose-500/5"
-                   : "border-amber-200 dark:border-amber-500/10 bg-amber-500/5",
+                   : "border-primary/20 dark:border-primary/10 bg-primary/5",
                ].join(" ")}>
                  {isOverdue ? (
                    <AlertTriangle className="h-3.5 w-3.5 text-rose-500 dark:text-rose-400 flex-shrink-0" />
                  ) : (
-                   <Clock className="h-3.5 w-3.5 text-amber-600 dark:text-amber-400 flex-shrink-0" />
+                   <Clock className="h-3.5 w-3.5 text-primary flex-shrink-0" />
                  )}
-                 <span className={`text-[11px] font-bold ${isOverdue ? "text-rose-700 dark:text-rose-300" : "text-amber-700 dark:text-amber-300"}`}>
+                 <span className={`text-[11px] font-bold ${isOverdue ? "text-rose-700 dark:text-rose-300" : "text-primary dark:text-primary-foreground/70"}`}>
                    {isOverdue ? "Payment overdue — late fee rules apply" : `Due ${fmt(current.dueDate)}`}
                  </span>
                </div>
@@ -150,7 +150,7 @@
                  <div className="grid gap-6 sm:grid-cols-[1fr_auto] sm:items-start">
                    <div className="space-y-1">
                      <p className="flex items-center gap-2 text-[10px] uppercase tracking-[0.22em] text-zinc-500 font-bold mb-3">
-                       <span className={`h-1.5 w-1.5 rounded-full animate-pulse ${isOverdue ? "bg-rose-500" : "bg-amber-500"}`} />
+                       <span className={`h-1.5 w-1.5 rounded-full animate-pulse ${isOverdue ? "bg-rose-500" : "bg-primary"}`} />
                        Outstanding balance
                      </p>
                      <div className="flex items-baseline gap-2">
@@ -216,7 +216,7 @@
                    </div>
                    <div className="h-[3px] rounded-full bg-zinc-100 dark:bg-white/[0.04] overflow-hidden">
                      <motion.div
-                       className={`h-full rounded-full ${isOverdue ? "bg-rose-500" : "bg-gold-500 dark:bg-gold-400"}`}
+                       className={`h-full rounded-full ${isOverdue ? "bg-rose-500" : "bg-primary"}`}
                        initial={{ width: 0 }}
                        animate={{ width: `${progressPct}%` }}
                        transition={{ duration: 1.2, ease: "easeOut" }}
@@ -256,7 +256,7 @@
                  </div>
  
                  <Link href="/student/payfee">
-                   <Button className="w-full h-12 bg-gold-500 hover:bg-gold-600 text-navy-950 font-bold text-[13.5px] rounded-xl group transition-all duration-150 active:scale-[0.99] shadow-lg shadow-gold-500/20">
+                   <Button className="w-full h-12 bg-primary hover:bg-primary/90 text-white font-bold text-[13.5px] rounded-xl group transition-all duration-150 active:scale-[0.99] shadow-lg shadow-primary/20">
                      Pay outstanding balance
                      <ArrowRight className="h-4 w-4 transition-transform duration-150 group-hover:translate-x-0.5" />
                    </Button>
@@ -347,7 +347,7 @@
                <p className="text-[9.5px] uppercase tracking-[0.2em] text-zinc-500 font-bold mb-1.5">
                  Total cleared
                </p>
-               <p className="font-mono tabular-nums text-[20px] font-bold text-gold-600 dark:text-gold-400 leading-tight">
+               <p className="font-mono tabular-nums text-[20px] font-bold text-primary leading-tight">
                  {summary?.totalPaid ? formatFullCurrency(summary.totalPaid) : "PKR 0"}
                </p>
              </div>
@@ -391,11 +391,11 @@
                <div className="flex items-center gap-2 mb-1">
                  <span className={[
                    "h-2 w-2 rounded-full flex-shrink-0",
-                   summary?.hasOverdue ? "bg-rose-500 animate-pulse" : isPaid ? "bg-emerald-500" : "bg-amber-500",
+                   summary?.hasOverdue ? "bg-rose-500 animate-pulse" : isPaid ? "bg-emerald-500" : "bg-primary",
                  ].join(" ")} />
                  <span className={[
                    "text-[15px] font-bold",
-                   summary?.hasOverdue ? "text-rose-700 dark:text-rose-300" : isPaid ? "text-emerald-700 dark:text-emerald-300" : "text-amber-700 dark:text-amber-300",
+                   summary?.hasOverdue ? "text-rose-700 dark:text-rose-300" : isPaid ? "text-emerald-700 dark:text-emerald-300" : "text-primary",
                  ].join(" ")}>
                    {summary?.hasOverdue ? "Overdue" : isPaid ? "Clear" : "Pending"}
                  </span>
@@ -423,7 +423,7 @@
                </p>
                <Link
                  href="/student/history"
-                 className="flex items-center gap-1 text-[11.5px] text-zinc-500 font-bold hover:text-gold-600 dark:hover:text-gold-400 transition-colors duration-150 group"
+                 className="flex items-center gap-1 text-[11.5px] text-zinc-500 font-bold hover:text-primary transition-colors duration-150 group"
                >
                  View all
                  <ArrowRight className="h-3 w-3 transition-transform duration-150 group-hover:translate-x-0.5" />

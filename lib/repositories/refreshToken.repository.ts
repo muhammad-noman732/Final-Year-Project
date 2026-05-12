@@ -23,6 +23,10 @@ export class RefreshTokenRepository {
     await this.redis.del(`${RefreshTokenRepository.PREFIX}${token}`)
   }
 
+  async revokeWithGrace(token: string, graceSeconds = 30): Promise<void> {
+    await this.redis.expire(`${RefreshTokenRepository.PREFIX}${token}`, graceSeconds)
+  }
+
   async revokeAll(userId: string): Promise<void> {
     const pattern = `${RefreshTokenRepository.PREFIX}*`
     let cursor = "0"

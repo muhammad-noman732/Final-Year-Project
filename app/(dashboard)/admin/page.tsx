@@ -33,7 +33,7 @@ export default function AdminDashboard() {
     collectionTotal > 0 ? Math.round((metrics.totalCollected / collectionTotal) * 100) : 0
 
   return (
-    <div className="space-y-6 pb-10 p-5 lg:p-8 animate-in fade-in duration-500">
+    <div className="space-y-6 pb-10 animate-in fade-in duration-500">
 
       {/* ─── Toast ──────────────────────────────────────────────────── */}
       {showToast && (
@@ -53,12 +53,12 @@ export default function AdminDashboard() {
       {/* ─── Page Header ────────────────────────────────────────────── */}
       <div className="flex items-start justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-gold-500/10 border border-gold-500/15 flex-shrink-0">
-            <LayoutDashboard className="h-5 w-5 text-gold-400" />
+          <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-primary/10 border border-primary/20 flex-shrink-0">
+            <LayoutDashboard className="h-5 w-5 text-primary" />
           </div>
           <div>
             <h1 className="text-xl font-bold tracking-tight text-[#0F172A] dark:text-foreground">
-              Platform <span className="text-amber-500 dark:text-gold-400">Overview</span>
+              Platform Overview
             </h1>
             <p className="text-xs font-medium text-slate-500 dark:text-muted-foreground mt-0.5">
               Real-time university fee intelligence — live payments, ledger, and export.
@@ -160,14 +160,14 @@ export default function AdminDashboard() {
 
         {/* Today's Collection (1 col) */}
         <div
-          className="group relative overflow-hidden rounded-2xl border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-navy-900/40 p-5 transition-all duration-300 hover:shadow-xl hover:shadow-gold-500/5"
+          className="group relative overflow-hidden rounded-2xl border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-navy-900/40 p-5 transition-all duration-300 hover:shadow-xl hover:shadow-primary/5"
           style={{
-            backgroundImage: `radial-gradient(circle at 0% 0%, rgba(212, 168, 73, 0.03) 0%, transparent 50%), radial-gradient(circle at 100% 100%, rgba(212, 168, 73, 0.03) 0%, transparent 50%)`
+            backgroundImage: `radial-gradient(circle at 0% 0%, rgba(99, 102, 241, 0.03) 0%, transparent 50%), radial-gradient(circle at 100% 100%, rgba(99, 102, 241, 0.03) 0%, transparent 50%)`
           }}
         >
           <div className="flex items-center gap-3 mb-4">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gold-500/10 border border-gold-500/20">
-              <TrendingUp className="h-4.5 w-4.5 text-gold-500" />
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10 border border-primary/20">
+              <TrendingUp className="h-4.5 w-4.5 text-primary" />
             </div>
             <p className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-muted-foreground/60">
               Today
@@ -212,14 +212,14 @@ export default function AdminDashboard() {
 
         {/* Total Students (1 col) */}
         <div
-          className="group relative overflow-hidden rounded-2xl border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-navy-900/40 p-5 transition-all duration-300 hover:shadow-xl hover:shadow-sky-500/5"
+          className="group relative overflow-hidden rounded-2xl border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-navy-900/40 p-5 transition-all duration-300 hover:shadow-xl hover:shadow-primary/5"
           style={{
-            backgroundImage: `radial-gradient(circle at 0% 0%, rgba(14, 165, 233, 0.03) 0%, transparent 50%), radial-gradient(circle at 100% 100%, rgba(14, 165, 233, 0.03) 0%, transparent 50%)`
+            backgroundImage: `radial-gradient(circle at 0% 0%, rgba(99, 102, 241, 0.03) 0%, transparent 50%), radial-gradient(circle at 100% 100%, rgba(99, 102, 241, 0.03) 0%, transparent 50%)`
           }}
         >
           <div className="flex items-center gap-3 mb-4">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-sky-500/10 border border-sky-500/20">
-              <Users className="h-4.5 w-4.5 text-sky-500" />
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10 border border-primary/20">
+              <Users className="h-4.5 w-4.5 text-primary" />
             </div>
             <p className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-muted-foreground/60">
               Enrollment
@@ -244,14 +244,14 @@ export default function AdminDashboard() {
 
         {/* Outstanding Amount (1 col) */}
         <div
-          className="group relative overflow-hidden rounded-2xl border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-navy-900/40 p-5 transition-all duration-300 hover:shadow-xl hover:shadow-amber-500/5"
+          className="group relative overflow-hidden rounded-2xl border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-navy-900/40 p-5 transition-all duration-300 hover:shadow-xl hover:shadow-primary/5"
           style={{
-            backgroundImage: `radial-gradient(circle at 0% 0%, rgba(245, 158, 11, 0.03) 0%, transparent 50%), radial-gradient(circle at 100% 100%, rgba(245, 158, 11, 0.03) 0%, transparent 50%)`
+            backgroundImage: `radial-gradient(circle at 0% 0%, rgba(99, 102, 241, 0.03) 0%, transparent 50%), radial-gradient(circle at 100% 100%, rgba(99, 102, 241, 0.03) 0%, transparent 50%)`
           }}
         >
           <div className="flex items-center gap-3 mb-4">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-amber-500/10 border border-amber-500/20">
-              <Clock className="h-4.5 w-4.5 text-amber-500" />
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10 border border-primary/20">
+              <Clock className="h-4.5 w-4.5 text-primary" />
             </div>
             <p className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-muted-foreground/60">
               Arrears
@@ -264,21 +264,21 @@ export default function AdminDashboard() {
               {formatCurrency(metrics.outstanding)}
             </h3>
           )}
-          <p className="mt-2 text-[11px] font-medium text-amber-600 dark:text-amber-400/70">Total Pending Dues</p>
+          <p className="mt-2 text-[11px] font-medium text-primary">Total Pending Dues</p>
         </div>
 
         {/* Payment Rate (2 cols) */}
         <div
-          className="group lg:col-span-2 relative overflow-hidden rounded-2xl border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-navy-900/40 p-5 transition-all duration-300 hover:shadow-xl hover:shadow-violet-500/5"
+          className="group lg:col-span-2 relative overflow-hidden rounded-2xl border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-navy-900/40 p-5 transition-all duration-300 hover:shadow-xl hover:shadow-primary/5"
           style={{
-            backgroundImage: `radial-gradient(circle at 0% 0%, rgba(139, 92, 246, 0.03) 0%, transparent 50%), radial-gradient(circle at 100% 100%, rgba(139, 92, 246, 0.03) 0%, transparent 50%)`
+            backgroundImage: `radial-gradient(circle at 0% 0%, rgba(99, 102, 241, 0.03) 0%, transparent 50%), radial-gradient(circle at 100% 100%, rgba(99, 102, 241, 0.03) 0%, transparent 50%)`
           }}
         >
           <div className="flex items-center justify-between h-full">
             <div>
               <div className="flex items-center gap-3 mb-4">
-                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-violet-500/10 border border-violet-500/20">
-                  <Zap className="h-4.5 w-4.5 text-violet-500" />
+                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10 border border-primary/20">
+                  <Zap className="h-4.5 w-4.5 text-primary" />
                 </div>
                 <p className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-muted-foreground/60">
                   Efficiency
@@ -308,7 +308,7 @@ export default function AdminDashboard() {
                     strokeLinecap="round"
                     strokeDasharray={`${2 * Math.PI * 20}`}
                     strokeDashoffset={`${2 * Math.PI * 20 * (1 - metrics.paymentRate / 100)}`}
-                    className="text-violet-500 transition-all duration-1000"
+                    className="text-primary transition-all duration-1000"
                   />
                 </svg>
                 <div className="absolute inset-0 flex items-center justify-center">

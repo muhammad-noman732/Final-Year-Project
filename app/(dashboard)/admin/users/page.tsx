@@ -29,7 +29,7 @@ export default function UsersPage() {
     const { register, formState: { errors }, setValue } = form;
 
     return (
-        <div className="space-y-6 p-5 lg:p-8 pb-10">
+        <div className="space-y-6 pb-10">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div>
                     <h1 className="text-2xl font-bold text-[#0F172A] dark:text-foreground tracking-tight">
@@ -87,7 +87,7 @@ export default function UsersPage() {
                                             <TableCell className="text-sm font-medium">{user.name}</TableCell>
                                             <TableCell className="text-sm text-muted-foreground">{user.email}</TableCell>
                                             <TableCell>
-                                                <span className={`text-xs font-mono px-2 py-0.5 rounded-full ${user.role === "VC" ? "bg-sky-500/10 text-sky-400" : "bg-amber-500/10 text-amber-400"}`}>
+                                                <span className="text-xs font-mono px-2 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20">
                                                     {user.role}
                                                 </span>
                                             </TableCell>

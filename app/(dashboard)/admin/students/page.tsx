@@ -64,7 +64,7 @@ export default function StudentsPage() {
     const suspendedCount = students.filter(s => s.enrollmentStatus === "SUSPENDED").length;
 
     return (
-        <div className="space-y-6 p-5 lg:p-8 pb-10">
+        <div className="space-y-6 pb-10">
             {/* ═══ HEADER ═══ */}
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div>
@@ -93,12 +93,12 @@ export default function StudentsPage() {
                     </div>
                 </Card>
                 <Card className="glass-card border-0 p-4 flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-emerald-500/10 flex items-center justify-center flex-shrink-0">
-                        <GraduationCap className="w-5 h-5 text-emerald-400" />
+                    <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
+                        <GraduationCap className="w-5 h-5 text-primary" />
                     </div>
                     <div>
                         <p className="text-xs text-muted-foreground uppercase tracking-wider">Active</p>
-                        <p className="text-lg font-bold text-emerald-400">{activeCount}</p>
+                        <p className="text-lg font-bold text-primary">{activeCount}</p>
                     </div>
                 </Card>
                 <Card className="glass-card border-0 p-4 flex items-center gap-3">
@@ -111,12 +111,12 @@ export default function StudentsPage() {
                     </div>
                 </Card>
                 <Card className="glass-card border-0 p-4 flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-sky-500/10 flex items-center justify-center flex-shrink-0">
-                        <ShieldAlert className="w-5 h-5 text-sky-400" />
+                    <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
+                        <ShieldAlert className="w-5 h-5 text-primary" />
                     </div>
                     <div>
                         <p className="text-xs text-muted-foreground uppercase tracking-wider">Page</p>
-                        <p className="text-lg font-bold text-sky-400">{students.length}</p>
+                        <p className="text-lg font-bold text-primary">{students.length}</p>
                     </div>
                 </Card>
             </div>
@@ -266,7 +266,7 @@ export default function StudentsPage() {
                                                     <Button
                                                         size="icon"
                                                         variant="ghost"
-                                                        className="h-8 w-8 text-muted-foreground hover:text-sky-400"
+                                                        className="h-8 w-8 text-muted-foreground hover:text-primary"
                                                         onClick={() => setViewStudent(student)}
                                                     >
                                                         <Eye className="w-3.5 h-3.5" />

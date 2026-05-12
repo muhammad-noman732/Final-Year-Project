@@ -18,14 +18,9 @@ export default function HodDashboardClient({ initialData }: HodDashboardClientPr
   } = useHodDashboard(initialData, { fetchDashboard: true, fetchStudents: false })
 
   return (
-    <div className="relative isolate space-y-6 pb-10 min-h-[calc(100dvh-3.5rem)] p-5 lg:p-8 transition-colors duration-300" style={{ backgroundColor: "var(--hod-bg, #F4F6FA)" }}>
+    <div className="relative isolate space-y-6 pb-10 min-h-[calc(100dvh-3.5rem)] transition-colors duration-300">
 
-      {/* Fantasy UI Mesh Gradient Background */}
-      <div className="absolute inset-0 -z-10 overflow-hidden pointer-events-none bg-gradient-to-br from-[#E2E8F0] via-[#F1F5F9] to-[#E2E8F0] dark:from-[#050811] dark:via-[#0A0E1A] dark:to-[#050811]">
-        <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-[#b8c6e5] dark:bg-[#312e81] rounded-full blur-[100px] opacity-40 dark:opacity-20" />
-        <div className="absolute top-[20%] right-[10%] w-[45%] h-[50%] bg-[#f0e4c8] dark:bg-[#1e1b4b] rounded-full blur-[100px] opacity-40 dark:opacity-20" />
-        <div className="absolute bottom-[-10%] left-[20%] w-[40%] h-[50%] bg-[#e5d4ed] dark:bg-[#3730a3] rounded-full blur-[100px] opacity-40 dark:opacity-20" />
-      </div>
+
 
       <AnimatePresence>
         {showToast && (
@@ -38,7 +33,7 @@ export default function HodDashboardClient({ initialData }: HodDashboardClientPr
             className="fixed top-5 right-5 z-50"
           >
             <div className="flex items-center gap-3 rounded-2xl px-4 py-3 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border border-white dark:border-slate-800 shadow-xl">
-              <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-[#22C55E] flex-shrink-0">
+              <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-primary flex-shrink-0">
                 <Zap className="h-4 w-4 text-white" strokeWidth={2} />
               </div>
               <div>
@@ -65,9 +60,6 @@ export default function HodDashboardClient({ initialData }: HodDashboardClientPr
               {department.name}
               <span className="ml-2 font-medium text-[#64748B] dark:text-slate-500">— Hod Dashboard</span>
             </h1>
-            <p className="text-sm text-[#64748B] dark:text-slate-400 mt-1.5 leading-none">
-              Department-scoped fee tracking with real-time updates
-            </p>
           </div>
         </div>
 
@@ -79,10 +71,10 @@ export default function HodDashboardClient({ initialData }: HodDashboardClientPr
             </div>
           )}
           <div
-            className={`flex items-center gap-1.5 rounded-full px-4 py-1.5 text-xs font-bold transition-all duration-300 shadow-sm border backdrop-blur-sm ${sseConnected ? "bg-[#22C55E]/10 text-[#22C55E] border-[#22C55E]/20" : "bg-white/40 dark:bg-white/5 text-[#64748B] dark:text-slate-500 border-white/60 dark:border-white/10"
+            className={`flex items-center gap-1.5 rounded-full px-4 py-1.5 text-xs font-bold transition-all duration-300 shadow-sm border backdrop-blur-sm ${sseConnected ? "bg-primary/10 text-primary border-primary/20" : "bg-white/40 dark:bg-white/5 text-[#64748B] dark:text-slate-500 border-white/60 dark:border-white/10"
               }`}
           >
-            <span className={`w-2 h-2 rounded-full ${sseConnected ? "bg-[#22C55E] animate-pulse" : "bg-gray-400 dark:bg-gray-600"}`} />
+            <span className={`w-2 h-2 rounded-full ${sseConnected ? "bg-primary animate-pulse" : "bg-gray-400 dark:bg-gray-600"}`} />
             {sseConnected ? "Live Updates" : "Offline"}
           </div>
         </div>

@@ -1,18 +1,9 @@
 import { Suspense } from "react"
-import { Building2, Users, GraduationCap, LayoutDashboard } from "lucide-react"
+import { Building2, LayoutDashboard } from "lucide-react"
 import prisma from "@/lib/prisma"
 import { CreateTenantModal } from "@/components/superadmin/CreateTenantModal"
 
 export const dynamic = "force-dynamic"
-
-async function getStats() {
-  const [tenantsCount, usersCount, studentsCount] = await Promise.all([
-    prisma.tenant.count(),
-    prisma.user.count(),
-    prisma.student.count()
-  ])
-  return { tenantsCount, usersCount, studentsCount }
-}
 
 async function getTenants() {
   return await prisma.tenant.findMany({
@@ -25,8 +16,7 @@ async function getTenants() {
   })
 }
 
-export default async function SuperAdminDashboard() {
-  const stats = await getStats()
+export default async function UniversitiesPage() {
   const tenants = await getTenants()
 
   return (
@@ -36,10 +26,10 @@ export default async function SuperAdminDashboard() {
       <header className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-6 border-b border-border/50 dark:border-white/[0.05]">
         <div>
           <h1 className="text-2xl font-bold tracking-tight text-foreground font-heading">
-            Platform Administration
+            University Management
           </h1>
           <p className="text-sm text-muted-foreground mt-1.5">
-            Manage universities, monitor usage, and supervise global systems.
+            Detailed list of all institutional tenants and their current status.
           </p>
         </div>
         <div className="shrink-0">
@@ -47,54 +37,11 @@ export default async function SuperAdminDashboard() {
         </div>
       </header>
 
-      {/* Stats Cards */}
-      <section className="grid grid-cols-1 md:grid-cols-3 gap-6 stagger-children">
-        <div className="glass-card glass-card-hover rounded-2xl p-6 border border-border/50">
-          <div className="flex items-center gap-4">
-            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary border border-primary/20">
-              <Building2 className="h-6 w-6" />
-            </div>
-            <div>
-              <p className="text-[11px] font-bold text-muted-foreground uppercase tracking-widest">Active Universities</p>
-              <h3 className="text-2xl font-bold text-foreground tracking-tight">{stats.tenantsCount}</h3>
-            </div>
-          </div>
-        </div>
-
-        <div className="glass-card glass-card-hover rounded-2xl p-6 border border-border/50">
-          <div className="flex items-center gap-4">
-            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary border border-primary/20">
-              <Users className="h-6 w-6" />
-            </div>
-            <div>
-              <p className="text-[11px] font-bold text-muted-foreground uppercase tracking-widest">Total Admin/Staff</p>
-              <h3 className="text-2xl font-bold text-foreground tracking-tight">{stats.usersCount}</h3>
-            </div>
-          </div>
-        </div>
-
-        <div className="glass-card glass-card-hover rounded-2xl p-6 border border-border/50">
-          <div className="flex items-center gap-4">
-            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary border border-primary/20">
-              <GraduationCap className="h-6 w-6" />
-            </div>
-            <div>
-              <p className="text-[11px] font-bold text-muted-foreground uppercase tracking-widest">Enrolled Students</p>
-              <h3 className="text-2xl font-bold text-foreground tracking-tight">{stats.studentsCount}</h3>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Tenants Table */}
       <section className="space-y-4">
-        <h2 className="text-lg font-bold tracking-tight text-foreground font-heading">
-          Deployed Universities
-        </h2>
-
         {tenants.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-16 text-center border-2 border-dashed border-border/50 rounded-2xl bg-muted/30 dark:bg-navy-900/30">
-            <LayoutDashboard className="h-10 w-10 text-primary/30 mb-4" />
+            <Building2 className="h-10 w-10 text-primary/30 mb-4" />
             <p className="text-base font-bold text-foreground">No universities deployed</p>
             <p className="text-sm text-muted-foreground mt-1.5 max-w-sm">
               You haven&apos;t onboarded any universities yet. Click the button above to provision your first tenant.
@@ -115,7 +62,7 @@ export default async function SuperAdminDashboard() {
                 </thead>
                 <tbody className="divide-y divide-border/40 dark:divide-white/[0.04]">
                   {tenants.map(tenant => (
-                    <tr key={tenant.id} className="hover:bg-primary/[0.02] transition-colors duration-150">
+                    <tr key={tenant.id} className="hover:bg-primary/[0.02] dark:hover:bg-white/[0.02] transition-colors duration-150">
                       <td className="px-6 py-4">
                         <div className="font-bold text-foreground">{tenant.name}</div>
                         <div className="text-[11px] text-muted-foreground font-medium mt-0.5">{tenant.shortName}</div>
@@ -132,10 +79,10 @@ export default async function SuperAdminDashboard() {
                       <td className="px-6 py-4">
                         <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-tighter ${
                           tenant.isActive 
-                            ? 'bg-primary/10 text-primary border border-primary/20' 
+                            ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20' 
                             : 'bg-muted text-muted-foreground border border-border/50'
                         }`}>
-                          <span className={`w-1.5 h-1.5 rounded-full ${tenant.isActive ? 'bg-primary' : 'bg-slate-400'}`} />
+                          <span className={`w-1.5 h-1.5 rounded-full ${tenant.isActive ? 'bg-emerald-500' : 'bg-slate-400'}`} />
                           {tenant.isActive ? 'Active' : 'Disabled'}
                         </span>
                       </td>

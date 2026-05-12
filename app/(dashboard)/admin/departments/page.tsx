@@ -24,7 +24,7 @@ export default function DepartmentsPage() {
     const { register, formState: { errors } } = form;
 
     return (
-        <div className="space-y-6 p-5 lg:p-8 pb-10">
+        <div className="space-y-6 pb-10">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div>
                     <h1 className="text-2xl font-bold text-[#0F172A] dark:text-foreground tracking-tight">
@@ -34,7 +34,7 @@ export default function DepartmentsPage() {
                 </div>
                 <Button
                     onClick={() => setIsAddOpen(true)}
-                    className="bg-gradient-to-r from-gold-600 to-gold-500 hover:from-gold-500 hover:to-gold-400 text-navy-950 font-semibold"
+                    className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold shadow-lg shadow-primary/20"
                 >
                     <Plus className="w-4 h-4 mr-2" /> Add Department
                 </Button>
@@ -104,8 +104,8 @@ export default function DepartmentsPage() {
                             {errors.code && <p className="text-xs text-rose-400">{errors.code.message}</p>}
                         </div>
                         <div className="flex gap-3 pt-4">
-                            <Button type="button" variant="outline" className="flex-1 border-gold-500/20 text-muted-foreground" onClick={() => setIsAddOpen(false)}>Cancel</Button>
-                            <Button type="submit" disabled={isCreating} className="flex-1 bg-gradient-to-r from-gold-600 to-gold-500 text-navy-950 font-semibold">
+                            <Button type="button" variant="outline" className="flex-1 border-primary/20 text-muted-foreground" onClick={() => setIsAddOpen(false)}>Cancel</Button>
+                            <Button type="submit" disabled={isCreating} className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground font-bold">
                                 {isCreating ? "Creating..." : "Create Department"}
                             </Button>
                         </div>

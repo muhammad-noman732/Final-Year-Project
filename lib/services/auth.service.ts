@@ -118,7 +118,7 @@ export class AuthService {
       throw new UnauthorizedError("Session expired. Please log in again.")
     }
 
-    await this.refreshTokenRepo.revoke(oldRefreshToken)
+    await this.refreshTokenRepo.revokeWithGrace(oldRefreshToken)
 
     const freshUser = await this.userRepo.findById(userId)
     if (!freshUser) {

@@ -20,89 +20,81 @@ const CARDS = [
     key: "students",
     label: "Total Students",
     icon: Users,
-    iconBg: "bg-[#22C55E]",
+    iconBg: "bg-primary",
   },
   {
     key: "fee",
     label: "Fee Collected",
     icon: Banknote,
-    iconBg: "bg-[#6366F1]",
+    iconBg: "bg-primary",
   },
   {
     key: "rate",
     label: "Collection Rate",
     icon: TrendingUp,
-    iconBg: "bg-amber-400",
+    iconBg: "bg-primary",
   },
   {
     key: "defaulters",
     label: "Defaulters",
     icon: AlertTriangle,
-    iconBg: "bg-[#EF4444]",
+    iconBg: "bg-rose-500",
   },
 ]
 
 export default function HodStatsGrid({ overview, sseConnected, newAmountCollected }: HodStatsGridProps) {
   const hasNewPayments = newAmountCollected > 0 && sseConnected
 
-  const values = [
-    {
-      main: <CountUp end={overview.totalStudents} duration={1.2} separator="," />,
-      sub: `${overview.paidStudents} paid · ${overview.unpaidStudents} unpaid`,
-    },
-    {
-      main: (
-        <CountUp
-          end={overview.totalCollected}
-          duration={1.4}
-          formattingFn={(v) => formatCurrency(Math.round(v))}
-        />
-      ),
-      sub: hasNewPayments
-        ? `+${formatCurrency(newAmountCollected)} this session`
-        : `${formatCurrency(overview.collectedToday)} today`,
-    },
-    {
-      main: (
-        <span className="flex items-baseline gap-0.5">
-          <CountUp end={overview.paymentRate} duration={1.2} decimals={1} />
-          <span className="text-sm text-[#64748B] font-normal">%</span>
-        </span>
-      ),
-      sub: `${overview.paymentsToday} payments today`,
-    },
-    {
-      main: <CountUp end={overview.defaulters} duration={1} />,
-      sub: `${formatFullCurrency(overview.outstandingAmount)} outstanding`,
-    },
-  ]
-
   return (
     <motion.div variants={container} initial="hidden" animate="show"
       className="grid grid-cols-2 lg:grid-cols-4 gap-6">
-      {CARDS.map((card, idx) => {
-        const { main, sub } = values[idx]
+      {CARDS.map((card) => {
         const Icon = card.icon
+        
+        let displayValue: React.ReactNode = ""
+        let sub = ""
+
+        if (card.key === "students") {
+          displayValue = overview.totalStudents.toLocaleString()
+          sub = `${overview.paidStudents} paid · ${overview.unpaidStudents} unpaid`
+        } else if (card.key === "fee") {
+          displayValue = formatCurrency(Math.round(overview.totalCollected))
+          sub = hasNewPayments
+            ? `+${formatCurrency(newAmountCollected)} this session`
+            : `${formatCurrency(overview.collectedToday)} today`
+        } else if (card.key === "rate") {
+          displayValue = (
+            <span className="flex items-baseline gap-0.5">
+              {overview.paymentRate.toFixed(1)}
+              <span className="text-sm text-[#64748B] font-normal">%</span>
+            </span>
+          )
+          sub = `${overview.paymentsToday} payments today`
+        } else {
+          displayValue = overview.defaulters.toLocaleString()
+          sub = `${formatFullCurrency(overview.outstandingAmount)} outstanding`
+        }
+
         return (
           <motion.div key={card.key} variants={item}>
-            <div className="relative overflow-hidden bg-white/40 dark:bg-slate-900/40 backdrop-blur-md rounded-xl shadow-[0_8px_32px_rgba(0,0,0,0.04)] border border-white/60 dark:border-white/10 p-6 h-full transition-all duration-300 hover:bg-white/60 dark:hover:bg-slate-800/60 hover:-translate-y-1 hover:shadow-lg">
+            <div className="relative overflow-hidden bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-white/10 p-4 h-full transition-all duration-300 hover:shadow-md">
               
-              <div className="flex items-start gap-4 mb-4 relative z-10">
-                <div className={`w-12 h-12 rounded-xl ${card.iconBg} flex items-center justify-center shadow-sm flex-shrink-0`}>
-                  <Icon className="w-6 h-6 text-white" strokeWidth={2} />
+              <div className="flex items-center gap-3 mb-3 relative z-10">
+                <div className={`w-9 h-9 rounded-lg ${card.iconBg} flex items-center justify-center flex-shrink-0 shadow-sm`}>
+                  <Icon className="w-5 h-5 text-white" strokeWidth={2} />
                 </div>
                 <div className="pt-0.5 text-left">
                    <p className="text-[10px] font-bold tracking-widest uppercase text-[#64748B] dark:text-slate-500 mb-1">
                     {card.label}
                   </p>
-                  <div className="text-2xl font-bold tracking-tight text-[#0F172A] dark:text-slate-100 leading-none">
-                    {main}
+                  <div className="text-xl font-bold tracking-tight text-[#0F172A] dark:text-slate-100 leading-none">
+                    {displayValue}
                   </div>
                 </div>
               </div>
 
-              <div className="mt-4 pt-4 border-t border-slate-200/50 dark:border-white/5">
-                <p className="text-xs text-[#64748B] dark:text-slate-400 font-medium truncate">{sub}</p>
+              <div className="mt-3 pt-3 border-t border-slate-100 dark:border-white/5">
+                <p className="text-[11px] text-[#64748B] dark:text-slate-400 font-medium truncate">{sub}</p>
               </div>
 
             </div>

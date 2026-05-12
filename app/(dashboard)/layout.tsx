@@ -87,7 +87,7 @@ export default function DashboardLayout({
   const userRole = config.label
   
   // Specific styling for HOD, VC, Admin, and Student routes to give full-width background with mesh gradients
-  const isInteractive = role === "hod" || role === "vc" || role === "admin" || role === "student"
+  const isInteractive = role === "hod" || role === "vc" || role === "admin" || role === "student" || role === "superadmin"
 
   return (
     <div className="h-[100dvh] flex bg-[#F4F6FA] dark:bg-[#050811] overflow-hidden transition-colors duration-300 relative isolate">
@@ -114,10 +114,7 @@ export default function DashboardLayout({
           onMenuClick={() => setSidebarOpen(true)}
           showLiveIndicator={config.showLive}
         />
-        <main className={cn(
-          "flex-1 overflow-y-auto scroll-smooth",
-          isInteractive ? "" : "p-5 lg:p-8 bg-slate-50 dark:bg-slate-950"
-        )}>
+        <main className="flex-1 overflow-y-auto scroll-smooth p-6 lg:p-10">
           {children}
         </main>
       </div>

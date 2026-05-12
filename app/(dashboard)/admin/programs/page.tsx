@@ -28,13 +28,13 @@ export default function ProgramsPage() {
     const { register, formState: { errors }, setValue, watch } = form;
 
     return (
-        <div className="space-y-6 p-5 lg:p-8 pb-10">
+        <div className="space-y-6 pb-10">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div>
                     <h1 className="text-2xl font-bold text-[#0F172A] dark:text-foreground tracking-tight">Programs</h1>
                     <p className="text-sm text-muted-foreground mt-1">{meta.total} programs</p>
                 </div>
-                <Button onClick={() => setIsAddOpen(true)} className="bg-gradient-to-r from-gold-600 to-gold-500 hover:from-gold-500 hover:to-gold-400 text-navy-950 font-semibold">
+                <Button onClick={() => setIsAddOpen(true)} className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold shadow-lg shadow-primary/20">
                     <Plus className="w-4 h-4 mr-2" /> Add Program
                 </Button>
             </div>
@@ -62,7 +62,7 @@ export default function ProgramsPage() {
                                             <TableCell className="text-sm font-medium">{prog.name}</TableCell>
                                             <TableCell className="text-xs font-mono text-muted-foreground">{prog.code}</TableCell>
                                             <TableCell>
-                                                <span className="text-xs px-2 py-0.5 rounded-full bg-sky-500/10 text-sky-400">{prog.degreeType}</span>
+                                                <span className="text-xs px-2 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20 font-bold">{prog.degreeType}</span>
                                             </TableCell>
                                             <TableCell className="text-sm text-muted-foreground">{prog.department.name}</TableCell>
                                             <TableCell className="text-sm text-muted-foreground">{prog.durationYears}y / {prog.totalSemesters}s</TableCell>
@@ -137,8 +137,8 @@ export default function ProgramsPage() {
                             </div>
                         </div>
                         <div className="flex gap-3 pt-4">
-                            <Button type="button" variant="outline" className="flex-1 border-gold-500/20 text-muted-foreground" onClick={() => setIsAddOpen(false)}>Cancel</Button>
-                            <Button type="submit" disabled={isCreating} className="flex-1 bg-gradient-to-r from-gold-600 to-gold-500 text-navy-950 font-semibold">
+                            <Button type="button" variant="outline" className="flex-1 border-primary/20 text-muted-foreground" onClick={() => setIsAddOpen(false)}>Cancel</Button>
+                            <Button type="submit" disabled={isCreating} className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground font-bold">
                                 {isCreating ? "Creating..." : "Create Program"}
                             </Button>
                         </div>
