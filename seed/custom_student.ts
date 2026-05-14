@@ -18,7 +18,7 @@ async function main() {
   if (!department) throw new Error("CS department not found");
 
   const program = await prisma.program.findFirst({
-    where: { tenantId: tenant.id, departmentId: department.id, code: "BSCS" },
+    where: { tenantId: tenant.id, departmentId: department.id, code: "BSCS-CS" },
   });
   if (!program) throw new Error("BSCS program not found");
 
