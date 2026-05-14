@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { cn } from "@/lib/utils"
 import { useChangePasswordPage } from "@/hooks/useChangePasswordPage"
+import { AuthBackground } from "@/components/auth/AuthBackground"
 
 export default function ChangePasswordPage() {
   const {
@@ -36,11 +37,8 @@ export default function ChangePasswordPage() {
   const strengthLabels = { weak: "Weak", fair: "Fair", good: "Good", strong: "Strong" }
 
   return (
-    <div className="min-h-[100dvh] w-full flex items-center justify-center p-6 relative overflow-hidden bg-[#0F172A] font-sans">
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-[-10%] left-[-10%] w-[60%] h-[60%] bg-[#d4a843]/15 rounded-full blur-[120px] animate-pulse" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-blue-500/10 rounded-full blur-[120px]" />
-      </div>
+    <div className="min-h-[100dvh] w-full flex items-center justify-center p-6 relative overflow-hidden font-sans">
+      <AuthBackground />
 
       <div className="w-full max-w-[420px] relative z-10">
         <div className="flex flex-col items-center mb-8 transform transition-all duration-700 animate-in fade-in slide-in-from-top-4">

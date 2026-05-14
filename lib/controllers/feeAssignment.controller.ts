@@ -22,7 +22,6 @@ export class FeeAssignmentController {
       { feeStructureId, studentIds },
     )
 
-    // Revalidate fee structures cache — the _count.assignments count changes
     revalidateFeeStructures(tenantId)
 
     return successResponse(result, 200)

@@ -1,12 +1,7 @@
 import { getTenantContext } from "@/lib/auth"
 import { createRedisSubscriber, notificationChannel } from "@/lib/redis"
 
-/**
- * GET /api/notifications/stream
- *
- * Per-user SSE stream. Publishes a "NewNotification" ping whenever a notification
- * is written for this user. The client reacts by invalidating its RTK Query cache.
- */
+
 export async function GET() {
   const { userId } = await getTenantContext()
 

@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useLoginPage } from "@/hooks/useLoginPage"
+import { AuthBackground } from "@/components/auth/AuthBackground"
 
 export default function LoginPage() {
   const {
@@ -18,21 +19,8 @@ export default function LoginPage() {
   } = useLoginPage()
 
   return (
-    <div className="min-h-[100dvh] w-full flex items-center justify-center p-6 relative overflow-hidden bg-[#0F172A] font-sans">
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-[-10%] left-[-10%] w-[60%] h-[60%] bg-[#d4a843]/15 rounded-full blur-[120px] animate-pulse" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-blue-500/10 rounded-full blur-[120px]" />
-        <div className="absolute inset-0 opacity-[0.15]">
-          <svg className="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
-            <defs>
-              <pattern id="dots" width="6" height="6" patternUnits="userSpaceOnUse">
-                <circle cx="1" cy="1" r="0.4" fill="white" />
-              </pattern>
-            </defs>
-            <rect width="100%" height="100%" fill="url(#dots)" />
-          </svg>
-        </div>
-      </div>
+    <div className="min-h-[100dvh] w-full flex items-center justify-center p-6 relative overflow-hidden font-sans">
+      <AuthBackground />
 
       <div className="w-full max-w-[420px] relative z-10">
         <div className="flex flex-col items-center mb-8 transform transition-all duration-700 animate-in fade-in slide-in-from-top-4">

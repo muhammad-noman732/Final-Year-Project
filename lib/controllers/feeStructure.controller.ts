@@ -22,9 +22,6 @@ export class FeeStructureController {
     const searchParams = Object.fromEntries(req.nextUrl.searchParams.entries())
     const query = listFeeStructuresQuerySchema.parse(searchParams)
 
-    // No server-side unstable_cache here — the RTK Query client cache (invalidatesTags)
-    // is the correct caching layer. Creating unstable_cache inside a request handler
-    // produces a new function reference each time, defeating deduplication.
     const result = await this.feeStructureService.getFeeStructures(tenantId, query)
     return successResponse(result)
   }

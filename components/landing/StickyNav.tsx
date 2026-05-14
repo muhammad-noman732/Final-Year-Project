@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { ArrowRight, Menu, X } from "lucide-react";
+import { MagneticButton } from "@/components/ui/magnetic-button";
 
 const NAV_LINKS = [
   { label: "Features", href: "#features" },
@@ -24,9 +25,10 @@ export default function StickyNav() {
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
         scrolled
-          ? "bg-white/80 backdrop-blur-2xl border-b border-black/[0.04] shadow-[0_1px_2px_rgba(0,0,0,0.03)]"
+          ? "backdrop-blur-2xl border-b border-white/[0.06] shadow-[0_1px_2px_rgba(0,0,0,0.3)]"
           : "bg-transparent"
       }`}
+    style={scrolled ? { background: "rgba(5,8,15,0.85)" } : {}}
     >
       <div className="max-w-[1240px] mx-auto px-6 lg:px-10">
         <div className="flex items-center justify-between h-[72px]">
@@ -46,7 +48,7 @@ export default function StickyNav() {
               <a
                 key={link.label}
                 href={link.href}
-                className="text-[13px] text-[#737373] font-medium hover:text-[#0a0a0a] transition-colors duration-200"
+                className="text-[13px] text-white/50 font-medium hover:text-white transition-colors duration-200"
               >
                 {link.label}
               </a>
@@ -57,18 +59,23 @@ export default function StickyNav() {
           <div className="hidden md:flex items-center gap-5">
             <Link
               href="/login"
-              className="text-[13px] text-[#737373] font-medium hover:text-[#0a0a0a] transition-colors duration-200"
+              className="text-[13px] text-white/45 font-medium hover:text-white transition-colors duration-200"
             >
               Sign In
             </Link>
-            <Link
-              href="/login"
-              className="group inline-flex items-center gap-2 px-[18px] py-[9px] rounded-full bg-[#0a0a0a] text-white text-[13px] font-medium
-                hover:bg-[#171717] transition-all duration-200 active:scale-[0.97]"
-            >
-              Get Started
-              <ArrowRight className="w-3.5 h-3.5 opacity-60 transition-all duration-200 group-hover:opacity-100 group-hover:translate-x-0.5" />
-            </Link>
+            <MagneticButton strength={0.4}>
+              <Link
+                href="/login"
+                className="group inline-flex items-center gap-2 px-[18px] py-[9px] rounded-full text-[#0a0a0a] text-[13px] font-semibold transition-all duration-200 active:scale-[0.97]"
+                style={{
+                  background: "linear-gradient(135deg, #f5c542 0%, #d4a843 60%, #c9952b 100%)",
+                  boxShadow: "0 2px 12px rgba(212,168,67,0.3)",
+                }}
+              >
+                Get Started
+                <ArrowRight className="w-3.5 h-3.5 opacity-70 group-hover:translate-x-0.5 transition-transform duration-200" />
+              </Link>
+            </MagneticButton>
           </div>
 
           {/* Mobile toggle */}
