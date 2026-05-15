@@ -1,7 +1,6 @@
 import { getTenantContext } from "@/lib/auth"
 import { createRedisSubscriber, notificationChannel } from "@/lib/redis"
 
-
 export async function GET() {
   const { userId } = await getTenantContext()
 
@@ -21,7 +20,7 @@ export async function GET() {
         try {
           controller.enqueue(encoder.encode(`data: ${message}\n\n`))
         } catch {
-          // Stream already closed — client disconnected before cancel() fired
+
         }
       })
 

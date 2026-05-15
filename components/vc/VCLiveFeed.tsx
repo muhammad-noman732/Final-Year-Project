@@ -29,7 +29,7 @@ export default function VCLiveFeed({
 
   return (
     <div className="flex h-full flex-col overflow-hidden rounded-xl border border-white/60 dark:border-white/[0.05] bg-white/40 dark:bg-slate-900/40 backdrop-blur-md shadow-[0_8px_32px_rgba(0,0,0,0.04)]">
-      {/* Header */}
+      {}
       <div className="flex items-center justify-between px-4 py-3.5 flex-shrink-0">
         <div className="flex items-center gap-2">
           <div className="relative flex h-7 w-7 items-center justify-center rounded-lg bg-primary/10">
@@ -72,7 +72,7 @@ export default function VCLiveFeed({
 
       <Separator className="bg-slate-200/50 dark:bg-white/[0.04]" />
 
-      {/* Feed */}
+      {}
       <div className="flex-1 overflow-y-auto">
         {merged.length === 0 ? (
           <div className="flex flex-col items-center justify-center px-5 py-14 text-center">
@@ -116,7 +116,7 @@ function LiveTransactionRow({ tx, isNew }: { tx: SSELiveTransaction; isNew: bool
         highlight ? "bg-primary/[0.05]" : "hover:bg-white/60 dark:hover:bg-white/[0.015]"
       }`}
     >
-      {/* Avatar placeholder */}
+      {}
       <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-slate-200/50 dark:bg-white/[0.04] text-[11px] font-bold text-[#64748B] dark:text-muted-foreground uppercase">
         {tx.studentName.charAt(0)}
       </div>

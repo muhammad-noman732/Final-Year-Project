@@ -52,7 +52,6 @@ const testimonials = [
   },
 ];
 
-// Duplicate for seamless infinite loop
 const doubled = [...testimonials, ...testimonials];
 
 export default function TestimonialsSection() {
@@ -61,7 +60,7 @@ export default function TestimonialsSection() {
       className="relative py-28 md:py-36 overflow-hidden"
       style={{ background: "linear-gradient(180deg, #07090f 0%, #05080f 100%)" }}
     >
-      {/* Subtle grid */}
+      {}
       <div
         className="absolute inset-0 opacity-[0.12] pointer-events-none"
         style={{
@@ -72,7 +71,7 @@ export default function TestimonialsSection() {
       <div className="absolute top-0 left-0 right-0 h-px" style={{ background: "linear-gradient(90deg, transparent, rgba(212,168,67,0.2) 50%, transparent)" }} />
 
       <div className="relative z-10">
-        {/* Heading */}
+        {}
         <div className="max-w-[1240px] mx-auto px-6 lg:px-10 text-center mb-16">
           <FadeIn>
             <p className="text-[11px] text-[#d4a843] font-bold uppercase tracking-[0.22em] mb-4">
@@ -93,9 +92,9 @@ export default function TestimonialsSection() {
           </FadeIn>
         </div>
 
-        {/* Marquee */}
+        {}
         <div className="relative">
-          {/* Fade edges — dark */}
+          {}
           <div className="absolute left-0 top-0 bottom-0 w-24 z-10 pointer-events-none" style={{ background: "linear-gradient(to right, #07090f, transparent)" }} />
           <div className="absolute right-0 top-0 bottom-0 w-24 z-10 pointer-events-none" style={{ background: "linear-gradient(to left, #07090f, transparent)" }} />
 
@@ -127,7 +126,7 @@ function TestimonialCard({
           boxShadow: "0 2px 12px rgba(0,0,0,0.3)",
         }}
       >
-        {/* Stars */}
+        {}
         <div className="flex gap-1 mb-4">
           {Array.from({ length: 5 }).map((_, i) => (
             <svg key={i} className="w-3.5 h-3.5" viewBox="0 0 16 16" fill="#d4a843">
@@ -136,12 +135,12 @@ function TestimonialCard({
           ))}
         </div>
 
-        {/* Quote */}
+        {}
         <p className="text-[13px] text-white/55 leading-[1.75] mb-5">
           &ldquo;{t.quote}&rdquo;
         </p>
 
-        {/* Author */}
+        {}
         <div className="flex items-center gap-3 pt-4 border-t border-white/[0.06]">
           <div
             className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 text-[11px] font-bold text-white"

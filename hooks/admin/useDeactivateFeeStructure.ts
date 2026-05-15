@@ -11,7 +11,7 @@ export function useDeactivateFeeStructure() {
         description: "All unpaid fee assignments have been removed.",
       })
     } catch {
-      // RTK error middleware handles API error toasts
+
     }
   }
 

@@ -35,7 +35,7 @@ export default function AdminDashboard() {
   return (
     <div className="space-y-6 pb-10 animate-in fade-in duration-500">
 
-      {/* ─── Toast ──────────────────────────────────────────────────── */}
+      {}
       {showToast && (
         <div className="fixed top-4 right-4 z-50 animate-in slide-in-from-top-2 fade-in duration-200">
           <div className="flex items-center gap-3 rounded-2xl border border-emerald-500/15 bg-white/90 dark:bg-[#070b14]/90 backdrop-blur-xl px-4 py-3 shadow-2xl shadow-black/10 dark:shadow-black/50">
@@ -50,7 +50,7 @@ export default function AdminDashboard() {
         </div>
       )}
 
-      {/* ─── Page Header ────────────────────────────────────────────── */}
+      {}
       <div className="flex items-start justify-between gap-4">
         <div className="flex items-center gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-primary/10 border border-primary/20 flex-shrink-0">
@@ -98,10 +98,10 @@ export default function AdminDashboard() {
         </div>
       </div>
 
-      {/* ─── Bento Metrics ──────────────────────────────────────────── */}
+      {}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
 
-        {/* Total Fee Collected (2 cols) */}
+        {}
         <div
           className="group lg:col-span-2 relative overflow-hidden rounded-2xl border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-navy-900/40 p-5 transition-all duration-300 hover:shadow-xl hover:shadow-emerald-500/5"
           style={{
@@ -158,7 +158,7 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        {/* Today's Collection (1 col) */}
+        {}
         <div
           className="group relative overflow-hidden rounded-2xl border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-navy-900/40 p-5 transition-all duration-300 hover:shadow-xl hover:shadow-primary/5"
           style={{
@@ -185,7 +185,7 @@ export default function AdminDashboard() {
           </p>
         </div>
 
-        {/* Defaulters (1 col) */}
+        {}
         <div
           className="group relative overflow-hidden rounded-2xl border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-navy-900/40 p-5 transition-all duration-300 hover:shadow-xl hover:shadow-rose-500/5"
           style={{
@@ -210,7 +210,7 @@ export default function AdminDashboard() {
           <p className="mt-2 text-[11px] font-bold text-rose-500 uppercase tracking-tighter">Defaulters List</p>
         </div>
 
-        {/* Total Students (1 col) */}
+        {}
         <div
           className="group relative overflow-hidden rounded-2xl border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-navy-900/40 p-5 transition-all duration-300 hover:shadow-xl hover:shadow-primary/5"
           style={{
@@ -242,7 +242,7 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        {/* Outstanding Amount (1 col) */}
+        {}
         <div
           className="group relative overflow-hidden rounded-2xl border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-navy-900/40 p-5 transition-all duration-300 hover:shadow-xl hover:shadow-primary/5"
           style={{
@@ -267,7 +267,7 @@ export default function AdminDashboard() {
           <p className="mt-2 text-[11px] font-medium text-primary">Total Pending Dues</p>
         </div>
 
-        {/* Payment Rate (2 cols) */}
+        {}
         <div
           className="group lg:col-span-2 relative overflow-hidden rounded-2xl border border-slate-200 dark:border-white/[0.08] bg-white dark:bg-navy-900/40 p-5 transition-all duration-300 hover:shadow-xl hover:shadow-primary/5"
           style={{
@@ -323,7 +323,7 @@ export default function AdminDashboard() {
         </div>
       </div>
 
-      {/* ─── Main Content: Transactions + Live Feed ─────────────────── */}
+      {}
       <div className="grid gap-4 xl:grid-cols-[1fr_320px]">
         <AdminTransactionTable
           transactions={transactions}

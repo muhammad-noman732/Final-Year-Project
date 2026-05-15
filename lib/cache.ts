@@ -1,9 +1,6 @@
 import { unstable_cache } from "next/cache"
 import { revalidateTag } from "next/cache"
 
-// Tenant-scoped cache tag builders
-// Every tag is prefixed with tenantId to prevent cross-tenant data leaks.
-
 export function deptTag(tenantId: string) {
   return `departments-${tenantId}`
 }
@@ -28,16 +25,9 @@ export function feeStructureTag(tenantId: string) {
   return `fee-structures-${tenantId}`
 }
 
-/**
- * Per-student fee tag — scoped to both tenant AND user so each student's
- * cache is invalidated independently when their fee status changes.
- */
 export function studentFeeTag(tenantId: string, userId: string) {
   return `student-fee-${tenantId}-${userId}`
 }
-
-// Cache builder
-// Wraps unstable_cache with tenant-scoped tags and a default TTL.
 
 export function buildCachedFn<TArgs extends unknown[], TResult>(
   fn: (...args: TArgs) => Promise<TResult>,
@@ -50,8 +40,6 @@ export function buildCachedFn<TArgs extends unknown[], TResult>(
     revalidate: revalidateSeconds,
   })
 }
-
-//  Revalidation helpers 
 
 export function revalidateDepartments(tenantId: string) {
   revalidateTag(deptTag(tenantId), "max")
@@ -81,12 +69,6 @@ export function revalidateStudentFee(tenantId: string, userId: string) {
   revalidateTag(studentFeeTag(tenantId, userId), "max")
 }
 
-/**
- * Tenant-wide tag that covers every student's fee cache entry.
- * Add this tag alongside studentFeeTag on any cached fee query so a single
- * revalidateAllStudentFees() call busts all of them at once (e.g. after a
- * fee-structure update that affects multiple students).
- */
 export function allStudentFeesTag(tenantId: string) {
   return `all-student-fees-${tenantId}`
 }

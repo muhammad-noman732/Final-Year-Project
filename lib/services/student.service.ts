@@ -35,8 +35,6 @@ export class StudentService {
     private readonly auditService: AuditService,
   ) { }
 
-  // List Students
-
   async getStudents(
     tenantId: string,
     query: ListStudentsQuery,
@@ -75,23 +73,18 @@ export class StudentService {
     return { data, meta: buildPaginationMeta(total, query.page, query.limit) }
   }
 
-  // Get Single Student
-
   async getStudent(tenantId: string, id: string): Promise<StudentRow> {
     const student = await this.studentRepo.findById(tenantId, id)
     if (!student) throw new NotFoundError("Student not found.")
     return student
   }
 
-  // Create Student (User + Student in $transaction)
-
   async createStudent(
     tenantId: string,
     adminUserId: string,
     input: CreateStudentInput,
   ): Promise<StudentRow> {
-    // 1. Verify all FK references belong to this tenant — prevents cross-tenant injection.
-    //    Run all three lookups in parallel for speed.
+
     const [dept, program, session, existingRollNo] = await Promise.all([
       this.deptRepo.findById(tenantId, input.departmentId),
       this.programRepo.findById(tenantId, input.programId),
@@ -115,19 +108,16 @@ export class StudentService {
       )
     }
 
-    // 2. Conflict check — @@unique([tenantId, studentId])
     if (existingRollNo) {
       throw new ConflictError(
         "A student with this roll number already exists in your university.",
       )
     }
 
-    // 3. Generate temp password and hash
     const emailNormalized = input.email.toLowerCase().trim()
     const tempPassword = this.generateTempPassword()
     const passwordHash = await bcrypt.hash(tempPassword, this.BCRYPT_ROUNDS)
 
-    // 4. Persist — User + Student atomically (Rule 12: $transaction)
     const student = await this.studentRepo.createWithUser({
       userData: {
         tenantId,
@@ -150,12 +140,9 @@ export class StudentService {
       },
     })
 
-    // 5. Fetch tenant name for welcome email
     const tenant = await this.tenantRepo.findById(tenantId)
     const universityName = tenant?.name ?? "Your University"
 
-    // 6. Send welcome email (fire-and-forget)
-    // TODO: Replace with BullMQ `emails` queue → `welcome-email` job when queue worker is live
     this.emailService
       .sendWelcomeEmail({
         to: emailNormalized,
@@ -176,7 +163,6 @@ export class StudentService {
         )
       })
 
-    // 7. Audit log (fire-and-forget)
     this._audit({
       tenantId,
       userId: adminUserId,
@@ -204,8 +190,6 @@ export class StudentService {
     return student
   }
 
-  // Update Student
-
   async updateStudent(
     tenantId: string,
     adminUserId: string,
@@ -225,7 +209,6 @@ export class StudentService {
       ...(input.cnic !== undefined && { cnic: input.cnic }),
     })
 
-    // Persist optional user-level phone update on the linked User row.
     if (input.phone !== undefined) {
       await this.studentRepo.updateStudentUserPhone(tenantId, id, input.phone)
     }
@@ -260,8 +243,6 @@ export class StudentService {
 
     return updated
   }
-
-  // Private helpers
 
   private _audit(params: {
     tenantId: string

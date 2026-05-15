@@ -26,7 +26,7 @@ export default function VCVelocityCard({ overview, collectionTrend }: VCVelocity
 
   return (
     <div className="rounded-xl border border-white/60 dark:border-white/[0.06] bg-white/40 dark:bg-navy-900/60 backdrop-blur-md shadow-[0_8px_32px_rgba(0,0,0,0.04)] p-4">
-      {/* Header */}
+      {}
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
           <div className="flex h-6 w-6 items-center justify-center rounded-lg bg-gold-500/10">
@@ -40,7 +40,7 @@ export default function VCVelocityCard({ overview, collectionTrend }: VCVelocity
         </div>
       </div>
 
-      {/* Main stat */}
+      {}
       <div className="flex items-end gap-1.5 mb-1">
         <span className="text-2xl font-bold tabular-nums tracking-tight text-[#0F172A] dark:text-foreground">
           {velocity.paymentsPerHourToday}
@@ -48,7 +48,7 @@ export default function VCVelocityCard({ overview, collectionTrend }: VCVelocity
         <span className="text-[11px] text-[#64748B] dark:text-muted-foreground mb-0.5">payments/hr today</span>
       </div>
 
-      {/* vs yesterday */}
+      {}
       {velocity.paymentsPerHourYesterday > 0 && (
         <p className="text-[11px] text-[#64748B] dark:text-muted-foreground mb-3">
           vs{" "}

@@ -9,13 +9,13 @@ export function ThemeApplier() {
 
   useEffect(() => {
     const root = window.document.documentElement
-    
+
     if (theme === "dark") {
       root.classList.add("dark")
     } else if (theme === "light") {
       root.classList.remove("dark")
     } else {
-      // System preference
+
       const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"
       if (systemTheme === "dark") {
         root.classList.add("dark")

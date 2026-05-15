@@ -6,7 +6,6 @@ import { formatCurrency, formatFullCurrency } from "@/config/constants"
 import { useVCHealthScore } from "@/hooks/vc/useVCHealthScore"
 import type { VCHealthScoreBentoProps, VCHealthTier } from "@/types/client/ui/vc.ui.types"
 
-// ─── Gauge Arc constants ───────────────────────────────────────────────────────
 const CX = 80
 const CY = 80
 const R = 56
@@ -23,10 +22,8 @@ function polar(angleDeg: number) {
 
 const start = polar(START_DEG)
 const end = polar(END_DEG)
-// 270° arc — large-arc-flag=1, sweep-flag=1 (clockwise)
-const ARC_PATH = `M ${start.x.toFixed(2)} ${start.y.toFixed(2)} A ${R} ${R} 0 1 1 ${end.x.toFixed(2)} ${end.y.toFixed(2)}`
 
-// ─── Tier config ──────────────────────────────────────────────────────────────
+const ARC_PATH = `M ${start.x.toFixed(2)} ${start.y.toFixed(2)} A ${R} ${R} 0 1 1 ${end.x.toFixed(2)} ${end.y.toFixed(2)}`
 
 const TIER_CONFIG: Record<
   VCHealthTier,
@@ -55,8 +52,6 @@ const TIER_CONFIG: Record<
   },
 }
 
-// ─── Sparkline ────────────────────────────────────────────────────────────────
-
 function Sparkline({ points }: { points: number[] }) {
   if (points.length < 2) return null
   const max = Math.max(...points)
@@ -82,8 +77,6 @@ function Sparkline({ points }: { points: number[] }) {
     </svg>
   )
 }
-
-// ─── Metric Card ──────────────────────────────────────────────────────────────
 
 function MetricCard({
   label,
@@ -123,8 +116,6 @@ function MetricCard({
   )
 }
 
-// ─── Root Component ───────────────────────────────────────────────────────────
-
 export default function VCHealthScoreBento({
   overview,
   collectionTrend,
@@ -158,12 +149,12 @@ export default function VCHealthScoreBento({
       ref={flashRef}
       className="flex flex-col xl:flex-row gap-4 rounded-2xl border border-white/60 dark:border-white/[0.06] bg-white/40 dark:bg-navy-900/60 backdrop-blur-md shadow-[0_8px_32px_rgba(0,0,0,0.04)] p-5 transition-all duration-500"
     >
-      {/* ── Left: Gauge ── */}
+      {}
       <div className="flex flex-col items-center gap-3 xl:w-[220px] shrink-0">
-        {/* Gauge SVG */}
+        {}
         <div className="relative" style={{ filter: `drop-shadow(0 0 18px ${cfg.glow})` }}>
           <svg width="160" height="140" viewBox="0 0 160 160">
-            {/* Background arc */}
+            {}
             <path
               d={ARC_PATH}
               fill="none"
@@ -171,7 +162,7 @@ export default function VCHealthScoreBento({
               strokeWidth="8"
               strokeLinecap="round"
             />
-            {/* Animated progress arc */}
+            {}
             <motion.path
               d={ARC_PATH}
               fill="none"
@@ -182,7 +173,7 @@ export default function VCHealthScoreBento({
               animate={{ pathLength: score / 100 }}
               transition={{ type: "spring", stiffness: 80, damping: 22, delay: 0.15 }}
             />
-            {/* Score text */}
+            {}
             <text
               x={CX}
               y={CY - 6}
@@ -210,21 +201,21 @@ export default function VCHealthScoreBento({
           </svg>
         </div>
 
-        {/* Tier badge */}
+        {}
         <span
           className={`inline-flex items-center rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] ${cfg.badge}`}
         >
           {cfg.badgeText}
         </span>
 
-        {/* Reason */}
+        {}
         {healthScore && (
           <p className="text-center text-[11.5px] text-[#64748B]/80 dark:text-muted-foreground/80 max-w-[160px]">
             {healthScore.reason}
           </p>
         )}
 
-        {/* Sparkline */}
+        {}
         {sparkPoints.length > 1 && (
           <div className="flex flex-col items-center gap-1">
             <Sparkline points={sparkPoints} />
@@ -232,7 +223,7 @@ export default function VCHealthScoreBento({
           </div>
         )}
 
-        {/* SSE dot */}
+        {}
         <div className="flex items-center gap-1.5">
           <span className="relative flex h-1.5 w-1.5">
             {sseConnected && (
@@ -248,9 +239,9 @@ export default function VCHealthScoreBento({
         </div>
       </div>
 
-      {/* ── Right: Metric Grid ── */}
+      {}
       <div className="flex-1 grid grid-cols-2 gap-3 content-start">
-        {/* Total Collected — hero */}
+        {}
         <MetricCard
           colSpan2
           label="Total Collected"
@@ -260,7 +251,7 @@ export default function VCHealthScoreBento({
           onClick={onCardClick ? () => onCardClick("payments") : undefined}
         />
 
-        {/* Today's Collection */}
+        {}
         <MetricCard
           label="Today"
           value={formatCurrency(overview.collectedToday)}
@@ -268,7 +259,7 @@ export default function VCHealthScoreBento({
           accent="text-emerald-400"
         />
 
-        {/* Payment Rate */}
+        {}
         <MetricCard
           label="Rate"
           value={`${payRate}%`}
@@ -277,7 +268,7 @@ export default function VCHealthScoreBento({
           onClick={onCardClick ? () => onCardClick("paid") : undefined}
         />
 
-        {/* Students */}
+        {}
         <MetricCard
           label="Students"
           value={String(overview.totalStudents)}
@@ -286,7 +277,7 @@ export default function VCHealthScoreBento({
           onClick={onCardClick ? () => onCardClick("paid") : undefined}
         />
 
-        {/* Defaulters */}
+        {}
         <MetricCard
           label="Defaulters"
           value={String(overview.defaulters)}

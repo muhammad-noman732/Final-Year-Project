@@ -11,7 +11,7 @@ export default function CTASection() {
       className="relative py-28 md:py-40 overflow-hidden"
       style={{ background: "linear-gradient(180deg, #07090f 0%, #05080f 100%)" }}
     >
-      {/* Aurora blobs — warm gold */}
+      {}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <div
           className="absolute -top-20 -left-20 w-[600px] h-[600px] rounded-full"
@@ -29,7 +29,7 @@ export default function CTASection() {
             animation: "hero-orb-b 22s ease-in-out infinite",
           }}
         />
-        {/* Fine dot grid */}
+        {}
         <div
           className="absolute inset-0 opacity-[0.14]"
           style={{
@@ -37,7 +37,7 @@ export default function CTASection() {
             backgroundSize: "30px 30px",
           }}
         />
-        {/* Top separator */}
+        {}
         <div
           className="absolute top-0 left-0 right-0 h-px"
           style={{
@@ -76,7 +76,7 @@ export default function CTASection() {
             </Link>
           </MagneticButton>
 
-          {/* Trust signal */}
+          {}
           <p className="mt-6 text-[12px] text-white/25 font-medium">
             No credit card required · Set up in minutes · Cancel anytime
           </p>

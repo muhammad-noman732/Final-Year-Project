@@ -18,7 +18,6 @@ import {
 } from "@/types/server/registration.types"
 import { ValidationError } from "@/lib/utils/AppError"
 
-// Normalise CSV header names — exported systems may use various casings
 function normaliseRow(raw: Record<string, string>): Record<string, string> {
   const headerMap: Record<string, string> = {
     full_name: "fullName",
@@ -235,7 +234,6 @@ export class RegistrationService {
       (p) => p.count / p.capacity >= CAPACITY_WARNING,
     ).length
 
-    // Daily activity for the past 30 days, filling zeros for empty days
     const dailyMap = new Map<string, number>()
     for (const { importedAt } of activityRaw) {
       const key = importedAt.toISOString().slice(0, 10)
@@ -292,7 +290,6 @@ export class RegistrationService {
 
     const insightRows: Parameters<typeof this.insightRepo.createMany>[0] = []
 
-    // 1. Capacity Alerts
     for (const row of byProgram) {
       const count = row._count.id
       const capacity = PROGRAM_CAPACITY[row.department] ?? 500
@@ -313,7 +310,6 @@ export class RegistrationService {
       }
     }
 
-    // 2. Department Comparison — flag programs 20%+ below average
     const totalApplicants = byProgram.reduce((s, r) => s + r._count.id, 0)
     const avgCount = totalApplicants / byProgram.length
     for (const row of byProgram) {
@@ -332,7 +328,6 @@ export class RegistrationService {
       }
     }
 
-    // 3. Prediction — ETA to capacity based on 30-day daily import rate
     const activityRaw = await this.applicantRepo.getDailyActivityLast30Days(tenantId)
     const dailyAvg = activityRaw.length > 0 ? activityRaw.length / 30 : 0
     if (dailyAvg > 0) {
@@ -355,7 +350,6 @@ export class RegistrationService {
       }
     }
 
-    // 4. Activity Anomaly — no imports in last 48 h
     if (lastImport) {
       const hoursSince =
         (now.getTime() - lastImport.importedAt.getTime()) / (1000 * 60 * 60)
@@ -371,7 +365,6 @@ export class RegistrationService {
       }
     }
 
-    // 5. Merit Score Summary (current session)
     if (currentSessionRow?.name) {
       const meritData = await this.applicantRepo.getAverageMeritByProgram(
         tenantId,

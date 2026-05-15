@@ -65,7 +65,7 @@ export default function VCStudentsTable({
 
   return (
     <div className="relative overflow-hidden rounded-2xl border border-white/60 dark:border-white/[0.06] bg-white/40 dark:bg-navy-900/40 backdrop-blur-md shadow-[0_8px_32px_rgba(0,0,0,0.04)]">
-      {/* ── Loading overlay when refetching existing data ── */}
+      {}
       {isLoading && hasRows && (
         <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/40 dark:bg-navy-900/60 backdrop-blur-sm">
           <div className="flex items-center gap-2 rounded-xl border border-white/60 dark:border-white/[0.06] bg-white/80 dark:bg-navy-800/90 px-4 py-2.5 shadow-xl">
@@ -75,7 +75,7 @@ export default function VCStudentsTable({
         </div>
       )}
 
-      {/* ── Header ── */}
+      {}
       <div className="flex items-center justify-between gap-3 border-b border-slate-200/50 dark:border-white/[0.04] px-5 py-3.5 bg-white/20 dark:bg-transparent">
         <div>
           <p className="text-[12.5px] font-semibold text-[#0F172A] dark:text-foreground">Student Records</p>
@@ -97,7 +97,7 @@ export default function VCStudentsTable({
         )}
       </div>
 
-      {/* ── Table ── */}
+      {}
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
           <thead>
@@ -189,7 +189,7 @@ export default function VCStudentsTable({
         </table>
       </div>
 
-      {/* ── Pagination ── */}
+      {}
       {meta && meta.totalPages > 1 && (
         <div className="flex items-center justify-between border-t border-slate-200/50 dark:border-white/[0.04] px-5 py-3 bg-white/20 dark:bg-transparent">
           <span className="text-[10.5px] text-[#64748B] dark:text-muted-foreground/60">

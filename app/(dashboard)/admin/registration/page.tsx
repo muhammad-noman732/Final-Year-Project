@@ -37,7 +37,7 @@ export default function AdminRegistrationPage() {
 
   return (
     <div className="mx-auto max-w-2xl space-y-8 p-5 lg:p-8 pb-10">
-      {/* Header */}
+      {}
       <div className="space-y-1">
         <h1 className="text-xl font-bold tracking-tight text-[#0F172A] dark:text-foreground">Registration Import</h1>
         <p className="text-sm text-muted-foreground/70">
@@ -46,7 +46,7 @@ export default function AdminRegistrationPage() {
         </p>
       </div>
 
-      {/* CSV Format hint */}
+      {}
       <div className="rounded-xl border border-slate-200/80 dark:border-white/[0.05] bg-slate-50 dark:bg-[#080c18] px-4 py-3">
         <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground/60 dark:text-muted-foreground/45">
           Required CSV Columns
@@ -67,7 +67,7 @@ export default function AdminRegistrationPage() {
         </p>
       </div>
 
-      {/* Drop zone */}
+      {}
       <AnimatePresence mode="wait">
         {!result && (
           <motion.div
@@ -128,7 +128,7 @@ export default function AdminRegistrationPage() {
           </motion.div>
         )}
 
-        {/* Result panel */}
+        {}
         {result && (
           <motion.div
             key="result"
@@ -137,7 +137,7 @@ export default function AdminRegistrationPage() {
             exit={{ opacity: 0 }}
             className="rounded-2xl border border-slate-200/80 dark:border-white/[0.06] bg-white/90 dark:bg-[#080c18] p-6 space-y-5"
           >
-            {/* Summary */}
+            {}
             <div className="flex items-start justify-between gap-4">
               <div className="flex items-center gap-3">
                 <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/10">
@@ -159,7 +159,7 @@ export default function AdminRegistrationPage() {
               </button>
             </div>
 
-            {/* Stats row */}
+            {}
             <div className="grid grid-cols-3 gap-3">
               {[
                 { label: "Imported", value: result.totalImported, tone: "text-emerald-400" },
@@ -175,7 +175,7 @@ export default function AdminRegistrationPage() {
               ))}
             </div>
 
-            {/* Errors */}
+            {}
             {result.errors.length > 0 && (
               <div className="space-y-1.5">
                 <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-amber-400/70">
@@ -200,7 +200,7 @@ export default function AdminRegistrationPage() {
         )}
       </AnimatePresence>
 
-      {/* Instructions */}
+      {}
       <div className="rounded-xl border border-slate-200/80 dark:border-white/[0.04] bg-slate-50 dark:bg-[#080c18] p-5 space-y-3">
         <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground/50">
           How it works
@@ -221,7 +221,7 @@ export default function AdminRegistrationPage() {
         ))}
       </div>
 
-      {/* File format example */}
+      {}
       <div className="rounded-xl border border-slate-200/80 dark:border-white/[0.04] bg-slate-50 dark:bg-[#080c18] p-4">
         <div className="flex items-center gap-2 mb-2">
           <FileText className="h-3.5 w-3.5 text-muted-foreground/40" strokeWidth={1.8} />

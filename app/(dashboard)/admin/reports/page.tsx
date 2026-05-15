@@ -1,5 +1,4 @@
 "use client";
-
 import { useState } from "react";
 import { FileBarChart, Users, Building2, CreditCard, Download, Calendar, FileText, Table as TableIcon } from "lucide-react";
 import { Card } from "@/components/ui/card";
@@ -9,30 +8,25 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { DEPARTMENTS, SEMESTERS } from "@/config/constants";
-
 const reportTypes = [
     { id: "collection", title: "Fee Collection Summary", desc: "Overview of all fee collections with breakdowns", icon: FileBarChart, color: "text-emerald-400", bg: "bg-emerald-500/10" },
     { id: "defaulters", title: "Defaulters Report", desc: "Students with pending or overdue payments", icon: Users, color: "text-rose-400", bg: "bg-rose-500/10" },
     { id: "department", title: "Department-wise Collection", desc: "Collection comparison across departments", icon: Building2, color: "text-sky-400", bg: "bg-sky-500/10" },
     { id: "payment-method", title: "Payment Method Analysis", desc: "Breakdown by payment channels", icon: CreditCard, color: "text-gold-400", bg: "bg-gold-500/10" },
 ];
-
 const recentReports = [
     { name: "Fee Collection Summary — Feb 2026", generatedOn: "Feb 25, 2026 3:45 PM", format: "PDF", size: "2.4 MB" },
     { name: "Defaulters Report — Feb 2026", generatedOn: "Feb 24, 2026 11:20 AM", format: "Excel", size: "1.1 MB" },
     { name: "Department Collection — Jan 2026", generatedOn: "Feb 1, 2026 9:00 AM", format: "CSV", size: "540 KB" },
     { name: "Payment Method Analysis — Q4 2025", generatedOn: "Jan 15, 2026 2:30 PM", format: "PDF", size: "3.2 MB" },
 ];
-
 export default function ReportsPage() {
     const [selectedType, setSelectedType] = useState<string | null>(null);
     const [format, setFormat] = useState("pdf");
-
     return (
         <div className="space-y-6 p-5 lg:p-8 pb-10">
             <h1 className="text-2xl font-bold text-[#0F172A] dark:text-foreground tracking-tight">Reports</h1>
-
-            {/* Report Type Cards */}
+            {}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {reportTypes.map((type) => (
                     <Card
@@ -57,8 +51,7 @@ export default function ReportsPage() {
                     </Card>
                 ))}
             </div>
-
-            {/* Configuration Panel */}
+            {}
             {selectedType && (
                 <Card className="glass-card border-0 p-6 animate-count">
                     <h3 className="text-sm font-semibold text-foreground tracking-tight mb-5">
@@ -98,8 +91,7 @@ export default function ReportsPage() {
                             </Select>
                         </div>
                     </div>
-
-                    {/* Format Selector */}
+                    {}
                     <div className="flex items-center gap-3 mb-6">
                         <span className="text-xs text-muted-foreground uppercase tracking-wider">Format:</span>
                         {[
@@ -121,14 +113,12 @@ export default function ReportsPage() {
                             </Button>
                         ))}
                     </div>
-
                     <Button className="bg-gradient-to-r from-gold-600 to-gold-500 text-navy-950 font-semibold shadow-lg shadow-gold-500/20">
                         <Download className="w-4 h-4 mr-2" /> Generate Report
                     </Button>
                 </Card>
             )}
-
-            {/* Recent Reports */}
+            {}
             <Card className="glass-card border-0 overflow-hidden">
                 <div className="px-6 py-4 border-b border-slate-200/80 dark:border-gold-500/5">
                     <h3 className="text-sm font-semibold text-[#0F172A] dark:text-foreground tracking-tight">Recent Reports</h3>

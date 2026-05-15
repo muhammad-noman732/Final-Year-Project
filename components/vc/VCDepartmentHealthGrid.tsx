@@ -38,8 +38,6 @@ const TIER_STYLES: Record<
   },
 }
 
-// ─── Mini Donut ───────────────────────────────────────────────────────────────
-
 function MiniDonut({ rate, color }: { rate: number; color: string }) {
   const r = 14
   const cx = 18
@@ -67,8 +65,6 @@ function MiniDonut({ rate, color }: { rate: number; color: string }) {
     </svg>
   )
 }
-
-// ─── Department Card ──────────────────────────────────────────────────────────
 
 function DeptCard({
   dept,
@@ -99,7 +95,7 @@ function DeptCard({
           : "cursor-default",
       ].join(" ")}
     >
-      {/* Header */}
+      {}
       <div className="flex items-start justify-between gap-2">
         <div className="min-w-0">
           <p className="text-[12.5px] font-semibold text-foreground truncate">
@@ -116,7 +112,7 @@ function DeptCard({
         </span>
       </div>
 
-      {/* Donut + Rate */}
+      {}
       <div className="flex items-center gap-3">
         <MiniDonut rate={dept.paymentRate} color={styles.donut} />
         <div>
@@ -129,7 +125,7 @@ function DeptCard({
         </div>
       </div>
 
-      {/* Stats row */}
+      {}
       <div className="grid grid-cols-2 gap-2 pt-2 border-t border-white/[0.04]">
         <div>
           <p className="text-[9.5px] uppercase tracking-[0.14em] text-muted-foreground/50 mb-0.5">
@@ -153,8 +149,6 @@ function DeptCard({
     </motion.button>
   )
 }
-
-// ─── Root ─────────────────────────────────────────────────────────────────────
 
 export default function VCDepartmentHealthGrid({
   departments,

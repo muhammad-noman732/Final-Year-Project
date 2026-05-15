@@ -29,7 +29,7 @@ function DefaultersSkeleton() {
             <div className="h-5 w-64 bg-slate-100 dark:bg-slate-800 rounded-md" />
           </div>
         </div>
-        
+
         <div className="px-6 py-4 border-b border-white/40 dark:border-white/5 flex justify-between">
           {Array.from({ length: 6 }).map((_, i) => (
             <div key={i} className="h-4 w-20 bg-slate-50 dark:bg-slate-900 rounded" />

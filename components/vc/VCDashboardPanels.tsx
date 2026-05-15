@@ -46,7 +46,7 @@ export default function VCDashboardPanels({
   collectionTrend,
   onSemesterSelect,
 }: VCDashboardPanelsProps) {
-  // Monthly comparison from trend
+
   const monthlyComparison = Array.from(
     collectionTrend.reduce<Map<string, number>>((acc, item) => {
       const monthLabel = item.label.slice(0, 7)
@@ -75,7 +75,7 @@ export default function VCDashboardPanels({
 
   return (
     <div className="grid gap-4">
-      {/* Collection Trend */}
+      {}
       <div className="rounded-xl border border-white/60 dark:border-white/[0.05] bg-white/40 dark:bg-slate-900/40 backdrop-blur-md p-5 shadow-[0_8px_32px_rgba(0,0,0,0.04)]">
         <div className="flex items-center justify-between mb-5">
           <div className="flex items-center gap-2">
@@ -137,7 +137,7 @@ export default function VCDashboardPanels({
           </div>
         )}
 
-        {/* Monthly intel */}
+        {}
         {currentMonth && (
           <>
             <Separator className="bg-slate-200/50 dark:bg-white/[0.04] my-4" />
@@ -180,7 +180,7 @@ export default function VCDashboardPanels({
         )}
       </div>
 
-      {/* Semester Breakdown */}
+      {}
       <div className="rounded-xl border border-white/60 dark:border-white/[0.05] bg-white/40 dark:bg-slate-900/40 backdrop-blur-md p-5 shadow-[0_8px_32px_rgba(0,0,0,0.04)]">
         <div className="flex items-center gap-2 mb-5">
           <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-sky-500/10">

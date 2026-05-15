@@ -34,7 +34,7 @@ function StudentsSkeleton() {
             <div className="h-9 w-32 bg-slate-100 dark:bg-slate-800 rounded-lg" />
           </div>
         </div>
-        
+
         <div className="px-6 py-4 border-b border-white/40 dark:border-white/5 flex gap-12">
           {Array.from({ length: 6 }).map((_, i) => (
             <div key={i} className="h-4 w-24 bg-slate-50 dark:bg-slate-900 rounded" />

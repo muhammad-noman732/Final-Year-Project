@@ -34,14 +34,14 @@ export function welcomeEmailTemplate(
                                     <p style="color: #4b5563; font-size: 16px; line-height: 1.6; margin: 0 0 20px 0;">
                                         Please use the following auto-generated temporary password to log in to the portal for the first time:
                                     </p>
-                                    
+
                                     <div style="background-color: #f3f4f6; border-radius: 8px; padding: 30px; text-align: center; margin: 30px 0;">
                                         <div style="color: #6b7280; font-size: 14px; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px;">Temporary Password</div>
                                         <div style="font-size: 24px; font-weight: bold; color: #2563eb; letter-spacing: 4px; font-family: 'Courier New', Courier, monospace; background: #e5e7eb; display: inline-block; padding: 10px 20px; border-radius: 6px;">
                                             ${tempPassword}
                                         </div>
                                     </div>
-  
+
                                     <div style="text-align: center; margin: 30px 0;">
                                         <a href="${loginUrl}" 
                                            target="_blank"
@@ -49,7 +49,7 @@ export function welcomeEmailTemplate(
                                             Sign In Now
                                         </a>
                                     </div>
-                                    
+
                                     <p style="color: #dc2626; font-size: 14px; line-height: 1.6; margin: 20px 0 0 0; text-align: center; font-weight: bold;">
                                         ⚠️ You will be required to change your password immediately upon first login.
                                     </p>

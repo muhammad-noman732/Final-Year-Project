@@ -1,7 +1,5 @@
 import type { Prisma, PrismaClient } from "@/app/generated/prisma/client"
 
-// Select shapes
-
 const FEE_STRUCTURE_SELECT = {
   id: true,
   semester: true,
@@ -36,13 +34,9 @@ const FEE_STRUCTURE_SELECT = {
   },
 } satisfies Prisma.FeeStructureSelect
 
-// Exported row types
-
 export type FeeStructureRow = Prisma.FeeStructureGetPayload<{
   select: typeof FEE_STRUCTURE_SELECT
 }>
-
-// Repository class
 
 export class FeeStructureRepository {
   constructor(private readonly db: PrismaClient) { }

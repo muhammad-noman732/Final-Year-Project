@@ -11,7 +11,7 @@ export function useDeleteUser() {
       await deactivateUser(userId).unwrap()
       toast.success(`${userName} has been deactivated`)
     } catch {
-      // RTK error middleware handles API error toasts
+
     }
   }
 

@@ -1,6 +1,5 @@
 import { PaginationMeta } from "./shared.types"
 
-//  Fee Structures 
 export type FeeStatusType = "UNPAID" | "PARTIAL" | "PAID" | "OVERDUE" | "WAIVED"
 
 export interface FeeStructure {

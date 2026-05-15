@@ -10,19 +10,17 @@ import {
   logRequestEntry,
 } from "@/lib/proxies/request-context.proxy"
 
-// ── Constants 
 const AUTH_COOKIE = "auth-token"
 
 const PUBLIC_PATHS = [
   "/login",
   "/api/auth/login",
-  "/api/auth/refresh",  // authenticated by refresh-token cookie, not JWT
+  "/api/auth/refresh",  
   "/api/webhooks/stripe",
   "/api/health",
   "/",
 ]
 
-// ── Path helpers 
 function isPublicPath(pathname: string): boolean {
   return PUBLIC_PATHS.some(
     (p) => pathname === p || pathname.startsWith(p + "/")
@@ -39,15 +37,12 @@ function isApiPath(pathname: string): boolean {
   return pathname.startsWith("/api/")
 }
 
-// Error response helper 
 function jsonError(code: string, message: string, status: number): NextResponse {
   return NextResponse.json(
     { success: false, error: { code, message } },
     { status }
   )
 }
-
-// Finalize helper 
 
 function finalizeResponse(
   request: NextRequest,
@@ -60,7 +55,6 @@ function finalizeResponse(
   return response
 }
 
-//  Main proxy 
 export async function authProxy(request: NextRequest): Promise<NextResponse> {
   const { pathname } = request.nextUrl
 
@@ -77,17 +71,15 @@ export async function authProxy(request: NextRequest): Promise<NextResponse> {
   const requestId = injectRequestId(request, requestHeaders)
   logRequestEntry(request, requestId)
 
-  //3. Public paths — no auth needed 
   if (isPublicPath(pathname)) {
     const response = NextResponse.next({ request: { headers: requestHeaders } })
     return finalizeResponse(request, response, requestId)
   }
 
-  // 3.5 Boneyard Bypass
   const userAgent = request.headers.get("user-agent")?.toLowerCase() || ""
   const isBoneyard = process.env.BONEYARD_BYPASS === "true" || userAgent.includes("boneyard") || userAgent.includes("headlesschrome") || userAgent.includes("puppeteer")
   if (isBoneyard) {
-    let bypassRole = "ADMIN" // Default to ADMIN
+    let bypassRole = "ADMIN" 
     if (pathname.startsWith("/vc")) bypassRole = "VC"
     else if (pathname.startsWith("/hod")) bypassRole = "HOD"
     else if (pathname.startsWith("/student")) bypassRole = "STUDENT"
@@ -100,7 +92,6 @@ export async function authProxy(request: NextRequest): Promise<NextResponse> {
     requestHeaders.set("x-user-email", "boneyard@local.dev")
     requestHeaders.set("x-user-first-login", "false")
 
-    // Mock auth/me if the frontend calls it to verify the session
     if (pathname.startsWith("/api/auth/me")) {
       const mockResponse = NextResponse.json({
         success: true,
@@ -121,7 +112,6 @@ export async function authProxy(request: NextRequest): Promise<NextResponse> {
     return finalizeResponse(request, response, requestId)
   }
 
-  // 4. Auth token extraction 
   const token = request.cookies.get(AUTH_COOKIE)?.value
 
   if (!token) {
@@ -133,7 +123,6 @@ export async function authProxy(request: NextRequest): Promise<NextResponse> {
     return finalizeResponse(request, redirectRes, requestId)
   }
 
-  // ── 5. JWT verification ───────────────────────────────────────────
   let payload: Record<string, unknown>
   try {
     const secret = new TextEncoder().encode(process.env.JWT_SECRET)
@@ -149,7 +138,6 @@ export async function authProxy(request: NextRequest): Promise<NextResponse> {
     return finalizeResponse(request, redirectRes, requestId)
   }
 
-  // ── 6. Extract JWT claims ─────────────────────────────────────────
   const userId = payload.userId as string
   const role = payload.role as string
   const tenantId = (payload.tenantId as string) || ""
@@ -179,7 +167,6 @@ export async function authProxy(request: NextRequest): Promise<NextResponse> {
     }
   }
 
-  // 8. Role-based dashboard route protection 
   if (isDashboardPath(pathname) && !isFirstLogin) {
     const allowedPrefix = ROLE_ROUTES[role as keyof typeof ROLE_ROUTES]
     if (!allowedPrefix || !pathname.startsWith(allowedPrefix)) {
@@ -189,7 +176,6 @@ export async function authProxy(request: NextRequest): Promise<NextResponse> {
     }
   }
 
-  // 9. Inject user context headers for downstream route handlers 
   requestHeaders.set("x-user-id", userId)
   requestHeaders.set("x-user-role", role)
   requestHeaders.set("x-tenant-id", tenantId)
@@ -197,7 +183,6 @@ export async function authProxy(request: NextRequest): Promise<NextResponse> {
   requestHeaders.set("x-user-email", email)
   requestHeaders.set("x-user-first-login", String(isFirstLogin))
 
-  // 10. Final response with all headers applied 
   const response = NextResponse.next({
     request: { headers: requestHeaders },
   })

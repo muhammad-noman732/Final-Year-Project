@@ -56,7 +56,7 @@ export function useAddFeeStructure(onSuccess?: () => void) {
 
       // Transform dueDate to ISO string (as expected by backend API payload type)
       // Assuming dueDate from standard <input type="date"> is "YYYY-MM-DD"
-      // We append a basic time to ensure valid ISO
+
       const isoDueDate = new Date(`${data.dueDate}T23:59:59Z`).toISOString()
 
       await createFeeStructure({
@@ -83,7 +83,6 @@ export function useAddFeeStructure(onSuccess?: () => void) {
     }
   })
 
-  // Watch values for live cost computation preview
   const tuitionFee = form.watch("tuitionFee") || 0
   const labFee = form.watch("labFee") || 0
   const libraryFee = form.watch("libraryFee") || 0

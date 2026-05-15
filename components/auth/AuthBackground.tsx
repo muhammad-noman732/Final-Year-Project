@@ -1,10 +1,5 @@
 "use client"
 
-/**
- * AuthBackground
- * Shared animated canvas behind login / change-password cards.
- * All animation is CSS-only (no Framer Motion) for instant paint.
- */
 export function AuthBackground() {
   return (
     <>
@@ -177,20 +172,20 @@ export function AuthBackground() {
       `}</style>
 
       <div className="auth-bg" aria-hidden="true">
-        {/* Aurora orbs */}
+        {}
         <div className="orb orb-gold" />
         <div className="orb orb-teal" />
         <div className="orb orb-blue" />
 
-        {/* Grid layers */}
+        {}
         <div className="hex-grid" />
         <div className="dot-grid" />
 
-        {/* Light beams */}
+        {}
         <div className="beam" />
         <div className="beam beam-2" />
 
-        {/* Floating particles */}
+        {}
         {PARTICLES.map((p, i) => (
           <div
             key={i}
@@ -210,22 +205,21 @@ export function AuthBackground() {
           />
         ))}
 
-        {/* Corner decorative squares */}
+        {}
         <div className="corner-accent corner-tl" />
         <div className="corner-accent corner-br" />
 
-        {/* Vignette + noise */}
+        {}
         <div className="vignette" />
         <div className="noise" />
 
-        {/* Glow bottom line */}
+        {}
         <div className="glow-line" />
       </div>
     </>
   )
 }
 
-// Deterministic particle data (avoids hydration mismatch)
 const PARTICLES = Array.from({ length: 28 }, (_, i) => {
   const seed = (i * 9301 + 49297) % 233280
   const seed2 = (seed * 9301 + 49297) % 233280

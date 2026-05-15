@@ -2,8 +2,6 @@ import { baseApi } from "@/store/api/baseApi"
 import type { ApiResponse } from "@/types/server/shared.types"
 import type { AssignFeePayload, AssignFeeResult } from "@/types/client/store/fee.store.types"
 
-//  RTK Query Slice 
-
 export const feeAssignmentApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
 

@@ -55,9 +55,8 @@ export class DepartmentController {
 
     const result = await this.deptService.createDepartment(tenantId, userId, data)
 
-    // Bust server cache so next GET returns fresh data
     revalidateDepartments(tenantId)
-    revalidatePrograms(tenantId) // programs reference departments
+    revalidatePrograms(tenantId) 
 
     return successResponse(result, 201)
   }

@@ -89,7 +89,7 @@ export default function VCFilterBar({
 }: VCFilterBarProps) {
   return (
     <div className="rounded-xl border border-white/60 dark:border-white/[0.05] bg-white/40 dark:bg-navy-900/40 backdrop-blur-md shadow-[0_8px_32px_rgba(0,0,0,0.04)] p-4">
-      {/* Header row */}
+      {}
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
           <Filter className="h-3.5 w-3.5 text-gold-400" />
@@ -121,7 +121,7 @@ export default function VCFilterBar({
 
       <Separator className="bg-slate-200/50 dark:bg-white/[0.04] mb-3" />
 
-      {/* Filters grid */}
+      {}
       <div className="grid gap-2 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-6">
         <SelectField
           value={filters.departmentId || "all"}
@@ -169,7 +169,7 @@ export default function VCFilterBar({
         />
       </div>
 
-      {/* Optional rows */}
+      {}
       {showSearch && (
         <div className="mt-2">
           <Input

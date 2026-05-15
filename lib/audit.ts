@@ -6,13 +6,13 @@ interface AuditLogInput {
   userId?: string | null
   userEmail?: string | null
   userRole?: string | null
-  action: string        // e.g. "user.login", "password.changed", "tenant.created"
-  entity: string        // e.g. "User", "Tenant", "Payment"
-  entityId: string      // the ID of the record affected
-  oldData?: unknown      // state BEFORE the change (null on CREATE)
-  newData?: unknown      // state AFTER the change (null on DELETE)
+  action: string        
+  entity: string        
+  entityId: string      
+  oldData?: unknown      
+  newData?: unknown      
   ipAddress?: string | null
-  reason?: string | null // optional admin note for the action
+  reason?: string | null 
 }
 
 export async function createAuditLog(input: AuditLogInput): Promise<void> {
@@ -33,8 +33,7 @@ export async function createAuditLog(input: AuditLogInput): Promise<void> {
       },
     })
   } catch (error) {
-    // Audit logging should NEVER crash the main operation.
-    // Log the error and move on.
+
     logger.error(
       {
         event: "audit.log.create_failed",

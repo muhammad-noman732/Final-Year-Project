@@ -46,7 +46,6 @@ export default function CapacityProgress({ data }: Props) {
     )
   }
 
-  // Sort critical first
   const sorted = [...data].sort((a, b) => b.percentage - a.percentage)
 
   return (
@@ -98,7 +97,7 @@ export default function CapacityProgress({ data }: Props) {
                 </div>
               </div>
 
-              {/* Track */}
+              {}
               <div className="h-[5px] w-full overflow-hidden rounded-full bg-white/[0.05]">
                 <motion.div
                   className={`h-full rounded-full ${cfg.bar}`}

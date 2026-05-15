@@ -32,7 +32,7 @@ export default function StickyNav() {
     >
       <div className="max-w-[1240px] mx-auto px-6 lg:px-10">
         <div className="flex items-center justify-between h-[72px]">
-          {/* Logo */}
+          {}
           <Link href="/" className="flex items-center gap-2.5 shrink-0">
             <div className="w-8 h-8 rounded-[10px] bg-gradient-to-br from-[#d4a843] to-[#b8922e] flex items-center justify-center shadow-[0_2px_8px_rgba(212,168,67,0.3)]">
               <span className="text-white font-bold text-[13px] tracking-tight">U</span>
@@ -42,7 +42,7 @@ export default function StickyNav() {
             </span>
           </Link>
 
-          {/* Desktop links - center */}
+          {}
           <div className="hidden md:flex items-center gap-9">
             {NAV_LINKS.map((link) => (
               <a
@@ -55,7 +55,7 @@ export default function StickyNav() {
             ))}
           </div>
 
-          {/* CTA - right */}
+          {}
           <div className="hidden md:flex items-center gap-5">
             <Link
               href="/login"
@@ -78,7 +78,7 @@ export default function StickyNav() {
             </MagneticButton>
           </div>
 
-          {/* Mobile toggle */}
+          {}
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
             className="md:hidden w-10 h-10 flex items-center justify-center rounded-xl text-[#737373] hover:bg-black/[0.03]"
@@ -89,7 +89,7 @@ export default function StickyNav() {
         </div>
       </div>
 
-      {/* Mobile menu */}
+      {}
       {mobileOpen && (
         <div className="md:hidden bg-white/95 backdrop-blur-2xl border-t border-black/[0.04] px-6 py-5 space-y-1">
           {NAV_LINKS.map((link) => (

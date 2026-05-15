@@ -10,7 +10,6 @@ export interface CreatePaymentIntentResult {
   amountPkr: number
 }
 
-
 export interface StripePaymentMetadata {
   tenantId: string
   studentId: string

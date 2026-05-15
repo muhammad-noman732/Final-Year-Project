@@ -58,7 +58,7 @@ export function useHodSSE(): UseHodSSEReturn {
             setLatestEvent(data as SSEPaymentEvent)
           }
         } catch {
-          // Ignore malformed frames
+
         }
       }
 

@@ -28,8 +28,6 @@ export class FeeStructureService {
     private readonly studentRepo: StudentRepository,
   ) { }
 
-  //  List
-
   async getFeeStructures(
     tenantId: string,
     query: ListFeeStructuresQuery,
@@ -58,22 +56,18 @@ export class FeeStructureService {
     return { data, meta: buildPaginationMeta(total, query.page, query.limit) }
   }
 
-  //  Get Single
-
   async getFeeStructure(tenantId: string, id: string): Promise<FeeStructureRow> {
     const feeStructure = await this.feeStructureRepo.findById(tenantId, id)
     if (!feeStructure) throw new NotFoundError("Fee structure not found.")
     return feeStructure
   }
 
-  //  Create
-
   async createFeeStructure(
     tenantId: string,
     adminUserId: string,
     input: CreateFeeStructureInput,
   ): Promise<FeeStructureRow> {
-    // 1. Verify the program belongs to this tenant
+
     const program = await this.programRepo.findById(tenantId, input.programId)
     if (!program) {
       throw new NotFoundError(
@@ -81,7 +75,6 @@ export class FeeStructureService {
       )
     }
 
-    // 2. Unique constraint: one fee structure per program + semester + sessionYear per tenant
     const existing = await this.feeStructureRepo.findByUnique(
       tenantId,
       input.programId,
@@ -94,7 +87,6 @@ export class FeeStructureService {
       )
     }
 
-    // 3. Persist
     const feeStructure = await this.feeStructureRepo.create({
       tenantId,
       programId: input.programId,
@@ -112,13 +104,12 @@ export class FeeStructureService {
       lateFee: input.lateFee,
     })
 
-    // 4. AUTOMATIC ASSIGNMENT: Assign to all matching active students immediately
     try {
       await this.feeAssignmentService.assignFee(tenantId, adminUserId, {
         feeStructureId: feeStructure.id,
       })
     } catch (assignError) {
-      // We don't want to fail the whole creation if assignment fails (e.g., 0 students)
+
       logger.warn(
         {
           event: "fee_structure.auto_assign.failure",
@@ -130,7 +121,6 @@ export class FeeStructureService {
       )
     }
 
-    // 5. Audit log (fire-and-forget)
     this._audit({
       tenantId,
       userId: adminUserId,
@@ -158,8 +148,6 @@ export class FeeStructureService {
     return feeStructure
   }
 
-  //  Update
-
   async updateFeeStructure(
     tenantId: string,
     adminUserId: string,
@@ -169,7 +157,6 @@ export class FeeStructureService {
     const existing = await this.feeStructureRepo.findById(tenantId, id)
     if (!existing) throw new NotFoundError("Fee structure not found.")
 
-    // Recompute totalFee if any fee component is being updated
     const mergedTuition = input.tuitionFee ?? existing.tuitionFee
     const mergedLab = input.labFee ?? existing.labFee
     const mergedLibrary = input.libraryFee ?? existing.libraryFee
@@ -204,7 +191,6 @@ export class FeeStructureService {
       totalFee: newTotal,
     })
 
-    // Cascade to UNPAID/OVERDUE assignments when totalFee or dueDate changed
     const totalFeeChanged = newTotal !== existing.totalFee
     const dueDateChanged = newDueDate.getTime() !== existing.dueDate.getTime()
 
@@ -263,8 +249,6 @@ export class FeeStructureService {
     return updated
   }
 
-  //  Delete
-
   async deleteFeeStructure(
     tenantId: string,
     adminUserId: string,
@@ -273,7 +257,6 @@ export class FeeStructureService {
     const existing = await this.feeStructureRepo.findById(tenantId, id)
     if (!existing) throw new NotFoundError("Fee structure not found.")
 
-    // Block deletion if any student has already paid against this structure
     const paidCount = await this.feeAssignmentRepo.countPaidByFeeStructure(tenantId, id)
     if (paidCount > 0) {
       throw new ConflictError(
@@ -281,15 +264,12 @@ export class FeeStructureService {
       )
     }
 
-    // Capture affected students before deletion for totals recalc
     const affected = await this.feeAssignmentRepo.findUnpaidByFeeStructure(tenantId, id)
     const affectedStudentIds = [...new Set(affected.map((a) => a.studentId))]
 
-    // Delete UNPAID/OVERDUE assignments, then the structure itself
     await this.feeAssignmentRepo.deleteUnpaidByFeeStructure(tenantId, id)
     await this.feeStructureRepo.delete(id, tenantId)
 
-    // Recalculate student totals so ghost fees are cleared immediately
     await this.studentRepo.recalcFeeTotals(tenantId, affectedStudentIds)
 
     this._audit({
@@ -319,8 +299,6 @@ export class FeeStructureService {
       "Fee structure deleted successfully",
     )
   }
-
-  // ─── Private helpers ──────────────────────────────────────────────────────
 
   private _audit(params: {
     tenantId: string

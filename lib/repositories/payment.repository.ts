@@ -8,7 +8,6 @@ import {
   PaymentMethod,
 } from "@/app/generated/prisma/client"
 
-
 const PAYMENT_ASSIGNMENT_INCLUDE = {
   student: {
     include: {
@@ -26,11 +25,8 @@ export type FeeAssignmentWithRelations = Prisma.FeeAssignmentGetPayload<{
   include: typeof PAYMENT_ASSIGNMENT_INCLUDE
 }>
 
-
 export class PaymentRepository {
   constructor(private readonly db: PrismaClient) { }
-
-  //  Payment Intent creation queries 
 
   async getStudentByUserId(
     tenantId: string,
@@ -41,7 +37,6 @@ export class PaymentRepository {
       select: { id: true, studentId: true },
     })
   }
-
 
   async findFeeAssignmentForPayment(
     feeAssignmentId: string,
@@ -59,7 +54,6 @@ export class PaymentRepository {
     })
   }
 
-
   async findExistingPaymentForAssignment(
     feeAssignmentId: string,
   ): Promise<Payment | null> {
@@ -72,7 +66,6 @@ export class PaymentRepository {
       orderBy: { createdAt: "desc" },
     })
   }
-
 
   async createPaymentRecord(data: {
     tenantId: string
@@ -100,8 +93,6 @@ export class PaymentRepository {
     })
   }
 
-  //  Webhook update queries 
-
   async findPaymentByStripeIntentId(
     stripePaymentIntentId: string,
   ): Promise<Payment | null> {
@@ -109,7 +100,6 @@ export class PaymentRepository {
       where: { stripePaymentIntentId },
     })
   }
-
 
   async fulfilPayment(data: {
     paymentId: string
@@ -120,7 +110,7 @@ export class PaymentRepository {
     paidAt: Date
   }): Promise<void> {
     await this.db.$transaction([
-      // 1. Update the Payment record → COMPLETED
+
       this.db.payment.update({
         where: { id: data.paymentId },
         data: {
@@ -130,7 +120,6 @@ export class PaymentRepository {
         },
       }),
 
-      // 2. Update FeeAssignment → PAID
       this.db.feeAssignment.update({
         where: { id: data.feeAssignmentId },
         data: {
@@ -150,7 +139,6 @@ export class PaymentRepository {
     ])
   }
 
-
   async failPayment(paymentId: string): Promise<void> {
     const payment = await this.db.payment.findUnique({
       where: { id: paymentId },
@@ -164,14 +152,12 @@ export class PaymentRepository {
         data: { status: PaymentStatus.FAILED },
       }),
 
-
       this.db.feeAssignment.update({
         where: { id: payment.feeAssignmentId },
         data: { status: FeeStatus.UNPAID },
       }),
     ])
   }
-
 
   async markPaymentProcessing(paymentId: string): Promise<void> {
     await this.db.payment.update({
@@ -180,10 +166,6 @@ export class PaymentRepository {
     })
   }
 
-
-
-  //  Receipt number generation
-
   async generateReceiptNumber(tenantId: string, stripePaymentIntentId: string): Promise<string> {
     const year = new Date().getFullYear()
     const tenant = await this.db.tenant.findUnique({
@@ -191,8 +173,7 @@ export class PaymentRepository {
       select: { shortName: true },
     })
     const prefix = tenant?.shortName?.toUpperCase() ?? "UNI"
-    // Derive a unique suffix from the PI ID (globally unique per Stripe contract).
-    // This avoids the count+1 race that collapses under concurrent inserts.
+
     const suffix = stripePaymentIntentId.replace(/[^A-Za-z0-9]/g, "").slice(-8).toUpperCase()
     return `${prefix}-${year}-${suffix}`
   }

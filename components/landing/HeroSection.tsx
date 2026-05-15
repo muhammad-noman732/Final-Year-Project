@@ -11,7 +11,7 @@ import { ArrowRight } from "lucide-react";
 export default function HeroSection() {
   return (
     <section className="relative bg-[#05080f] overflow-hidden">
-      {/* ── Background effects ── */}
+      {}
       <div className="absolute inset-0 pointer-events-none">
         <div
           className="absolute -top-40 -left-40 w-[800px] h-[800px] rounded-full"

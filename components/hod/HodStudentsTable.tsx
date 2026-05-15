@@ -20,7 +20,7 @@ export default function HodStudentsTable({
 
   return (
     <div className="relative overflow-hidden bg-white/40 dark:bg-slate-900/40 backdrop-blur-md rounded-xl shadow-[0_8px_32px_rgba(0,0,0,0.04)] border border-white/60 dark:border-white/10 transition-all duration-300">
-      
+
       <div className="px-6 py-5 border-b border-slate-100 dark:border-white/5 flex flex-col sm:flex-row items-start sm:items-center gap-4 justify-between">
         <div className="flex items-center gap-3">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#6366F1]/10 text-[#6366F1] border border-[#6366F1]/20 shadow-sm">

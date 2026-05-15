@@ -1,6 +1,5 @@
 import type { Prisma, PrismaClient } from "@/app/generated/prisma/client"
 
-// Select shapes
 const DEPT_SELECT = {
   id: true,
   name: true,
@@ -47,8 +46,6 @@ const DEPT_DETAIL_SELECT = {
     },
   },
 } satisfies Prisma.DepartmentSelect
-
-// Exported row types
 
 export type DepartmentRow = Prisma.DepartmentGetPayload<{ select: typeof DEPT_SELECT }>
 export type DepartmentDetailRow = Prisma.DepartmentGetPayload<{ select: typeof DEPT_DETAIL_SELECT }>

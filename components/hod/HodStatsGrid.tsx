@@ -50,7 +50,7 @@ export default function HodStatsGrid({ overview, sseConnected, newAmountCollecte
       className="grid grid-cols-2 lg:grid-cols-4 gap-6">
       {CARDS.map((card) => {
         const Icon = card.icon
-        
+
         let displayValue: React.ReactNode = ""
         let sub = ""
 
@@ -78,7 +78,7 @@ export default function HodStatsGrid({ overview, sseConnected, newAmountCollecte
         return (
           <motion.div key={card.key} variants={item}>
             <div className="relative overflow-hidden bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-white/10 p-4 h-full transition-all duration-300 hover:shadow-md">
-              
+
               <div className="flex items-center gap-3 mb-3 relative z-10">
                 <div className={`w-9 h-9 rounded-lg ${card.iconBg} flex items-center justify-center flex-shrink-0 shadow-sm`}>
                   <Icon className="w-5 h-5 text-white" strokeWidth={2} />

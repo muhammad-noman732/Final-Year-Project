@@ -1,21 +1,9 @@
-/**
- * admin.validators.ts
- *
- * User, Student, and Fee Structure validators.
- * Department/Program/Session validators have been split into their own files:
- *   - department.validators.ts
- *   - program.validators.ts
- *   - session.validators.ts
- */
 
 import { z } from "zod/v4"
 import { paginationQuerySchema } from "./shared.validators"
 
-// Re-export for backward compat
 export { paginationQuerySchema }
 export type { PaginationQuery } from "./shared.validators"
-
-// ─── User creation (VC or HOD — STUDENT goes through /admin/students) ──
 
 export const createUserSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters").max(100),
@@ -57,8 +45,6 @@ export const listUsersQuerySchema = paginationQuerySchema.extend({
 export type CreateUserInput = z.infer<typeof createUserSchema>
 export type UpdateUserInput = z.infer<typeof updateUserSchema>
 export type ListUsersQuery = z.infer<typeof listUsersQuerySchema>
-
-// ─── Student ───────────────────────────────────────────────────
 
 export const createStudentSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters").max(100),
@@ -107,8 +93,6 @@ export const listStudentsQuerySchema = paginationQuerySchema.extend({
 export type CreateStudentInput = z.infer<typeof createStudentSchema>
 export type UpdateStudentInput = z.infer<typeof updateStudentSchema>
 export type ListStudentsQuery = z.infer<typeof listStudentsQuerySchema>
-
-// ─── Fee Structure ─────────────────────────────────────────────
 
 export const createFeeStructureSchema = z
   .object({

@@ -1,6 +1,5 @@
 import type { Prisma, PrismaClient } from "@/app/generated/prisma/client"
 
-// Select shape 
 const STUDENT_SELECT = {
   id: true,
   studentId: true,
@@ -42,8 +41,7 @@ export class StudentRepository {
     })
   }
 
-  /** Checks @@unique([tenantId, studentId]) — used for conflict detection. */
-  async findByStudentId(
+    async findByStudentId(
     tenantId: string,
     studentId: string,
   ): Promise<{ id: string } | null> {
@@ -53,11 +51,7 @@ export class StudentRepository {
     })
   }
 
-  /**
-   * Looks up the Student record that belongs to the authenticated user.
-   * Used by the student portal — guarantees tenant isolation via userId.
-   */
-  async findByUserId(
+    async findByUserId(
     tenantId: string,
     userId: string,
   ): Promise<StudentRow | null> {
@@ -86,10 +80,7 @@ export class StudentRepository {
     return { data, total }
   }
 
-  /**
-   * Creates User + Student atomically.
-   */
-  async createWithUser(params: {
+    async createWithUser(params: {
     userData: Prisma.UserUncheckedCreateInput
     studentData: Omit<Prisma.StudentUncheckedCreateInput, "userId">
   }): Promise<StudentRow> {
@@ -131,12 +122,7 @@ export class StudentRepository {
     })
   }
 
-  /**
-   * Recalculates and persists the denormalized totalFeeDue on each student.
-   * totalFeeDue = SUM(amountDue - amountPaid) across UNPAID / OVERDUE / PARTIAL assignments.
-   * Called after fee-structure updates or deletes to eliminate ghost fees.
-   */
-  async recalcFeeTotals(tenantId: string, studentIds: string[]): Promise<void> {
+    async recalcFeeTotals(tenantId: string, studentIds: string[]): Promise<void> {
     if (studentIds.length === 0) return
     for (const studentId of studentIds) {
       const { _sum } = await this.db.feeAssignment.aggregate({

@@ -3,19 +3,13 @@ import type { PrismaClient, WebhookEvent } from "@/app/generated/prisma/client"
 export class WebhookRepository {
   constructor(private readonly db: PrismaClient) {}
 
-  /**
-   * Check if a webhook event has already been processed.
-   */
-  async findWebhookEvent(stripeEventId: string): Promise<WebhookEvent | null> {
+    async findWebhookEvent(stripeEventId: string): Promise<WebhookEvent | null> {
     return this.db.webhookEvent.findUnique({
       where: { stripeEventId },
     })
   }
 
-  /**
-   * Create a webhook event record BEFORE processing.
-   */
-  async createWebhookEvent(data: {
+    async createWebhookEvent(data: {
     stripeEventId: string
     type: string
     tenantId: string | null
@@ -32,20 +26,14 @@ export class WebhookRepository {
     })
   }
 
-  /**
-   * Mark a webhook event as successfully processed.
-   */
-  async markWebhookProcessed(stripeEventId: string): Promise<void> {
+    async markWebhookProcessed(stripeEventId: string): Promise<void> {
     await this.db.webhookEvent.update({
       where: { stripeEventId },
       data: { processed: true, processedAt: new Date() },
     })
   }
 
-  /**
-   * Record that a webhook event's handler threw an error.
-   */
-  async markWebhookFailed(stripeEventId: string, reason: string): Promise<void> {
+    async markWebhookFailed(stripeEventId: string, reason: string): Promise<void> {
     await this.db.webhookEvent.update({
       where: { stripeEventId },
       data: {

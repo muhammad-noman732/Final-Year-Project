@@ -42,7 +42,7 @@ export function useUpdateStudent(onSuccess?: () => void) {
         toast.success("Student updated successfully")
         onSuccess?.()
       } catch {
-        // RTK error middleware handles API error toasts
+
       }
     })
 

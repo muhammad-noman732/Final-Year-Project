@@ -29,7 +29,6 @@ export class ProgramService {
       if (!dept) throw new NotFoundError("Department not found")
     }
 
-    //  Build WHERE
     const where: Prisma.ProgramWhereInput = { tenantId }
     const andConditions: Prisma.ProgramWhereInput[] = []
 
@@ -48,7 +47,6 @@ export class ProgramService {
       where.AND = andConditions
     }
 
-    //  Build ORDER BY
     const orderBy: Prisma.ProgramOrderByWithRelationInput[] = [
       { [query.sortBy]: query.sortDir },
       { id: query.sortDir },
@@ -77,7 +75,7 @@ export class ProgramService {
     userId: string,
     input: CreateProgramInput,
   ): Promise<ProgramRow> {
-    // Two independent lookups — run in parallel
+
     const [dept, existing] = await Promise.all([
       this.deptRepo.findById(tenantId, input.departmentId),
       this.programRepo.findByCode(tenantId, input.code),
@@ -166,7 +164,6 @@ export class ProgramService {
     return updated
   }
 
-  //  Private 
   private _audit(params: {
     tenantId: string
     userId: string

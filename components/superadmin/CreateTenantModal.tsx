@@ -25,7 +25,7 @@ export function CreateTenantModal() {
           Add University
         </button>
       </DialogTrigger>
-      
+
       <DialogContent className="sm:max-w-[500px] border-border/50 bg-white dark:bg-navy-950 p-0 overflow-hidden shadow-2xl rounded-2xl">
         <div className="p-6 space-y-6">
             <DialogHeader>
@@ -84,7 +84,7 @@ export function CreateTenantModal() {
 
                 <div className="pt-2 border-t border-border/50">
                 <h4 className="text-xs font-bold uppercase tracking-[0.15em] text-muted-foreground/60 mb-4">Initial Administrator</h4>
-                
+
                 <div className="space-y-4">
                     <div className="space-y-1.5">
                     <label className="text-xs font-bold uppercase tracking-widest text-muted-foreground/70">

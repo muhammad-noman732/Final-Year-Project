@@ -71,7 +71,7 @@ export function useUpdateFeeStructure(onSuccess?: () => void) {
         toast.success("Fee structure updated successfully")
         onSuccess?.()
       } catch {
-        // RTK error middleware handles API error toasts
+
       }
     })
 

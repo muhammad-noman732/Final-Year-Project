@@ -20,8 +20,6 @@ export default function HodDashboardClient({ initialData }: HodDashboardClientPr
   return (
     <div className="relative isolate space-y-6 pb-10 min-h-[calc(100dvh-3.5rem)] transition-colors duration-300">
 
-
-
       <AnimatePresence>
         {showToast && (
           <motion.div

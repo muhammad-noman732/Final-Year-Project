@@ -12,7 +12,6 @@ export function useGetFeeStructures() {
   const [selectedSession, setSelectedSession] = useState("all")
   const [page, setPage] = useState(1)
 
-  // Filter options from the server
   const { data: deptsRes } = useGetDepartmentsQuery({ limit: 100 })
   const { data: progsRes } = useGetProgramsQuery({
     limit: 100,
@@ -25,7 +24,6 @@ export function useGetFeeStructures() {
   const sessions = sessRes?.data?.data ?? []
   const semesters = Array.from({ length: 12 }, (_, i) => i + 1)
 
-  // Build backend query
   const queryParams: ListFeeStructuresQueryParams = {
     page,
     limit: 10,
@@ -38,7 +36,6 @@ export function useGetFeeStructures() {
   const feeStructures = response?.data?.data ?? []
   const meta = response?.data?.meta ?? { total: 0, totalPages: 1, page: 1, limit: 10 }
 
-  // Reset dependent filters
   const handleDeptChange = (val: string) => {
     setSelectedDept(val)
     setSelectedProgram("all")
@@ -65,11 +62,11 @@ export function useGetFeeStructures() {
     selectedProgram, handleProgramChange,
     selectedSemester, handleSemesterChange,
     selectedSession, handleSessionChange,
-    
+
     departments, programs, sessions, semesters,
-    
+
     page, setPage,
-    
+
     feeStructures, meta, isLoading, isFetching,
   }
 }

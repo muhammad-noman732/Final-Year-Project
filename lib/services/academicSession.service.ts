@@ -20,14 +20,13 @@ export class AcademicSessionService {
     tenantId: string,
     query: ListSessionsQuery,
   ): Promise<PaginatedResult<AcademicSessionRow>> {
-    //  Build WHERE 
+
     const where: Prisma.AcademicSessionWhereInput = { tenantId }
 
     if (query.isCurrent !== undefined) {
       where.isCurrent = query.isCurrent
     }
 
-    // ── Build ORDER BY ──────────────────────────────────────────
     const orderBy: Prisma.AcademicSessionOrderByWithRelationInput[] = [
       { [query.sortBy]: query.sortDir },
       { id: query.sortDir },
@@ -67,7 +66,6 @@ export class AcademicSessionService {
       isCurrent: input.isCurrent ?? false,
     })
 
-    // If marked as current, atomically flip all others to false
     if (input.isCurrent) {
       session = await this.sessionRepo.makeCurrent(tenantId, session.id)
     }
@@ -102,7 +100,7 @@ export class AcademicSessionService {
     if (!session) throw new NotFoundError("Academic session not found")
 
     if (session.isCurrent) {
-      return session // already current — no-op
+      return session 
     }
 
     const updated = await this.sessionRepo.makeCurrent(tenantId, id)
@@ -128,7 +126,6 @@ export class AcademicSessionService {
     return updated
   }
 
-  // ── Private 
   private _audit(params: {
     tenantId: string
     userId: string

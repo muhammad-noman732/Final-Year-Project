@@ -133,7 +133,7 @@ export default function RegistrationInsightsPanel({ insightsUpdatedAt }: Props) 
       if (json.success && Array.isArray(json.data) && isMounted.current) {
         setInsights(json.data)
       }
-    } catch { /* non-critical */ }
+    } catch {  }
     finally { if (isMounted.current) setInitialLoad(false) }
   }, [])
 
@@ -147,7 +147,7 @@ export default function RegistrationInsightsPanel({ insightsUpdatedAt }: Props) 
     try {
       const res = await fetch(`/api/vc/insights/${id}/read`, { method: "PATCH" })
       if (res.ok && isMounted.current) setInsights((prev) => prev.filter((i) => i.id !== id))
-    } catch { /* silent */ }
+    } catch {  }
     finally {
       if (isMounted.current) {
         setDismissingIds((prev) => { const next = new Set(prev); next.delete(id); return next })

@@ -13,7 +13,7 @@ export default function FlowDiagram() {
       <div className="flex items-center justify-between">
         {NODES.map((node, i) => (
           <div key={node.label} className="flex items-center flex-1 min-w-0">
-            {/* Node */}
+            {}
             <div className="flex flex-col items-center gap-2 min-w-0 flex-shrink-0">
               <div
                 className="animate-flow-node w-9 h-9 rounded-full border-2 flex items-center justify-center"
@@ -33,7 +33,7 @@ export default function FlowDiagram() {
               </span>
             </div>
 
-            {/* Connector (not after last node) */}
+            {}
             {i < NODES.length - 1 && (
               <div className="flex-1 mx-2 mb-4 flow-connector" />
             )}

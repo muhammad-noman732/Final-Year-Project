@@ -6,7 +6,7 @@ export function injectRequestId(
   request: NextRequest,
   requestHeaders: Headers
 ): string {
-  // Respect upstream proxy (Nginx) if it already set a request ID
+
   const existingId = request.headers.get("x-request-id")
   const requestId = existingId || crypto.randomUUID()
 
@@ -15,9 +15,6 @@ export function injectRequestId(
   return requestId
 }
 
-/**
- * Copies the x-request-id onto the response headers so the client can correlate.
- */
 export function applyRequestIdToResponse(
   requestId: string,
   response: NextResponse
@@ -25,7 +22,6 @@ export function applyRequestIdToResponse(
   response.headers.set("x-request-id", requestId)
   return response
 }
-
 
 export function logRequestEntry(
   request: NextRequest,

@@ -12,18 +12,15 @@ export function usePaymentSuccess() {
     const router = useRouter();
     const searchParams = useSearchParams();
 
-    // URL params injected by the payfee page after Stripe confirms
     const assignmentId = searchParams.get("assignmentId");
     const amountParam = searchParams.get("amount");
     const semesterParam = searchParams.get("semester");
     const programParam = searchParams.get("program");
     const paymentIntentId = searchParams.get("payment_intent");
-    const paymentStatus = searchParams.get("redirect_status"); // 'succeeded' | 'failed'
+    const paymentStatus = searchParams.get("redirect_status"); 
 
-    // If the user landed here from a Stripe redirect (3DS), check for failure
     const stripeRedirectFailed = paymentStatus !== null && paymentStatus !== "succeeded";
 
-    // Invalidate StudentFeeProfile cache so dashboard shows PAID
     const [invalidate, { isLoading: invalidating }] = useInvalidateFeeProfileMutation();
     const { data: feeProfile, isLoading: profileLoading } = useGetMyFeeProfileQuery();
     const [cacheInvalidated, setCacheInvalidated] = useState(false);
@@ -43,7 +40,6 @@ export function usePaymentSuccess() {
 
     const isLoading = profileLoading || invalidating;
 
-    // Resolve receipt data
     const semester = semesterParam ? parseInt(semesterParam, 10) : null;
     const program = programParam ? decodeURIComponent(programParam) : null;
     const amountPkr = amountParam ? parseInt(amountParam, 10) : null;

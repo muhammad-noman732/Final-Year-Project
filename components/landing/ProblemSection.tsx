@@ -35,7 +35,7 @@ export default function ProblemSection() {
       className="relative py-28 md:py-36 overflow-hidden"
       style={{ background: "linear-gradient(180deg, #07090f 0%, #05080f 100%)" }}
     >
-      {/* Dot grid */}
+      {}
       <div
         className="absolute inset-0 opacity-[0.14] pointer-events-none"
         style={{
@@ -43,7 +43,7 @@ export default function ProblemSection() {
           backgroundSize: "28px 28px",
         }}
       />
-      {/* Top separator */}
+      {}
       <div className="absolute top-0 left-0 right-0 h-px" style={{ background: "linear-gradient(90deg, transparent, rgba(212,168,67,0.18) 50%, transparent)" }} />
 
       <div className="relative z-10 max-w-[1240px] mx-auto px-6 lg:px-10">

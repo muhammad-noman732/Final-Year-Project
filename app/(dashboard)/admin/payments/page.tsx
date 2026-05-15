@@ -1,5 +1,4 @@
 "use client";
-
 import { useState, useEffect } from "react";
 import { Banknote, TrendingUp, Clock, AlertTriangle, Eye } from "lucide-react";
 import { Card } from "@/components/ui/card";
@@ -9,14 +8,12 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { ScrollArea } from "@/components/ui/scroll-area";
 import StatusBadge from "@/components/shared/StatusBadge";
 import { formatCurrency, formatFullCurrency, PAYMENT_METHOD_LABELS } from "@/config/constants";
-
 const stats = [
     { label: "Total Collected", value: "PKR 62.5M", icon: Banknote, color: "text-emerald-400", bg: "bg-emerald-500/10" },
     { label: "Today's Collection", value: "PKR 450K", icon: TrendingUp, color: "text-gold-400", bg: "bg-gold-500/10" },
     { label: "Pending Verification", value: "12", icon: Clock, color: "text-amber-400", bg: "bg-amber-500/10" },
     { label: "Failed Payments", value: "3", icon: AlertTriangle, color: "text-rose-400", bg: "bg-rose-500/10" },
 ];
-
 const payments = [
     { id: "TXN-2026-00456", student: "Ahmed Hassan", department: "Computer Science", amount: 50000, method: "stripe", dateTime: "Feb 26, 2026 12:45 PM", status: "paid" },
     { id: "TXN-2026-00455", student: "Fatima Zahra", department: "Computer Science", amount: 50000, method: "jazzcash", dateTime: "Feb 26, 2026 12:30 PM", status: "paid" },
@@ -27,7 +24,6 @@ const payments = [
     { id: "TXN-2026-00450", student: "Omar Farooq", department: "Biology", amount: 45000, method: "jazzcash", dateTime: "Feb 26, 2026 11:05 AM", status: "paid" },
     { id: "TXN-2026-00449", student: "Hina Tariq", department: "Physics", amount: 48000, method: "stripe", dateTime: "Feb 26, 2026 10:48 AM", status: "paid" },
 ];
-
 const liveEventPool = [
     { name: "Muhammad Rizwan", dept: "CS", amount: 50000, method: "Stripe" },
     { name: "Sana Fatima", dept: "BIO", amount: 48000, method: "JazzCash" },
@@ -36,10 +32,8 @@ const liveEventPool = [
     { name: "Hamza Tariq", dept: "CS", amount: 50000, method: "Bank" },
     { name: "Zainab Bibi", dept: "BIO", amount: 48000, method: "Stripe" },
 ];
-
 export default function PaymentsPage() {
     const [liveEvents, setLiveEvents] = useState<Array<{ id: number; name: string; dept: string; amount: number; method: string; time: string; status: string }>>([]);
-
     useEffect(() => {
         const initial = liveEventPool.slice(0, 3).map((e, i) => ({
             ...e,
@@ -48,7 +42,6 @@ export default function PaymentsPage() {
             status: "success",
         }));
         setLiveEvents(initial);
-
         let counter = 3;
         const interval = setInterval(() => {
             const event = liveEventPool[counter % liveEventPool.length];
@@ -59,17 +52,14 @@ export default function PaymentsPage() {
             ]);
             counter++;
         }, 4000);
-
         return () => clearInterval(interval);
     }, []);
-
     return (
         <div className="space-y-6 p-5 lg:p-8 pb-10">
             <div className="flex items-center justify-between">
                 <h1 className="text-2xl font-bold text-[#0F172A] dark:text-foreground tracking-tight">Payments</h1>
             </div>
-
-            {/* Stats */}
+            {}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 stagger-children">
                 {stats.map((stat) => (
                     <Card key={stat.label} className="glass-card glass-card-hover border-0 p-5 cursor-default transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
@@ -83,9 +73,8 @@ export default function PaymentsPage() {
                     </Card>
                 ))}
             </div>
-
             <div className="grid lg:grid-cols-3 gap-6">
-                {/* ═══ LIVE FEED ═══ */}
+                {}
                 <Card className="glass-card border-0 lg:col-span-1 overflow-hidden">
                     <div className="px-4 py-3 border-b border-slate-200/80 dark:border-gold-500/5 flex items-center gap-2">
                         <div className="relative w-2 h-2">
@@ -124,8 +113,7 @@ export default function PaymentsPage() {
                         </div>
                     </ScrollArea>
                 </Card>
-
-                {/* ═══ PAYMENTS TABLE ═══ */}
+                {}
                 <Card className="glass-card border-0 lg:col-span-2 overflow-hidden">
                     <div className="px-4 py-3 border-b border-slate-200/80 dark:border-gold-500/5 flex flex-wrap items-center gap-3">
                         <Select defaultValue="all">

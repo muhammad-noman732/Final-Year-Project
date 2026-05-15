@@ -10,8 +10,6 @@ import type {
   FeeProfileSummary,
 } from "@/types/client/store/student.store.types"
 
-//  Countdown types 
-
 export interface CountdownTime {
   days: number
   hours: number
@@ -19,47 +17,36 @@ export interface CountdownTime {
   seconds: number
 }
 
-//  Flattened payment + label 
-
 export interface FlatPayment extends StudentPayment {
   assignmentLabel: string
   assignmentSemester: number
 }
 
-//  Full hook return type 
-
 export interface UseStudentDashboardReturn {
-  // Profile data
+
   profile: StudentProfile | undefined
   assignments: FeeAssignment[]
   summary: FeeProfileSummary | undefined
 
-  // Current unpaid/overdue assignment (null if all paid or no fee assigned)
   current: FeeAssignment | null
-  isPaid: boolean         // true when there are assignments AND none are unpaid/overdue
-  hasNoFee: boolean       // true when no assignments have been made yet
-  isOverdue: boolean      // true when current assignment is OVERDUE
+  isPaid: boolean         
+  hasNoFee: boolean       
+  isOverdue: boolean      
 
-  // Derived stats
   feeStatus: FeeStatus | null
   paidSemestersCount: number
   latestPaidAssignment: FeeAssignment | null
 
-  // Payment history (all payments across all assignments, newest first)
   allPayments: FlatPayment[]
 
-  // Countdown for the current assignment deadline
   countdown: CountdownTime
 
-  // Progress bar showing elapsed time between semester start and due date (0–100)
   progressPct: number
 
-  // UI state
   isLoading: boolean
   isFetching: boolean
   isError: boolean
 
-  // Payment history panel toggle
   historyOpen: boolean
   setHistoryOpen: (open: boolean) => void
 
@@ -67,15 +54,11 @@ export interface UseStudentDashboardReturn {
   setIsNavigating: (navigating: boolean) => void
 }
 
-//  Ordinal helper 
-
 export function ordinal(n: number): string {
   const s = ["th", "st", "nd", "rd"]
   const v = n % 100
   return n + (s[(v - 20) % 10] ?? s[v] ?? s[0])
 }
-
-//  Countdown computation 
 
 function computeCountdown(target: Date | null): CountdownTime {
   if (!target) return { days: 0, hours: 0, minutes: 0, seconds: 0 }
@@ -89,8 +72,6 @@ function computeCountdown(target: Date | null): CountdownTime {
   }
 }
 
-//  Hook 
-
 export function useStudentDashboard(): UseStudentDashboardReturn {
   const { data, isLoading, isFetching, isError } = useGetMyFeeProfileQuery()
 
@@ -99,8 +80,6 @@ export function useStudentDashboard(): UseStudentDashboardReturn {
   const [countdown, setCountdown] = useState<CountdownTime>(
     { days: 0, hours: 0, minutes: 0, seconds: 0 },
   )
-
-  //  Derived values 
 
   const assignments: FeeAssignment[] = data?.assignments ?? []
   const profile: StudentProfile | undefined = data?.student
@@ -125,7 +104,6 @@ export function useStudentDashboard(): UseStudentDashboardReturn {
   const latestPaidAssignment: FeeAssignment | null =
     assignments.find((a) => a.status === "PAID") ?? null
 
-  // Flatten all payments across all assignments, newest first, with label
   const allPayments: FlatPayment[] = assignments
     .flatMap((a) =>
       a.payments.map((p) => ({
@@ -139,14 +117,11 @@ export function useStudentDashboard(): UseStudentDashboardReturn {
         new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
     )
 
-  // Progress bar: elapsed time from session start → due date (approximate)
   const sessionStartYear = profile?.session?.startYear ?? new Date().getFullYear()
   const sessionStart = new Date(`${sessionStartYear}-08-01`)
   const elapsed = Date.now() - sessionStart.getTime()
   const total = (dueDate?.getTime() ?? Date.now()) - sessionStart.getTime()
   const progressPct = Math.min(100, Math.max(0, total > 0 ? (elapsed / total) * 100 : 0))
-
-  // ── Countdown ticker ────────────────────────────────────────────────────────
 
   const tick = useCallback(() => {
     setCountdown(computeCountdown(dueDate))

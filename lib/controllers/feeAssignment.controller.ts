@@ -5,7 +5,6 @@ import { revalidateFeeStructures } from "@/lib/cache"
 import type { FeeAssignmentService } from "@/lib/services/feeAssignment.service"
 import { assignFeeSchema } from "@/lib/validators/feeAssignment.validators"
 
-//  Controller 
 export class FeeAssignmentController {
   constructor(private readonly feeAssignmentService: FeeAssignmentService) { }
 

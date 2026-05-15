@@ -16,7 +16,6 @@ export const studentApi = baseApi.injectEndpoints({
       providesTags: ["StudentFeeProfile"],
     }),
 
-
     createPaymentIntent: build.mutation<
       PaymentIntentApiResponse,
       { feeAssignmentId: string }

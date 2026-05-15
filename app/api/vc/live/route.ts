@@ -1,13 +1,6 @@
 import { getTenantContext, requireRole } from "@/lib/auth"
 import { createRedisSubscriber, sseChannel } from "@/lib/redis"
 
-/**
- * GET /api/vc/live
- *
- * Server-Sent Events endpoint for real-time payment notifications.
- * Each connection creates its own Redis subscriber so events are delivered
- * correctly regardless of how many server processes are running.
- */
 export async function GET() {
   const { tenantId } = await getTenantContext()
   await requireRole("VC", "ADMIN")
@@ -16,7 +9,6 @@ export async function GET() {
   const subscriber = createRedisSubscriber()
   const encoder = new TextEncoder()
 
-  // Subscribe before the stream opens so no events are missed during setup
   await subscriber.subscribe(channel)
 
   let keepaliveInterval: ReturnType<typeof setInterval> | null = null
@@ -29,7 +21,7 @@ export async function GET() {
         try {
           controller.enqueue(encoder.encode(`data: ${message}\n\n`))
         } catch {
-          // Stream already closed — client disconnected before cancel() fired
+
         }
       })
 

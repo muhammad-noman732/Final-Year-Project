@@ -38,7 +38,6 @@ export class HodService {
     const department = await this.getHodDepartment(userId, tenantId)
     const today = this.todayRange()
 
-    // 1. Run heavy aggregations and small queries in parallel
     const [
       stats,
       allTimePayments,
@@ -59,7 +58,7 @@ export class HodService {
         paidAt: { gte: today.from, lte: today.to },
       }),
       this.hodRepo.findLivePayments(department.id, tenantId),
-      // Only fetch the top 50 defaulters for the dashboard view to keep it fast
+
       this.hodRepo.findAssignments({
         tenantId,
         status: { in: [FeeStatus.UNPAID, FeeStatus.OVERDUE] },
@@ -71,8 +70,6 @@ export class HodService {
     const collectedToday = todayPayments._sum.amount ?? 0
     const paymentsToday = todayPayments._count.id
 
-    // We still need canonical logic for breakdown, but we'll fetch a smaller set if needed
-    // For now, let's keep the breakdown logic but optimize the overview
     const canonical = this.buildCanonical(defaulterRows)
 
     const [

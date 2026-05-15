@@ -66,7 +66,7 @@ export default function AdminTransactionTable({
 
   return (
     <div className="flex flex-col overflow-hidden rounded-2xl border border-white/60 dark:border-white/[0.06] bg-gradient-to-br from-white/80 to-white/40 dark:from-navy-900/60 dark:to-navy-900/40 backdrop-blur-md shadow-sm dark:shadow-none transition-all duration-300">
-      {/* Table Header */}
+      {}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-5 py-4 border-b border-slate-200/50 dark:border-white/[0.05]">
         <div className="flex items-center gap-1 p-0.5 rounded-xl bg-white/60 dark:bg-white/[0.03] border border-slate-200/50 dark:border-white/[0.04] self-start shadow-sm dark:shadow-none">
           {TABS.map((tab) => (
@@ -112,7 +112,7 @@ export default function AdminTransactionTable({
         </div>
       </div>
 
-      {/* Table */}
+      {}
       <div className="overflow-x-auto flex-1">
         <table className="w-full text-sm">
           <thead>
@@ -143,7 +143,7 @@ export default function AdminTransactionTable({
         </table>
       </div>
 
-      {/* Pagination */}
+      {}
       {meta.totalPages > 1 && (
         <div className="flex items-center justify-between px-5 py-3 border-t border-slate-200/50 dark:border-white/[0.04]">
           <span className="text-[11px] font-medium text-slate-500 dark:text-muted-foreground/60">

@@ -29,8 +29,7 @@ export class InsightRepository {
     return this.db.insight.deleteMany({ where: { tenantId, module } })
   }
 
-  /** @deprecated — use deleteByModule to avoid cross-module deletion */
-  deleteAllForTenant(tenantId: string) {
+    deleteAllForTenant(tenantId: string) {
     return this.db.insight.deleteMany({ where: { tenantId } })
   }
 }

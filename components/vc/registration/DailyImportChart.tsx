@@ -36,7 +36,7 @@ function formatDateLabel(dateStr: string): string {
 }
 
 export default function DailyImportChart({ data }: Props) {
-  // Show only every 5th label to avoid crowding
+
   const labelledData = data.map((d, i) => ({
     ...d,
     label: i % 5 === 0 ? formatDateLabel(d.date) : "",

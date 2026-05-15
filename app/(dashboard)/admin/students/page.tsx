@@ -32,7 +32,6 @@ export default function StudentsPage() {
         selectedRows, toggleRow, toggleAll, clearSelection,
     } = useGetStudents();
 
-    // ── Add Student ───────────────────────────────────────────────
     const [isAddOpen, setIsAddOpen] = useState(false);
     const { form: addForm, onSubmit: addOnSubmit, isLoading: isCreating } = useAddStudent(() => setIsAddOpen(false));
     const { register: addRegister, formState: { errors: addErrors }, setValue: addSetValue, watch: addWatch } = addForm;
@@ -42,10 +41,8 @@ export default function StudentsPage() {
     const watchCurrentSemester = addWatch("currentSemester");
     const formPrograms = watchDeptId ? programs.filter((p) => p.department.id === watchDeptId) : [];
 
-    // ── View Student ──────────────────────────────────────────────
     const [viewStudent, setViewStudent] = useState<Student | null>(null);
 
-    // ── Edit Student ──────────────────────────────────────────────
     const [editStudent, setEditStudent] = useState<Student | null>(null);
     const { form: editForm, onSubmit: editOnSubmit, isLoading: isUpdating, populateForm } = useUpdateStudent(() => setEditStudent(null));
     const { register: editRegister, formState: { errors: editErrors }, setValue: editSetValue, watch: editWatch } = editForm;
@@ -55,17 +52,15 @@ export default function StudentsPage() {
         populateForm(student);
     }, [populateForm]);
 
-    // ── Delete Student ────────────────────────────────────────────
     const { handleDelete, isDeleting } = useDeleteStudent();
     const [deleteStudentState, setDeleteStudentState] = useState<{ id: string; name: string } | null>(null);
 
-    // ── Summary Stats ─────────────────────────────────────────────
     const activeCount = students.filter(s => s.enrollmentStatus === "ACTIVE").length;
     const suspendedCount = students.filter(s => s.enrollmentStatus === "SUSPENDED").length;
 
     return (
         <div className="space-y-6 pb-10">
-            {/* ═══ HEADER ═══ */}
+            {}
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div>
                     <h1 className="text-2xl font-bold text-[#0F172A] dark:text-foreground tracking-tight">
@@ -81,7 +76,7 @@ export default function StudentsPage() {
                 </Button>
             </div>
 
-            {/* ═══ SUMMARY CARDS ═══ */}
+            {}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                 <Card className="glass-card border-0 p-4 flex items-center gap-3">
                     <div className="w-10 h-10 rounded-xl bg-gold-500/10 flex items-center justify-center flex-shrink-0">
@@ -121,7 +116,7 @@ export default function StudentsPage() {
                 </Card>
             </div>
 
-            {/* ═══ FILTERS ═══ */}
+            {}
             <Card className="glass-card border-0 p-4">
                 <div className="flex flex-col lg:flex-row gap-3">
                     <div className="relative flex-1">
@@ -183,7 +178,7 @@ export default function StudentsPage() {
                 </div>
             </Card>
 
-            {/* ═══ BULK ACTIONS ═══ */}
+            {}
             {selectedRows.size > 0 && (
                 <div className="flex items-center gap-3 px-4 py-3 rounded-xl bg-gold-500/5 border border-gold-500/15 animate-count">
                     <span className="text-sm text-gold-400 font-medium">
@@ -199,7 +194,7 @@ export default function StudentsPage() {
                 </div>
             )}
 
-            {/* ═══ TABLE ═══ */}
+            {}
             <Skeleton name="students-table" loading={isLoading}>
                 <Card className="glass-card border-0 overflow-hidden">
                     <div className="overflow-x-auto">
@@ -297,7 +292,7 @@ export default function StudentsPage() {
                         </Table>
                     </div>
 
-                    {/* Pagination */}
+                    {}
                     <div className="flex items-center justify-between px-4 py-3 border-t border-gold-500/5">
                         <p className="text-xs text-muted-foreground">
                             Showing {students.length} of {meta.total} students
@@ -329,7 +324,7 @@ export default function StudentsPage() {
                 </Card>
             </Skeleton>
 
-            {/* ═══ VIEW STUDENT DIALOG ═══ */}
+            {}
             <Dialog open={!!viewStudent} onOpenChange={(open) => !open && setViewStudent(null)}>
                 <DialogContent className="bg-navy-900 border border-gold-500/10 w-full sm:max-w-lg">
                     <DialogHeader>
@@ -342,7 +337,7 @@ export default function StudentsPage() {
                     </DialogHeader>
                     {viewStudent && (
                         <div className="space-y-4 mt-2">
-                            {/* Avatar + name header */}
+                            {}
                             <div className="flex items-center gap-4 p-4 rounded-xl bg-navy-800/40 border border-gold-500/5">
                                 <div className="w-14 h-14 rounded-full bg-gradient-to-br from-gold-500/20 to-gold-600/10 flex items-center justify-center text-lg font-bold text-gold-400 flex-shrink-0">
                                     {viewStudent.user.name.charAt(0).toUpperCase()}
@@ -357,7 +352,7 @@ export default function StudentsPage() {
                                 </div>
                             </div>
 
-                            {/* Details grid */}
+                            {}
                             <div className="grid grid-cols-2 gap-3">
                                 {[
                                     { label: "Department", value: viewStudent.department.name },
@@ -389,7 +384,7 @@ export default function StudentsPage() {
                 </DialogContent>
             </Dialog>
 
-            {/* ═══ EDIT STUDENT SHEET ═══ */}
+            {}
             <Sheet open={!!editStudent} onOpenChange={(open) => !open && setEditStudent(null)}>
                 <SheetContent className="bg-navy-900 border-l border-gold-500/10 w-full sm:max-w-[480px] overflow-y-auto">
                     <SheetHeader className="mb-6">
@@ -460,7 +455,7 @@ export default function StudentsPage() {
                 </SheetContent>
             </Sheet>
 
-            {/* ═══ ADD STUDENT SHEET ═══ */}
+            {}
             <Sheet open={isAddOpen} onOpenChange={setIsAddOpen}>
                 <SheetContent className="bg-navy-900 border-l border-gold-500/10 w-full sm:max-w-[480px] overflow-y-auto">
                     <SheetHeader className="mb-6">

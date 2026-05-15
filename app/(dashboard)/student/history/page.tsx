@@ -1,5 +1,5 @@
 "use client"
- 
+
  import { motion, AnimatePresence } from "framer-motion"
  import {
    CreditCard, Receipt, CheckCircle2,
@@ -10,25 +10,25 @@
  import { formatFullCurrency } from "@/config/constants"
  import { Skeleton } from "boneyard-js/react"
  import { useStudentLedger } from "@/hooks/student/useStudentLedger"
- 
+
  function fmt(d: string | Date | null | undefined) {
    if (!d) return "—"
    return new Date(d).toLocaleDateString("en-PK", { day: "numeric", month: "short", year: "numeric" })
  }
- 
+
  function methodLabel(method: string) {
    if (method === "STRIPE_CARD") return "Card"
    if (method === "BANK_CHALLAN") return "Challan"
    if (method === "WAIVER") return "Waiver"
    return method
  }
- 
+
  const METHOD_ICON = {
    STRIPE_CARD: CreditCard,
    BANK_CHALLAN: Receipt,
    WAIVER: CheckCircle2,
  } as const
- 
+
  export default function StudentHistoryPage() {
    const {
      summary,
@@ -38,15 +38,15 @@
      setFilter,
      filteredPayments,
    } = useStudentLedger()
- 
+
    const completedCount = allPayments.filter((p) => p.status === "COMPLETED").length
- 
+
    return (
      <div className="relative isolate space-y-6 pb-10 p-5 lg:p-8">
- 
+
        <div className="max-w-4xl mx-auto space-y-8">
- 
-         {/* ── HEADER ── */}
+
+         {}
          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 px-1">
            <div className="space-y-2">
              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-sky-500/10 mb-2">
@@ -63,8 +63,8 @@
              </span>
            </div>
          </div>
- 
-         {/* ── SUMMARY STRIP ── */}
+
+         {}
          <Skeleton name="ledger-summary" loading={isLoading}>
            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
              <div className="rounded-2xl border border-zinc-200/50 dark:border-white/[0.05] bg-white/40 dark:bg-white/[0.015] p-6 shadow-sm backdrop-blur-md">
@@ -75,7 +75,7 @@
                  {summary?.totalPaid ? formatFullCurrency(summary.totalPaid) : "PKR 0"}
                </p>
              </div>
- 
+
              <div className="rounded-2xl border border-zinc-200/50 dark:border-white/[0.05] bg-white/40 dark:bg-white/[0.015] p-6 shadow-sm backdrop-blur-md">
                <p className="text-[10px] uppercase tracking-[0.2em] text-zinc-500 font-bold mb-2.5">
                  Transactions
@@ -87,7 +87,7 @@
                  <span className="text-[11px] text-zinc-500 font-bold uppercase tracking-widest">Confirmed</span>
                </div>
              </div>
- 
+
              <div className={[
                "rounded-2xl border p-6 shadow-sm backdrop-blur-md",
                summary && summary.totalOutstanding > 0 
@@ -115,8 +115,8 @@
              </div>
            </div>
          </Skeleton>
- 
-         {/* ── FILTER TABS ── */}
+
+         {}
          <div className="p-1 rounded-xl bg-white/40 dark:bg-white/[0.03] border border-zinc-200/50 dark:border-white/[0.05] w-fit shadow-sm backdrop-blur-md inline-flex">
            {(["all", "completed", "pending"] as const).map((f) => (
              <button
@@ -134,8 +134,8 @@
              </button>
            ))}
          </div>
- 
-         {/* ── TRANSACTION LIST ── */}
+
+         {}
          <Skeleton name="ledger-transactions" loading={isLoading}>
            {filteredPayments.length === 0 ? (
              <motion.div
@@ -170,7 +170,7 @@
                            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-zinc-50 dark:bg-white/[0.03] ring-1 ring-inset ring-zinc-200/50 dark:ring-white/[0.06] group-hover:scale-105 group-hover:bg-gold-500/5 transition-all shadow-inner">
                              <MethodIcon className="h-5 w-5 text-zinc-500 group-hover:text-gold-500 transition-colors" strokeWidth={1.75} />
                            </div>
- 
+
                            <div className="min-w-0 space-y-1">
                              <p className="text-[15px] font-bold text-zinc-900 dark:text-zinc-100 truncate tracking-tight">{p.assignmentLabel}</p>
                              <div className="flex flex-wrap items-center gap-3 text-[11px] font-bold text-zinc-500 dark:text-zinc-400 uppercase tracking-widest">
@@ -180,7 +180,7 @@
                              </div>
                            </div>
                          </div>
- 
+
                          <div className="flex items-center justify-between sm:justify-end gap-8 border-t sm:border-0 pt-4 sm:pt-0 border-zinc-100 dark:border-white/[0.03]">
                            <div className="sm:text-right">
                              <p className="font-mono tabular-nums font-bold text-zinc-900 dark:text-zinc-50 text-[16px] tracking-tight">
@@ -204,8 +204,8 @@
                    })}
                  </AnimatePresence>
                </div>
- 
-               {/* Footer totals */}
+
+               {}
                {summary && (
                  <div className="flex items-center justify-between px-6 py-4 border-t border-zinc-100 dark:border-white/[0.05] bg-zinc-50/50 dark:bg-white/[0.01]">
                    <div className="flex items-center gap-2">

@@ -62,7 +62,7 @@ export default function VCAnalyticsPanels({
 }) {
   return (
     <div className="space-y-4">
-      {/* Collection Timeline — full width */}
+      {}
       <div className="rounded-xl border border-white/60 dark:border-white/[0.05] bg-white/40 dark:bg-slate-900/40 backdrop-blur-md p-5 shadow-[0_8px_32px_rgba(0,0,0,0.04)]">
         <PanelHeader icon={TrendingUp} iconClass="bg-gold-500/10 text-gold-400" title="Collection Timeline" />
         {data.collectionTrend.length > 0 ? (
@@ -89,7 +89,7 @@ export default function VCAnalyticsPanels({
         )}
       </div>
 
-      {/* Department Health Grid */}
+      {}
       <div className="rounded-xl border border-white/60 dark:border-white/[0.05] bg-white/40 dark:bg-slate-900/40 backdrop-blur-md p-5 shadow-[0_8px_32px_rgba(0,0,0,0.04)]">
         <PanelHeader icon={TrendingUp} iconClass="bg-violet-500/10 text-violet-400" title="Department Health" />
         <VCDepartmentHealthGrid
@@ -98,7 +98,7 @@ export default function VCAnalyticsPanels({
         />
       </div>
 
-      {/* Semester Collections */}
+      {}
       <div className="rounded-xl border border-white/60 dark:border-white/[0.05] bg-white/40 dark:bg-slate-900/40 backdrop-blur-md p-5 shadow-[0_8px_32px_rgba(0,0,0,0.04)]">
         <PanelHeader icon={BookOpen} iconClass="bg-sky-500/10 text-sky-400" title="Semester Collections" />
         <div className="mb-3 flex items-center gap-3 text-[11px] text-[#64748B] dark:text-muted-foreground">

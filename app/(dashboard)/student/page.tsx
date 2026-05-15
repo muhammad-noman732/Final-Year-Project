@@ -1,5 +1,5 @@
 "use client"
- 
+
  import Link from "next/link"
  import { motion, AnimatePresence } from "framer-motion"
  import {
@@ -10,23 +10,23 @@
  import { formatFullCurrency } from "@/config/constants"
  import { Skeleton } from "boneyard-js/react"
  import { useStudentDashboard, ordinal } from "@/hooks/student/useStudentDashboard"
- 
+
  function pad(v: number) {
    return String(v).padStart(2, "0")
  }
- 
+
  function methodLabel(method: string) {
    if (method === "STRIPE_CARD") return "Card"
    if (method === "BANK_CHALLAN") return "Challan"
    if (method === "WAIVER") return "Waiver"
    return method
  }
- 
+
  function fmt(d: string | Date | null | undefined) {
    if (!d) return "—"
    return new Date(d).toLocaleDateString("en-PK", { day: "numeric", month: "short", year: "numeric" })
  }
- 
+
  function FeeRow({ label, value, accent }: { label: string; value: number; accent?: string }) {
    return (
      <div className="flex items-baseline justify-between py-2.5 border-b border-zinc-100 dark:border-white/[0.04] last:border-0">
@@ -37,24 +37,24 @@
      </div>
    )
  }
- 
+
  export default function StudentDashboard() {
    const {
      profile, summary, current, isPaid, hasNoFee, isOverdue,
      latestPaidAssignment, countdown, progressPct, isLoading,
      assignments, allPayments,
    } = useStudentDashboard()
- 
+
    const paidCount = assignments.filter((a) => a.status === "PAID").length
    const outstanding = current ? current.amountDue - current.amountPaid : 0
    const recentPayments = allPayments.slice(0, 3)
- 
+
    return (
      <div className="relative isolate space-y-6 pb-10">
- 
+
        <div className="max-w-5xl mx-auto space-y-5">
- 
-         {/* ── HEADER ── */}
+
+         {}
          <Skeleton name="student-profile-header" loading={isLoading}>
            <header className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
              <div className="flex items-center gap-4">
@@ -89,7 +89,7 @@
                  </div>
                </div>
              </div>
- 
+
              <div className="flex flex-wrap items-center gap-2">
                {profile?.currentSemester && (
                  <div className="flex items-center gap-1.5 rounded-lg border border-zinc-200 dark:border-white/[0.06] bg-white/50 dark:bg-white/[0.025] backdrop-blur-md px-2.5 py-1.5 shadow-sm">
@@ -114,11 +114,11 @@
              </div>
            </header>
          </Skeleton>
- 
-         {/* ── FEE STATUS HERO ── */}
+
+         {}
          <Skeleton name="student-fee-card" loading={isLoading}>
- 
-           {/* UNPAID / OVERDUE */}
+
+           {}
            {current && (
              <motion.div
                initial={{ opacity: 0, y: 8 }}
@@ -145,7 +145,7 @@
                    {isOverdue ? "Payment overdue — late fee rules apply" : `Due ${fmt(current.dueDate)}`}
                  </span>
                </div>
- 
+
                <div className="p-6 sm:p-8 space-y-7">
                  <div className="grid gap-6 sm:grid-cols-[1fr_auto] sm:items-start">
                    <div className="space-y-1">
@@ -164,7 +164,7 @@
                        <span className="text-zinc-900 dark:text-zinc-300">{current.feeStructure.program?.name ?? "—"}</span>
                      </p>
                    </div>
- 
+
                    {!isOverdue ? (
                      <div className="self-start rounded-xl border border-zinc-200 dark:border-white/[0.06] bg-zinc-50/50 dark:bg-black/30 px-5 py-4 shadow-sm backdrop-blur-md">
                        <p className="text-[9.5px] uppercase tracking-[0.2em] text-zinc-500 font-bold mb-2.5">
@@ -208,7 +208,7 @@
                      </div>
                    )}
                  </div>
- 
+
                  <div>
                    <div className="flex justify-between text-[9.5px] uppercase tracking-[0.18em] text-zinc-400 dark:text-zinc-600 font-bold mb-1.5">
                      <span>Term progress</span>
@@ -223,7 +223,7 @@
                      />
                    </div>
                  </div>
- 
+
                  <div className="grid sm:grid-cols-2 gap-0.5 rounded-xl overflow-hidden border border-zinc-200 dark:border-white/[0.05] shadow-sm">
                    <div className="bg-zinc-50/50 dark:bg-[#080c14]/50 p-5">
                      <p className="flex items-center gap-1.5 text-[9.5px] uppercase tracking-[0.2em] text-zinc-500 font-bold mb-3">
@@ -247,14 +247,14 @@
                      )}
                    </div>
                  </div>
- 
+
                  <div className="flex items-center justify-between rounded-xl border border-zinc-200/50 dark:border-white/[0.05] bg-zinc-900 dark:bg-white/[0.03] px-5 py-3.5 shadow-sm">
                    <span className="text-[11px] uppercase tracking-[0.18em] text-zinc-400 dark:text-zinc-500 font-bold">Total due</span>
                    <span className="font-mono tabular-nums text-[17px] font-bold text-white dark:text-zinc-50">
                      {formatFullCurrency(current.amountDue)}
                    </span>
                  </div>
- 
+
                  <Link href="/student/payfee">
                    <Button className="w-full h-12 bg-primary hover:bg-primary/90 text-white font-bold text-[13.5px] rounded-xl group transition-all duration-150 active:scale-[0.99] shadow-lg shadow-primary/20">
                      Pay outstanding balance
@@ -264,8 +264,8 @@
                </div>
              </motion.div>
            )}
- 
-           {/* ALL PAID */}
+
+           {}
            {isPaid && (
              <motion.div
                initial={{ opacity: 0, scale: 0.98 }}
@@ -313,8 +313,8 @@
                </div>
              </motion.div>
            )}
- 
-           {/* NO FEE */}
+
+           {}
            {hasNoFee && (
              <motion.div
                initial={{ opacity: 0 }}
@@ -333,8 +333,8 @@
              </motion.div>
            )}
          </Skeleton>
- 
-         {/* ── BENTO STATS STRIP ── */}
+
+         {}
          <Skeleton name="ledger-summary" loading={isLoading}>
            <motion.div
              initial={{ opacity: 0, y: 6 }}
@@ -342,7 +342,7 @@
              transition={{ delay: 0.12, type: "spring", stiffness: 280, damping: 28 }}
              className="grid gap-4 grid-cols-1 sm:grid-cols-3"
            >
-             {/* Total cleared */}
+             {}
              <div className="rounded-xl border border-zinc-200/50 dark:border-white/[0.06] bg-white/40 dark:bg-white/[0.015] p-5 shadow-sm backdrop-blur-md">
                <p className="text-[9.5px] uppercase tracking-[0.2em] text-zinc-500 font-bold mb-1.5">
                  Total cleared
@@ -351,8 +351,8 @@
                  {summary?.totalPaid ? formatFullCurrency(summary.totalPaid) : "PKR 0"}
                </p>
              </div>
- 
-             {/* Semesters */}
+
+             {}
              <div className="rounded-xl border border-zinc-200/50 dark:border-white/[0.06] bg-white/40 dark:bg-white/[0.015] p-5 shadow-sm backdrop-blur-md">
                <p className="text-[9.5px] uppercase tracking-[0.2em] text-zinc-500 font-bold mb-2">
                  Semesters
@@ -375,8 +375,8 @@
                  ))}
                </div>
              </div>
- 
-             {/* Account status */}
+
+             {}
              <div className={[
                "rounded-xl border p-5 shadow-sm backdrop-blur-md",
                summary?.hasOverdue
@@ -408,8 +408,8 @@
              </div>
            </motion.div>
          </Skeleton>
- 
-         {/* ── RECENT PAYMENTS ── */}
+
+         {}
          <Skeleton name="ledger-transactions" loading={isLoading}>
            <motion.section
              initial={{ opacity: 0, y: 6 }}
@@ -429,7 +429,7 @@
                  <ArrowRight className="h-3 w-3 transition-transform duration-150 group-hover:translate-x-0.5" />
                </Link>
              </div>
- 
+
              <div className="rounded-2xl border border-zinc-200/50 dark:border-white/[0.06] bg-white/40 dark:bg-white/[0.012] divide-y divide-zinc-100 dark:divide-white/[0.04] overflow-hidden shadow-sm backdrop-blur-md">
                {recentPayments.length > 0 ? (
                  recentPayments.map((p, idx) => (

@@ -16,7 +16,6 @@ export function useGetStudents() {
   const [selectedSession, setSelectedSession] = useState("all")
   const [page, setPage] = useState(1)
 
-  // Filter options from the server
   const { data: deptsRes } = useGetDepartmentsQuery({ limit: 100 })
   const { data: progsRes } = useGetProgramsQuery({
     limit: 100,
@@ -29,7 +28,6 @@ export function useGetStudents() {
   const sessions = sessRes?.data?.data ?? []
   const semesters = Array.from({ length: 8 }, (_, i) => i + 1)
 
-  // Build backend query
   const queryParams: ListStudentsQueryParams = {
     page,
     limit: 10,
@@ -44,7 +42,6 @@ export function useGetStudents() {
   const students = response?.data?.data ?? []
   const meta = response?.data?.meta ?? { total: 0, totalPages: 1, page: 1, limit: 10 }
 
-  // Row selection
   const [selectedRows, setSelectedRows] = useState<Set<string>>(new Set())
 
   const toggleRow = (id: string) => {
@@ -63,7 +60,6 @@ export function useGetStudents() {
 
   const clearSelection = () => setSelectedRows(new Set())
 
-  // Reset dependent filters
   const handleDeptChange = (val: string) => {
     setSelectedDept(val)
     setSelectedProgram("all")
@@ -86,23 +82,19 @@ export function useGetStudents() {
   }
 
   return {
-    // Search
+
     searchQuery, setSearchQuery,
 
-    // Filters
     selectedDept, handleDeptChange,
     selectedProgram, handleProgramChange,
     selectedSemester, handleSemesterChange,
     selectedSession, handleSessionChange,
     departments, programs, sessions, semesters,
 
-    // Pagination
     page, setPage,
 
-    // Data
     students, meta, isLoading, isFetching,
 
-    // Selection
     selectedRows, toggleRow, toggleAll, clearSelection,
   }
 }

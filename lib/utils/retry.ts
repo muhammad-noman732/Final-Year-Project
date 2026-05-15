@@ -1,6 +1,5 @@
 import { AppError } from "./AppError";
 import { logger } from '@/lib/logger';
-
 interface RetryOptions {
     maxAttempts?: number;
     baseDelayMs?: number;
@@ -8,7 +7,6 @@ interface RetryOptions {
     shouldRetry?: (error: Error, attempt: number) => boolean;
     onRetry?: (error: Error, attempt: number, delayMs: number) => void;
 }
-
 function calculateDelay(
     attempt: number,
     baseDelayMs: number,
@@ -18,25 +16,19 @@ function calculateDelay(
     const jitter = Math.random() * 1000;
     return Math.min(exponentialDelay + jitter, maxDelayMs);
 }
-
 function defaultShouldRetry(error: Error): boolean {
     if (error instanceof AppError) {
-        // Retry on rate limits (429) and server-side transient errors (503, 504)
         const retryableStatusCodes = [429, 503, 504];
         return retryableStatusCodes.includes(error.statusCode);
     }
-
-    // Common network errors that are usually transient
     const transientErrorMessages = [
         'ECONNRESET',
         'ECONNREFUSED',
         'ETIMEDOUT',
         'socket hang up'
     ];
-
     return transientErrorMessages.some(msg => error.message.includes(msg));
 }
-
 export async function withRetry<T>(
     operation: () => Promise<T>,
     operationName: string,
@@ -49,24 +41,19 @@ export async function withRetry<T>(
         shouldRetry = defaultShouldRetry,
         onRetry,
     } = options;
-
     let lastError!: Error;
-
     for (let attempt = 1; attempt <= maxAttempts; attempt++) {
         try {
             const result = await operation();
-
             if (attempt > 1) {
                 logger.info(
                     { event: "retry.succeeded", operationName, attempt, maxAttempts },
                     `Retry succeeded on attempt ${attempt}`
                 );
             }
-
             return result;
         } catch (error) {
             lastError = error as Error;
-
             if (attempt === maxAttempts) {
                 logger.error(
                     {
@@ -80,7 +67,6 @@ export async function withRetry<T>(
                 );
                 break;
             }
-
             if (!shouldRetry(lastError, attempt)) {
                 logger.info(
                     {
@@ -93,11 +79,8 @@ export async function withRetry<T>(
                 );
                 throw lastError;
             }
-
             const delayMs = calculateDelay(attempt, baseDelayMs, maxDelayMs);
-
             onRetry?.(lastError, attempt, delayMs);
-
             logger.warn(
                 {
                     event: "retry.scheduled",
@@ -108,10 +91,8 @@ export async function withRetry<T>(
                 },
                 "Retry attempt failed; scheduling next retry"
             );
-
             await new Promise((resolve) => setTimeout(resolve, delayMs));
         }
     }
-
     throw lastError;
 }

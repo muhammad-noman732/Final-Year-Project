@@ -7,7 +7,6 @@ import type { NextRequest } from "next/server"
 export class WebhookController {
   constructor(private readonly webhookService: WebhookService) { }
 
-
   async handleWebhookRaw(req: NextRequest) {
     const signature = req.headers.get("stripe-signature")
     if (!signature) {

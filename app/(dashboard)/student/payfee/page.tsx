@@ -1,5 +1,5 @@
 "use client";
- 
+
  import {
      Elements,
  } from "@stripe/react-stripe-js";
@@ -15,9 +15,9 @@
  import { Skeleton } from "boneyard-js/react";
  import { useSelector } from "react-redux";
  import type { RootState } from "@/store";
- 
+
  import { Suspense } from "react";
- 
+
  function PayFeeContent() {
      const {
          feeProfile,
@@ -29,10 +29,9 @@
          errorMessage
      } = usePayFee();
      const theme = useSelector((state: RootState) => state.ui.theme);
- 
- 
+
      const isActuallyLoading = isLoading || Boolean(!clientSecret && targetAssignment && !isError);
- 
+
      if (!isLoading && (isError || !targetAssignment)) {
          return (
              <div className="max-w-5xl mx-auto pb-10 pt-6 px-4">
@@ -50,13 +49,13 @@
              </div>
          );
      }
- 
+
      return (
          <div className="max-w-5xl mx-auto pb-10 pt-6 px-4 animate-in fade-in duration-500">
              <a href="/student" className="inline-flex items-center gap-1.5 text-zinc-500 hover:text-gold-600 dark:hover:text-gold-400 text-sm mb-6 transition-colors font-bold">
                  <ArrowLeft className="w-3.5 h-3.5" /> Back to Dashboard
              </a>
- 
+
              <div className="grid lg:grid-cols-[1fr_420px] gap-6">
                  <div className="order-2 lg:order-1">
                          {clientSecret && targetAssignment ? (
@@ -78,8 +77,8 @@
                          ) : (
                              <div className="rounded-2xl border border-zinc-200 dark:border-white/[0.06] bg-white dark:bg-[#0a0e1a] p-6 shadow-xl dark:shadow-2xl relative overflow-hidden">
                                  <div className="absolute inset-0 pointer-events-none opacity-50 bg-gradient-to-br from-zinc-500/[0.02] dark:from-white/[0.01] to-transparent" />
- 
-                                 {/* Header Skeleton */}
+
+                                 {}
                                  <div className="pb-4 border-b border-zinc-100 dark:border-white/[0.04] mb-6 flex gap-3 items-center animate-pulse">
                                      <div className="w-10 h-10 rounded-xl bg-[#635BFF]/10 border border-[#635BFF]/10 shrink-0" />
                                      <div className="space-y-2.5 flex-1">
@@ -87,12 +86,12 @@
                                          <div className="w-48 h-2.5 rounded-md bg-zinc-100 dark:bg-white/[0.03]" />
                                      </div>
                                  </div>
- 
+
                                  <div className="space-y-4 animate-pulse">
-                                     {/* Fake Card Preview */}
+                                     {}
                                      <div className="w-full h-[180px] rounded-xl bg-gradient-to-br from-zinc-100 dark:from-white/[0.04] to-zinc-50 dark:to-white/[0.01] border border-zinc-200 dark:border-white/[0.02] mb-6" />
- 
-                                     {/* Fake Inputs */}
+
+                                     {}
                                      <div className="space-y-4">
                                          <div className="w-full h-12 rounded-xl bg-zinc-50 dark:bg-white/[0.03] border border-zinc-200 dark:border-white/[0.02]" />
                                          <div className="grid grid-cols-2 gap-3">
@@ -101,8 +100,8 @@
                                          </div>
                                          <div className="w-full h-12 rounded-xl bg-zinc-50 dark:bg-white/[0.03] border border-zinc-200 dark:border-white/[0.02]" />
                                      </div>
- 
-                                     {/* Fake Pay Button */}
+
+                                     {}
                                      <div className="w-full h-14 rounded-xl bg-[#635BFF]/20 border border-[#635BFF]/20 mt-6" />
                                  </div>
                              </div>
@@ -121,7 +120,7 @@
          </div>
      );
  }
- 
+
  export default function PayFeePage() {
      return (
          <Suspense fallback={

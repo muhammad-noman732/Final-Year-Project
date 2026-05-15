@@ -54,7 +54,7 @@ function StatCard({
         "shadow-sm dark:shadow-none",
       ].join(" ")}
     >
-      {/* Ambient glow */}
+      {}
       <div
         className={[
           "pointer-events-none absolute -right-6 -top-6 h-24 w-24 rounded-full opacity-[0.08] blur-2xl",

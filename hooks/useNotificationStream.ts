@@ -8,11 +8,6 @@ import { baseApi } from "@/store/api/baseApi"
 const INITIAL_RETRY_DELAY_MS = 5_000
 const MAX_RETRY_DELAY_MS = 30_000
 
-/**
- * Connects to /api/notifications/stream and invalidates RTK Query notification
- * cache whenever the server broadcasts a "NewNotification" ping.
- * Must be mounted inside a Redux Provider.
- */
 export function useNotificationStream(): void {
   const dispatch = useDispatch<AppDispatch>()
   const esRef = useRef<EventSource | null>(null)
@@ -45,7 +40,7 @@ export function useNotificationStream(): void {
             )
           }
         } catch {
-          // Ignore malformed frames
+
         }
       }
 

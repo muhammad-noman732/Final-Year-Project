@@ -1,7 +1,5 @@
 import { z } from "zod/v4"
 
-
-
 const envSchema = z.object({
   DATABASE_URL: z.string().min(1, "DATABASE_URL is required"),
   JWT_SECRET: z.string().min(32, "JWT_SECRET must be at least 32 characters"),
@@ -13,7 +11,7 @@ const envSchema = z.object({
   STRIPE_SECRET_KEY: z.string(),
   STRIPE_WEBHOOK_SECRET: z.string().optional(),
   NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: z.string()
-  // REDIS_URL: z.string().optional(),
+
 })
 
 export type Env = z.infer<typeof envSchema>

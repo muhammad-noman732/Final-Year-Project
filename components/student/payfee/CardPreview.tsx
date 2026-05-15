@@ -17,7 +17,6 @@ export function CardPreview({ number, name, expiry, brand, flipped }: CardPrevie
         return (number + "________________").slice(0, 16).replace(/(\d{4})(?=.)/g, "$1 ");
     }, [number]);
 
-    // Brand colors or icons
     const brandLabel = brand?.toUpperCase() || "CARD";
 
     return (
@@ -26,7 +25,7 @@ export function CardPreview({ number, name, expiry, brand, flipped }: CardPrevie
                 className="relative w-full h-full transition-all duration-700 [transform-style:preserve-3d]"
                 style={{ transform: flipped ? "rotateY(180deg)" : "rotateY(0deg)" }}
             >
-                {/* Front */}
+                {}
                 <div className="absolute inset-0 rounded-2xl [backface-visibility:hidden] overflow-hidden bg-gradient-to-br from-[#1c2d4a] via-[#1a2940] to-[#0f1a2e] border border-gold-500/20 p-5 shadow-2xl shadow-black/40">
                     <div className="flex justify-between items-start mb-6">
                         <div className="flex gap-0.5">
@@ -51,7 +50,7 @@ export function CardPreview({ number, name, expiry, brand, flipped }: CardPrevie
                         </div>
                     </div>
                 </div>
-                {/* Back */}
+                {}
                 <div className="absolute inset-0 rounded-2xl [backface-visibility:hidden] [transform:rotateY(180deg)] overflow-hidden bg-gradient-to-br from-[#1c2d4a] via-[#1a2940] to-[#0f1a2e] border border-gold-500/20 shadow-2xl shadow-black/40">
                     <div className="h-10 bg-slate-900 mt-5" />
                     <div className="px-5 mt-4">

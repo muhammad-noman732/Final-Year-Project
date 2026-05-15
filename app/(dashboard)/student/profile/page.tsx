@@ -1,5 +1,5 @@
 "use client"
- 
+
  import { motion } from "framer-motion"
  import { GraduationCap, User, BookOpen, Calendar } from "lucide-react"
  import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -8,9 +8,9 @@
  import { Skeleton } from "boneyard-js/react"
  import { ordinal } from "@/hooks/student/useStudentDashboard"
  import { useEffect, useState } from "react"
- 
+
  type InfoField = { label: string; value: string | null | undefined }
- 
+
  function InfoRow({ field, index }: { field: InfoField; index: number }) {
    return (
      <motion.div
@@ -28,15 +28,15 @@
      </motion.div>
    )
  }
- 
+
  export default function StudentProfilePage() {
    const { profile, isLoading, isError } = useStudentProfile()
    const [mounted, setMounted] = useState(false)
- 
+
    useEffect(() => {
      setMounted(true)
    }, [])
- 
+
    if (isError) {
      return (
        <div className="max-w-3xl mx-auto flex items-center justify-center min-h-[400px]">
@@ -44,24 +44,24 @@
        </div>
      )
    }
- 
+
    const initials = profile?.user?.name
      ? profile.user.name.split(" ").map((n) => n[0]).join("").substring(0, 2).toUpperCase()
      : ""
- 
+
    const enrollmentDateObj = profile?.createdAt ? new Date(profile.createdAt) : null
    const formattedEnrollmentDate =
      mounted && enrollmentDateObj && !isNaN(enrollmentDateObj.getTime())
        ? format(enrollmentDateObj, "MMM dd, yyyy")
        : "—"
- 
+
    const personalFields: InfoField[] = [
      { label: "Full name", value: profile?.user?.name },
      { label: "Email", value: profile?.user?.email },
      { label: "Phone", value: profile?.user?.phone || "Not provided" },
      { label: "CNIC", value: profile?.cnic || "Not provided" },
    ]
- 
+
    const academicFields: InfoField[] = [
      { label: "Student ID", value: profile?.studentId },
      { label: "Department", value: profile?.department?.name },
@@ -74,7 +74,7 @@
      { label: "Session", value: profile?.session?.name },
      { label: "Enrollment date", value: formattedEnrollmentDate },
    ]
- 
+
    return (
      <div className="relative">
        <div
@@ -84,18 +84,18 @@
            background: "radial-gradient(ellipse 80% 50% at 50% -10%, rgba(212,168,67,0.06), transparent 60%)",
          }}
        />
- 
+
        <div className="max-w-3xl mx-auto space-y-5 pb-16 pt-6 px-4">
- 
-         {/* ── PROFILE HEADER ── */}
+
+         {}
          <Skeleton name="student-profile-header" loading={isLoading}>
            <div className="rounded-2xl border border-zinc-200 dark:border-white/[0.06] bg-white dark:bg-white/[0.015] overflow-hidden shadow-sm backdrop-blur-sm">
-             {/* Banner */}
+             {}
              <div className="relative h-16 bg-gradient-to-br from-gold-500/[0.1] dark:from-gold-500/[0.06] to-transparent">
                <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-zinc-200 dark:via-white/[0.08] to-transparent" />
              </div>
- 
-             {/* Avatar + identity */}
+
+             {}
              <div className="px-6 pb-6 -mt-6">
                <div className="flex flex-col sm:flex-row sm:items-end gap-4">
                  <motion.div
@@ -106,7 +106,7 @@
                  >
                    {initials || "—"}
                  </motion.div>
- 
+
                  <div className="min-w-0 flex-1 pb-0.5">
                    <h1 className="text-[20px] font-bold text-zinc-900 dark:text-zinc-50 tracking-tight leading-tight truncate">
                      {profile?.user?.name ?? "—"}
@@ -138,8 +138,8 @@
              </div>
            </div>
          </Skeleton>
- 
-         {/* ── TABS: PERSONAL + ACADEMIC ── */}
+
+         {}
          <Skeleton name="active-liabilities" loading={isLoading}>
            <Tabs defaultValue="personal" className="space-y-4">
              <TabsList className="bg-zinc-100 dark:bg-white/[0.02] ring-1 ring-inset ring-zinc-200 dark:ring-white/[0.06] p-1 rounded-xl gap-0.5 w-full h-auto shadow-inner">
@@ -157,8 +157,8 @@
                  </TabsTrigger>
                ))}
              </TabsList>
- 
-             {/* ─── PERSONAL ─── */}
+
+             {}
              <TabsContent value="personal" className="mt-0">
                <div className="rounded-2xl border border-zinc-200 dark:border-white/[0.06] bg-white dark:bg-white/[0.015] overflow-hidden shadow-sm backdrop-blur-sm">
                  <dl className="divide-y divide-zinc-100 dark:divide-white/[0.04]">
@@ -168,8 +168,8 @@
                  </dl>
                </div>
              </TabsContent>
- 
-             {/* ─── ACADEMIC ─── */}
+
+             {}
              <TabsContent value="academic" className="mt-0">
                <div className="rounded-2xl border border-zinc-200 dark:border-white/[0.06] bg-white dark:bg-white/[0.015] overflow-hidden shadow-sm backdrop-blur-sm">
                  <dl className="divide-y divide-zinc-100 dark:divide-white/[0.04]">

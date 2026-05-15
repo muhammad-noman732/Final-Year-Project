@@ -32,15 +32,13 @@ export class UserService {
     private readonly auditService: AuditService,
   ) { }
 
-  // List Users
-
   async getUsers(
     tenantId: string,
     query: ListUsersQuery,
   ): Promise<PaginatedResult<AdminUserRow>> {
     const where: Prisma.UserWhereInput = {
       tenantId,
-      // Only return VC and HOD — students have their own endpoint
+
       role: query.role ? query.role : { in: ["VC", "HOD"] },
     }
 
@@ -65,21 +63,18 @@ export class UserService {
     return { data, meta: buildPaginationMeta(total, query.page, query.limit) }
   }
 
-  // Create User (VC or HOD)
-
   async createUser(
     tenantId: string,
     adminUserId: string,
     input: CreateUserInput,
   ): Promise<AdminUserRow> {
-    // 1. Role guard — only VC and HOD are permitted here
+
     if (!this.ALLOWED_ROLES.includes(input.role as (typeof this.ALLOWED_ROLES)[number])) {
       throw new ForbiddenError(
         "Role must be VC or HOD. Students are created via /api/admin/students.",
       )
     }
 
-    // 2. Conflict check — @@unique([tenantId, email])
     const emailNormalized = input.email.toLowerCase().trim()
     const existing = await this.userRepo.adminFindByEmail(tenantId, emailNormalized)
     if (existing) {
@@ -88,7 +83,6 @@ export class UserService {
       )
     }
 
-    // 3. If HOD — verify the department belongs to this tenant
     if (input.role === "HOD" && input.hodDepartmentId) {
       const dept = await this.deptRepo.findById(tenantId, input.hodDepartmentId)
       if (!dept) {
@@ -98,11 +92,9 @@ export class UserService {
       }
     }
 
-    // 4. Generate temp password and hash
     const tempPassword = this.generateTempPassword()
     const passwordHash = await bcrypt.hash(tempPassword, this.BCRYPT_ROUNDS)
 
-    // 5. Persist the new user
     const user = await this.userRepo.adminCreate({
       tenantId,
       name: input.name.trim(),
@@ -115,12 +107,9 @@ export class UserService {
       hodDepartmentId: input.role === "HOD" ? (input.hodDepartmentId ?? null) : null,
     })
 
-    // 6. Fetch tenant name for welcome email
     const tenant = await this.tenantRepo.findById(tenantId)
     const universityName = tenant?.name ?? "Your University"
 
-    // 7. Send welcome email (fire-and-forget — never block the response)
-    // TODO: Replace with BullMQ `emails` queue → `welcome-email` job when queue worker is live
     this.emailService
       .sendWelcomeEmail({
         to: emailNormalized,
@@ -141,7 +130,6 @@ export class UserService {
         )
       })
 
-    // 8. Audit log (fire-and-forget)
     this._audit({
       tenantId,
       userId: adminUserId,
@@ -170,8 +158,6 @@ export class UserService {
     return user
   }
 
-  // Update User
-
   async updateUser(
     tenantId: string,
     adminUserId: string,
@@ -181,7 +167,6 @@ export class UserService {
     const existing = await this.userRepo.adminFindById(tenantId, userId)
     if (!existing) throw new NotFoundError("User not found.")
 
-    // If reassigning HOD department, verify the new dept belongs to this tenant
     if (input.hodDepartmentId !== undefined && existing.role === "HOD") {
       const dept = await this.deptRepo.findById(tenantId, input.hodDepartmentId)
       if (!dept) {
@@ -223,13 +208,7 @@ export class UserService {
     return updated
   }
 
-  // Soft Delete
-
-  /**
-   * Soft delete: sets isActive=false. Records are NEVER hard-deleted.
-   * Rule: Only deactivate — never DELETE from the database.
-   */
-  async deleteUser(
+    async deleteUser(
     tenantId: string,
     adminUserId: string,
     userId: string,
@@ -263,8 +242,6 @@ export class UserService {
 
     return updated
   }
-
-  // Private helpers
 
   private _audit(params: {
     tenantId: string

@@ -59,7 +59,6 @@ export interface RegistrationDashboardStats {
   }>
 }
 
-// Capacity constants — seats per program
 export const PROGRAM_CAPACITY: Record<string, number> = {
   CS: 400,
   Biology: 350,
@@ -67,6 +66,5 @@ export const PROGRAM_CAPACITY: Record<string, number> = {
   Math: 250,
 }
 
-// Capacity thresholds
-export const CAPACITY_CRITICAL = 0.9  // ≥90% → critical
-export const CAPACITY_WARNING  = 0.85 // ≥85% → warning
+export const CAPACITY_CRITICAL = 0.9  
+export const CAPACITY_WARNING  = 0.85 

@@ -1,5 +1,4 @@
 "use client"
-
 import { Suspense } from "react"
 import { Skeleton } from "boneyard-js/react"
 import {
@@ -13,9 +12,6 @@ import { formatCurrency } from "@/config/constants"
 import { useVCTracking } from "@/hooks/vc/useVCTracking"
 import type { TrackingTab, TrackingScope, TrackingKPICard } from "@/types/client/ui/vc.ui.types"
 import type { VCDepartmentPerformance, VCSemesterBreakdown } from "@/types/server/vc.types"
-
-// ─── KPI icon map ──────────────────────────────────────────────────────────────
-
 const KPI_ICONS = {
   users: Users,
   check: CheckCircle2,
@@ -24,24 +20,17 @@ const KPI_ICONS = {
   ratio: BarChart3,
   receipt: Clock,
 }
-
-// ─── Tab config ───────────────────────────────────────────────────────────────
-
 const STATUS_TABS: { value: TrackingTab; label: string; color: string; activeClass: string }[] = [
   { value: "overview", label: "Overview", color: "text-violet-400", activeClass: "bg-violet-500/10 text-violet-300 border-violet-500/20" },
   { value: "defaulters", label: "Defaulters", color: "text-rose-400", activeClass: "bg-rose-500/10 text-rose-300 border-rose-500/20" },
   { value: "paid", label: "Paid", color: "text-emerald-400", activeClass: "bg-emerald-500/10 text-emerald-300 border-emerald-500/20" },
   { value: "unpaid", label: "Unpaid", color: "text-amber-400", activeClass: "bg-amber-500/10 text-amber-300 border-amber-500/20" },
 ]
-
 const SCOPE_TABS: { value: TrackingScope; label: string; Icon: typeof Building2 }[] = [
   { value: "overall", label: "University", Icon: Building2 },
   { value: "department", label: "Department", Icon: Building2 },
   { value: "semester", label: "Semester", Icon: GraduationCap },
 ]
-
-// ─── KPI Card ─────────────────────────────────────────────────────────────────
-
 function KPICard({ card }: { card: TrackingKPICard }) {
   const Icon = KPI_ICONS[card.icon as keyof typeof KPI_ICONS] ?? Users
   return (
@@ -65,9 +54,6 @@ function KPICard({ card }: { card: TrackingKPICard }) {
     </motion.div>
   )
 }
-
-// ─── Department Grid ──────────────────────────────────────────────────────────
-
 function DeptGrid({
   departments,
 }: {
@@ -121,8 +107,6 @@ function DeptGrid({
     </div>
   )
 }
-
-// Semester Grid 
 function SemGrid({ semesters }: { semesters: VCSemesterBreakdown[] }) {
   if (semesters.length === 0) {
     return (
@@ -171,9 +155,6 @@ function SemGrid({ semesters }: { semesters: VCSemesterBreakdown[] }) {
     </div>
   )
 }
-
-// ─── Page ─────────────────────────────────────────────────────────────────────
-
 function VCTrackingContent() {
   const {
     tab, scope, filters,
@@ -185,11 +166,9 @@ function VCTrackingContent() {
     handleFilterChange, handleTabChange, handleScopeChange,
     handleReset, handlePageChange, handleExport,
   } = useVCTracking()
-
   return (
     <div className="relative isolate space-y-5 pb-10 min-h-[calc(100dvh-3.5rem)] p-5 lg:p-8 transition-colors duration-300">
-
-      {/* ── Header ── */}
+      {}
       <div className="flex items-start justify-between gap-4">
         <div>
           <h1 className="text-lg font-bold tracking-tight text-slate-900 dark:text-foreground">Tracking Center</h1>
@@ -204,8 +183,7 @@ function VCTrackingContent() {
           </div>
         )}
       </div>
-
-      {/* ── Status Tabs ── */}
+      {}
       <div className="flex items-center gap-1 p-1 rounded-xl bg-white/60 dark:bg-white/[0.025] border border-slate-200/60 dark:border-white/[0.04] shadow-sm backdrop-blur-sm w-fit">
         {STATUS_TABS.map((t) => (
           <button
@@ -223,8 +201,7 @@ function VCTrackingContent() {
           </button>
         ))}
       </div>
-
-      {/* ── Scope Toggle (only on Overview) ── */}
+      {}
       {tab === "overview" && (
         <div className="flex items-center gap-1.5">
           <span className="text-[10px] uppercase tracking-[0.18em] text-slate-400 dark:text-muted-foreground/50 font-semibold">
@@ -250,8 +227,7 @@ function VCTrackingContent() {
           </div>
         </div>
       )}
-
-      {/* ── Filters ── */}
+      {}
       <VCFilterBar
         filters={filters}
         departments={departments}
@@ -262,8 +238,7 @@ function VCTrackingContent() {
         onExport={tab !== "overview" ? handleExport : undefined}
         showFeeStatus={tab === "overview"}
       />
-
-      {/* ── KPI Cards ── */}
+      {}
       <Skeleton name="vc-tracking-kpi" loading={isOverviewLoading}>
         {trackingCards.length > 0 && (
           <AnimatePresence mode="wait">
@@ -275,8 +250,7 @@ function VCTrackingContent() {
           </AnimatePresence>
         )}
       </Skeleton>
-
-      {/* ── Student Table (non-overview tabs) ── */}
+      {}
       {tab !== "overview" && (
         <AnimatePresence mode="wait">
           <motion.div
@@ -298,8 +272,7 @@ function VCTrackingContent() {
           </motion.div>
         </AnimatePresence>
       )}
-
-      {/* ── Overview Breakdowns ── */}
+      {}
       {tab === "overview" && (
         <AnimatePresence mode="wait">
           {scope === "department" && (
@@ -316,7 +289,6 @@ function VCTrackingContent() {
               <DeptGrid departments={departmentPerformance} />
             </motion.div>
           )}
-
           {scope === "semester" && (
             <motion.div
               key="sem"
@@ -331,7 +303,6 @@ function VCTrackingContent() {
               <SemGrid semesters={semesterBreakdown} />
             </motion.div>
           )}
-
           {scope === "overall" && (
             <motion.div
               key="overall"
@@ -356,7 +327,6 @@ function VCTrackingContent() {
     </div>
   )
 }
-
 export default function VCTrackingPage() {
   return (
     <Suspense

@@ -44,8 +44,6 @@ function getActionRoute(insight: InsightItem): string | null {
   return "/vc/tracking?tab=overview"
 }
 
-// ─── Severity Config ──────────────────────────────────────────────────────────
-
 function getConfig(insight: InsightItem): InsightConfig {
   const { type, priority } = insight
 
@@ -104,8 +102,6 @@ function getConfig(insight: InsightItem): InsightConfig {
   }
 }
 
-// ─── Pulsing dot for critical alerts ─────────────────────────────────────────
-
 function PulseDot({ color }: { color: string }) {
   return (
     <span className="relative flex h-1.5 w-1.5 shrink-0">
@@ -116,8 +112,6 @@ function PulseDot({ color }: { color: string }) {
     </span>
   )
 }
-
-// ─── Single Insight Card ──────────────────────────────────────────────────────
 
 function InsightCard({
   insight,
@@ -162,14 +156,14 @@ function InsightCard({
       ].join(" ")}
     >
       <div className="flex items-start gap-3">
-        {/* Severity icon */}
+        {}
         <div className="mt-[3px] shrink-0">
           <Icon className={`h-3.5 w-3.5 ${iconColor}`} strokeWidth={2.25} />
         </div>
 
-        {/* Body */}
+        {}
         <div className="min-w-0 flex-1 space-y-1.5">
-          {/* Badge row */}
+          {}
           <div className="flex items-center gap-2">
             <span
               className={`inline-flex items-center rounded px-1.5 py-[2px] text-[9px] font-bold uppercase tracking-[0.14em] ${badgeClass}`}
@@ -179,12 +173,12 @@ function InsightCard({
             {isCritical && <PulseDot color={dotColor} />}
           </div>
 
-          {/* Message */}
+          {}
           <p className="text-[12.5px] leading-[1.5] text-[#0F172A] dark:text-foreground/80">
             {insight.message}
           </p>
 
-          {/* Action CTA */}
+          {}
           {insight.actionLabel && actionRoute && (
             <button
               type="button"
@@ -200,7 +194,7 @@ function InsightCard({
           )}
         </div>
 
-        {/* Dismiss button */}
+        {}
         <motion.button
           type="button"
           disabled={isDismissing}
@@ -217,8 +211,6 @@ function InsightCard({
     </motion.div>
   )
 }
-
-// ─── Root Panel ───────────────────────────────────────────────────────────────
 
 export default function InsightsPanel({ insightsUpdatedAt }: InsightsPanelProps) {
   const [insights, setInsights] = useState<InsightItem[]>([])
@@ -242,7 +234,7 @@ export default function InsightsPanel({ insightsUpdatedAt }: InsightsPanelProps)
         setInsights(json.data)
       }
     } catch {
-      // Non-critical — insights failing must never break the dashboard
+
     } finally {
       if (isMounted.current) setInitialLoad(false)
     }
@@ -264,7 +256,7 @@ export default function InsightsPanel({ insightsUpdatedAt }: InsightsPanelProps)
         setInsights((prev) => prev.filter((i) => i.id !== id))
       }
     } catch {
-      // Silent fail
+
     } finally {
       if (isMounted.current) {
         setDismissingIds((prev) => {
@@ -285,10 +277,8 @@ export default function InsightsPanel({ insightsUpdatedAt }: InsightsPanelProps)
     if (isMounted.current) setInsights([])
   }, [insights])
 
-  // Render nothing during initial fetch or when empty — no empty-state shell
   if (initialLoad || insights.length === 0) return null
 
-  // Visual separation: CRITICAL cards surface to the top
   const critical = insights.filter((i) => i.priority === "CRITICAL")
   const rest = insights.filter((i) => i.priority !== "CRITICAL")
 
@@ -299,7 +289,7 @@ export default function InsightsPanel({ insightsUpdatedAt }: InsightsPanelProps)
       transition={{ type: "spring", stiffness: 340, damping: 32 }}
       className="overflow-hidden rounded-lg border border-white/60 dark:border-white/[0.05] bg-white/40 dark:bg-zinc-950/40 backdrop-blur-md shadow-[0_8px_32px_rgba(0,0,0,0.04)]"
     >
-      {/* ── Header ── */}
+      {}
       <div className="flex items-center gap-2.5 border-b border-slate-200/50 dark:border-white/[0.04] px-4 py-2.5 bg-white/20 dark:bg-transparent">
         <div className="flex h-5 w-5 items-center justify-center rounded bg-slate-200/50 dark:bg-white/[0.04]">
           <Activity className="h-[11px] w-[11px] text-[#64748B]/70 dark:text-muted-foreground/50" strokeWidth={2} />
@@ -316,7 +306,7 @@ export default function InsightsPanel({ insightsUpdatedAt }: InsightsPanelProps)
           </span>
         </div>
         <div className="ml-auto flex items-center gap-2">
-          {/* Mark all read */}
+          {}
           <button
             type="button"
             onClick={dismissAll}
@@ -325,7 +315,7 @@ export default function InsightsPanel({ insightsUpdatedAt }: InsightsPanelProps)
             <CheckCheck className="h-3 w-3" />
             All read
           </button>
-          {/* Live indicator */}
+          {}
           <div className="flex items-center gap-1">
             <span className="relative flex h-1.5 w-1.5">
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-50" />
@@ -338,10 +328,10 @@ export default function InsightsPanel({ insightsUpdatedAt }: InsightsPanelProps)
         </div>
       </div>
 
-      {/* ── Cards ── */}
+      {}
       <div className="space-y-[1px] bg-white/30 dark:bg-white/[0.012] p-3">
         <AnimatePresence mode="popLayout" initial={false}>
-          {/* CRITICAL first */}
+          {}
           {critical.map((insight, i) => (
             <InsightCard
               key={insight.id}
@@ -353,7 +343,7 @@ export default function InsightsPanel({ insightsUpdatedAt }: InsightsPanelProps)
           ))}
         </AnimatePresence>
 
-        {/* Separator between critical and the rest */}
+        {}
         {critical.length > 0 && rest.length > 0 && (
           <div className="my-1 h-px bg-slate-200/50 dark:bg-white/[0.06]" />
         )}

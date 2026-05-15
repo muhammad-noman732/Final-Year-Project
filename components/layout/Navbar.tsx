@@ -19,7 +19,7 @@ export default function Navbar({ title, userName, userRole, onMenuClick, showLiv
 
     return (
         <header className="sticky top-0 z-30 w-full h-14 flex items-center justify-between px-5 lg:px-6 border-b border-white/40 dark:border-white/[0.02] bg-white/60 dark:bg-[#050811]/60 backdrop-blur-md shadow-sm transition-colors duration-300">
-            {/* ── Left ── */}
+            {}
             <div className="flex items-center gap-3">
                 <button
                     onClick={onMenuClick}
@@ -44,7 +44,7 @@ export default function Navbar({ title, userName, userRole, onMenuClick, showLiv
                 </div>
             </div>
 
-            {/* ── Center Search ── */}
+            {}
             <div className="hidden md:flex flex-1 max-w-xs mx-6">
                 <div className="relative w-full">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#64748B] dark:text-slate-500" />
@@ -56,18 +56,18 @@ export default function Navbar({ title, userName, userRole, onMenuClick, showLiv
                 </div>
             </div>
 
-            {/* ── Right ── */}
+            {}
             <div className="flex items-center gap-3">
-                {/* Theme Toggle */}
+                {}
                 <ThemeToggle />
 
-                {/* Bell */}
+                {}
                 <NotificationBell />
 
-                {/* Divider */}
+                {}
                 <div className="hidden sm:block w-px h-6 bg-slate-200/50 dark:bg-slate-800/50 mx-1" aria-hidden="true" />
 
-                {/* User */}
+                {}
                 <div className="hidden sm:flex items-center gap-3">
                     <Avatar className="w-8 h-8 border border-white/60 dark:border-slate-800 shadow-sm">
                         <AvatarFallback className="bg-indigo-50 dark:bg-indigo-900/30 text-[#6366F1] dark:text-indigo-400 text-[11px] font-bold">
@@ -80,7 +80,7 @@ export default function Navbar({ title, userName, userRole, onMenuClick, showLiv
                     </div>
                 </div>
 
-                {/* Logout */}
+                {}
                 <Link href="/login" aria-label="Sign out">
                     <button className="w-8 h-8 rounded-lg flex items-center justify-center text-[#64748B] dark:text-slate-400 hover:text-[#EF4444] dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-[#EF4444]">
                         <LogOut className="w-4 h-4" />

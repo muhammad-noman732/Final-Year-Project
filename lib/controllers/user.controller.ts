@@ -18,7 +18,7 @@ export class UserController {
 
   async getUsers(req: NextRequest) {
     const { tenantId } = await getTenantContext()
-    await requireRole("ADMIN", "VC") // HOD and Student shouldn't see all users
+    await requireRole("ADMIN", "VC") 
 
     const searchParams = Object.fromEntries(req.nextUrl.searchParams.entries())
     const query = listUsersQuerySchema.parse(searchParams)
@@ -50,7 +50,7 @@ export class UserController {
 
   async createUser(req: NextRequest) {
     const { tenantId, userId } = await getTenantContext()
-    await requireRole("ADMIN") // Only Admin creates VC/HOD
+    await requireRole("ADMIN") 
 
     const body = await req.json()
     const data = createUserSchema.parse(body)

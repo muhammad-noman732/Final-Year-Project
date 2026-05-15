@@ -34,7 +34,7 @@ export default function Sidebar({ items, role, roleLabel, open, onClose }: Sideb
 
     return (
         <>
-            {/* Mobile overlay */}
+            {}
             {open && (
                 <div
                     className="fixed inset-0 z-40 bg-[#0F172A]/40 dark:bg-[#000]/60 backdrop-blur-sm lg:hidden transition-opacity duration-200"
@@ -51,7 +51,7 @@ export default function Sidebar({ items, role, roleLabel, open, onClose }: Sideb
                 role="navigation"
                 aria-label="Main navigation"
             >
-                {/* ── Logo ── */}
+                {}
                 <div className="px-5 h-14 flex items-center border-b border-amber-200/20 dark:border-white/[0.02]">
                     <div className="flex items-center justify-between w-full">
                         <div className="flex items-center gap-3 w-full">
@@ -72,7 +72,7 @@ export default function Sidebar({ items, role, roleLabel, open, onClose }: Sideb
                     </div>
                 </div>
 
-                {/* ── Role Badge ── */}
+                {}
                 <div className="px-5 py-3 border-b border-amber-200/20 dark:border-white/[0.02]">
                     <span className={cn("inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold uppercase tracking-widest border shadow-sm", palette.badge)}>
                         <span className="w-1.5 h-1.5 rounded-full bg-current" />
@@ -80,7 +80,7 @@ export default function Sidebar({ items, role, roleLabel, open, onClose }: Sideb
                     </span>
                 </div>
 
-                {/* ── Navigation ── */}
+                {}
                 <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
                     {items.map((item) => {
                         const Icon = iconMap[item.icon] || LayoutDashboard;
@@ -101,7 +101,7 @@ export default function Sidebar({ items, role, roleLabel, open, onClose }: Sideb
                                 )}
                                 aria-current={isActive ? "page" : undefined}
                             >
-                                {/* Active indicator line */}
+                                {}
                                 {isActive && (
                                     <span className={cn("absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 rounded-r-full bg-amber-500 dark:bg-amber-400")} />
                                 )}
@@ -116,7 +116,7 @@ export default function Sidebar({ items, role, roleLabel, open, onClose }: Sideb
                     })}
                 </nav>
 
-                {/* ── Footer ── */}
+                {}
                 <div className="px-4 py-4 border-t border-amber-200/20 dark:border-white/[0.02]">
                     <button 
                         onClick={() => logout()}

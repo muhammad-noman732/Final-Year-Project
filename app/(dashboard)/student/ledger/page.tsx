@@ -1,5 +1,5 @@
 "use client";
- 
+
  import Link from "next/link";
  import { useStudentLedger } from "@/hooks/student/useStudentLedger";
  import { formatFullCurrency } from "@/config/constants";
@@ -8,7 +8,7 @@
  import { format } from "date-fns";
  import { motion, AnimatePresence } from "framer-motion";
  import { Button } from "@/components/ui/button";
- 
+
  import { 
      Clock, 
      ArrowRight, 
@@ -21,7 +21,7 @@
      TrendingUp,
      Layers
  } from "lucide-react";
- 
+
  export default function StudentLedgerPage() {
      const {
          summary,
@@ -33,13 +33,13 @@
          unpaidAssignments,
          filteredPayments,
      } = useStudentLedger();
- 
+
      return (
          <div className="relative isolate space-y-6 pb-10 p-5 lg:p-8">
- 
+
              <div className="max-w-6xl mx-auto space-y-8">
-                 
-                 {/* Page Header */}
+
+                 {}
                  <header className="space-y-2 px-1">
                      <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-violet-500/10 mb-2">
                          <Receipt className="h-4.5 w-4.5 text-violet-500" />
@@ -49,10 +49,10 @@
                          Track your complete payment history, active liabilities, and overall institutional financial summary.
                      </p>
                  </header>
- 
+
                  <Skeleton name="ledger-summary" loading={isLoading}>
                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                         {/* Total Cleared Card */}
+                         {}
                          <div className="group relative rounded-2xl border border-zinc-200/50 dark:border-white/[0.05] bg-white/40 dark:bg-white/[0.015] p-6 sm:p-8 flex items-center justify-between shadow-sm backdrop-blur-md transition-all duration-300">
                              <div>
                                  <p className="text-[11px] font-bold uppercase tracking-widest text-zinc-400 dark:text-muted-foreground flex items-center gap-2 mb-2">
@@ -66,8 +66,8 @@
                                  <CheckCircle2 className="w-7 h-7 text-emerald-500" />
                              </div>
                          </div>
- 
-                         {/* Total Liability Card */}
+
+                         {}
                          <div className="group relative rounded-2xl border border-zinc-200/50 dark:border-white/[0.05] bg-white/40 dark:bg-white/[0.015] p-6 sm:p-8 flex items-center justify-between shadow-sm backdrop-blur-md transition-all duration-300">
                              <div>
                                  <p className="text-[11px] font-bold uppercase tracking-widest text-zinc-400 dark:text-muted-foreground flex items-center gap-2 mb-2">
@@ -83,16 +83,16 @@
                          </div>
                      </div>
                  </Skeleton>
- 
+
                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-                     
-                     {/* ══ LEFT COLUMN: Active Targets ══ */}
+
+                     {}
                      <div className="lg:col-span-5 space-y-6">
                          <div className="flex items-center gap-2 px-1">
                              <ShieldAlert className="w-4 h-4 text-amber-500" />
                              <h3 className="text-xs font-bold text-zinc-500 dark:text-muted-foreground uppercase tracking-widest">Active Liabilities</h3>
                          </div>
- 
+
                          <Skeleton name="active-liabilities" loading={isLoading}>
                              {unpaidAssignments.length === 0 ? (
                                  <div className="rounded-2xl border border-zinc-200/50 dark:border-white/[0.05] bg-white/40 dark:bg-white/[0.01] p-10 flex flex-col items-center justify-center text-center h-[300px] shadow-sm backdrop-blur-md">
@@ -136,7 +136,7 @@
                                                              </p>
                                                          </div>
                                                      </div>
- 
+
                                                      <div className="flex items-center justify-between p-3 rounded-xl bg-zinc-900/5 dark:bg-black/20 border border-zinc-200/50 dark:border-white/[0.02] mb-6 text-xs">
                                                          <div className="flex items-center gap-2">
                                                              <Clock className="w-4 h-4 text-zinc-400" />
@@ -146,7 +146,7 @@
                                                              {format(new Date(assignment.dueDate), "dd MMM, yyyy")}
                                                          </span>
                                                      </div>
- 
+
                                                      <Button 
                                                          onClick={() => {
                                                              setNavigatingId(assignment.id);
@@ -174,15 +174,15 @@
                              )}
                          </Skeleton>
                      </div>
- 
-                     {/* ══ RIGHT COLUMN: Transaction Timeline ══ */}
+
+                     {}
                      <div className="lg:col-span-7 space-y-6">
                          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 px-1">
                              <div className="flex items-center gap-2">
                                  <Wallet className="w-4 h-4 text-sky-500" />
                                  <h3 className="text-xs font-bold text-zinc-500 dark:text-muted-foreground uppercase tracking-widest">Transaction Timeline</h3>
                              </div>
-                             
+
                              <div className="p-1 rounded-xl bg-white/40 dark:bg-white/[0.03] border border-zinc-200/50 dark:border-white/[0.05] inline-flex shadow-sm backdrop-blur-md">
                                  {(["all", "completed", "pending"] as const).map((f) => (
                                      <button
@@ -199,7 +199,7 @@
                                  ))}
                              </div>
                          </div>
- 
+
                          <Skeleton name="ledger-transactions" loading={isLoading}>
                              <div className="rounded-2xl border border-zinc-200/50 dark:border-white/[0.05] bg-white/40 dark:bg-white/[0.01] overflow-hidden shadow-sm backdrop-blur-md">
                                  {filteredPayments.length === 0 ? (
@@ -238,7 +238,7 @@
                                                              </div>
                                                          </div>
                                                      </div>
- 
+
                                                      <div className="flex items-center gap-6 sm:justify-end">
                                                          <div className="text-left sm:text-right">
                                                              <p className="font-bold text-zinc-900 dark:text-zinc-50 tabular-nums text-sm tracking-tight">

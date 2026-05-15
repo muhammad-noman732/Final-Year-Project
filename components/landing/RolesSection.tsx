@@ -59,7 +59,7 @@ export default function RolesSection() {
       className="relative py-28 md:py-40 overflow-hidden"
       style={{ background: "linear-gradient(180deg, #07090f 0%, #05080f 100%)" }}
     >
-      {/* Background effects */}
+      {}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <div
           className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[400px]"
@@ -75,7 +75,7 @@ export default function RolesSection() {
             backgroundSize: "30px 30px",
           }}
         />
-        {/* Section top separator */}
+        {}
         <div
           className="absolute top-0 left-0 right-0 h-px"
           style={{
@@ -98,9 +98,9 @@ export default function RolesSection() {
           </p>
         </FadeIn>
 
-        {/* 2-top + 3-bottom — 3D card layout */}
+        {}
         <div className="max-w-[960px] mx-auto">
-          {/* Top row — 2 cards */}
+          {}
           <div className="grid grid-cols-1 md:grid-cols-2">
             {roles.slice(0, 2).map((role, i) => (
               <FadeIn key={role.role} delay={i * 0.08}>
@@ -108,7 +108,7 @@ export default function RolesSection() {
               </FadeIn>
             ))}
           </div>
-          {/* Bottom row — 3 cards */}
+          {}
           <div className="grid grid-cols-1 md:grid-cols-3">
             {roles.slice(2).map((role, i) => (
               <FadeIn key={role.role} delay={(i + 2) * 0.08}>
@@ -133,7 +133,7 @@ function RoleCard3D({ role }: { role: (typeof roles)[number] }) {
           backdropFilter: "blur(12px)",
         }}
       >
-        {/* Coloured top accent line */}
+        {}
         <CardItem translateZ={20} className="absolute inset-x-0 top-0 h-[2.5px] rounded-t-[22px]">
           <div
             style={{
@@ -144,13 +144,13 @@ function RoleCard3D({ role }: { role: (typeof roles)[number] }) {
           />
         </CardItem>
 
-        {/* Inner gradient */}
+        {}
         <div
           className={`absolute inset-0 rounded-[22px] bg-gradient-to-br ${role.gradient} pointer-events-none opacity-40`}
         />
 
         <div className="relative p-7">
-          {/* Icon */}
+          {}
           <CardItem translateZ={60} className="mb-5">
             <div
               className="w-11 h-11 rounded-[13px] flex items-center justify-center"
@@ -168,14 +168,14 @@ function RoleCard3D({ role }: { role: (typeof roles)[number] }) {
             </div>
           </CardItem>
 
-          {/* Role title */}
+          {}
           <CardItem translateZ={50} as="div" className="mb-1">
             <h3 className="text-[16px] font-bold text-white tracking-[-0.02em] leading-tight">
               {role.role}
             </h3>
           </CardItem>
 
-          {/* Scope badge */}
+          {}
           <CardItem translateZ={40} as="div" className="mb-4">
             <p
               className="text-[10px] font-black uppercase tracking-[0.12em]"
@@ -185,7 +185,7 @@ function RoleCard3D({ role }: { role: (typeof roles)[number] }) {
             </p>
           </CardItem>
 
-          {/* Description */}
+          {}
           <CardItem translateZ={30} as="p" className="text-[13px] text-white/45 leading-[1.75]">
             {role.description}
           </CardItem>

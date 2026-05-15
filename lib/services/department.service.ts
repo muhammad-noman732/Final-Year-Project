@@ -21,7 +21,7 @@ export class DepartmentService {
     tenantId: string,
     query: ListDepartmentsQuery,
   ): Promise<PaginatedResult<DepartmentRow>> {
-    //  Build WHERE 
+
     const where: Prisma.DepartmentWhereInput = { tenantId }
 
     if (query.search) {
@@ -35,7 +35,6 @@ export class DepartmentService {
       where.isActive = query.isActive
     }
 
-    //  Build ORDER BY 
     const orderBy: Prisma.DepartmentOrderByWithRelationInput[] = [
       { [query.sortBy]: query.sortDir },
       { id: query.sortDir },
@@ -130,7 +129,6 @@ export class DepartmentService {
     return updated
   }
 
-  // Private
   private _audit(params: {
     tenantId: string
     userId: string

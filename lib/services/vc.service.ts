@@ -180,7 +180,6 @@ export class VCService {
 
     const insightRows: Parameters<InsightRepository["createMany"]>[0] = []
 
-    // 1. ALERT: Departmental Lag — any dept 15%+ below campus average
     const deptMap = new Map<string, { deptId: string; deptName: string; total: number; paid: number }>()
     for (const row of canonicalAssignments) {
       const dept = row.assignment.student.department
@@ -207,7 +206,6 @@ export class VCService {
       }
     }
 
-    // 2. ALERT CRITICAL: Deadline in ≤ 3 days with unpaid students
     const nearestDeadlineRow = await this.vcRepo.findNearestDeadline(tenantId)
     let daysUntilDeadline: number | null = null
     if (nearestDeadlineRow) {
@@ -235,7 +233,6 @@ export class VCService {
       }
     }
 
-    // 3. SUCCESS: Collection rate > 90% with 5+ days until deadline
     if (overallRate > 90 && daysUntilDeadline !== null && daysUntilDeadline >= 5) {
       insightRows.push({
         tenantId,
@@ -247,7 +244,6 @@ export class VCService {
       })
     }
 
-    // 4. PREDICTION: Full collection ETA based on 7-day daily average
     const recentPayments = await this.vcRepo.findRecentPayments(tenantId, 7)
     if (recentPayments.length > 0) {
       const totalRecentAmount = recentPayments.reduce((sum, p) => sum + p.amount, 0)
@@ -272,7 +268,6 @@ export class VCService {
       }
     }
 
-    // 5. RISK: Students with latePaymentCount > 2 and OVERDUE status
     const atRiskStudents = await this.vcRepo.findAtRiskStudents(tenantId)
     if (atRiskStudents.length > 0) {
       await this.vcRepo.updateStudentRiskLevels(

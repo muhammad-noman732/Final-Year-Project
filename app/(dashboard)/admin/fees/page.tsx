@@ -24,14 +24,13 @@ import { useAssignFee } from "@/hooks/admin/useAssignFee";
 import type { FeeStructure } from "@/types/client/store/fee.store.types";
 
 export default function FeesPage() {
-    // ── Data Queries ──────────────────────────────────────────────
+
     const {
         programs, semesters, sessions,
         page, setPage,
         feeStructures, meta, isLoading,
     } = useGetFeeStructures();
 
-    // ── Create ────────────────────────────────────────────────────
     const [createOpen, setCreateOpen] = useState(false);
     const { form: createForm, onSubmit: createOnSubmit, isLoading: isCreating, computedTotal: createTotal } = useAddFeeStructure(() => setCreateOpen(false));
     const { register: createRegister, formState: { errors: createErrors }, setValue: createSetValue, watch: createWatch } = createForm;
@@ -39,10 +38,8 @@ export default function FeesPage() {
     const watchedSemester = createWatch("semester");
     const watchedSessionYear = createWatch("sessionYear");
 
-    // ── View ──────────────────────────────────────────────────────
     const [viewFs, setViewFs] = useState<FeeStructure | null>(null);
 
-    // ── Edit ──────────────────────────────────────────────────────
     const [editFs, setEditFs] = useState<FeeStructure | null>(null);
     const {
         form: editForm, onSubmit: editOnSubmit, isLoading: isUpdating,
@@ -55,11 +52,9 @@ export default function FeesPage() {
         editPopulate(fs);
     }, [editPopulate]);
 
-    // ── Deactivate ────────────────────────────────────────────────
     const { handleDeactivate, isDeactivating } = useDeactivateFeeStructure();
     const [deleteFeeState, setDeleteFeeState] = useState<{ id: string; label: string } | null>(null);
 
-    // ── Assign ────────────────────────────────────────────────────
     const { assignAll, isAssigning } = useAssignFee();
     const [assigningId, setAssigningId] = useState<string | null>(null);
 
@@ -69,13 +64,11 @@ export default function FeesPage() {
         setAssigningId(null);
     };
 
-    // ── Stats ─────────────────────────────────────────────────────
     const totalRevenue = feeStructures.reduce((s, fs) => s + (fs.totalFee * fs._count.assignments), 0);
     const totalAssigned = feeStructures.reduce((s, fs) => s + fs._count.assignments, 0);
-    // Count only active structures from the current page — accurate after any hard-delete or deactivation
+
     const activeCount = feeStructures.filter(fs => fs.isActive).length;
 
-    // ── Fee breakdown labels ─────────────────────────────────────
     const feeBreakdownFields = [
         { label: "Tuition Fee", name: "tuitionFee" },
         { label: "Lab Fee", name: "labFee" },
@@ -88,7 +81,7 @@ export default function FeesPage() {
 
     return (
         <div className="space-y-6 p-5 lg:p-8 pb-10">
-            {/* ═══ HEADER ═══ */}
+            {}
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div>
                     <h1 className="text-2xl font-bold text-[#0F172A] dark:text-foreground tracking-tight">Fee Management</h1>
@@ -96,7 +89,7 @@ export default function FeesPage() {
                 </div>
             </div>
 
-            {/* ═══ SUMMARY CARDS ═══ */}
+            {}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                 <Card className="glass-card border-0 p-4 flex items-center gap-3">
                     <div className="w-10 h-10 rounded-xl bg-gold-500/10 flex items-center justify-center flex-shrink-0">
@@ -149,7 +142,7 @@ export default function FeesPage() {
                     </TabsTrigger>
                 </TabsList>
 
-                {/* ═══ FEE STRUCTURES TAB ═══ */}
+                {}
                 <TabsContent value="structures">
                     <div className="flex justify-between items-center mb-4">
                         <p className="text-sm text-muted-foreground">{meta.total} structures</p>
@@ -265,7 +258,7 @@ export default function FeesPage() {
                     </Skeleton>
                 </TabsContent>
 
-                {/* ═══ DEFAULTERS TAB ═══ */}
+                {}
                 <TabsContent value="defaulters">
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
                         <Card className="glass-card border-0 p-5 flex items-center gap-4">
@@ -298,7 +291,7 @@ export default function FeesPage() {
                 </TabsContent>
             </Tabs>
 
-            {/* ═══ VIEW FEE STRUCTURE DIALOG ═══ */}
+            {}
             <Dialog open={!!viewFs} onOpenChange={(open) => !open && setViewFs(null)}>
                 <DialogContent className="bg-navy-900 border border-gold-500/10 w-full sm:max-w-lg">
                     <DialogHeader>
@@ -311,7 +304,7 @@ export default function FeesPage() {
                     </DialogHeader>
                     {viewFs && (
                         <div className="space-y-4 mt-2">
-                            {/* Summary header */}
+                            {}
                             <div className="flex items-center gap-4 p-4 rounded-xl bg-navy-800/40 border border-gold-500/5">
                                 <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-gold-500/20 to-gold-600/10 flex items-center justify-center flex-shrink-0">
                                     <DollarSign className="w-7 h-7 text-gold-400" />
@@ -325,7 +318,7 @@ export default function FeesPage() {
                                 </div>
                             </div>
 
-                            {/* Fee breakdown */}
+                            {}
                             <div className="p-4 rounded-xl bg-navy-800/30 border border-gold-500/5 space-y-2">
                                 <p className="text-xs text-gold-500/60 uppercase tracking-wider font-medium mb-3">Fee Breakdown</p>
                                 {feeBreakdownFields.map((item) => (
@@ -340,7 +333,7 @@ export default function FeesPage() {
                                 </div>
                             </div>
 
-                            {/* Meta grid */}
+                            {}
                             <div className="grid grid-cols-3 gap-3">
                                 <div className="p-3 rounded-lg bg-navy-800/30 border border-gold-500/5">
                                     <p className="text-[10px] text-muted-foreground uppercase tracking-widest mb-1">Deadline</p>
@@ -369,7 +362,7 @@ export default function FeesPage() {
                 </DialogContent>
             </Dialog>
 
-            {/* ═══ EDIT FEE STRUCTURE SHEET ═══ */}
+            {}
             <Sheet open={!!editFs} onOpenChange={(open) => !open && setEditFs(null)}>
                 <SheetContent className="bg-navy-900 border-l border-gold-500/10 w-full sm:max-w-[480px] overflow-y-auto">
                     <SheetHeader className="mb-6">
@@ -380,7 +373,7 @@ export default function FeesPage() {
                     </SheetHeader>
                     {editFs && (
                         <form className="space-y-5" onSubmit={editOnSubmit(editFs.id)}>
-                            {/* Fee breakdown */}
+                            {}
                             <div className="space-y-3 p-4 rounded-xl bg-navy-800/30 border border-gold-500/5">
                                 <p className="text-xs text-gold-500/60 uppercase tracking-wider font-medium mb-3">Fee Breakdown</p>
                                 {feeBreakdownFields.map((item) => (
@@ -441,7 +434,7 @@ export default function FeesPage() {
                 </SheetContent>
             </Sheet>
 
-            {/* ═══ CREATE FEE STRUCTURE DIALOG ═══ */}
+            {}
             <Dialog open={createOpen} onOpenChange={setCreateOpen}>
                 <DialogContent className="bg-navy-900 border border-gold-500/10 w-full sm:max-w-lg max-h-[90vh] overflow-y-auto">
                     <DialogHeader>

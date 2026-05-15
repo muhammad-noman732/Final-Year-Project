@@ -1,7 +1,5 @@
 import type { Prisma, PrismaClient } from "@/app/generated/prisma/client"
 
-// Select shapes
-
 const PROGRAM_SELECT = {
   id: true,
   name: true,
@@ -21,10 +19,7 @@ const PROGRAM_SELECT = {
   },
 } satisfies Prisma.ProgramSelect
 
-// Exported row type
-
 export type ProgramRow = Prisma.ProgramGetPayload<{ select: typeof PROGRAM_SELECT }>
-
 
 export class ProgramRepository {
   constructor(private readonly db: PrismaClient) { }

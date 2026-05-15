@@ -43,7 +43,7 @@ export default function SolutionSection() {
       className="relative py-28 md:py-40 overflow-hidden"
       style={{ background: "linear-gradient(180deg, #05080f 0%, #07090f 100%)" }}
     >
-      {/* Subtle dot grid */}
+      {}
       <div
         className="absolute inset-0 opacity-[0.14] pointer-events-none"
         style={{
@@ -51,7 +51,7 @@ export default function SolutionSection() {
           backgroundSize: "32px 32px",
         }}
       />
-      {/* Top separator */}
+      {}
       <div className="absolute top-0 left-0 right-0 h-px" style={{ background: "linear-gradient(90deg, transparent, rgba(212,168,67,0.2) 50%, transparent)" }} />
 
       <div className="relative z-10 max-w-[1240px] mx-auto px-6 lg:px-10">
@@ -68,10 +68,10 @@ export default function SolutionSection() {
           </p>
         </FadeIn>
 
-        {/* ── Horizontal stepper (desktop) / Vertical (mobile) ── */}
+        {}
         <div className="max-w-[960px] mx-auto">
 
-          {/* Desktop connector line sitting behind the step circles */}
+          {}
           <div className="hidden md:block relative mb-10">
             <div
               className="absolute top-5 left-[calc(12.5%+5px)] right-[calc(12.5%+5px)] h-[2px] animate-dash-travel"
@@ -86,7 +86,7 @@ export default function SolutionSection() {
                 return (
                   <FadeIn key={step.number} delay={i * 0.1}>
                     <div className="flex flex-col items-center text-center">
-                      {/* Circle with number */}
+                      {}
                       <div
                         className="relative z-10 w-10 h-10 rounded-full border-2 flex items-center justify-center mb-6"
                         style={{
@@ -103,7 +103,7 @@ export default function SolutionSection() {
                         </span>
                       </div>
 
-                      {/* Icon */}
+                      {}
                       <div
                         className="w-12 h-12 rounded-[16px] flex items-center justify-center mb-4"
                         style={{
@@ -131,14 +131,14 @@ export default function SolutionSection() {
             </div>
           </div>
 
-          {/* Mobile: vertical stack */}
+          {}
           <div className="md:hidden space-y-0">
             {steps.map((step, i) => {
               const Icon = step.icon;
               return (
                 <FadeIn key={step.number} delay={i * 0.08}>
                   <div className="flex gap-5">
-                    {/* Left: circle + vertical line */}
+                    {}
                     <div className="flex flex-col items-center">
                       <div
                         className="w-10 h-10 rounded-full border-2 flex items-center justify-center flex-shrink-0 bg-white"
@@ -159,7 +159,7 @@ export default function SolutionSection() {
                       )}
                     </div>
 
-                    {/* Right: content */}
+                    {}
                     <div className="pb-10">
                       <div
                         className="w-11 h-11 rounded-[14px] flex items-center justify-center mb-3"

@@ -26,7 +26,6 @@ export function useAuth(): UseAuthReturn {
   const [user, setUser] = useState<AuthUser | null>(null)
   const [isLoading, setIsLoading] = useState(true)
 
-  // Fetch current user on mount
   useEffect(() => {
     let cancelled = false
 
@@ -52,7 +51,6 @@ export function useAuth(): UseAuthReturn {
     return () => { cancelled = true }
   }, [])
 
-  // Logout — calls API to clear cookie, then redirects to login
   const logout = useCallback(async (): Promise<void> => {
     try {
       await fetch("/api/auth/logout", { method: "POST" })

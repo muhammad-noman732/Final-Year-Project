@@ -35,7 +35,7 @@ export const feeStructuresApi = baseApi.injectEndpoints({
         url: "/admin/fees/structures",
         params: toListQueryParams(query),
       }),
-      // Override the global 600s TTL — fee data must not be stale after mutations
+
       keepUnusedDataFor: 60,
       providesTags: (result) =>
         result?.data?.data

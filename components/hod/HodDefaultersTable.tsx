@@ -9,7 +9,7 @@ const HEAD = ["Student", "Program", "Sem", "Amount Due", "Outstanding", "Overdue
 
 export default function HodDefaultersTable({ defaulters }: HodDefaultersTableProps) {
   const hasDefaulters = defaulters.length > 0
-  
+
   return (
     <div className="relative overflow-hidden bg-white/40 dark:bg-slate-900/40 backdrop-blur-md rounded-xl shadow-[0_8px_32px_rgba(0,0,0,0.04)] border border-white/60 dark:border-white/10 transition-all duration-300">
       <div className="px-6 py-5 border-b border-slate-100 dark:border-white/5 flex items-center justify-between">

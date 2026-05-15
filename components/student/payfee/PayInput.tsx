@@ -1,13 +1,13 @@
 "use client";
- 
+
  import React from "react";
- 
+
  interface PayInputProps {
      label: string;
      children: React.ReactNode;
      focused: boolean;
  }
- 
+
  export function PayInput({ label, children, focused }: PayInputProps) {
      return (
          <div className="relative">

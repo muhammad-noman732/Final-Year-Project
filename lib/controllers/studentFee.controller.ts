@@ -14,8 +14,6 @@ export class StudentFeeController {
     const { tenantId, userId } = await getTenantContext()
     await requireRole("STUDENT")
 
-    // Cache per-student (userId) + tenant-wide tag so either a targeted
-    // revalidateStudentFee() or a bulk revalidateAllStudentFees() busts it.
     const getCached = buildCachedFn(
       async (uid: string, tid: string) =>
         this.studentFeeService.getMyFeeProfile(tid, uid),

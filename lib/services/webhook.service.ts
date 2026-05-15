@@ -114,7 +114,6 @@ export class WebhookService {
       `Payment fulfilled: student=${meta.studentRollNo} amount=PKR ${pi.amount} pi=${pi.id}`,
     )
 
-    // Fetch student once for department name, cache revalidation, and notification userId
     let departmentName = ""
     let studentUserId: string | null = null
     try {
@@ -133,7 +132,7 @@ export class WebhookService {
     }
 
     if (meta.tenantId) {
-      // Broadcast real-time SSE event via Redis (fire-and-forget)
+
       void broadcastPayment(meta.tenantId, {
         type: "PaymentSuccess",
         payload: {
@@ -147,7 +146,6 @@ export class WebhookService {
         },
       })
 
-      // Notify the student who paid (fire-and-forget)
       if (studentUserId) {
         this.notificationService
           .notifyUser({
@@ -166,7 +164,6 @@ export class WebhookService {
           })
       }
 
-      // Notify all ADMIN and VC users in the tenant (fire-and-forget)
       this.userRepo
         .findIdsByRole(meta.tenantId, ["ADMIN" as const, "VC" as const])
         .then((adminVcIds) =>
@@ -190,7 +187,6 @@ export class WebhookService {
           )
         })
 
-      // Persist to ActivityLog so the VC feed has historical data on mount
       try {
         const activityMetadata: Prisma.InputJsonValue = {
           paymentId: payment.id,

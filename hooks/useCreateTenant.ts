@@ -19,7 +19,6 @@ export function useCreateTenant() {
   const [open, setOpen] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  // Notice we now use the powerful RTK Query hook!
   const [onboardTenant, { isLoading }] = useOnboardTenantMutation()
   const router = useRouter()
 

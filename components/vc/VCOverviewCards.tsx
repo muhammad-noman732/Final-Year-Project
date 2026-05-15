@@ -39,7 +39,7 @@ function StatCard(props: {
           : "cursor-default",
       ].join(" ")}
     >
-      {/* Top row */}
+      {}
       <div className="flex items-start justify-between gap-2 mb-4">
         <div className={`flex h-9 w-9 items-center justify-center rounded-lg ${props.iconClass}`}>
           <Icon className="h-4 w-4" />
@@ -49,7 +49,7 @@ function StatCard(props: {
         </p>
       </div>
 
-      {/* Value */}
+      {}
       <p className="text-2xl font-bold tabular-nums tracking-tight text-[#0F172A] dark:text-foreground">
         {props.primary}
       </p>
@@ -57,7 +57,7 @@ function StatCard(props: {
 
       <Separator className="bg-slate-200/50 dark:bg-white/[0.04] my-3" />
 
-      {/* Sub */}
+      {}
       <p className="text-[11px] text-[#64748B] dark:text-muted-foreground">{props.sub}</p>
     </button>
   )
@@ -85,7 +85,7 @@ export default function VCOverviewCards({ overview, onCardClick }: VCOverviewCar
         label="Students Paid"
         primary={`${overview.studentsPaid} / ${overview.totalStudents}`}
         secondary={
-          // secondary shown as colored rate inline — handled below
+
           `${payRate}% collection rate`
         }
         sub={`${overview.totalStudents - overview.studentsPaid} students pending`}

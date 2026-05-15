@@ -7,10 +7,6 @@ import type { SSELiveTransaction, UseSSEReturn } from "@/types/client/ui/vc.ui.t
 const INITIAL_RETRY_DELAY_MS = 5_000
 const MAX_RETRY_DELAY_MS = 30_000
 
-/**
- * Subscribes to real-time payment events via Server-Sent Events (/api/vc/live).
- * Reconnects automatically with exponential backoff (5s → 10s → 20s → 30s cap).
- */
 export function useSSE(): UseSSEReturn {
   const [transactions, setTransactions] = useState<SSELiveTransaction[]>([])
   const [newPaymentsCount, setNewPaymentsCount] = useState(0)
@@ -71,7 +67,7 @@ export function useSSE(): UseSSEReturn {
             setLatestRegistrationEvent(data as SSERegistrationImportedEvent)
           }
         } catch {
-          // Ignore malformed frames (e.g. keepalive comments)
+
         }
       }
 

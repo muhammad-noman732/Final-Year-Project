@@ -21,8 +21,8 @@ export default async function UniversitiesPage() {
 
   return (
     <div className="space-y-6 pb-10 animate-in fade-in duration-500">
-      
-      {/* Header */}
+
+      {}
       <header className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-6 border-b border-border/50 dark:border-white/[0.05]">
         <div>
           <h1 className="text-2xl font-bold tracking-tight text-foreground font-heading">
@@ -37,7 +37,7 @@ export default async function UniversitiesPage() {
         </div>
       </header>
 
-      {/* Tenants Table */}
+      {}
       <section className="space-y-4">
         {tenants.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-16 text-center border-2 border-dashed border-border/50 rounded-2xl bg-muted/30 dark:bg-navy-900/30">

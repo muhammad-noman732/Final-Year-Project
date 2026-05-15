@@ -8,15 +8,11 @@ import { navItems } from "@/config/site"
 import { useAuth } from "@/hooks/useAuth"
 import { cn } from "@/lib/utils"
 
-// ─── Nav item shape (shared with Sidebar) ─────────────────────
-
 interface NavItem {
   label: string
   href: string
   icon: string
 }
-
-// ─── Role config — maps role prefix to nav items & labels ─────
 
 const roleConfig: Record<
   string,
@@ -57,8 +53,6 @@ const roleConfig: Record<
   },
 }
 
-// ═══════════════════════════════════════════════════════════════
-
 export default function DashboardLayout({
   children,
 }: {
@@ -67,14 +61,11 @@ export default function DashboardLayout({
   const pathname = usePathname()
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
-  // Read real user from /api/auth/me via our useAuth hook
   const { user, isLoading } = useAuth()
 
-  // Determine role from URL pathname (middleware already ensures correct access)
   const role = pathname.split("/")[1] || "student"
   const config = roleConfig[role] || roleConfig.student
 
-  // Determine page title from current nav item
   const currentItem = config.items.find(
     (item) =>
       pathname === item.href ||
@@ -82,16 +73,14 @@ export default function DashboardLayout({
   )
   const pageTitle = currentItem?.label || config.title
 
-  // Use real user name if available, otherwise fallback
   const userName = isLoading ? "Loading..." : user?.name || "User"
   const userRole = config.label
-  
-  // Specific styling for HOD, VC, Admin, and Student routes to give full-width background with mesh gradients
+
   const isInteractive = role === "hod" || role === "vc" || role === "admin" || role === "student" || role === "superadmin"
 
   return (
     <div className="h-[100dvh] flex bg-[#F4F6FA] dark:bg-[#050811] overflow-hidden transition-colors duration-300 relative isolate">
-      {/* Fantasy UI Mesh Gradient Background for Interactive Panels */}
+      {}
       {isInteractive && (
         <div className="absolute inset-0 -z-10 overflow-hidden pointer-events-none bg-gradient-to-br from-[#E2E8F0] via-[#F1F5F9] to-[#E2E8F0] dark:from-[#050811] dark:via-[#0A0E1A] dark:to-[#050811]">
           <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-[#b8c6e5] dark:bg-[#312e81] rounded-full blur-[100px] opacity-40 dark:opacity-20" />

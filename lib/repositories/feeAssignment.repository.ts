@@ -1,6 +1,5 @@
 import type { Prisma, PrismaClient } from "@/app/generated/prisma/client"
 
-// Select shape 
 const FEE_ASSIGNMENT_SELECT = {
   id: true,
   amountDue: true,
@@ -58,13 +57,10 @@ export type FeeAssignmentRow = Prisma.FeeAssignmentGetPayload<{
   select: typeof FEE_ASSIGNMENT_SELECT
 }>
 
-// Repository 
-
 export class FeeAssignmentRepository {
   constructor(private readonly db: PrismaClient) { }
 
-  /** All fee assignments for one student, ordered newest first */
-  async findByStudent(
+    async findByStudent(
     tenantId: string,
     studentId: string,
   ): Promise<FeeAssignmentRow[]> {
@@ -75,8 +71,7 @@ export class FeeAssignmentRepository {
     })
   }
 
-  /** Check if a student already has an assignment for this fee structure */
-  async findExisting(
+    async findExisting(
     tenantId: string,
     studentId: string,
     feeStructureId: string,
@@ -87,23 +82,17 @@ export class FeeAssignmentRepository {
     })
   }
 
-  /**
-   * Bulk-create FeeAssignment records atomically.
-   * Uses createMany for efficiency (one DB round-trip for N students).
-   * Returns count of assignments actually created (duplicates are skipped).
-   */
-  async bulkCreate(
+    async bulkCreate(
     records: Prisma.FeeAssignmentCreateManyInput[],
   ): Promise<number> {
     const result = await this.db.feeAssignment.createMany({
       data: records,
-      skipDuplicates: true, // honours @@unique([studentId, feeStructureId])
+      skipDuplicates: true, 
     })
     return result.count
   }
 
-  /** Count how many assignments already exist for a fee structure */
-  async countByFeeStructure(
+    async countByFeeStructure(
     tenantId: string,
     feeStructureId: string,
   ): Promise<number> {
@@ -112,8 +101,7 @@ export class FeeAssignmentRepository {
     })
   }
 
-  /** Returns UNPAID/OVERDUE assignments for a structure with student userId for cache busting */
-  async findUnpaidByFeeStructure(
+    async findUnpaidByFeeStructure(
     tenantId: string,
     feeStructureId: string,
   ): Promise<Array<{ id: string; studentId: string; student: { userId: string } }>> {
@@ -123,8 +111,7 @@ export class FeeAssignmentRepository {
     })
   }
 
-  /** Bulk-updates amountDue + dueDate for all UNPAID/OVERDUE assignments on a structure */
-  async updateUnpaidByFeeStructure(
+    async updateUnpaidByFeeStructure(
     tenantId: string,
     feeStructureId: string,
     data: { amountDue: number; dueDate: Date },
@@ -136,15 +123,13 @@ export class FeeAssignmentRepository {
     return result.count
   }
 
-  /** Count assignments with financial activity — these block deletion */
-  async countPaidByFeeStructure(tenantId: string, feeStructureId: string): Promise<number> {
+    async countPaidByFeeStructure(tenantId: string, feeStructureId: string): Promise<number> {
     return this.db.feeAssignment.count({
       where: { tenantId, feeStructureId, status: { in: ["PAID", "PARTIAL", "WAIVED"] } },
     })
   }
 
-  /** Deletes UNPAID/OVERDUE assignments for a structure; returns deleted count */
-  async deleteUnpaidByFeeStructure(tenantId: string, feeStructureId: string): Promise<number> {
+    async deleteUnpaidByFeeStructure(tenantId: string, feeStructureId: string): Promise<number> {
     const result = await this.db.feeAssignment.deleteMany({
       where: { tenantId, feeStructureId, status: { in: ["UNPAID", "OVERDUE"] } },
     })

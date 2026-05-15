@@ -1,7 +1,6 @@
 import prisma from "@/lib/prisma"
 import { redisPublisher } from "@/lib/redis"
 
-// Repositories
 import { UserRepository } from "@/lib/repositories/user.repository"
 import { AuditRepository } from "@/lib/repositories/audit.repository"
 import { TenantRepository } from "@/lib/repositories/tenant.repository"
@@ -22,7 +21,6 @@ import { ApplicantRepository } from "@/lib/repositories/applicant.repository"
 import { ImportBatchRepository } from "@/lib/repositories/importBatch.repository"
 import { RefreshTokenRepository } from "@/lib/repositories/refreshToken.repository"
 
-// Services
 import { AuditService } from "@/lib/services/audit.service"
 import { EmailService } from "@/lib/services/email.service"
 import { AuthService } from "@/lib/services/auth.service"
@@ -42,7 +40,6 @@ import { HodService } from "@/lib/services/hod.service"
 import { NotificationService } from "@/lib/services/notification.service"
 import { RegistrationService } from "@/lib/services/registration.service"
 
-// Controllers
 import { AuthController } from "@/lib/controllers/auth.controller"
 import { SuperAdminController } from "@/lib/controllers/superadmin.controller"
 import { DepartmentController } from "@/lib/controllers/department.controller"
@@ -61,7 +58,6 @@ import { CronController } from "@/lib/controllers/cron.controller"
 import { NotificationController } from "@/lib/controllers/notification.controller"
 import { RegistrationController } from "@/lib/controllers/registration.controller"
 
-// Repositories
 const userRepo = new UserRepository(prisma)
 const auditRepo = new AuditRepository(prisma)
 const tenantRepo = new TenantRepository(prisma)
@@ -82,7 +78,6 @@ const applicantRepo = new ApplicantRepository(prisma)
 const importBatchRepo = new ImportBatchRepository(prisma)
 const refreshTokenRepo = new RefreshTokenRepository(redisPublisher)
 
-// Services
 const auditService = new AuditService(auditRepo)
 export const emailService = new EmailService()
 const authService = new AuthService(userRepo, refreshTokenRepo, auditService)
@@ -102,7 +97,6 @@ export const vcService = new VCService(vcRepo, insightRepo)
 export const hodService = new HodService(hodRepo)
 const registrationService = new RegistrationService(applicantRepo, importBatchRepo, activityLogRepo, insightRepo, sessionRepo)
 
-// Controllers
 export const authController = new AuthController(authService)
 export const superAdminController = new SuperAdminController(tenantService)
 export const departmentController = new DepartmentController(deptService)

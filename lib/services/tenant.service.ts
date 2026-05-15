@@ -65,7 +65,6 @@ export class TenantService {
       )
     })
 
-    //  Audit Log
     this.auditService.log({
       userId: superAdminId,
       userRole: "SUPER_ADMIN",

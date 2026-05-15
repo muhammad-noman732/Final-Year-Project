@@ -62,14 +62,14 @@ export class EmailService {
                         subject: `Welcome to UniSync - Your ${params.role.replace("_", " ")} Account Credentials`,
                         html: htmlContent,
                     }),
-                    10000, // 10s timeout for SendGrid
+                    10000, 
                     "SendGrid:sendWelcomeEmail"
                 ),
                 "SendGrid:sendWelcomeEmail",
                 {
                     maxAttempts: 3,
                     shouldRetry: (err: unknown) => {
-                        // Don't retry if it's a client error (e.g., bad email format)
+
                         const code = (err as { code?: number })?.code;
                         if (code === 400 || code === 401 || code === 403) return false;
                         return true;
@@ -90,7 +90,6 @@ export class EmailService {
             );
         }
     }
-
 
     async sendPasswordResetEmail(params: PasswordResetEmailParams): Promise<void> {
         const htmlContent = passwordResetEmailTemplate(

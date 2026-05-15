@@ -130,7 +130,7 @@ export default function UsersPage() {
                 </Card>
             </Skeleton>
 
-            {/* ═══ ADD USER SHEET ═══ */}
+            {}
             <Sheet open={isAddOpen} onOpenChange={setIsAddOpen}>
                 <SheetContent className="bg-navy-900 border-l border-gold-500/10 w-full sm:max-w-[480px] overflow-y-auto">
                     <SheetHeader className="mb-6">

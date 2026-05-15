@@ -59,7 +59,7 @@ export default function VCDepartmentPage({ departments, onDepartmentSelect }: Pr
 
   return (
     <div className="space-y-4">
-      {/* Summary Row */}
+      {}
       <div className="grid gap-3 sm:grid-cols-3">
         <div className="rounded-xl border border-white/60 dark:border-white/[0.05] bg-gradient-to-br from-white/80 to-white/40 dark:from-[#080c18] dark:to-[#080c18] backdrop-blur-md shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-0.5 p-4">
           <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#64748B] dark:text-muted-foreground mb-2">Total Departments</p>
@@ -90,7 +90,7 @@ export default function VCDepartmentPage({ departments, onDepartmentSelect }: Pr
         )}
       </div>
 
-      {/* Bar Chart */}
+      {}
       <div className="rounded-xl border border-white/60 dark:border-white/[0.05] bg-gradient-to-br from-white/80 to-white/40 dark:from-[#080c18] dark:to-[#080c18] backdrop-blur-md shadow-sm p-5">
         <div className="mb-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -121,7 +121,7 @@ export default function VCDepartmentPage({ departments, onDepartmentSelect }: Pr
         </ResponsiveContainer>
       </div>
 
-      {/* Department Cards Grid */}
+      {}
       <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
         {sorted.map((dept) => {
           const isGood = dept.paymentRate >= 70
@@ -146,7 +146,7 @@ export default function VCDepartmentPage({ departments, onDepartmentSelect }: Pr
                 </span>
               </div>
 
-              {/* Progress bar */}
+              {}
               <div className="h-1 rounded-full bg-slate-200/50 dark:bg-white/[0.05] mb-3 overflow-hidden">
                 <div
                   className={`h-full rounded-full transition-all duration-500 ${barColor}`}

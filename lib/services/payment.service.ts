@@ -85,7 +85,7 @@ export class PaymentService {
       )
 
     if (existingPayment?.stripePaymentIntentId) {
-      // Retrieve the PI outside of try/catch so FeeAlreadyPaidError propagates normally
+
       let existingPI: Stripe.PaymentIntent | null = null
       try {
         existingPI = await withRetry(
@@ -110,7 +110,7 @@ export class PaymentService {
       }
 
       if (existingPI) {
-        // PI already collected — fulfil inline if DB is stale (e.g. webhook missed on localhost)
+
         if (existingPI.status === "succeeded") {
           logger.info(
             { event: "payment.inline_fulfil", pi: existingPI.id },
@@ -128,7 +128,6 @@ export class PaymentService {
           throw new FeeAlreadyPaidError(dto.feeAssignmentId)
         }
 
-        // Reuse if still confirmable — no new PI needed
         if (
           existingPI.status === "requires_payment_method" ||
           existingPI.status === "requires_confirmation" ||
@@ -185,7 +184,6 @@ export class PaymentService {
       { shouldRetry: isStripeRetryable },
     )
 
-    // Stripe's idempotency key returned the same PI already in our DB — nothing to insert
     if (existingPayment?.stripePaymentIntentId === paymentIntent.id) {
       return {
         clientSecret: paymentIntent.client_secret!,
@@ -209,7 +207,7 @@ export class PaymentService {
         receiptNumber,
       })
     } catch (err) {
-      // Concurrent request beat us to the insert — recover by returning the same PI payload
+
       if (isPrismaP2002(err)) {
         logger.info(
           {

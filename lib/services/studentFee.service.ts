@@ -9,11 +9,7 @@ import type {
 } from "@/lib/repositories/feeAssignment.repository"
 import { logger } from "@/lib/logger"
 
-//  Return types 
-
 import type { StudentFeeProfile } from "@/types/server/student.types"
-
-//  Service 
 
 export class StudentFeeService {
   constructor(
@@ -21,12 +17,11 @@ export class StudentFeeService {
     private readonly feeAssignmentRepo: FeeAssignmentRepository,
   ) { }
 
-
   async getMyFeeProfile(
     tenantId: string,
     userId: string,
   ): Promise<StudentFeeProfile> {
-    // Resolve student record from the authenticated user's ID
+
     const student = await this.studentRepo.findByUserId(tenantId, userId)
     if (!student) {
       throw new NotFoundError(
@@ -34,13 +29,11 @@ export class StudentFeeService {
       )
     }
 
-    // 2. Fetch ALL fee assignments for this student
     const assignments = await this.feeAssignmentRepo.findByStudent(
       tenantId,
       student.id,
     )
 
-    // 3. Compute summary — pure calculation, no extra DB hit
     const totalAssigned = assignments.reduce((s, a) => s + a.amountDue, 0)
     const totalPaid = assignments.reduce((s, a) => s + a.amountPaid, 0)
     const totalOutstanding = totalAssigned - totalPaid
@@ -48,7 +41,6 @@ export class StudentFeeService {
       (a) => a.status === "OVERDUE",
     )
 
-    // Current assignment = the latest UNPAID or OVERDUE one
     const currentAssignment =
       assignments.find(
         (a) => a.status === "UNPAID" || a.status === "OVERDUE",

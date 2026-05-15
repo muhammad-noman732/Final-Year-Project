@@ -33,7 +33,7 @@ export default function ChangePasswordPage() {
     good: "bg-sky-500",
     strong: "bg-emerald-500",
   }
-  
+
   const strengthLabels = { weak: "Weak", fair: "Fair", good: "Good", strong: "Strong" }
 
   return (

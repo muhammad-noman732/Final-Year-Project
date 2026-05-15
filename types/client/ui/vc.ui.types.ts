@@ -41,8 +41,6 @@ export interface UseSSEReturn {
   latestRegistrationEvent: SSERegistrationImportedEvent | null
 }
 
-// ─── Health Score ──────────────────────────────────────────────────────────────
-
 export type VCHealthTier = "healthy" | "at-risk" | "critical"
 
 export interface VCHealthScore {
@@ -53,8 +51,6 @@ export interface VCHealthScore {
   velocityScore: number
   reason: string
 }
-
-// ─── Velocity ─────────────────────────────────────────────────────────────────
 
 export type VCVelocityTrend = "accelerating" | "stable" | "slowing"
 
@@ -67,8 +63,6 @@ export interface VCVelocityMetrics {
   deltaPercent: number
   avgDailyAmount: number
 }
-
-// ─── Tracking Page ────────────────────────────────────────────────────────────
 
 export type TrackingTab = "overview" | "defaulters" | "paid" | "unpaid"
 export type TrackingScope = "overall" | "department" | "semester"
@@ -104,8 +98,6 @@ export interface UseVCTrackingReturn {
   handlePageChange: (page: number) => void
   handleExport: () => void
 }
-
-// ─── Component Prop Types ──────────────────────────────────────────────────────
 
 export interface VCHealthScoreBentoProps {
   overview: VCDashboardOverview

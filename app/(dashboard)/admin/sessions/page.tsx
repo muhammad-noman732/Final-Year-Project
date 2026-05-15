@@ -30,7 +30,7 @@ export default function SessionsPage() {
             await setCurrentSession(id).unwrap();
             toast.success(`${name} is now the current session`);
         } catch {
-            // RTK middleware handles error toast
+
         }
     };
 

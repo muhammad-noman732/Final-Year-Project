@@ -25,7 +25,7 @@ export async function GET() {
           if (event.type === "PaymentSuccess" && event.payload?.department !== department.code) return
           controller.enqueue(encoder.encode(`data: ${message}\n\n`))
         } catch {
-          // Ignore malformed frames
+
         }
       })
 

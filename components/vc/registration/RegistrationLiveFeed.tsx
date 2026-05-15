@@ -35,12 +35,10 @@ export default function RegistrationLiveFeed({
 }: Props) {
   const [feed, setFeed] = useState<FeedEntry[]>(initialActivity)
 
-  // Seed initial data when it loads
   useEffect(() => {
     setFeed(initialActivity)
   }, [initialActivity])
 
-  // Prepend new import event from SSE
   useEffect(() => {
     if (!latestRegistrationEvent) return
     const p = latestRegistrationEvent.payload
@@ -60,7 +58,7 @@ export default function RegistrationLiveFeed({
       transition={{ duration: 0.4, delay: 0.3 }}
       className="rounded-xl border border-white/60 dark:border-white/[0.05] bg-gradient-to-br from-white/80 to-white/40 dark:from-[#080c18] dark:to-[#080c18] backdrop-blur-md shadow-sm"
     >
-      {/* Header */}
+      {}
       <div className="flex items-center gap-2.5 border-b border-slate-200/80 dark:border-white/[0.04] px-4 py-2.5">
         <div className="flex h-5 w-5 items-center justify-center rounded bg-slate-200/50 dark:bg-white/[0.04]">
           <Upload className="h-[11px] w-[11px] text-slate-500 dark:text-muted-foreground/50" strokeWidth={2} />
@@ -83,7 +81,7 @@ export default function RegistrationLiveFeed({
         </div>
       </div>
 
-      {/* Feed entries */}
+      {}
       <div className="max-h-64 overflow-y-auto p-3 space-y-[1px]">
         {feed.length === 0 ? (
           <div className="flex h-24 items-center justify-center gap-2 text-[12px] font-medium text-slate-400 dark:text-muted-foreground/30">

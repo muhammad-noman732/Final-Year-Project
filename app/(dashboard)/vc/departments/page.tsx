@@ -15,7 +15,7 @@ export default function VCDepartmentsPage() {
 
   return (
     <div className="space-y-6 pb-8 p-5 lg:p-8">
-      {/* Header */}
+      {}
       <div>
         <div className="flex items-center gap-2.5 mb-1">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-violet-500/10">

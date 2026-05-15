@@ -29,7 +29,6 @@ export default function VCRegistrationTab({
   const [animateKey, setAnimateKey] = useState(0)
   const prevImportedAt = useRef<number | null>(null)
 
-  // Re-fetch and re-animate when a new CSV import arrives via SSE
   useEffect(() => {
     if (
       registrationImportedAt != null &&
@@ -51,10 +50,10 @@ export default function VCRegistrationTab({
 
   return (
     <div className="space-y-5">
-      {/* Intelligence feed — registration module only */}
+      {}
       <RegistrationInsightsPanel insightsUpdatedAt={insightsUpdatedAt} />
 
-      {/* Section header */}
+      {}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-violet-500/10 shrink-0">
@@ -77,7 +76,7 @@ export default function VCRegistrationTab({
         </button>
       </div>
 
-      {/* KPI Cards */}
+      {}
       {stats ? (
         <RegistrationStatCards
           totalRegistered={stats.totalRegistered}
@@ -88,7 +87,7 @@ export default function VCRegistrationTab({
         />
       ) : null}
 
-      {/* Bar chart + Capacity side-by-side on xl */}
+      {}
       {stats ? (
         <div className="grid gap-4 xl:grid-cols-2">
           <RegistrationBarChart data={stats.byProgram} />
@@ -96,7 +95,7 @@ export default function VCRegistrationTab({
         </div>
       ) : null}
 
-      {/* Daily trend + Live feed side-by-side on xl */}
+      {}
       {stats ? (
         <div className="grid gap-4 xl:grid-cols-[1fr_360px]">
           <DailyImportChart data={stats.dailyActivity} />
@@ -112,7 +111,7 @@ export default function VCRegistrationTab({
         </div>
       )}
 
-      {/* Empty state */}
+      {}
       {!isLoading && stats?.totalRegistered === 0 && (
         <motion.div
           initial={{ opacity: 0 }}

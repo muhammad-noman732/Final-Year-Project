@@ -1,5 +1,5 @@
 "use client";
- 
+
  import { useRef, useEffect } from "react";
  import Link from "next/link";
  import {
@@ -9,7 +9,7 @@
  } from "lucide-react";
  import { formatFullCurrency } from "@/config/constants";
  import { usePaymentSuccess } from "@/hooks/student/usePaymentSuccess";
- 
+
  function AnimatedCheck() {
      return (
          <div className="relative inline-flex">
@@ -22,7 +22,7 @@
          </div>
      );
  }
- 
+
  function SuccessLoading() {
      return (
          <div className="max-w-2xl mx-auto pb-12 flex items-center justify-center min-h-[400px]">
@@ -33,9 +33,9 @@
          </div>
      );
  }
- 
+
  import { Suspense } from "react";
- 
+
  function PaymentSuccessContent() {
      const checkRef = useRef<HTMLDivElement>(null);
      const {
@@ -53,8 +53,7 @@
          receiptNumber,
          formattedDate,
      } = usePaymentSuccess();
- 
-     // Entrance animation
+
      useEffect(() => {
          const el = checkRef.current;
          if (!el) return;
@@ -64,9 +63,9 @@
          }, 100);
          return () => clearTimeout(timer);
      }, []);
- 
+
      if (isLoading) return <SuccessLoading />;
- 
+
      if (stripeRedirectFailed) {
          return (
              <div className="max-w-2xl mx-auto pb-12 flex items-center justify-center min-h-[400px]">
@@ -86,10 +85,10 @@
              </div>
          );
      }
- 
+
      return (
          <div className="max-w-2xl mx-auto pb-12 pt-6 px-4 space-y-8">
-             {/* Print CSS — only the receipt card renders when printing */}
+             {}
              <style dangerouslySetInnerHTML={{ __html: `
                  @media print {
                      * { visibility: hidden !important; }
@@ -118,8 +117,8 @@
                      @page { margin: 0; }
                  }
              ` }} />
- 
-             {/* ══ SUCCESS HEADER ══ */}
+
+             {}
              <div
                  ref={checkRef}
                  className="text-center transition-all duration-700"
@@ -135,22 +134,22 @@
                      Your fee has been paid and verified by the institution.
                  </p>
              </div>
- 
-             {/* ══ OFFICIAL RECEIPT ══ */}
+
+             {}
              <div id="receipt-print-area" className="relative rounded-2xl border border-zinc-200 dark:border-white/[0.07] bg-white dark:bg-[#0a0e1a] overflow-hidden shadow-xl dark:shadow-2xl dark:shadow-black/40">
-                 {/* Gold accent bar */}
+                 {}
                  <div className="h-0.5 bg-gradient-to-r from-transparent via-gold-500 dark:via-gold-400 to-transparent" />
- 
-                 {/* PAID watermark */}
+
+                 {}
                  <div
                      className="pointer-events-none select-none absolute top-6 right-6 text-emerald-500/[0.08] dark:text-emerald-500/10 font-black uppercase text-[64px] leading-none [transform:rotate(-15deg)] tracking-wider"
                      aria-hidden
                  >
                      PAID
                  </div>
- 
+
                  <div className="p-6 sm:p-8 relative">
-                     {/* University header */}
+                     {}
                      <div className="text-center mb-6 pb-6 border-b border-zinc-100 dark:border-white/[0.06]">
                          <p className="text-[11px] text-gold-600/50 dark:text-gold-500/50 uppercase tracking-[0.25em] font-bold mb-1.5">
                              Government College University Faisalabad
@@ -159,8 +158,8 @@
                              Fee Payment Receipt
                          </h2>
                      </div>
- 
-                     {/* Student info grid */}
+
+                     {}
                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-6 gap-y-4 mb-6 pb-6 border-b border-zinc-100 dark:border-white/[0.06]">
                          {[
                              { label: "Student Name", value: studentName },
@@ -178,8 +177,8 @@
                              </div>
                          ))}
                      </div>
- 
-                     {/* Fee breakdown */}
+
+                     {}
                      {paidAssignment && (
                          <div className="space-y-1 mb-4">
                              {[
@@ -204,16 +203,16 @@
                                  ))}
                          </div>
                      )}
- 
-                     {/* Total */}
+
+                     {}
                      <div className="flex justify-between items-center py-3 px-4 rounded-xl bg-gold-50 dark:bg-gold-500/5 border border-gold-200 dark:border-gold-500/10 mb-6">
                          <span className="text-sm font-bold text-gold-600 dark:text-gold-400">Total Paid</span>
                          <span className="text-xl font-bold text-gold-600 dark:text-gold-gradient tracking-tight">
                              {formatFullCurrency(displayAmount)}
                          </span>
                      </div>
- 
-                     {/* Transaction info */}
+
+                     {}
                      <div className="space-y-2 mb-6 pb-6 border-b border-zinc-100 dark:border-white/[0.06]">
                          {[
                              { label: "Receipt No.", value: receiptNumber },
@@ -232,8 +231,8 @@
                              </span>
                          </div>
                      </div>
- 
-                     {/* QR + footer */}
+
+                     {}
                      <div className="flex items-center justify-between">
                          <div>
                              <p className="text-[11px] text-zinc-500 dark:text-muted-foreground uppercase tracking-widest font-bold mb-1">
@@ -247,14 +246,14 @@
                              <QrCode className="w-9 h-9 text-zinc-400 dark:text-gold-500/25" />
                          </div>
                      </div>
- 
+
                      <p className="text-center text-[11px] text-zinc-400 dark:text-muted-foreground/40 uppercase tracking-widest mt-5 font-bold">
                          Official Digital Receipt — Government College University Faisalabad
                      </p>
                  </div>
              </div>
- 
-             {/* ══ ACTIONS ══ */}
+
+             {}
              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                  {[
                      { icon: Download, label: "Download", onClick: () => window.print() },
@@ -275,8 +274,8 @@
                      );
                  })}
              </div>
- 
-             {/* ══ WHAT'S NEXT ══ */}
+
+             {}
              <div className="rounded-2xl border border-zinc-200 dark:border-white/[0.06] bg-white dark:bg-[#0a0e1a] p-6 shadow-sm">
                  <h3 className="text-sm font-bold text-zinc-900 dark:text-foreground tracking-tight mb-4 flex items-center gap-2">
                      <Sparkles className="w-4 h-4 text-gold-500 dark:text-gold-400" />
@@ -308,7 +307,7 @@
          </div>
      );
  }
- 
+
  export default function PaymentSuccessPage() {
      return (
          <Suspense fallback={

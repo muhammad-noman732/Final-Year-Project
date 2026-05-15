@@ -54,7 +54,7 @@ export default function VCDashboard() {
   return (
     <div className="relative isolate space-y-6 pb-10 min-h-[calc(100dvh-3.5rem)] transition-colors duration-300">
 
-      {/* Mesh gradient is now provided globally by layout.tsx */}
+      {}
 
       {showToast && (
         <div className="fixed top-4 right-4 z-50 animate-in slide-in-from-top-2 fade-in duration-200">
@@ -70,7 +70,7 @@ export default function VCDashboard() {
         </div>
       )}
 
-      {/*  Tab Bar  */}
+      {}
       <div className="flex items-center gap-1 rounded-xl bg-white/40 dark:bg-[#080c18] backdrop-blur-md p-1 shadow-[0_8px_32px_rgba(0,0,0,0.04)]">
         {TABS.map(({ id, label, Icon }) => {
           const isActive = activeTab === id
@@ -100,7 +100,7 @@ export default function VCDashboard() {
         })}
       </div>
 
-      {/*  Tab Content  */}
+      {}
       <AnimatePresence mode="wait" initial={false}>
         {activeTab === "fee" && (
           <motion.div
@@ -111,10 +111,10 @@ export default function VCDashboard() {
             transition={{ duration: 0.18, ease: "easeOut" }}
             className="space-y-5"
           >
-            {/* Intelligence Feed */}
+            {}
             <InsightsPanel insightsUpdatedAt={insightsUpdatedAt} />
 
-            {/* Page Header */}
+            {}
             <div className="flex items-start justify-between gap-4">
               <div className="flex items-center gap-3">
                 <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10 flex-shrink-0">
@@ -151,7 +151,7 @@ export default function VCDashboard() {
               </div>
             </div>
 
-            {/* Filters */}
+            {}
             <VCFilterBar
               filters={filters}
               departments={departments}
@@ -162,7 +162,7 @@ export default function VCDashboard() {
               showSearch={false}
             />
 
-            {/* Health Score Bento */}
+            {}
             {dashboard ? (
               <VCHealthScoreBento
                 overview={dashboard.overview}
@@ -173,7 +173,7 @@ export default function VCDashboard() {
               />
             ) : null}
 
-            {/* Charts + Right Column */}
+            {}
             <div className="grid gap-4 xl:grid-cols-[1fr_320px]">
               {dashboard && (
                 <VCDashboardPanels
@@ -200,7 +200,7 @@ export default function VCDashboard() {
               </div>
             </div>
 
-            {/* Advanced Analytics */}
+            {}
             <div>
               <div className="flex items-center gap-2 mb-4">
                 <BarChart2 className="h-4 w-4 text-primary" />

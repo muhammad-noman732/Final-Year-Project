@@ -63,7 +63,7 @@ export function useChangePasswordPage() {
   const strengthScore = Object.values(requirements).filter(Boolean).length
   const strengthLevel =
     strengthScore <= 1 ? "weak" : strengthScore === 2 ? "fair" : strengthScore === 3 ? "good" : "strong"
-  
+
   const passwordsMatch = confirmPassword.length > 0 && newPassword === confirmPassword
 
   const onSubmit = async (data: ChangePasswordFormData) => {

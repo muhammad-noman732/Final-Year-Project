@@ -31,8 +31,8 @@ export default async function SuperAdminDashboard() {
 
   return (
     <div className="space-y-6 pb-10 animate-in fade-in duration-500">
-      
-      {/* Header */}
+
+      {}
       <header className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-6 border-b border-border/50 dark:border-white/[0.05]">
         <div>
           <h1 className="text-2xl font-bold tracking-tight text-foreground font-heading">
@@ -47,7 +47,7 @@ export default async function SuperAdminDashboard() {
         </div>
       </header>
 
-      {/* Stats Cards */}
+      {}
       <section className="grid grid-cols-1 md:grid-cols-3 gap-6 stagger-children">
         <div className="glass-card glass-card-hover rounded-2xl p-6 border border-border/50">
           <div className="flex items-center gap-4">
@@ -86,7 +86,7 @@ export default async function SuperAdminDashboard() {
         </div>
       </section>
 
-      {/* Tenants Table */}
+      {}
       <section className="space-y-4">
         <h2 className="text-lg font-bold tracking-tight text-foreground font-heading">
           Deployed Universities

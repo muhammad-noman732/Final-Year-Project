@@ -15,35 +15,35 @@ import type { VCFilterState, VCSelectOption, SSELiveTransaction } from "@/types/
 import type { SSERegistrationImportedEvent } from "@/types/server/sse.types"
 
 export interface UseVCDashboardReturn {
-  // Filters
+
   filters: VCFilterState
   handleFilterChange: (key: keyof VCFilterState, value: string) => void
   handleReset: () => void
   handleTodayToggle: () => void
-  // Filter options
+
   departments: VCSelectOption[]
   programs: VCSelectOption[]
   sessions: VCSelectOption[]
-  // Dashboard data
+
   dashboard: VCDashboardData | undefined
   isLoading: boolean
   lastUpdatedAt: string | null
-  // SSE live feed
+
   liveTransactions: SSELiveTransaction[]
   initialTransactions: SSELiveTransaction[]
   sseConnected: boolean
   newPaymentsCount: number
   newAmountCollected: number
-  // Toast
+
   showToast: boolean
   toastMessage: string
-  // Navigation handlers
+
   handleDepartmentTracking: (departmentId: string) => void
   handleSemesterTracking: (semester: number) => void
   handleOverviewCardClick: (tab: "paid" | "defaulters" | "payments") => void
-  // Insights SSE signal
+
   insightsUpdatedAt: number | null
-  // Registration SSE signals
+
   registrationImportedAt: number | null
   latestRegistrationEvent: SSERegistrationImportedEvent | null
 }
@@ -102,7 +102,6 @@ export function useVCDashboard(): UseVCDashboardReturn {
     return () => clearTimeout(timer)
   }, [latestEvent, clearLatestEvent, dashboardQuery])
 
-  // Reset child filters when a department filter is removed externally
   useEffect(() => {
     if (hasDepartmentsLoaded && filters.departmentId && !departmentExists) {
       setFilters((prev) => ({ ...prev, departmentId: "", programId: "" }))
@@ -129,7 +128,6 @@ export function useVCDashboard(): UseVCDashboardReturn {
       })
     : null
 
-  // Seed the live feed with recent DB payments so it isn't empty on mount
   const initialTransactions = useMemo<SSELiveTransaction[]>(() => {
     if (!dashboard?.livePayments) return []
     return dashboard.livePayments.map((p: VCLivePaymentItem) => ({

@@ -8,8 +8,6 @@ import { logger } from "@/lib/logger"
 
 import type { AssignFeeInput } from "@/lib/validators/feeAssignment.validators"
 
-//  Service
-
 export class FeeAssignmentService {
   constructor(
     private readonly studentRepo: StudentRepository,
@@ -19,25 +17,12 @@ export class FeeAssignmentService {
     private readonly notificationService: NotificationService,
   ) { }
 
-  /**
-   * Assign a fee structure to students.
-   *
-   * Eligibility rules:
-   *  1. Student must be ACTIVE (not SUSPENDED/GRADUATED/WITHDRAWN)
-   *  2. Student must be enrolled in the same program as the fee structure
-   *  3. Student's current semester must match the fee structure semester
-   *
-   * If `studentIds` is provided → assign only those students (after eligibility check).
-   * If omitted → bulk-assign ALL eligible students in the program+semester.
-   *
-   * Duplicate assignments are silently skipped (@@unique constraint + skipDuplicates).
-   */
-  async assignFee(
+    async assignFee(
     tenantId: string,
     adminUserId: string,
     input: AssignFeeInput,
   ): Promise<{ assigned: number; skipped: number }> {
-    // 1. Verify fee structure exists and belongs to tenant
+
     const feeStructure = await this.feeStructureRepo.findById(
       tenantId,
       input.feeStructureId,
@@ -49,11 +34,10 @@ export class FeeAssignmentService {
       throw new ConflictError("Cannot assign an inactive fee structure.")
     }
 
-    // 2. Resolve eligible students
     let eligibleStudents: StudentRow[] = []
 
     if (input.studentIds && input.studentIds.length > 0) {
-      // Manual selection — still enforce eligibility
+
       const { data } = await this.studentRepo.findMany({
         where: {
           tenantId,
@@ -68,7 +52,7 @@ export class FeeAssignmentService {
       })
       eligibleStudents = data
     } else {
-      // Bulk assign — all active students in matching program + semester
+
       const { data } = await this.studentRepo.findMany({
         where: {
           tenantId,
@@ -89,7 +73,6 @@ export class FeeAssignmentService {
 
     const eligibleStudentIds = eligibleStudents.map((s) => s.id)
 
-    // 3. Build assignment records
     const now = new Date()
     const records = eligibleStudentIds.map((studentId) => ({
       tenantId,
@@ -105,11 +88,9 @@ export class FeeAssignmentService {
       updatedAt: now,
     }))
 
-    // 4. Bulk insert — skipDuplicates handles already-assigned students
     const assigned = await this.feeAssignmentRepo.bulkCreate(records)
     const skipped = eligibleStudentIds.length - assigned
 
-    // 5. Fire-and-forget notifications to each assigned student
     const studentUserIds = eligibleStudents.map((s) => s.user.id)
     this.notificationService
       .fanOut({
@@ -132,7 +113,6 @@ export class FeeAssignmentService {
         )
       })
 
-    // 6. Audit log
     this._audit({
       tenantId,
       userId: adminUserId,
@@ -163,8 +143,6 @@ export class FeeAssignmentService {
 
     return { assigned, skipped }
   }
-
-  // ─── Private helpers ────────────────────────────────────────────────────────
 
   private _audit(params: {
     tenantId: string

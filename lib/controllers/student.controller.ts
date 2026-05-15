@@ -19,7 +19,7 @@ export class StudentController {
 
   async getStudents(req: NextRequest) {
     const { tenantId } = await getTenantContext()
-    await requireRole("ADMIN", "VC", "HOD") // HOD and VC can also view students
+    await requireRole("ADMIN", "VC", "HOD") 
 
     const searchParams = Object.fromEntries(req.nextUrl.searchParams.entries())
     const query = listStudentsQuerySchema.parse(searchParams)
@@ -45,14 +45,13 @@ export class StudentController {
     const { tenantId } = await getTenantContext()
     await requireRole("ADMIN", "VC", "HOD")
 
-    // Students cannot query other students via this endpoint
     const result = await this.studentService.getStudent(tenantId, id)
     return successResponse(result)
   }
 
   async createStudent(req: NextRequest) {
     const { tenantId, userId } = await getTenantContext()
-    await requireRole("ADMIN") // Only Admin creates students
+    await requireRole("ADMIN") 
 
     const body = await req.json()
     const data = createStudentSchema.parse(body)

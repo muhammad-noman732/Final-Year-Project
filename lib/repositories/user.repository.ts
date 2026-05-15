@@ -1,7 +1,6 @@
 import type { Prisma, PrismaClient, Role } from "@/app/generated/prisma/client"
 import type { UserWithTenant, UserBasic } from "@/types/server/auth.types"
 
-//Admin select shape (never includes passwordHash) 
 const ADMIN_USER_SELECT = {
   id: true,
   name: true,
@@ -22,9 +21,6 @@ export type AdminUserRow = Prisma.UserGetPayload<{ select: typeof ADMIN_USER_SEL
 
 export class UserRepository {
   constructor(private readonly db: PrismaClient) { }
-
-  //  Auth methods (used by AuthService) 
-
 
   async findByEmail(email: string): Promise<UserWithTenant | null> {
     const user = await this.db.user.findUnique({
@@ -67,13 +63,7 @@ export class UserRepository {
     })
   }
 
-  // ─── Admin management methods ──────────────────────────────────
-
-  /**
-   * Checks the @@unique([tenantId, email]) constraint.
-   * Returns the user id if a conflict exists, null otherwise.
-   */
-  async adminFindByEmail(
+    async adminFindByEmail(
     tenantId: string,
     email: string,
   ): Promise<{ id: string } | null> {
@@ -112,8 +102,7 @@ export class UserRepository {
     return { data, total }
   }
 
-  /** Never pass passwordHash through this return type — it is excluded by select. */
-  async adminCreate(
+    async adminCreate(
     data: Prisma.UserUncheckedCreateInput,
   ): Promise<AdminUserRow> {
     return this.db.user.create({ data, select: ADMIN_USER_SELECT })
@@ -131,8 +120,7 @@ export class UserRepository {
     })
   }
 
-  /** Returns user IDs for all active users with the given roles in a tenant. */
-  async findIdsByRole(tenantId: string, roles: Role[]): Promise<string[]> {
+    async findIdsByRole(tenantId: string, roles: Role[]): Promise<string[]> {
     const users = await this.db.user.findMany({
       where: { tenantId, role: { in: roles }, isActive: true },
       select: { id: true },

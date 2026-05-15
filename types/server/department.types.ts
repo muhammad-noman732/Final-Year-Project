@@ -1,6 +1,5 @@
 import { PaginationMeta } from "./shared.types"
 
-// ─── Departments ───────────────────────────────────────────────
 export interface Department {
   id: string
   name: string

@@ -1,6 +1,5 @@
 import type { Prisma, PrismaClient } from "@/app/generated/prisma/client"
 
-// Select shape
 const SESSION_SELECT = {
   id: true,
   tenantId: true,
@@ -14,10 +13,7 @@ const SESSION_SELECT = {
   },
 } satisfies Prisma.AcademicSessionSelect
 
-// Exported row type
-
 export type AcademicSessionRow = Prisma.AcademicSessionGetPayload<{ select: typeof SESSION_SELECT }>
-
 
 export class AcademicSessionRepository {
   constructor(private readonly db: PrismaClient) { }
@@ -66,10 +62,7 @@ export class AcademicSessionRepository {
     return this.db.academicSession.create({ data, select: SESSION_SELECT })
   }
 
-  /**
-   * Atomically set ONE session as current (all others → false).
-   */
-  async makeCurrent(tenantId: string, id: string): Promise<AcademicSessionRow> {
+    async makeCurrent(tenantId: string, id: string): Promise<AcademicSessionRow> {
     await this.db.$transaction([
       this.db.academicSession.updateMany({
         where: { tenantId },

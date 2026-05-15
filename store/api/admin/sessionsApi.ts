@@ -45,7 +45,7 @@ export const sessionsApi = baseApi.injectEndpoints({
         method: "POST",
         body,
       }),
-      // Pure invalidation — server cache makes the refetch fast.
+
       invalidatesTags: [{ type: "Session", id: "LIST" }],
     }),
 
