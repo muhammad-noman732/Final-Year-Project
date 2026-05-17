@@ -1,5 +1,6 @@
 import type {
   FeeStructure,
+  FeeStructureGlobalStats,
   PaginatedFeeStructures,
   ListFeeStructuresQueryParams,
   FeeStatusType,
@@ -15,6 +16,7 @@ import type { AssignFeePayload } from "@/lib/validators/feeAssignment.validators
 
 export type {
   FeeStructure,
+  FeeStructureGlobalStats,
   PaginatedFeeStructures,
   ListFeeStructuresQueryParams,
   FeeStatusType,

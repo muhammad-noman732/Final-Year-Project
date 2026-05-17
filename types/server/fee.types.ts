@@ -2,6 +2,13 @@ import { PaginationMeta } from "./shared.types"
 
 export type FeeStatusType = "UNPAID" | "PARTIAL" | "PAID" | "OVERDUE" | "WAIVED"
 
+export interface FeeStructureGlobalStats {
+  totalCount: number
+  activeCount: number
+  totalAssigned: number
+  expectedRevenue: number
+}
+
 export interface FeeStructure {
   id: string
   semester: number
@@ -33,6 +40,7 @@ export interface FeeStructure {
 export interface PaginatedFeeStructures {
   data: FeeStructure[]
   meta: PaginationMeta
+  stats: FeeStructureGlobalStats
 }
 
 export interface ListFeeStructuresQueryParams {
@@ -44,6 +52,7 @@ export interface ListFeeStructuresQueryParams {
   isActive?: boolean
   sortBy?: string
   sortDir?: "asc" | "desc"
+  search?: string
 }
 
 export interface AssignFeeResult {

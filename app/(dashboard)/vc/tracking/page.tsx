@@ -327,18 +327,47 @@ function VCTrackingContent() {
     </div>
   )
 }
+function TrackingFallback() {
+  return (
+    <div className="relative isolate space-y-5 pb-10 min-h-[calc(100dvh-3.5rem)] p-5 lg:p-8">
+      <div className="flex items-start justify-between gap-4">
+        <div className="space-y-2">
+          <div className="h-5 w-36 rounded-md bg-slate-200/80 dark:bg-white/[0.06] animate-pulse" />
+          <div className="h-3 w-64 rounded-md bg-slate-200/50 dark:bg-white/[0.04] animate-pulse" />
+        </div>
+        <div className="h-3 w-24 rounded-md bg-slate-200/50 dark:bg-white/[0.04] animate-pulse mt-1" />
+      </div>
+      <div className="flex items-center gap-1 p-1 rounded-xl bg-white/60 dark:bg-white/[0.025] border border-slate-200/60 dark:border-white/[0.04] w-fit">
+        {[80, 96, 64, 80].map((w, i) => (
+          <div key={i} className="rounded-[9px] px-4 py-1.5">
+            <div
+              className="h-3 rounded bg-slate-200/80 dark:bg-white/[0.06] animate-pulse"
+              style={{ width: w }}
+            />
+          </div>
+        ))}
+      </div>
+      <div className="h-10 w-full rounded-xl bg-white/60 dark:bg-white/[0.025] border border-slate-200/60 dark:border-white/[0.04] animate-pulse" />
+      <div className="grid gap-3 grid-cols-2 xl:grid-cols-4">
+        {[...Array(4)].map((_, i) => (
+          <div
+            key={i}
+            className="flex flex-col gap-3 rounded-xl border border-slate-200/60 dark:border-white/[0.06] bg-white/70 dark:bg-white/[0.03] p-4 animate-pulse"
+          >
+            <div className="flex items-center justify-between">
+              <div className="h-2.5 w-20 rounded bg-slate-200/80 dark:bg-white/[0.06]" />
+              <div className="h-6 w-6 rounded-lg bg-slate-100 dark:bg-white/[0.06]" />
+            </div>
+            <div className="h-7 w-24 rounded bg-slate-200/80 dark:bg-white/[0.06]" />
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
 export default function VCTrackingPage() {
   return (
-    <Suspense
-      fallback={
-        <div className="flex h-[50vh] flex-col items-center justify-center gap-4">
-          <div className="h-6 w-6 animate-spin rounded-full border-2 border-slate-200 dark:border-white/20 border-t-violet-500 dark:border-t-white/80" />
-          <p className="text-[11px] uppercase tracking-widest text-slate-400 dark:text-muted-foreground/60 animate-pulse font-medium">
-            Loading Tracking Data...
-          </p>
-        </div>
-      }
-    >
+    <Suspense fallback={<TrackingFallback />}>
       <VCTrackingContent />
     </Suspense>
   )

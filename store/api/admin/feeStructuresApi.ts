@@ -24,6 +24,7 @@ const toListQueryParams = (query?: ListFeeStructuresQueryParams): Record<string,
   if (query.semester !== undefined) params.semester = String(query.semester)
   if (query.sessionYear !== undefined) params.sessionYear = String(query.sessionYear)
   if (query.isActive !== undefined) params.isActive = String(query.isActive)
+  if (query.search !== undefined) params.search = query.search
 
   return params
 }

@@ -44,7 +44,14 @@
    return (
      <div className="relative isolate space-y-6 pb-10 p-5 lg:p-8">
 
-       <div className="max-w-4xl mx-auto space-y-8">
+      {/* Mesh background */}
+      <div aria-hidden className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
+        <div className="absolute -top-32 -left-32 w-[600px] h-[600px] rounded-full bg-blue-400/[0.06] blur-[120px]" />
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] rounded-full bg-amber-400/[0.05] blur-[100px]" />
+        <div className="absolute bottom-0 left-1/3 w-[500px] h-[400px] rounded-full bg-violet-400/[0.04] blur-[120px]" />
+      </div>
+
+      <div className="max-w-4xl mx-auto space-y-8">
 
          {}
          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 px-1">
@@ -67,7 +74,7 @@
          {}
          <Skeleton name="ledger-summary" loading={isLoading}>
            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-             <div className="rounded-2xl border border-zinc-200/50 dark:border-white/[0.05] bg-white/40 dark:bg-white/[0.015] p-6 shadow-sm backdrop-blur-md">
+             <div className="rounded-2xl border border-white/80 dark:border-white/[0.05] bg-white/60 dark:bg-white/[0.015] p-6 shadow-sm backdrop-blur-md">
                <p className="text-[10px] uppercase tracking-[0.2em] text-zinc-500 font-bold mb-2">
                  Total cleared
                </p>
@@ -76,7 +83,7 @@
                </p>
              </div>
 
-             <div className="rounded-2xl border border-zinc-200/50 dark:border-white/[0.05] bg-white/40 dark:bg-white/[0.015] p-6 shadow-sm backdrop-blur-md">
+             <div className="rounded-2xl border border-white/80 dark:border-white/[0.05] bg-white/60 dark:bg-white/[0.015] p-6 shadow-sm backdrop-blur-md">
                <p className="text-[10px] uppercase tracking-[0.2em] text-zinc-500 font-bold mb-2.5">
                  Transactions
                </p>
@@ -117,7 +124,7 @@
          </Skeleton>
 
          {}
-         <div className="p-1 rounded-xl bg-white/40 dark:bg-white/[0.03] border border-zinc-200/50 dark:border-white/[0.05] w-fit shadow-sm backdrop-blur-md inline-flex">
+         <div className="p-1 rounded-xl bg-white/60 dark:bg-white/[0.03] border border-white/80 dark:border-white/[0.05] w-fit shadow-sm backdrop-blur-md inline-flex">
            {(["all", "completed", "pending"] as const).map((f) => (
              <button
                key={f}
@@ -152,7 +159,7 @@
                </p>
              </motion.div>
            ) : (
-             <div className="rounded-2xl border border-zinc-200/50 dark:border-white/[0.06] bg-white/40 dark:bg-white/[0.012] overflow-hidden shadow-sm backdrop-blur-md">
+             <div className="rounded-2xl border border-white/80 dark:border-white/[0.06] bg-white/60 dark:bg-white/[0.02] overflow-hidden shadow-sm backdrop-blur-xl">
                <div className="divide-y divide-zinc-100 dark:divide-white/[0.04]">
                  <AnimatePresence mode="popLayout">
                    {filteredPayments.map((p, idx) => {

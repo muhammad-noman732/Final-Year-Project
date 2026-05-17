@@ -1,7 +1,7 @@
 "use client"
 
 import { Skeleton } from "boneyard-js/react"
-import { Building2, TrendingUp, AlertTriangle, CheckCircle2 } from "lucide-react"
+import { Building2 } from "lucide-react"
 import { useGetVCDashboardQuery } from "@/store/api/vc/vcApi"
 import { buildVCQuery, defaultVCFilters } from "@/components/vc/vcFilters"
 import VCDepartmentPage from "@/components/vc/VCDepartmentPage"
@@ -28,7 +28,7 @@ export default function VCDepartmentsPage() {
         </p>
       </div>
 
-      <Skeleton name="vc-dashboard-panels" loading={isLoading && !dashboard}>
+      <Skeleton name="vc-department-grid" loading={isLoading && !dashboard}>
         {dashboard ? (
           <VCDepartmentPage departments={dashboard.departmentPerformance} />
         ) : (

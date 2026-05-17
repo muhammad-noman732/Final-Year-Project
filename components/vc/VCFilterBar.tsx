@@ -1,5 +1,6 @@
 "use client"
 
+import { useEffect, useState } from "react"
 import { Filter, RotateCcw, Download } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -87,6 +88,33 @@ export default function VCFilterBar({
   showFeeStatus = true,
   showSearch = true,
 }: VCFilterBarProps) {
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  if (!mounted) {
+    return (
+      <div className="rounded-xl border border-white/60 dark:border-white/[0.05] bg-white/40 dark:bg-navy-900/40 backdrop-blur-md shadow-[0_8px_32px_rgba(0,0,0,0.04)] p-4">
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center gap-2">
+            <Filter className="h-3.5 w-3.5 text-gold-400 animate-pulse" />
+            <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#64748B] dark:text-muted-foreground">
+              Loading Filters...
+            </span>
+          </div>
+        </div>
+        <Separator className="bg-slate-200/50 dark:bg-white/[0.04] mb-3" />
+        <div className="grid gap-2 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-6">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <div key={i} className="h-8 rounded-md border border-slate-200/30 dark:border-white/[0.04] bg-white/20 dark:bg-white/[0.01] animate-pulse" />
+          ))}
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="rounded-xl border border-white/60 dark:border-white/[0.05] bg-white/40 dark:bg-navy-900/40 backdrop-blur-md shadow-[0_8px_32px_rgba(0,0,0,0.04)] p-4">
       {}

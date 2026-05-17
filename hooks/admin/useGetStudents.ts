@@ -28,9 +28,7 @@ export function useGetStudents() {
   const sessions = sessRes?.data?.data ?? []
   const semesters = Array.from({ length: 8 }, (_, i) => i + 1)
 
-  const queryParams: ListStudentsQueryParams = {
-    page,
-    limit: 10,
+  const baseQueryParams: ListStudentsQueryParams = {
     search: debouncedSearch || undefined,
     departmentId: selectedDept !== "all" ? selectedDept : undefined,
     programId: selectedProgram !== "all" ? selectedProgram : undefined,
@@ -38,27 +36,20 @@ export function useGetStudents() {
     semester: selectedSemester !== "all" ? parseInt(selectedSemester) : undefined,
   }
 
+  const queryParams: ListStudentsQueryParams = {
+    ...baseQueryParams,
+    page,
+    limit: 10,
+  }
+
   const { data: response, isLoading, isFetching } = useGetStudentsQuery(queryParams)
+  const { data: activeRes } = useGetStudentsQuery({ ...baseQueryParams, enrollmentStatus: "ACTIVE", limit: 1 })
+  const { data: suspendedRes } = useGetStudentsQuery({ ...baseQueryParams, enrollmentStatus: "SUSPENDED", limit: 1 })
+
   const students = response?.data?.data ?? []
   const meta = response?.data?.meta ?? { total: 0, totalPages: 1, page: 1, limit: 10 }
-
-  const [selectedRows, setSelectedRows] = useState<Set<string>>(new Set())
-
-  const toggleRow = (id: string) => {
-    const next = new Set(selectedRows)
-    next.has(id) ? next.delete(id) : next.add(id)
-    setSelectedRows(next)
-  }
-
-  const toggleAll = () => {
-    if (selectedRows.size === students.length && students.length > 0) {
-      setSelectedRows(new Set())
-    } else {
-      setSelectedRows(new Set(students.map((s) => s.id)))
-    }
-  }
-
-  const clearSelection = () => setSelectedRows(new Set())
+  const activeCount = activeRes?.data?.meta?.total ?? 0
+  const suspendedCount = suspendedRes?.data?.meta?.total ?? 0
 
   const handleDeptChange = (val: string) => {
     setSelectedDept(val)
@@ -82,7 +73,6 @@ export function useGetStudents() {
   }
 
   return {
-
     searchQuery, setSearchQuery,
 
     selectedDept, handleDeptChange,
@@ -93,8 +83,6 @@ export function useGetStudents() {
 
     page, setPage,
 
-    students, meta, isLoading, isFetching,
-
-    selectedRows, toggleRow, toggleAll, clearSelection,
+    students, meta, activeCount, suspendedCount, isLoading, isFetching,
   }
 }

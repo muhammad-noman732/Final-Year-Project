@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { Plus, Search, Trash2, Eye, Pencil, ChevronLeft, ChevronRight, X, Filter, GraduationCap, Users, UserX, ShieldAlert } from "lucide-react";
+import { Plus, Search, Trash2, Eye, Pencil, ChevronLeft, ChevronRight, Filter, GraduationCap, Users, UserX } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -28,8 +28,7 @@ export default function StudentsPage() {
         selectedSession, handleSessionChange,
         departments, programs, sessions, semesters,
         page, setPage,
-        students, meta, isLoading,
-        selectedRows, toggleRow, toggleAll, clearSelection,
+        students, meta, activeCount, suspendedCount, isLoading,
     } = useGetStudents();
 
     const [isAddOpen, setIsAddOpen] = useState(false);
@@ -55,29 +54,26 @@ export default function StudentsPage() {
     const { handleDelete, isDeleting } = useDeleteStudent();
     const [deleteStudentState, setDeleteStudentState] = useState<{ id: string; name: string } | null>(null);
 
-    const activeCount = students.filter(s => s.enrollmentStatus === "ACTIVE").length;
-    const suspendedCount = students.filter(s => s.enrollmentStatus === "SUSPENDED").length;
-
     return (
         <div className="space-y-6 pb-10">
             {}
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div>
                     <h1 className="text-2xl font-bold text-[#0F172A] dark:text-foreground tracking-tight">
-                        Students Management
+                        Students
                     </h1>
                     <p className="text-sm text-muted-foreground mt-1">{meta.total} total students enrolled</p>
                 </div>
                 <Button
                     onClick={() => setIsAddOpen(true)}
-                    className="bg-gradient-to-r from-gold-600 to-gold-500 hover:from-gold-500 hover:to-gold-400 text-navy-950 font-semibold shadow-lg shadow-gold-500/20"
+                    className="bg-gradient-to-r from-gold-600 to-gold-500 hover:from-gold-500 hover:to-gold-400 text-navy-950 font-semibold shadow-lg shadow-gold-500/20 transition-all duration-150 hover:scale-[1.02] active:scale-[0.98]"
                 >
                     <Plus className="w-4 h-4 mr-2" /> Add New Student
                 </Button>
             </div>
 
             {}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            <div className="grid grid-cols-3 gap-3">
                 <Card className="glass-card border-0 p-4 flex items-center gap-3">
                     <div className="w-10 h-10 rounded-xl bg-gold-500/10 flex items-center justify-center flex-shrink-0">
                         <Users className="w-5 h-5 text-gold-400" />
@@ -103,15 +99,6 @@ export default function StudentsPage() {
                     <div>
                         <p className="text-xs text-muted-foreground uppercase tracking-wider">Suspended</p>
                         <p className="text-lg font-bold text-rose-400">{suspendedCount}</p>
-                    </div>
-                </Card>
-                <Card className="glass-card border-0 p-4 flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
-                        <ShieldAlert className="w-5 h-5 text-primary" />
-                    </div>
-                    <div>
-                        <p className="text-xs text-muted-foreground uppercase tracking-wider">Page</p>
-                        <p className="text-lg font-bold text-primary">{students.length}</p>
                     </div>
                 </Card>
             </div>
@@ -179,36 +166,12 @@ export default function StudentsPage() {
             </Card>
 
             {}
-            {selectedRows.size > 0 && (
-                <div className="flex items-center gap-3 px-4 py-3 rounded-xl bg-gold-500/5 border border-gold-500/15 animate-count">
-                    <span className="text-sm text-gold-400 font-medium">
-                        {selectedRows.size} student{selectedRows.size > 1 ? "s" : ""} selected
-                    </span>
-                    <div className="flex-1" />
-                    <Button size="sm" variant="outline" className="border-rose-500/20 text-rose-400 hover:bg-rose-500/5">
-                        <Trash2 className="w-3.5 h-3.5 mr-1.5" /> Suspend All
-                    </Button>
-                    <Button size="sm" variant="ghost" onClick={clearSelection} className="text-muted-foreground">
-                        <X className="w-3.5 h-3.5" />
-                    </Button>
-                </div>
-            )}
-
-            {}
             <Skeleton name="students-table" loading={isLoading}>
                 <Card className="glass-card border-0 overflow-hidden">
                     <div className="overflow-x-auto">
                         <Table>
                             <TableHeader>
                                 <TableRow className="border-slate-200/80 dark:border-gold-500/5 hover:bg-transparent">
-                                    <TableHead className="w-10">
-                                        <input
-                                            type="checkbox"
-                                            checked={selectedRows.size === students.length && students.length > 0}
-                                            onChange={toggleAll}
-                                            className="w-4 h-4 rounded border-slate-300 dark:border-gold-500/20"
-                                        />
-                                    </TableHead>
                                     <TableHead className="text-slate-500 dark:text-gold-500/60 text-xs uppercase tracking-wider">Student ID</TableHead>
                                     <TableHead className="text-slate-500 dark:text-gold-500/60 text-xs uppercase tracking-wider">Name</TableHead>
                                     <TableHead className="text-slate-500 dark:text-gold-500/60 text-xs uppercase tracking-wider">Email</TableHead>
@@ -222,7 +185,7 @@ export default function StudentsPage() {
                             <TableBody>
                                 {students.length === 0 ? (
                                     <TableRow>
-                                        <TableCell colSpan={9} className="h-32 text-center">
+                                        <TableCell colSpan={8} className="h-32 text-center">
                                             <div className="flex flex-col items-center gap-2">
                                                 <Users className="w-8 h-8 text-muted-foreground/30" />
                                                 <p className="text-muted-foreground">No students found. Try adjusting your filters.</p>
@@ -235,14 +198,6 @@ export default function StudentsPage() {
                                             key={student.id}
                                             className="border-gold-500/5 hover:bg-navy-700/20 transition-colors group"
                                         >
-                                            <TableCell>
-                                                <input
-                                                    type="checkbox"
-                                                    checked={selectedRows.has(student.id)}
-                                                    onChange={() => toggleRow(student.id)}
-                                                    className="w-4 h-4 rounded border-gold-500/20 bg-navy-800"
-                                                />
-                                            </TableCell>
                                             <TableCell className="text-xs font-mono text-gold-400/80">{student.studentId}</TableCell>
                                             <TableCell className="text-sm font-medium">{student.user.name}</TableCell>
                                             <TableCell className="text-xs text-muted-foreground">{student.user.email}</TableCell>
@@ -261,7 +216,7 @@ export default function StudentsPage() {
                                                     <Button
                                                         size="icon"
                                                         variant="ghost"
-                                                        className="h-8 w-8 text-muted-foreground hover:text-primary"
+                                                        className="h-8 w-8 text-muted-foreground hover:text-primary transition-all duration-150 hover:scale-110 active:scale-95"
                                                         onClick={() => setViewStudent(student)}
                                                     >
                                                         <Eye className="w-3.5 h-3.5" />
@@ -269,7 +224,7 @@ export default function StudentsPage() {
                                                     <Button
                                                         size="icon"
                                                         variant="ghost"
-                                                        className="h-8 w-8 text-muted-foreground hover:text-gold-400"
+                                                        className="h-8 w-8 text-muted-foreground hover:text-gold-400 transition-all duration-150 hover:scale-110 active:scale-95"
                                                         onClick={() => openEdit(student)}
                                                     >
                                                         <Pencil className="w-3.5 h-3.5" />
@@ -277,7 +232,7 @@ export default function StudentsPage() {
                                                     <Button
                                                         size="icon"
                                                         variant="ghost"
-                                                        className="h-8 w-8 text-muted-foreground hover:text-rose-400"
+                                                        className="h-8 w-8 text-muted-foreground hover:text-rose-400 transition-all duration-150 hover:scale-110 active:scale-95"
                                                         disabled={isDeleting || student.enrollmentStatus === "SUSPENDED"}
                                                         onClick={() => setDeleteStudentState({ id: student.id, name: student.user.name })}
                                                     >

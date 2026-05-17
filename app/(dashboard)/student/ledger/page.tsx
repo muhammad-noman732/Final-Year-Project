@@ -35,7 +35,14 @@
      } = useStudentLedger();
 
      return (
-         <div className="relative isolate space-y-6 pb-10 p-5 lg:p-8">
+         <div className="relative isolate space-y-6 pb-10 p-5 lg:p-8 min-h-[calc(100dvh-3.5rem)]">
+
+{/* Premium Multi-Color Mesh Background Blobs */}
+             <div className="absolute inset-0 -z-10 overflow-hidden pointer-events-none">
+                 <div className="absolute -top-[10%] -left-[10%] w-[50%] h-[50%] rounded-full bg-blue-400/10 dark:bg-blue-500/5 blur-[120px]" />
+                 <div className="absolute top-[20%] -right-[10%] w-[60%] h-[60%] rounded-full bg-violet-400/10 dark:bg-violet-500/5 blur-[130px]" />
+                 <div className="absolute -bottom-[10%] left-[20%] w-[55%] h-[55%] rounded-full bg-emerald-400/8 dark:bg-emerald-500/3 blur-[120px]" />
+             </div>
 
              <div className="max-w-6xl mx-auto space-y-8">
 
@@ -53,7 +60,7 @@
                  <Skeleton name="ledger-summary" loading={isLoading}>
                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                          {}
-                         <div className="group relative rounded-2xl border border-zinc-200/50 dark:border-white/[0.05] bg-white/40 dark:bg-white/[0.015] p-6 sm:p-8 flex items-center justify-between shadow-sm backdrop-blur-md transition-all duration-300">
+                         <div className="group relative rounded-2xl border border-white/80 dark:border-white/[0.06] bg-white/60 dark:bg-white/[0.02] p-6 sm:p-8 flex items-center justify-between shadow-sm backdrop-blur-xl hover:shadow-md hover:-translate-y-0.5 transition-all duration-300">
                              <div>
                                  <p className="text-[11px] font-bold uppercase tracking-widest text-zinc-400 dark:text-muted-foreground flex items-center gap-2 mb-2">
                                      <TrendingUp className="w-3.5 h-3.5 text-emerald-500" /> Total Cleared
@@ -68,7 +75,7 @@
                          </div>
 
                          {}
-                         <div className="group relative rounded-2xl border border-zinc-200/50 dark:border-white/[0.05] bg-white/40 dark:bg-white/[0.015] p-6 sm:p-8 flex items-center justify-between shadow-sm backdrop-blur-md transition-all duration-300">
+                         <div className="group relative rounded-2xl border border-white/80 dark:border-white/[0.06] bg-white/60 dark:bg-white/[0.02] p-6 sm:p-8 flex items-center justify-between shadow-sm backdrop-blur-xl hover:shadow-md hover:-translate-y-0.5 transition-all duration-300">
                              <div>
                                  <p className="text-[11px] font-bold uppercase tracking-widest text-zinc-400 dark:text-muted-foreground flex items-center gap-2 mb-2">
                                      <TrendingDown className="w-3.5 h-3.5 text-rose-500" /> Outstanding
@@ -95,7 +102,7 @@
 
                          <Skeleton name="active-liabilities" loading={isLoading}>
                              {unpaidAssignments.length === 0 ? (
-                                 <div className="rounded-2xl border border-zinc-200/50 dark:border-white/[0.05] bg-white/40 dark:bg-white/[0.01] p-10 flex flex-col items-center justify-center text-center h-[300px] shadow-sm backdrop-blur-md">
+                                 <div className="rounded-2xl border border-white/80 dark:border-white/[0.06] bg-white/60 dark:bg-white/[0.02] p-10 flex flex-col items-center justify-center text-center h-[300px] shadow-sm backdrop-blur-xl hover:shadow-md transition-all duration-300">
                                      <div className="w-12 h-12 bg-emerald-500/5 rounded-xl flex items-center justify-center mb-4 ring-1 ring-emerald-500/10">
                                          <CheckCircle2 className="w-6 h-6 text-emerald-500" />
                                      </div>
@@ -113,7 +120,7 @@
                                                      layout
                                                      initial={{ opacity: 0, y: 8 }}
                                                      animate={{ opacity: 1, y: 0 }}
-                                                     className={`rounded-2xl p-6 border shadow-sm backdrop-blur-md ${isOverdue ? 'border-rose-200 dark:border-rose-500/20 bg-rose-500/5' : 'border-zinc-200/50 dark:border-white/[0.05] bg-white/40 dark:bg-white/[0.02]'}`}
+                                                     className={`rounded-2xl p-6 border shadow-sm backdrop-blur-xl hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 ${isOverdue ? 'border-rose-200/80 dark:border-rose-500/25 bg-rose-500/10' : 'border-white/80 dark:border-white/[0.06] bg-white/60 dark:bg-white/[0.02]'}`}
                                                  >
                                                      <div className="flex justify-between items-start mb-6">
                                                          <div>
@@ -183,7 +190,7 @@
                                  <h3 className="text-xs font-bold text-zinc-500 dark:text-muted-foreground uppercase tracking-widest">Transaction Timeline</h3>
                              </div>
 
-                             <div className="p-1 rounded-xl bg-white/40 dark:bg-white/[0.03] border border-zinc-200/50 dark:border-white/[0.05] inline-flex shadow-sm backdrop-blur-md">
+                             <div className="p-1 rounded-xl bg-white/60 dark:bg-white/[0.02] border border-white/80 dark:border-white/[0.06] inline-flex shadow-sm backdrop-blur-xl">
                                  {(["all", "completed", "pending"] as const).map((f) => (
                                      <button
                                          key={f}
@@ -191,7 +198,7 @@
                                          className={`px-4 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all duration-300 ${
                                              filter === f 
                                              ? 'bg-zinc-900 dark:bg-white text-white dark:text-navy-950 shadow-sm' 
-                                             : 'text-zinc-500 dark:text-muted-foreground hover:text-zinc-900 dark:hover:text-foreground'
+                                             : 'text-zinc-500/60 dark:text-muted-foreground/60 hover:text-zinc-900 dark:hover:text-foreground transition-all duration-200'
                                          }`}
                                      >
                                          {f}
@@ -201,7 +208,7 @@
                          </div>
 
                          <Skeleton name="ledger-transactions" loading={isLoading}>
-                             <div className="rounded-2xl border border-zinc-200/50 dark:border-white/[0.05] bg-white/40 dark:bg-white/[0.01] overflow-hidden shadow-sm backdrop-blur-md">
+                             <div className="rounded-2xl border border-white/80 dark:border-white/[0.06] bg-white/60 dark:bg-white/[0.02] overflow-hidden shadow-sm backdrop-blur-xl">
                                  {filteredPayments.length === 0 ? (
                                      <div className="h-[400px] flex flex-col items-center justify-center text-center p-6">
                                          <Receipt className="w-10 h-10 mb-4 text-zinc-300 dark:text-zinc-700" strokeWidth={1} />
@@ -219,10 +226,10 @@
                                                      initial={{ opacity: 0 }}
                                                      animate={{ opacity: 1 }}
                                                      key={payment.id}
-                                                     className="p-5 sm:p-6 hover:bg-zinc-50/50 dark:hover:bg-white/[0.02] transition-colors flex flex-col sm:flex-row sm:items-center justify-between gap-4 group"
+                                                     className="p-5 sm:p-6 hover:bg-zinc-900/5 dark:hover:bg-white/[0.03] transition-all duration-300 flex flex-col sm:flex-row sm:items-center justify-between gap-4 group border-b border-zinc-100/50 dark:border-white/[0.02] last:border-b-0"
                                                  >
                                                      <div className="flex items-center gap-4">
-                                                         <div className="w-12 h-12 rounded-xl bg-zinc-50 dark:bg-white/[0.03] border border-zinc-200/50 dark:border-white/[0.05] flex items-center justify-center flex-shrink-0 group-hover:bg-white dark:group-hover:bg-white/[0.05] transition-colors shadow-inner">
+                                                         <div className="w-12 h-12 rounded-xl bg-zinc-100/50 dark:bg-white/[0.02] border border-white/60 dark:border-white/[0.06] flex items-center justify-center flex-shrink-0 group-hover:bg-white/80 dark:group-hover:bg-white/[0.05] transition-all duration-300 shadow-inner">
                                                              {payment.method === 'STRIPE_CARD' ? (
                                                                  <Wallet className="w-5 h-5 text-sky-500" />
                                                              ) : (

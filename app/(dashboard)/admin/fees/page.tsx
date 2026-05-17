@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { Plus, AlertTriangle, Eye, Pencil, Trash2, ChevronLeft, ChevronRight, UserPlus, Loader2, DollarSign, Calendar, BookOpen, BarChart3 } from "lucide-react";
+import { Plus, AlertTriangle, Eye, Pencil, Trash2, ChevronLeft, ChevronRight, UserPlus, Loader2, DollarSign, BookOpen, BarChart3, Search, X } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -17,6 +17,7 @@ import { formatFullCurrency } from "@/config/constants";
 import { Skeleton } from "boneyard-js/react";
 
 import { useGetFeeStructures } from "@/hooks/admin/useGetFeeStructures";
+import { useGetVCStudentsQuery } from "@/store/api/vc/vcApi";
 import { useAddFeeStructure } from "@/hooks/admin/useAddFeeStructure";
 import { useUpdateFeeStructure } from "@/hooks/admin/useUpdateFeeStructure";
 import { useDeactivateFeeStructure } from "@/hooks/admin/useDeactivateFeeStructure";
@@ -26,10 +27,23 @@ import type { FeeStructure } from "@/types/client/store/fee.store.types";
 export default function FeesPage() {
 
     const {
-        programs, semesters, sessions,
+        departments, programs, semesters, sessions,
+        selectedDept, handleDeptChange,
+        selectedProgram, handleProgramChange,
+        selectedSemester, handleSemesterChange,
+        selectedSession, handleSessionChange,
+        searchInput, setSearchInput,
         page, setPage,
-        feeStructures, meta, isLoading,
+        feeStructures, meta, stats, isLoading, isFetching,
+        resetFilters,
     } = useGetFeeStructures();
+
+    const [defaultersPage, setDefaultersPage] = useState(1);
+    const { data: defaultersRes, isLoading: isLoadingDefaulters } = useGetVCStudentsQuery({ feeStatus: "OVERDUE", limit: 10, page: defaultersPage });
+    const defaulterRows = defaultersRes?.data?.data ?? [];
+    const totalDefaulters = defaultersRes?.data?.meta?.total ?? 0;
+    const defaultersTotalPages = defaultersRes?.data?.meta?.totalPages ?? 1;
+    const totalOutstanding = defaulterRows.reduce((s, r) => s + r.outstandingAmount, 0);
 
     const [createOpen, setCreateOpen] = useState(false);
     const { form: createForm, onSubmit: createOnSubmit, isLoading: isCreating, computedTotal: createTotal } = useAddFeeStructure(() => setCreateOpen(false));
@@ -64,11 +78,6 @@ export default function FeesPage() {
         setAssigningId(null);
     };
 
-    const totalRevenue = feeStructures.reduce((s, fs) => s + (fs.totalFee * fs._count.assignments), 0);
-    const totalAssigned = feeStructures.reduce((s, fs) => s + fs._count.assignments, 0);
-
-    const activeCount = feeStructures.filter(fs => fs.isActive).length;
-
     const feeBreakdownFields = [
         { label: "Tuition Fee", name: "tuitionFee" },
         { label: "Lab Fee", name: "labFee" },
@@ -84,7 +93,7 @@ export default function FeesPage() {
             {}
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div>
-                    <h1 className="text-2xl font-bold text-[#0F172A] dark:text-foreground tracking-tight">Fee Management</h1>
+                    <h1 className="text-2xl font-bold text-[#0F172A] dark:text-foreground tracking-tight">Fees</h1>
                     <p className="text-sm text-muted-foreground mt-1">Manage fee structures and track assignments</p>
                 </div>
             </div>
@@ -97,7 +106,7 @@ export default function FeesPage() {
                     </div>
                     <div>
                         <p className="text-xs text-muted-foreground uppercase tracking-wider">Structures</p>
-                        <p className="text-lg font-bold text-foreground">{meta.total}</p>
+                        <p className="text-lg font-bold text-foreground">{stats?.totalCount ?? meta.total}</p>
                     </div>
                 </Card>
                 <Card className="glass-card border-0 p-4 flex items-center gap-3">
@@ -106,7 +115,7 @@ export default function FeesPage() {
                     </div>
                     <div>
                         <p className="text-xs text-muted-foreground uppercase tracking-wider">Active</p>
-                        <p className="text-lg font-bold text-emerald-400">{activeCount}</p>
+                        <p className="text-lg font-bold text-emerald-400">{stats?.activeCount ?? 0}</p>
                     </div>
                 </Card>
                 <Card className="glass-card border-0 p-4 flex items-center gap-3">
@@ -115,7 +124,7 @@ export default function FeesPage() {
                     </div>
                     <div>
                         <p className="text-xs text-muted-foreground uppercase tracking-wider">Assigned</p>
-                        <p className="text-lg font-bold text-sky-400">{totalAssigned}</p>
+                        <p className="text-lg font-bold text-sky-400">{stats?.totalAssigned ?? 0}</p>
                     </div>
                 </Card>
                 <Card className="glass-card border-0 p-4 flex items-center gap-3">
@@ -124,7 +133,7 @@ export default function FeesPage() {
                     </div>
                     <div>
                         <p className="text-xs text-muted-foreground uppercase tracking-wider">Expected</p>
-                        <p className="text-lg font-bold text-amber-400">{formatFullCurrency(totalRevenue)}</p>
+                        <p className="text-lg font-bold text-amber-400">{formatFullCurrency(stats?.expectedRevenue ?? 0)}</p>
                     </div>
                 </Card>
             </div>
@@ -136,19 +145,83 @@ export default function FeesPage() {
                     </TabsTrigger>
                     <TabsTrigger value="defaulters" className="data-[state=active]:bg-white dark:data-[state=active]:bg-gold-500/10 data-[state=active]:text-amber-600 dark:data-[state=active]:text-gold-400 data-[state=active]:shadow-sm">
                         Defaulters
-                        <span className="ml-2 px-1.5 py-0.5 text-[11px] font-bold rounded-full bg-rose-500/15 text-rose-400">
-                            0
-                        </span>
+                        {totalDefaulters > 0 && (
+                            <span className="ml-2 px-1.5 py-0.5 text-[11px] font-bold rounded-full bg-rose-500/15 text-rose-400">
+                                {totalDefaulters}
+                            </span>
+                        )}
                     </TabsTrigger>
                 </TabsList>
 
                 {}
                 <TabsContent value="structures">
-                    <div className="flex justify-between items-center mb-4">
-                        <p className="text-sm text-muted-foreground">{meta.total} structures</p>
-                        <Button onClick={() => setCreateOpen(true)} className="bg-gradient-to-r from-gold-600 to-gold-500 hover:from-gold-500 hover:to-gold-400 text-navy-950 font-semibold shadow-lg shadow-gold-500/20">
-                            <Plus className="w-4 h-4 mr-2" /> Create Fee Structure
-                        </Button>
+                    <div className="space-y-3 mb-4">
+                        <div className="flex flex-col sm:flex-row gap-2">
+                            <div className="relative flex-1">
+                                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                                <Input
+                                    placeholder="Search by program or department..."
+                                    value={searchInput}
+                                    onChange={(e) => setSearchInput(e.target.value)}
+                                    className="pl-9 bg-white/60 dark:bg-navy-800/50 border-slate-200/80 dark:border-gold-500/10"
+                                />
+                            </div>
+                            <Select value={selectedDept} onValueChange={handleDeptChange}>
+                                <SelectTrigger className="w-full sm:w-44 bg-white/60 dark:bg-navy-800/50 border-slate-200/80 dark:border-gold-500/10">
+                                    <SelectValue placeholder="Department" />
+                                </SelectTrigger>
+                                <SelectContent className="bg-white dark:bg-navy-800 border-slate-200/80 dark:border-gold-500/10">
+                                    <SelectItem value="all">All Departments</SelectItem>
+                                    {departments.map((d) => (
+                                        <SelectItem key={d.id} value={d.id}>{d.name}</SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                            <Select value={selectedProgram} onValueChange={handleProgramChange}>
+                                <SelectTrigger className="w-full sm:w-44 bg-white/60 dark:bg-navy-800/50 border-slate-200/80 dark:border-gold-500/10">
+                                    <SelectValue placeholder="Program" />
+                                </SelectTrigger>
+                                <SelectContent className="bg-white dark:bg-navy-800 border-slate-200/80 dark:border-gold-500/10">
+                                    <SelectItem value="all">All Programs</SelectItem>
+                                    {programs.map((p) => (
+                                        <SelectItem key={p.id} value={p.id}>{p.code}</SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                            <Select value={selectedSemester} onValueChange={handleSemesterChange}>
+                                <SelectTrigger className="w-full sm:w-36 bg-white/60 dark:bg-navy-800/50 border-slate-200/80 dark:border-gold-500/10">
+                                    <SelectValue placeholder="Semester" />
+                                </SelectTrigger>
+                                <SelectContent className="bg-white dark:bg-navy-800 border-slate-200/80 dark:border-gold-500/10">
+                                    <SelectItem value="all">All Semesters</SelectItem>
+                                    {semesters.map((s) => (
+                                        <SelectItem key={s} value={String(s)}>Semester {s}</SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                            <Select value={selectedSession} onValueChange={handleSessionChange}>
+                                <SelectTrigger className="w-full sm:w-36 bg-white/60 dark:bg-navy-800/50 border-slate-200/80 dark:border-gold-500/10">
+                                    <SelectValue placeholder="Year" />
+                                </SelectTrigger>
+                                <SelectContent className="bg-white dark:bg-navy-800 border-slate-200/80 dark:border-gold-500/10">
+                                    <SelectItem value="all">All Years</SelectItem>
+                                    {Array.from(new Set(sessions.flatMap((s) => [s.startYear, s.endYear]))).sort().map((yr) => (
+                                        <SelectItem key={yr} value={String(yr)}>{yr}</SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                            {(searchInput || selectedDept !== "all" || selectedProgram !== "all" || selectedSemester !== "all" || selectedSession !== "all") && (
+                                <Button variant="ghost" size="icon" onClick={resetFilters} className="shrink-0 text-muted-foreground hover:text-foreground">
+                                    <X className="w-4 h-4" />
+                                </Button>
+                            )}
+                        </div>
+                        <div className="flex justify-between items-center">
+                            <p className="text-sm text-muted-foreground">{stats?.totalCount ?? meta.total} structures{isFetching && !isLoading ? " · updating..." : ""}</p>
+                            <Button onClick={() => setCreateOpen(true)} className="bg-gradient-to-r from-gold-600 to-gold-500 hover:from-gold-500 hover:to-gold-400 text-navy-950 font-semibold shadow-lg shadow-gold-500/20 transition-all duration-150 hover:scale-[1.02] active:scale-[0.98]">
+                                <Plus className="w-4 h-4 mr-2" /> Create Fee Structure
+                            </Button>
+                        </div>
                     </div>
 
                     <Skeleton name="fee-structures-table" loading={isLoading}>
@@ -206,10 +279,10 @@ export default function FeesPage() {
                                                         <TableCell><StatusBadge status={fs.isActive ? "active" : "inactive"} /></TableCell>
                                                         <TableCell>
                                                             <div className="flex gap-0.5 opacity-60 group-hover:opacity-100 transition-opacity">
-                                                                <Button size="icon" variant="ghost" className="h-8 w-8 text-muted-foreground hover:text-sky-400" onClick={() => setViewFs(fs)}>
+                                                                <Button size="icon" variant="ghost" className="h-8 w-8 text-muted-foreground hover:text-sky-400 transition-all duration-150 hover:scale-110 active:scale-95" onClick={() => setViewFs(fs)}>
                                                                     <Eye className="w-3.5 h-3.5" />
                                                                 </Button>
-                                                                <Button size="icon" variant="ghost" className="h-8 w-8 text-muted-foreground hover:text-gold-400" onClick={() => openEdit(fs)}>
+                                                                <Button size="icon" variant="ghost" className="h-8 w-8 text-muted-foreground hover:text-gold-400 transition-all duration-150 hover:scale-110 active:scale-95" onClick={() => openEdit(fs)}>
                                                                     <Pencil className="w-3.5 h-3.5" />
                                                                 </Button>
                                                                 <Button
@@ -218,7 +291,7 @@ export default function FeesPage() {
                                                                     title="Assign to Students"
                                                                     disabled={isAssigning && assigningId === fs.id}
                                                                     onClick={() => handleAssign(fs.id)}
-                                                                    className="h-8 w-8 text-muted-foreground hover:text-emerald-400"
+                                                                    className="h-8 w-8 text-muted-foreground hover:text-emerald-400 transition-all duration-150 hover:scale-110 active:scale-95"
                                                                 >
                                                                     {isAssigning && assigningId === fs.id
                                                                         ? <Loader2 className="w-3.5 h-3.5 animate-spin" />
@@ -227,7 +300,7 @@ export default function FeesPage() {
                                                                 <Button
                                                                     size="icon"
                                                                     variant="ghost"
-                                                                    className="h-8 w-8 text-muted-foreground hover:text-rose-400"
+                                                                    className="h-8 w-8 text-muted-foreground hover:text-rose-400 transition-all duration-150 hover:scale-110 active:scale-95"
                                                                     disabled={isDeactivating}
                                                                     onClick={() => setDeleteFeeState({ id: fs.id, label: `${fs.program.code} Sem ${fs.semester}` })}
                                                                 >
@@ -267,7 +340,7 @@ export default function FeesPage() {
                             </div>
                             <div>
                                 <p className="text-xs text-muted-foreground uppercase tracking-wider">Total Defaulters</p>
-                                <p className="text-2xl font-bold text-foreground tracking-tight">0</p>
+                                <p className="text-2xl font-bold text-foreground tracking-tight">{totalDefaulters}</p>
                             </div>
                         </Card>
                         <Card className="glass-card border-0 p-5 flex items-center gap-4">
@@ -276,18 +349,87 @@ export default function FeesPage() {
                             </div>
                             <div>
                                 <p className="text-xs text-muted-foreground uppercase tracking-wider">Total Outstanding</p>
-                                <p className="text-2xl font-bold text-foreground tracking-tight">{formatFullCurrency(0)}</p>
+                                <p className="text-2xl font-bold text-foreground tracking-tight">{formatFullCurrency(totalOutstanding)}</p>
                             </div>
                         </Card>
                     </div>
-                    <Card className="glass-card border-0 p-8 text-center">
-                        <div className="flex flex-col items-center gap-3">
-                            <div className="w-16 h-16 rounded-2xl bg-emerald-500/10 flex items-center justify-center">
-                                <AlertTriangle className="w-8 h-8 text-emerald-400" />
-                            </div>
-                            <p className="text-muted-foreground">No defaulters found. All students are up to date with their payments.</p>
-                        </div>
-                    </Card>
+
+                    <Skeleton name="students-table" loading={isLoadingDefaulters}>
+                        {defaulterRows.length === 0 ? (
+                            <Card className="glass-card border-0 p-8 text-center">
+                                <div className="flex flex-col items-center gap-3">
+                                    <div className="w-16 h-16 rounded-2xl bg-emerald-500/10 flex items-center justify-center">
+                                        <AlertTriangle className="w-8 h-8 text-emerald-400" />
+                                    </div>
+                                    <p className="text-muted-foreground">No defaulters found. All students are up to date with their payments.</p>
+                                </div>
+                            </Card>
+                        ) : (
+                            <Card className="glass-card border-0 overflow-hidden">
+                                <div className="overflow-x-auto">
+                                    <Table>
+                                        <TableHeader>
+                                            <TableRow className="border-gold-500/5 hover:bg-transparent">
+                                                <TableHead className="text-gold-500/60 text-xs uppercase tracking-wider">Student</TableHead>
+                                                <TableHead className="text-gold-500/60 text-xs uppercase tracking-wider">Program</TableHead>
+                                                <TableHead className="text-gold-500/60 text-xs uppercase tracking-wider">Sem</TableHead>
+                                                <TableHead className="text-gold-500/60 text-xs uppercase tracking-wider">Days Overdue</TableHead>
+                                                <TableHead className="text-gold-500/60 text-xs uppercase tracking-wider">Outstanding</TableHead>
+                                            </TableRow>
+                                        </TableHeader>
+                                        <TableBody>
+                                            {defaulterRows.map((row) => (
+                                                <TableRow key={row.assignmentId} className="border-gold-500/5 hover:bg-navy-700/20 transition-colors">
+                                                    <TableCell>
+                                                        <div>
+                                                            <span className="text-sm font-medium">{row.studentName}</span>
+                                                            <p className="text-[10px] text-muted-foreground">{row.rollNumber}</p>
+                                                        </div>
+                                                    </TableCell>
+                                                    <TableCell className="text-sm text-muted-foreground">{row.programName}</TableCell>
+                                                    <TableCell>
+                                                        <span className="text-sm font-medium text-gold-400/80">Sem {row.semester}</span>
+                                                    </TableCell>
+                                                    <TableCell>
+                                                        <span className={`text-sm font-medium ${row.daysOverdue > 30 ? "text-rose-400" : "text-amber-400"}`}>
+                                                            {row.daysOverdue}d
+                                                        </span>
+                                                    </TableCell>
+                                                    <TableCell className="text-sm font-semibold text-rose-400">
+                                                        {formatFullCurrency(row.outstandingAmount)}
+                                                    </TableCell>
+                                                </TableRow>
+                                            ))}
+                                        </TableBody>
+                                    </Table>
+                                </div>
+                                    <div className="flex items-center justify-between px-4 py-3 border-t border-gold-500/5">
+                                        <p className="text-xs text-muted-foreground">Showing {defaulterRows.length} of {totalDefaulters} defaulters</p>
+                                        <div className="flex items-center gap-2">
+                                            <Button
+                                                size="sm"
+                                                variant="outline"
+                                                className="border-gold-500/10 text-muted-foreground transition-all duration-150 hover:scale-[1.02] active:scale-[0.98]"
+                                                disabled={defaultersPage === 1}
+                                                onClick={() => setDefaultersPage(defaultersPage - 1)}
+                                            >
+                                                <ChevronLeft className="w-4 h-4" />
+                                            </Button>
+                                            <span className="text-sm text-muted-foreground mx-2">Page {defaultersPage} of {defaultersTotalPages}</span>
+                                            <Button
+                                                size="sm"
+                                                variant="outline"
+                                                className="border-gold-500/10 text-muted-foreground transition-all duration-150 hover:scale-[1.02] active:scale-[0.98]"
+                                                disabled={defaultersPage >= defaultersTotalPages}
+                                                onClick={() => setDefaultersPage(defaultersPage + 1)}
+                                            >
+                                                <ChevronRight className="w-4 h-4" />
+                                            </Button>
+                                        </div>
+                                    </div>
+                            </Card>
+                        )}
+                    </Skeleton>
                 </TabsContent>
             </Tabs>
 

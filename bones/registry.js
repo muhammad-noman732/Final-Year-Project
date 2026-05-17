@@ -14,6 +14,14 @@ import _users_table from './users-table.bones.json'
 import _departments_table from './departments-table.bones.json'
 import _programs_table from './programs-table.bones.json'
 import _sessions_table from './sessions-table.bones.json'
+import _vc_health_bento from './vc-health-bento.bones.json'
+import _vc_dashboard_panels from './vc-dashboard-panels.bones.json'
+import _vc_velocity_card from './vc-velocity-card.bones.json'
+import _vc_live_feed from './vc-live-feed.bones.json'
+import _vc_analytics_panels from './vc-analytics-panels.bones.json'
+import _vc_tracking_kpi from './vc-tracking-kpi.bones.json'
+import _vc_students_table from './vc-students-table.bones.json'
+import _vc_department_grid from './vc-department-grid.bones.json'
 
 registerBones({
   "student-fee-card": _student_fee_card,
@@ -28,8 +36,16 @@ registerBones({
   "departments-table": _departments_table,
   "programs-table": _programs_table,
   "sessions-table": _sessions_table,
-  "fee-structures-table": _students_table, // Placeholder for admin
-  "admin-metrics": _hod_stats_grid, // Placeholder for admin
-  "admin-transactions": _ledger_transactions, // Placeholder for admin
-  "reports-table": _users_table, // Placeholder for admin
+  "fee-structures-table": _students_table,
+  "admin-metrics": _hod_stats_grid,
+  "admin-transactions": _ledger_transactions,
+  "reports-table": _users_table,
+  "vc-health-bento": _vc_health_bento,
+  "vc-dashboard-panels": _vc_dashboard_panels,
+  "vc-velocity-card": _vc_velocity_card,
+  "vc-live-feed": _vc_live_feed,
+  "vc-analytics-panels": _vc_analytics_panels,
+  "vc-tracking-kpi": _vc_tracking_kpi,
+  "vc-students-table": _vc_students_table,
+  "vc-department-grid": _vc_department_grid,
 })

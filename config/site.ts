@@ -25,7 +25,7 @@ export const navItems = {
         { label: "Departments", href: "/admin/departments", icon: "Building" },
         { label: "Programs", href: "/admin/programs", icon: "GraduationCap" },
         { label: "Sessions", href: "/admin/sessions", icon: "Calendar" },
-        { label: "Fee Management", href: "/admin/fees", icon: "Banknote" },
+        { label: "Fees", href: "/admin/fees", icon: "Banknote" },
         { label: "Registration", href: "/admin/registration", icon: "GraduationCap" },
     ],
     vc: [

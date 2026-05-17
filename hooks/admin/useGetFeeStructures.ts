@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useGetFeeStructuresQuery } from "@/store/api/admin/feeStructuresApi"
 import { useGetProgramsQuery } from "@/store/api/admin/programsApi"
 import { useGetSessionsQuery } from "@/store/api/admin/sessionsApi"
@@ -10,7 +10,17 @@ export function useGetFeeStructures() {
   const [selectedProgram, setSelectedProgram] = useState("all")
   const [selectedSemester, setSelectedSemester] = useState("all")
   const [selectedSession, setSelectedSession] = useState("all")
+  const [searchInput, setSearchInput] = useState("")
+  const [search, setSearch] = useState("")
   const [page, setPage] = useState(1)
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setSearch(searchInput)
+      setPage(1)
+    }, 300)
+    return () => clearTimeout(timer)
+  }, [searchInput])
 
   const { data: deptsRes } = useGetDepartmentsQuery({ limit: 100 })
   const { data: progsRes } = useGetProgramsQuery({
@@ -30,11 +40,13 @@ export function useGetFeeStructures() {
     programId: selectedProgram !== "all" ? selectedProgram : undefined,
     semester: selectedSemester !== "all" ? parseInt(selectedSemester) : undefined,
     sessionYear: selectedSession !== "all" ? parseInt(selectedSession) : undefined,
+    search: search || undefined,
   }
 
   const { data: response, isLoading, isFetching } = useGetFeeStructuresQuery(queryParams)
   const feeStructures = response?.data?.data ?? []
   const meta = response?.data?.meta ?? { total: 0, totalPages: 1, page: 1, limit: 10 }
+  const stats = response?.data?.stats
 
   const handleDeptChange = (val: string) => {
     setSelectedDept(val)
@@ -57,16 +69,28 @@ export function useGetFeeStructures() {
     setPage(1)
   }
 
+  const resetFilters = () => {
+    setSelectedDept("all")
+    setSelectedProgram("all")
+    setSelectedSemester("all")
+    setSelectedSession("all")
+    setSearchInput("")
+    setSearch("")
+    setPage(1)
+  }
+
   return {
     selectedDept, handleDeptChange,
     selectedProgram, handleProgramChange,
     selectedSemester, handleSemesterChange,
     selectedSession, handleSessionChange,
+    searchInput, setSearchInput,
 
     departments, programs, sessions, semesters,
 
     page, setPage,
 
-    feeStructures, meta, isLoading, isFetching,
+    feeStructures, meta, stats, isLoading, isFetching,
+    resetFilters,
   }
 }

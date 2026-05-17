@@ -151,6 +151,7 @@ export const listFeeStructuresQuerySchema = paginationQuerySchema.extend({
     .enum(["true", "false"])
     .transform((v) => v === "true")
     .optional(),
+  search: z.string().max(100).optional(),
 })
 
 export type CreateFeeStructureInput = z.infer<typeof createFeeStructureSchema>

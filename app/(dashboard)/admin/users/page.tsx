@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Plus, Trash2, ChevronLeft, ChevronRight } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { ConfirmDialog } from "@/components/shared/ConfirmDialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -25,6 +26,7 @@ export default function UsersPage() {
     const [isAddOpen, setIsAddOpen] = useState(false);
     const { form, onSubmit, isLoading: isCreating, watchRole, departments } = useAddUser(() => setIsAddOpen(false));
     const { handleDelete, isDeleting } = useDeleteUser();
+    const [deleteUserState, setDeleteUserState] = useState<{ id: string; name: string } | null>(null);
 
     const { register, formState: { errors }, setValue } = form;
 
@@ -33,13 +35,13 @@ export default function UsersPage() {
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div>
                     <h1 className="text-2xl font-bold text-[#0F172A] dark:text-foreground tracking-tight">
-                        Staff Management
+                        Staff
                     </h1>
                     <p className="text-sm text-muted-foreground mt-1">{meta.total} staff accounts</p>
                 </div>
                 <Button
                     onClick={() => setIsAddOpen(true)}
-                    className="bg-gradient-to-r from-gold-600 to-gold-500 hover:from-gold-500 hover:to-gold-400 text-navy-950 font-semibold"
+                    className="bg-gradient-to-r from-gold-600 to-gold-500 hover:from-gold-500 hover:to-gold-400 text-navy-950 font-semibold transition-all duration-150 hover:scale-[1.02] active:scale-[0.98]"
                 >
                     <Plus className="w-4 h-4 mr-2" /> Add Staff
                 </Button>
@@ -99,9 +101,9 @@ export default function UsersPage() {
                                                 <Button
                                                     size="icon"
                                                     variant="ghost"
-                                                    className="h-8 w-8 text-muted-foreground hover:text-rose-400"
+                                                    className="h-8 w-8 text-muted-foreground hover:text-rose-400 transition-all duration-150 hover:scale-110 active:scale-95"
                                                     disabled={isDeleting}
-                                                    onClick={() => handleDelete(user.id, user.name)}
+                                                    onClick={() => setDeleteUserState({ id: user.id, name: user.name })}
                                                 >
                                                     <Trash2 className="w-3.5 h-3.5" />
                                                 </Button>
@@ -194,6 +196,22 @@ export default function UsersPage() {
                     </form>
                 </SheetContent>
             </Sheet>
+
+            <ConfirmDialog
+                open={!!deleteUserState}
+                onOpenChange={(v) => !v && setDeleteUserState(null)}
+                title="Deactivate Account"
+                description={`Are you sure you want to deactivate ${deleteUserState?.name}? They will lose access to the system immediately.`}
+                actionLabel="Deactivate"
+                isDestructive
+                isPending={isDeleting}
+                onAction={async () => {
+                    if (deleteUserState) {
+                        await handleDelete(deleteUserState.id, deleteUserState.name);
+                        setDeleteUserState(null);
+                    }
+                }}
+            />
         </div>
     );
 }

@@ -15,6 +15,7 @@ import type {
   ListFeeStructuresQuery,
 } from "@/lib/validators/admin.validators"
 import type { PaginatedResult } from "@/types/server/admin.types"
+import type { FeeStructureGlobalStats } from "@/types/server/fee.types"
 import { getPaginationParams, buildPaginationMeta } from "@/lib/utils/paginate"
 import { logger } from "@/lib/logger"
 
@@ -31,13 +32,21 @@ export class FeeStructureService {
   async getFeeStructures(
     tenantId: string,
     query: ListFeeStructuresQuery,
-  ): Promise<PaginatedResult<FeeStructureRow>> {
+  ): Promise<PaginatedResult<FeeStructureRow> & { stats: FeeStructureGlobalStats }> {
     const where: Prisma.FeeStructureWhereInput = { tenantId }
 
     if (query.programId) where.programId = query.programId
     if (query.semester !== undefined) where.semester = query.semester
     if (query.sessionYear !== undefined) where.sessionYear = query.sessionYear
     if (query.isActive !== undefined) where.isActive = query.isActive
+    if (query.search) {
+      const s = query.search.trim()
+      where.OR = [
+        { program: { code: { contains: s, mode: "insensitive" } } },
+        { program: { name: { contains: s, mode: "insensitive" } } },
+        { program: { department: { name: { contains: s, mode: "insensitive" } } } },
+      ]
+    }
 
     const orderBy: Prisma.FeeStructureOrderByWithRelationInput[] = [
       { createdAt: "desc" },
@@ -46,14 +55,17 @@ export class FeeStructureService {
 
     const { skip } = getPaginationParams({ page: query.page, limit: query.limit })
 
-    const { data, total } = await this.feeStructureRepo.findMany({
-      where,
-      orderBy,
-      skip,
-      take: query.limit,
-    })
+    const [{ data, total }, stats] = await Promise.all([
+      this.feeStructureRepo.findMany({
+        where,
+        orderBy,
+        skip,
+        take: query.limit,
+      }),
+      this.feeStructureRepo.getGlobalStats(tenantId),
+    ])
 
-    return { data, meta: buildPaginationMeta(total, query.page, query.limit) }
+    return { data, meta: buildPaginationMeta(total, query.page, query.limit), stats }
   }
 
   async getFeeStructure(tenantId: string, id: string): Promise<FeeStructureRow> {

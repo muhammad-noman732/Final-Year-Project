@@ -17,7 +17,7 @@
        initial={{ opacity: 0, x: -4 }}
        animate={{ opacity: 1, x: 0 }}
        transition={{ delay: index * 0.04, type: "spring", stiffness: 300, damping: 30 }}
-       className="grid grid-cols-1 sm:grid-cols-[180px_1fr] gap-1 sm:gap-6 px-6 py-3.5 hover:bg-zinc-50 dark:hover:bg-white/[0.012] transition-colors duration-100 border-b border-zinc-100 dark:border-white/[0.04] last:border-0"
+        className="grid grid-cols-1 sm:grid-cols-[180px_1fr] gap-1 sm:gap-6 px-6 py-3.5 hover:bg-white/80 dark:hover:bg-white/[0.02] transition-all duration-150 border-b border-white/60 dark:border-white/[0.04] last:border-0"
      >
        <dt className="text-[10.5px] uppercase tracking-[0.14em] text-zinc-500 font-bold sm:py-0.5 flex-shrink-0">
          {field.label}
@@ -77,19 +77,18 @@
 
    return (
      <div className="relative">
-       <div
-         aria-hidden
-         className="pointer-events-none fixed inset-0 -z-10"
-         style={{
-           background: "radial-gradient(ellipse 80% 50% at 50% -10%, rgba(212,168,67,0.06), transparent 60%)",
-         }}
-       />
+      {/* Mesh background */}
+      <div aria-hidden className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
+        <div className="absolute -top-32 -left-32 w-[600px] h-[600px] rounded-full bg-blue-400/[0.06] blur-[120px]" />
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] rounded-full bg-amber-400/[0.05] blur-[100px]" />
+        <div className="absolute bottom-0 left-1/3 w-[500px] h-[400px] rounded-full bg-violet-400/[0.04] blur-[120px]" />
+      </div>
 
        <div className="max-w-3xl mx-auto space-y-5 pb-16 pt-6 px-4">
 
          {}
          <Skeleton name="student-profile-header" loading={isLoading}>
-           <div className="rounded-2xl border border-zinc-200 dark:border-white/[0.06] bg-white dark:bg-white/[0.015] overflow-hidden shadow-sm backdrop-blur-sm">
+           <div className="rounded-2xl border border-white/60 dark:border-white/[0.06] bg-white/60 dark:bg-white/[0.015] overflow-hidden shadow-sm backdrop-blur-xl">
              {}
              <div className="relative h-16 bg-gradient-to-br from-gold-500/[0.1] dark:from-gold-500/[0.06] to-transparent">
                <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-zinc-200 dark:via-white/[0.08] to-transparent" />
@@ -112,22 +111,22 @@
                      {profile?.user?.name ?? "—"}
                    </h1>
                    <div className="flex flex-wrap items-center gap-1.5 mt-2">
-                     <span className="text-[10.5px] font-mono text-zinc-500 dark:text-zinc-400 tracking-wider bg-zinc-50 dark:bg-white/[0.03] ring-1 ring-inset ring-zinc-200 dark:ring-white/[0.06] px-2 py-[3px] rounded-md font-bold">
+                     <span className="text-[10.5px] font-mono text-zinc-500 dark:text-zinc-400 tracking-wider bg-zinc-50/50 dark:bg-white/[0.03] ring-1 ring-inset ring-zinc-200 dark:ring-white/[0.06] px-2 py-[3px] rounded-md font-bold">
                        {profile?.studentId ?? "—"}
                      </span>
                      {profile?.enrollmentStatus && (
-                       <span className="text-[10px] font-bold uppercase tracking-widest text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-500/10 ring-1 ring-inset ring-emerald-200 dark:ring-emerald-500/20 px-2 py-[3px] rounded-md">
+                       <span className="text-[10px] font-bold uppercase tracking-widest text-emerald-600 dark:text-emerald-400 bg-emerald-50/50 dark:bg-emerald-500/10 ring-1 ring-inset ring-emerald-200 dark:ring-emerald-500/20 px-2 py-[3px] rounded-md">
                          {profile.enrollmentStatus.replace(/_/g, " ")}
                        </span>
                      )}
                      {profile?.program?.code && (
-                       <span className="inline-flex items-center gap-1.5 text-[10.5px] font-bold text-zinc-500 dark:text-zinc-400 bg-zinc-50 dark:bg-white/[0.03] ring-1 ring-inset ring-zinc-200 dark:ring-white/[0.06] px-2 py-[3px] rounded-md">
+                       <span className="inline-flex items-center gap-1.5 text-[10.5px] font-bold text-zinc-500 dark:text-zinc-400 bg-zinc-50/50 dark:bg-white/[0.03] ring-1 ring-inset ring-zinc-200 dark:ring-white/[0.06] px-2 py-[3px] rounded-md">
                          <BookOpen className="w-3 h-3" strokeWidth={2} />
                          {profile.program.code}
                        </span>
                      )}
                      {profile?.session?.name && (
-                       <span className="inline-flex items-center gap-1.5 text-[10.5px] font-bold text-zinc-500 dark:text-zinc-400 bg-zinc-50 dark:bg-white/[0.03] ring-1 ring-inset ring-zinc-200 dark:ring-white/[0.06] px-2 py-[3px] rounded-md">
+                       <span className="inline-flex items-center gap-1.5 text-[10.5px] font-bold text-zinc-500 dark:text-zinc-400 bg-zinc-50/50 dark:bg-white/[0.03] ring-1 ring-inset ring-zinc-200 dark:ring-white/[0.06] px-2 py-[3px] rounded-md">
                          <Calendar className="w-3 h-3" strokeWidth={2} />
                          {profile.session.name}
                        </span>
@@ -142,7 +141,7 @@
          {}
          <Skeleton name="active-liabilities" loading={isLoading}>
            <Tabs defaultValue="personal" className="space-y-4">
-             <TabsList className="bg-zinc-100 dark:bg-white/[0.02] ring-1 ring-inset ring-zinc-200 dark:ring-white/[0.06] p-1 rounded-xl gap-0.5 w-full h-auto shadow-inner">
+             <TabsList className="bg-white/60 dark:bg-white/[0.02] ring-1 ring-inset ring-white/80 dark:ring-white/[0.06] p-1 rounded-xl gap-0.5 w-full h-auto shadow-sm backdrop-blur-xl">
                {[
                  { value: "personal", label: "Personal", Icon: User },
                  { value: "academic", label: "Academic", Icon: GraduationCap },
@@ -160,7 +159,7 @@
 
              {}
              <TabsContent value="personal" className="mt-0">
-               <div className="rounded-2xl border border-zinc-200 dark:border-white/[0.06] bg-white dark:bg-white/[0.015] overflow-hidden shadow-sm backdrop-blur-sm">
+               <div className="rounded-2xl border border-white/60 dark:border-white/[0.06] bg-white/70 dark:bg-white/[0.015] overflow-hidden shadow-md backdrop-blur-xl hover:shadow-lg transition-all duration-300">
                  <dl className="divide-y divide-zinc-100 dark:divide-white/[0.04]">
                    {personalFields.map((f, i) => (
                      <InfoRow key={f.label} field={f} index={i} />
@@ -171,7 +170,7 @@
 
              {}
              <TabsContent value="academic" className="mt-0">
-               <div className="rounded-2xl border border-zinc-200 dark:border-white/[0.06] bg-white dark:bg-white/[0.015] overflow-hidden shadow-sm backdrop-blur-sm">
+               <div className="rounded-2xl border border-white/60 dark:border-white/[0.06] bg-white/70 dark:bg-white/[0.015] overflow-hidden shadow-md backdrop-blur-xl hover:shadow-lg transition-all duration-300">
                  <dl className="divide-y divide-zinc-100 dark:divide-white/[0.04]">
                    {academicFields.map((f, i) => (
                      <InfoRow key={f.label} field={f} index={i} />

@@ -25,8 +25,8 @@ export function ThemeToggle() {
 
   if (!mounted) {
     return (
-      <Button variant="ghost" size="icon" className="w-8 h-8 rounded-lg text-[#64748B] hover:text-[#0F172A] hover:bg-slate-100 dark:text-slate-400 dark:hover:text-slate-100 dark:hover:bg-slate-800 transition-colors">
-        <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+      <Button variant="ghost" size="icon" className="w-8 h-8 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 dark:text-slate-500 dark:hover:text-slate-200 dark:hover:bg-slate-800 transition-colors">
+        <Sun className="h-[1.1rem] w-[1.1rem]" />
         <span className="sr-only">Toggle theme</span>
       </Button>
     )
@@ -35,22 +35,22 @@ export function ThemeToggle() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon" className="w-8 h-8 rounded-lg text-[#64748B] hover:text-[#0F172A] hover:bg-slate-100 dark:text-slate-400 dark:hover:text-slate-100 dark:hover:bg-slate-800 transition-colors">
-          <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-          <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+        <Button variant="ghost" size="icon" className="w-8 h-8 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 dark:text-slate-500 dark:hover:text-slate-200 dark:hover:bg-slate-800 transition-colors focus-visible:outline-2 focus-visible:outline-blue-500">
+          <Sun className="h-[1.1rem] w-[1.1rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+          <Moon className="absolute h-[1.1rem] w-[1.1rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
           <span className="sr-only">Toggle theme</span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="dark:bg-[#0F172A] dark:border-slate-800">
-        <DropdownMenuItem onClick={() => dispatch(setTheme("light"))} className="gap-2 cursor-pointer dark:hover:bg-slate-800 dark:text-slate-300">
+      <DropdownMenuContent align="end" className="bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800">
+        <DropdownMenuItem onClick={() => dispatch(setTheme("light"))} className="gap-2 cursor-pointer text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-100 focus:bg-blue-50 dark:focus:bg-blue-500/10 focus:text-blue-700 dark:focus:text-blue-400">
           <Sun className="h-4 w-4" />
           <span>Light</span>
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => dispatch(setTheme("dark"))} className="gap-2 cursor-pointer dark:hover:bg-slate-800 dark:text-slate-300">
+        <DropdownMenuItem onClick={() => dispatch(setTheme("dark"))} className="gap-2 cursor-pointer text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-100 focus:bg-blue-50 dark:focus:bg-blue-500/10 focus:text-blue-700 dark:focus:text-blue-400">
           <Moon className="h-4 w-4" />
           <span>Dark</span>
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => dispatch(setTheme("system"))} className="gap-2 cursor-pointer dark:hover:bg-slate-800 dark:text-slate-300">
+        <DropdownMenuItem onClick={() => dispatch(setTheme("system"))} className="gap-2 cursor-pointer text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-100 focus:bg-blue-50 dark:focus:bg-blue-500/10 focus:text-blue-700 dark:focus:text-blue-400">
           <Monitor className="h-4 w-4" />
           <span>System</span>
         </DropdownMenuItem>
@@ -58,3 +58,4 @@ export function ThemeToggle() {
     </DropdownMenu>
   )
 }
+

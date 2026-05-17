@@ -3,7 +3,7 @@ import type { NextRequest } from "next/server"
 
 const ALLOWED_METHODS = "GET, POST, PUT, PATCH, DELETE, OPTIONS"
 const ALLOWED_HEADERS = "Content-Type, Authorization, X-Request-Id"
-const MAX_AGE = "86400" 
+const MAX_AGE = "86400"
 
 function getAllowedOrigins(): string[] {
   const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"

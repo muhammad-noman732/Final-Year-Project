@@ -105,4 +105,22 @@ export class FeeStructureRepository {
   async delete(id: string, tenantId: string): Promise<void> {
     await this.db.feeStructure.delete({ where: { id, tenantId } })
   }
+
+  async getGlobalStats(tenantId: string): Promise<{
+    totalCount: number
+    activeCount: number
+    totalAssigned: number
+    expectedRevenue: number
+  }> {
+    const structures = await this.db.feeStructure.findMany({
+      where: { tenantId },
+      select: { isActive: true, totalFee: true, _count: { select: { assignments: true } } },
+    })
+    return {
+      totalCount: structures.length,
+      activeCount: structures.filter((s) => s.isActive).length,
+      totalAssigned: structures.reduce((sum, f) => sum + f._count.assignments, 0),
+      expectedRevenue: structures.reduce((sum, f) => sum + f.totalFee * f._count.assignments, 0),
+    }
+  }
 }

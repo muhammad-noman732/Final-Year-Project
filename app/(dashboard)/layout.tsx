@@ -71,7 +71,14 @@ export default function DashboardLayout({
       pathname === item.href ||
       (item.href !== `/${role}` && pathname.startsWith(item.href))
   )
-  const pageTitle = currentItem?.label || config.title
+  let pageTitle = currentItem?.label || config.title
+  if (pageTitle === "Dashboard") {
+    if (role === "vc") pageTitle = "VC Dashboard"
+    else if (role === "hod") pageTitle = "HOD Dashboard"
+    else if (role === "admin") pageTitle = "Admin Dashboard"
+    else if (role === "student") pageTitle = "Student Dashboard"
+    else if (role === "superadmin") pageTitle = "Super Admin Dashboard"
+  }
 
   const userName = isLoading ? "Loading..." : user?.name || "User"
   const userRole = config.label

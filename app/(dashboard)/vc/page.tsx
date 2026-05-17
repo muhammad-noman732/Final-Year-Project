@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { Clock, Zap, BarChart2, LayoutDashboard, GraduationCap } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
+import { Skeleton } from "boneyard-js/react"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import VCFilterBar from "@/components/vc/VCFilterBar"
@@ -14,6 +15,7 @@ import VCVelocityCard from "@/components/vc/VCVelocityCard"
 import InsightsPanel from "@/components/vc/InsightsPanel"
 import VCRegistrationTab from "@/components/vc/registration/VCRegistrationTab"
 import { useVCDashboard } from "@/hooks/vc/useVCDashboard"
+import { useBoneyard } from "@/hooks/useBoneyard"
 
 type DashboardTab = "fee" | "registration"
 
@@ -24,6 +26,7 @@ const TABS: Array<{ id: DashboardTab; label: string; Icon: React.ElementType }> 
 
 export default function VCDashboard() {
   const [activeTab, setActiveTab] = useState<DashboardTab>("fee")
+  const boneyard = useBoneyard()
 
   const {
     filters,
@@ -50,6 +53,8 @@ export default function VCDashboard() {
     registrationImportedAt,
     latestRegistrationEvent,
   } = useVCDashboard()
+
+  const loadingData = !boneyard && isLoading && !dashboard
 
   return (
     <div className="relative isolate space-y-6 pb-10 min-h-[calc(100dvh-3.5rem)] transition-colors duration-300">
@@ -163,40 +168,48 @@ export default function VCDashboard() {
             />
 
             {}
-            {dashboard ? (
-              <VCHealthScoreBento
-                overview={dashboard.overview}
-                collectionTrend={dashboard.collectionTrend}
-                newAmountCollected={newAmountCollected}
-                sseConnected={sseConnected}
-                onCardClick={handleOverviewCardClick}
-              />
-            ) : null}
+            <Skeleton name="vc-health-bento" loading={loadingData}>
+              {dashboard ? (
+                <VCHealthScoreBento
+                  overview={dashboard.overview}
+                  collectionTrend={dashboard.collectionTrend}
+                  newAmountCollected={newAmountCollected}
+                  sseConnected={sseConnected}
+                  onCardClick={handleOverviewCardClick}
+                />
+              ) : null}
+            </Skeleton>
 
             {}
             <div className="grid gap-4 xl:grid-cols-[1fr_320px]">
-              {dashboard && (
-                <VCDashboardPanels
-                  semesterBreakdown={dashboard.semesterBreakdown}
-                  collectionTrend={dashboard.collectionTrend}
-                  onSemesterSelect={handleSemesterTracking}
-                />
-              )}
-
-              <div className="flex flex-col gap-4">
+              <Skeleton name="vc-dashboard-panels" loading={loadingData}>
                 {dashboard && (
-                  <VCVelocityCard
-                    overview={dashboard.overview}
+                  <VCDashboardPanels
+                    semesterBreakdown={dashboard.semesterBreakdown}
                     collectionTrend={dashboard.collectionTrend}
+                    onSemesterSelect={handleSemesterTracking}
                   />
                 )}
-                <VCLiveFeed
-                  transactions={liveTransactions}
-                  initialTransactions={initialTransactions}
-                  connected={sseConnected}
-                  newPaymentsCount={newPaymentsCount}
-                  newAmountCollected={newAmountCollected}
-                />
+              </Skeleton>
+
+              <div className="flex flex-col gap-4">
+                <Skeleton name="vc-velocity-card" loading={loadingData}>
+                  {dashboard && (
+                    <VCVelocityCard
+                      overview={dashboard.overview}
+                      collectionTrend={dashboard.collectionTrend}
+                    />
+                  )}
+                </Skeleton>
+                <Skeleton name="vc-live-feed" loading={loadingData}>
+                  <VCLiveFeed
+                    transactions={liveTransactions}
+                    initialTransactions={initialTransactions}
+                    connected={sseConnected}
+                    newPaymentsCount={newPaymentsCount}
+                    newAmountCollected={newAmountCollected}
+                  />
+                </Skeleton>
               </div>
             </div>
 
@@ -208,19 +221,21 @@ export default function VCDashboard() {
                 <Separator className="flex-1 bg-slate-200/50 dark:bg-white/[0.04]" />
               </div>
 
-              {dashboard ? (
-                <VCAnalyticsPanels
-                  data={{
-                    overview: dashboard.overview,
-                    collectionTrend: dashboard.collectionTrend,
-                    departmentPerformance: dashboard.departmentPerformance,
-                    semesterBreakdown: dashboard.semesterBreakdown,
-                    paymentMethods: dashboard.paymentMethods,
-                  }}
-                  onDepartmentSelect={handleDepartmentTracking}
-                  onSemesterSelect={handleSemesterTracking}
-                />
-              ) : null}
+              <Skeleton name="vc-analytics-panels" loading={loadingData}>
+                {dashboard ? (
+                  <VCAnalyticsPanels
+                    data={{
+                      overview: dashboard.overview,
+                      collectionTrend: dashboard.collectionTrend,
+                      departmentPerformance: dashboard.departmentPerformance,
+                      semesterBreakdown: dashboard.semesterBreakdown,
+                      paymentMethods: dashboard.paymentMethods,
+                    }}
+                    onDepartmentSelect={handleDepartmentTracking}
+                    onSemesterSelect={handleSemesterTracking}
+                  />
+                ) : null}
+              </Skeleton>
             </div>
           </motion.div>
         )}

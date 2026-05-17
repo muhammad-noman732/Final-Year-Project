@@ -15,7 +15,7 @@ const AUTH_COOKIE = "auth-token"
 const PUBLIC_PATHS = [
   "/login",
   "/api/auth/login",
-  "/api/auth/refresh",  
+  "/api/auth/refresh",
   "/api/webhooks/stripe",
   "/api/health",
   "/",
@@ -79,7 +79,7 @@ export async function authProxy(request: NextRequest): Promise<NextResponse> {
   const userAgent = request.headers.get("user-agent")?.toLowerCase() || ""
   const isBoneyard = process.env.BONEYARD_BYPASS === "true" || userAgent.includes("boneyard") || userAgent.includes("headlesschrome") || userAgent.includes("puppeteer")
   if (isBoneyard) {
-    let bypassRole = "ADMIN" 
+    let bypassRole = "ADMIN"
     if (pathname.startsWith("/vc")) bypassRole = "VC"
     else if (pathname.startsWith("/hod")) bypassRole = "HOD"
     else if (pathname.startsWith("/student")) bypassRole = "STUDENT"
@@ -145,7 +145,7 @@ export async function authProxy(request: NextRequest): Promise<NextResponse> {
   const email = (payload.email as string) || ""
   const isFirstLogin = payload.isFirstLogin === true
 
-  // 7. First-login password-change enforcement 
+
   if (isFirstLogin) {
     const allowed =
       pathname === "/changepassword" ||
