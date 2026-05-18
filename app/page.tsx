@@ -10,7 +10,7 @@ import FAQ from "@/components/landing/faq";
 import FinalCTA from "@/components/landing/cta";
 import Footer from "@/components/landing/footer";
 
-export default function LuminaPage() {
+export default function LandingPage() {
   return (
     <div className="lumina-theme min-h-screen bg-background text-foreground">
       <Hero />
