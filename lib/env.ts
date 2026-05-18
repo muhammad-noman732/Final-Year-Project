@@ -4,14 +4,15 @@ const envSchema = z.object({
   DATABASE_URL: z.string().min(1, "DATABASE_URL is required"),
   JWT_SECRET: z.string().min(32, "JWT_SECRET must be at least 32 characters"),
   JWT_EXPIRES_IN: z.string().default("7d"),
+  ACCESS_TOKEN_EXPIRES_IN: z.string().default("15m"),
   NODE_ENV: z.enum(["development", "production", "test"]).default("development"),
   SENDGRID_API_KEY: z.string().optional(),
   FROM_EMAIL: z.string().default("noreply@gcuf.edu.pk"),
   NEXT_PUBLIC_APP_URL: z.string().default("http://localhost:3000"),
   STRIPE_SECRET_KEY: z.string(),
   STRIPE_WEBHOOK_SECRET: z.string().optional(),
-  NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: z.string()
-
+  NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: z.string(),
+  ML_SERVICE_URL: z.string().url().default("http://localhost:8000")
 })
 
 export type Env = z.infer<typeof envSchema>

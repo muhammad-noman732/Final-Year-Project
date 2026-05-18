@@ -17,7 +17,7 @@ interface VCStudentsTableProps {
 function SkeletonRow() {
   return (
     <tr className="border-t border-slate-200/50 dark:border-white/[0.03]">
-      {Array.from({ length: 8 }).map((_, i) => (
+      {Array.from({ length: 10 }).map((_, i) => (
         <td key={i} className="px-3 py-3">
           <div
             className="h-3 rounded bg-slate-200/50 dark:bg-white/[0.04] animate-pulse"
@@ -39,7 +39,7 @@ function EmptyState({ tab }: { tab: TrackingTab }) {
   const { title, desc } = msgs[tab]
   return (
     <tr>
-      <td colSpan={9} className="px-6 py-16 text-center">
+      <td colSpan={10} className="px-6 py-16 text-center">
         <div className="flex flex-col items-center gap-2">
           <div className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-200/50 dark:bg-white/[0.03]">
             <FileText className="h-4 w-4 text-[#64748B]/30 dark:text-white/10" />
@@ -102,13 +102,13 @@ export default function VCStudentsTable({
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b border-slate-200/50 dark:border-white/[0.04]">
-              {["Student", "Roll No", "Department", "Program", "Sem", "Status", "Due", "Paid", "Date"].map(
+              {["Student", "Roll No", "Department", "Program", "Sem", "Status", "AI Risk", "Due", "Paid", "Date"].map(
                 (h, i) => (
                   <th
                     key={h}
                     className={[
                       "px-3 py-2.5 text-[10px] uppercase tracking-widest font-semibold text-[#64748B]/70 dark:text-muted-foreground/50 bg-white/30 dark:bg-white/[0.012]",
-                      i === 0 ? "text-left pl-5" : i >= 6 ? "text-right" : "text-left",
+                      i === 0 ? "text-left pl-5" : i >= 7 ? "text-right" : "text-left",
                     ].join(" ")}
                   >
                     {h}
@@ -165,6 +165,28 @@ export default function VCStudentsTable({
                     </td>
                     <td className="px-3 py-2.5">
                       <StatusBadge status={row.feeStatus.toLowerCase()} />
+                    </td>
+                    <td className="px-3 py-2.5 whitespace-nowrap">
+                      {row.riskLevel ? (
+                        <span className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-extrabold uppercase border shadow-sm ${
+                          row.riskLevel === "HIGH" 
+                            ? "bg-rose-500/10 border-rose-500/20 text-rose-600 dark:text-rose-400" 
+                            : row.riskLevel === "MEDIUM"
+                            ? "bg-amber-500/10 border-amber-500/20 text-amber-600 dark:text-amber-500"
+                            : "bg-emerald-500/10 border-emerald-500/20 text-emerald-600 dark:text-emerald-400"
+                        }`}>
+                          <span className={`w-1.5 h-1.5 rounded-full ${
+                            row.riskLevel === "HIGH" 
+                              ? "bg-rose-500" 
+                              : row.riskLevel === "MEDIUM"
+                              ? "bg-amber-500"
+                              : "bg-emerald-500"
+                          }`} />
+                          {row.riskLevel} {row.riskScore !== undefined && row.riskScore !== null ? `(${Math.round(row.riskScore)}%)` : ""}
+                        </span>
+                      ) : (
+                        <span className="text-[11px] text-slate-400 dark:text-slate-600">-</span>
+                      )}
                     </td>
                     <td className="px-3 py-2.5 text-right">
                       <span className="text-[12px] font-semibold text-[#0F172A] dark:text-foreground font-mono tabular-nums">

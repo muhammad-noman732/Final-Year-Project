@@ -364,6 +364,7 @@ async function main(): Promise<void> {
       isActive: true,
     })
 
+    const isScholarship = index % 5 === 0
     studentRows.push({
       id: studentId,
       tenantId: tenant.id,
@@ -375,6 +376,7 @@ async function main(): Promise<void> {
       programId: program.id,
       currentSemester,
       enrollmentStatus: "ACTIVE" as const,
+      metadata: undefined,
     })
   }
 
@@ -440,9 +442,10 @@ async function main(): Promise<void> {
             ? FeeStatus.OVERDUE
             : FeeStatus.UNPAID
 
-      const randomDayOffset = (index * 3 + offset * 11) % 120
+      const randomDayOffset = ((index * 3 + offset * 11) % 120) + 20
+      const randomPaymentDelayDays = (index * 7 + offset * 13) % 25
       const paidAt = isPaid
-        ? new Date(today.getTime() - randomDayOffset * 24 * 60 * 60 * 1000 + (index % 19) * 60 * 60 * 1000)
+        ? new Date(today.getTime() - (randomDayOffset - randomPaymentDelayDays) * 24 * 60 * 60 * 1000)
         : null
 
       const dueDate = isOverdue
@@ -479,7 +482,7 @@ async function main(): Promise<void> {
           stripePaymentIntentId: `pi_seed_${index}_${offset}`,
           stripeResponse: { seeded: true, index, offset, simulatedStatus: paymentStatus, sessionYear },
           receiptNumber: `GCUF-2026-${String(receiptCounter).padStart(5, "0")}`,
-          paidAt: isCompleted ? paidAt ?? new Date(today.getTime() - (index % 15) * 60 * 60 * 1000) : null,
+          paidAt: isCompleted ? paidAt ?? new Date(today.getTime() - (randomDayOffset - randomPaymentDelayDays) * 24 * 60 * 60 * 1000) : null,
           createdAt: new Date(today.getTime() - randomDayOffset * 24 * 60 * 60 * 1000),
         })
         receiptCounter += 1

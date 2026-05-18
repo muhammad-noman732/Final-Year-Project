@@ -1,4 +1,4 @@
-import { type NextRequest } from "next/server"
+import { type NextRequest, NextResponse } from "next/server"
 import { loginSchema, changePasswordSchema } from "@/lib/validators/auth.validators"
 import { successResponse } from "@/lib/utils/ApiResponse"
 import { getAuthUser } from "@/lib/auth"
@@ -20,7 +20,7 @@ const ACCESS_MAX_AGE = 15 * 60
 const REFRESH_MAX_AGE = 7 * 24 * 60 * 60
 
 function attachTokenCookies(
-  response: ReturnType<typeof successResponse>,
+  response: NextResponse,
   accessToken: string,
   refreshToken: string,
 ): void {
@@ -34,7 +34,7 @@ function attachTokenCookies(
   })
 }
 
-function clearTokenCookies(response: ReturnType<typeof successResponse>): void {
+function clearTokenCookies(response: NextResponse): void {
   response.cookies.set(ACCESS_COOKIE, "", { ...COOKIE_BASE, maxAge: 0 })
   response.cookies.set(REFRESH_COOKIE, "", { ...COOKIE_BASE, maxAge: 0 })
 }
@@ -72,6 +72,28 @@ export class AuthController {
     const response = successResponse({ message: "Session refreshed." })
     attachTokenCookies(response, result.accessToken, result.refreshToken)
     return response
+  }
+
+  async silentRefresh(req: NextRequest): Promise<NextResponse> {
+    const rawNext = req.nextUrl.searchParams.get("next") ?? "/"
+    const next = rawNext.startsWith("/") && !rawNext.startsWith("//") ? rawNext : "/"
+
+    const oldRefreshToken = req.cookies.get(REFRESH_COOKIE)?.value
+    if (!oldRefreshToken) {
+      return NextResponse.redirect(new URL("/login", req.url))
+    }
+
+    try {
+      const result = await this.authService.refreshSession(oldRefreshToken)
+      const redirectResponse = NextResponse.redirect(new URL(next, req.url))
+      attachTokenCookies(redirectResponse, result.accessToken, result.refreshToken)
+      return redirectResponse
+    } catch {
+      logger.warn({ event: "auth.silentRefresh.failed" }, "Silent refresh failed — sending to login")
+      const loginResponse = NextResponse.redirect(new URL("/login", req.url))
+      clearTokenCookies(loginResponse)
+      return loginResponse
+    }
   }
 
   async logout(req: NextRequest) {

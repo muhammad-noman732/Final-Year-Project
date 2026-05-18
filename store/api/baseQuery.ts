@@ -43,6 +43,10 @@ export const baseQueryWithReauth: BaseQueryFn<
 
         if (refreshResult.data) {
           result = await rawBaseQuery(args, api, extraOptions)
+          if (result.error?.status === 401) {
+            api.dispatch(logout())
+            if (typeof window !== "undefined") window.location.replace("/login")
+          }
         } else {
           api.dispatch(logout())
           if (typeof window !== "undefined") {

@@ -229,6 +229,8 @@
 
     // ── Intelligence / Risk metrics ──
     riskLevel        String    @default("LOW") // "LOW" | "MEDIUM" | "HIGH"
+    riskScore        Float?
+    lastPredictionAt DateTime?
     latePaymentCount Int       @default(0)
     lastPaymentDate  DateTime?
 

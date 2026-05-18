@@ -1,9 +1,9 @@
 "use client"
-import { Suspense } from "react"
+import { Suspense, useState } from "react"
 import { Skeleton } from "boneyard-js/react"
 import {
   Users, CheckCircle2, AlertTriangle, DollarSign,
-  Clock, BarChart3, Building2, GraduationCap,
+  Clock, BarChart3, Building2, GraduationCap, Brain, Loader2,
 } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import VCFilterBar from "@/components/vc/VCFilterBar"
@@ -166,22 +166,107 @@ function VCTrackingContent() {
     handleFilterChange, handleTabChange, handleScopeChange,
     handleReset, handlePageChange, handleExport,
   } = useVCTracking()
+
+  const [runningAI, setRunningAI] = useState(false)
+  const [showToast, setShowToast] = useState(false)
+  const [toastMessage, setToastMessage] = useState("")
+  const [toastType, setToastType] = useState<"success" | "error">("success")
+
+  const handleRecalculateAI = async () => {
+    setRunningAI(true)
+    try {
+      const res = await fetch("/api/ml/defaulters", { method: "POST" })
+      const result = await res.json()
+      if (res.ok && result.success) {
+        setToastType("success")
+        setToastMessage("AI risk models ran successfully! Refreshing tracking board...")
+        setShowToast(true)
+        setTimeout(() => {
+          window.location.reload()
+        }, 1500)
+      } else {
+        setToastType("error")
+        setToastMessage(result.error?.message || "AI recalculation failed.")
+        setShowToast(true)
+        setTimeout(() => setShowToast(false), 4000)
+      }
+    } catch (err: any) {
+      setToastType("error")
+      setToastMessage(err.message || "Failed to trigger AI prediction.")
+      setShowToast(true)
+      setTimeout(() => setShowToast(false), 4000)
+    } finally {
+      setRunningAI(false)
+    }
+  }
+
   return (
     <div className="relative isolate space-y-5 pb-10 min-h-[calc(100dvh-3.5rem)] p-5 lg:p-8 transition-colors duration-300">
-      {}
-      <div className="flex items-start justify-between gap-4">
+      <AnimatePresence>
+        {showToast && (
+          <motion.div
+            key="vc-ai-toast"
+            initial={{ opacity: 0, y: -20, scale: 0.94 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -20, scale: 0.94 }}
+            transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
+            className="fixed top-5 right-5 z-50"
+          >
+            <div className="flex items-center gap-3 rounded-2xl px-4 py-3 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border border-white dark:border-slate-800 shadow-xl">
+              <div className={`flex h-8 w-8 items-center justify-center rounded-xl flex-shrink-0 ${
+                toastType === "success" ? "bg-emerald-500" : "bg-rose-500"
+              }`}>
+                <Brain className="h-4 w-4 text-white" strokeWidth={2} />
+              </div>
+              <div>
+                <p className="text-xs font-bold tracking-wide text-[#0F172A] dark:text-slate-100">
+                  {toastType === "success" ? "AI Prediction Completed" : "AI Sync Error"}
+                </p>
+                <p className="text-[11px] text-[#64748B] dark:text-slate-400 mt-0.5">{toastMessage}</p>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-lg font-bold tracking-tight text-slate-900 dark:text-foreground">Tracking Center</h1>
           <p className="mt-0.5 text-xs text-slate-500 dark:text-muted-foreground/70">
             Operational view — paid, unpaid, defaulters across departments and semesters.
           </p>
         </div>
-        {lastUpdatedAt && (
-          <div className="flex items-center gap-1.5 text-[10.5px] text-slate-400 dark:text-muted-foreground/50 flex-shrink-0 mt-0.5">
-            <Clock className="h-3 w-3" />
-            {lastUpdatedAt}
-          </div>
-        )}
+        <div className="flex items-center gap-3 shrink-0 self-end sm:self-auto">
+          {/* AI RUN BUTTON */}
+          <button
+            onClick={handleRecalculateAI}
+            disabled={runningAI}
+            className={`flex items-center gap-1.5 rounded-xl px-3 py-2 text-[11px] font-bold border transition-all duration-200 shadow-sm disabled:opacity-50 ${
+              runningAI 
+                ? "bg-slate-200 dark:bg-white/[0.05] text-slate-500 dark:text-muted-foreground border-slate-300/30 dark:border-white/[0.05]" 
+                : "bg-indigo-600 hover:bg-indigo-700 text-white border-transparent dark:bg-indigo-500/10 dark:hover:bg-indigo-500/20 dark:text-indigo-400 dark:border-indigo-500/20"
+            }`}
+          >
+            {runningAI ? (
+              <>
+                <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                AI Risk Syncing...
+              </>
+            ) : (
+              <>
+                <Brain className="h-3.5 w-3.5" />
+                Recalculate AI Risk
+              </>
+            )}
+          </button>
+
+          {lastUpdatedAt && (
+            <div className="flex items-center gap-1.5 text-[10.5px] text-slate-400 dark:text-muted-foreground/50 bg-white/40 dark:bg-white/5 px-2.5 py-1.5 rounded-full border border-white/60 dark:border-white/10 backdrop-blur-sm shadow-sm">
+              <Clock className="h-3 w-3" />
+              <span>{lastUpdatedAt}</span>
+            </div>
+          )}
+        </div>
       </div>
       {}
       <div className="flex items-center gap-1 p-1 rounded-xl bg-white/60 dark:bg-white/[0.025] border border-slate-200/60 dark:border-white/[0.04] shadow-sm backdrop-blur-sm w-fit">

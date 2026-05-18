@@ -16,7 +16,9 @@ export class RefreshTokenRepository {
   }
 
   async getUserId(token: string): Promise<string | null> {
-    return this.redis.get(`${RefreshTokenRepository.PREFIX}${token}`)
+    const val = await this.redis.get(`${RefreshTokenRepository.PREFIX}${token}`)
+    if (!val || val === "REVOKED") return null
+    return val
   }
 
   async revoke(token: string): Promise<void> {
@@ -24,7 +26,8 @@ export class RefreshTokenRepository {
   }
 
   async revokeWithGrace(token: string, graceSeconds = 30): Promise<void> {
-    await this.redis.expire(`${RefreshTokenRepository.PREFIX}${token}`, graceSeconds)
+    const key = `${RefreshTokenRepository.PREFIX}${token}`
+    await this.redis.set(key, "REVOKED", "EX", graceSeconds)
   }
 
   async revokeAll(userId: string): Promise<void> {

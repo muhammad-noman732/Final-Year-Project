@@ -1,8 +1,11 @@
 import Redis from "ioredis"
 
-const globalForRedis = globalThis as unknown as { __redisPublisher?: Redis }
+const globalForRedis = globalThis as unknown as {
+  __redisPublisher?: Redis
+  __redisClient?: Redis
+}
 
-function createClient(): Redis {
+export function createClient(): Redis {
   const url = process.env.REDIS_URL
   if (!url) throw new Error("REDIS_URL environment variable is not set")
 
@@ -10,7 +13,7 @@ function createClient(): Redis {
     maxRetriesPerRequest: 3,
     enableReadyCheck: false,
     retryStrategy: (times) => Math.min(times * 100, 3_000),
-
+    tls: {},
   })
 
   client.on("error", (err: Error) => {
@@ -24,14 +27,19 @@ export const redisPublisher: Redis =
   globalForRedis.__redisPublisher ??
   (globalForRedis.__redisPublisher = createClient())
 
+export const redisClient: Redis =
+  globalForRedis.__redisClient ??
+  (globalForRedis.__redisClient = createClient())
+
 export function createRedisSubscriber(): Redis {
   const url = process.env.REDIS_URL
   if (!url) throw new Error("REDIS_URL environment variable is not set")
 
   return new Redis(url, {
-    maxRetriesPerRequest: null, 
+    maxRetriesPerRequest: null,
     enableReadyCheck: false,
     retryStrategy: (times) => Math.min(times * 100, 3_000),
+    tls: {},
   })
 }
 

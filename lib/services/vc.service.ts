@@ -512,6 +512,8 @@ export class VCService {
       paidAt: row.assignment.paidAt?.toISOString() ?? null,
       daysOverdue,
       enrollmentStatus: row.assignment.student.enrollmentStatus,
+      riskLevel: row.assignment.student.riskLevel,
+      riskScore: row.assignment.student.riskScore,
     }
   }
 

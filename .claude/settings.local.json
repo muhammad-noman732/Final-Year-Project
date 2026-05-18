@@ -8,7 +8,8 @@
       "Bash(xargs ls *)",
       "Bash(npm install *)",
       "Bash(npx prisma *)",
-      "Bash(grep -v \"^$\")"
+      "Bash(grep -v \"^$\")",
+      "WebSearch"
     ]
   }
 }

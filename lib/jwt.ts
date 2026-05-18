@@ -1,18 +1,17 @@
 import { SignJWT, jwtVerify } from "jose"
 import type { JWTPayload } from "@/types/server/auth.types"
 import { UnauthorizedError } from "@/lib/utils/AppError"
+import { env } from "@/lib/env"
 
 function getSecret(): Uint8Array {
-  const secret = process.env.JWT_SECRET
-  if (!secret) throw new Error("JWT_SECRET environment variable is not set.")
-  return new TextEncoder().encode(secret)
+  return new TextEncoder().encode(env.JWT_SECRET)
 }
 
 export async function signJWT(
   payload: JWTPayload,
   expiresIn?: string,
 ): Promise<string> {
-  const ttl = expiresIn ?? process.env.ACCESS_TOKEN_EXPIRES_IN ?? "15m"
+  const ttl = expiresIn ?? env.ACCESS_TOKEN_EXPIRES_IN
   return new SignJWT({ ...payload })
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()

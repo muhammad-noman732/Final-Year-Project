@@ -11,11 +11,13 @@ import {
 } from "@/lib/proxies/request-context.proxy"
 
 const AUTH_COOKIE = "auth-token"
+const REFRESH_COOKIE = "refresh-token"
 
 const PUBLIC_PATHS = [
   "/login",
   "/api/auth/login",
   "/api/auth/refresh",
+  "/api/auth/silent-refresh",
   "/api/webhooks/stripe",
   "/api/health",
   "/",
@@ -119,6 +121,12 @@ export async function authProxy(request: NextRequest): Promise<NextResponse> {
       const errRes = jsonError("UNAUTHORIZED", "Authentication required. Please log in.", 401)
       return finalizeResponse(request, errRes, requestId)
     }
+    const hasRefresh = !!request.cookies.get(REFRESH_COOKIE)?.value
+    if (hasRefresh) {
+      const silentUrl = new URL("/api/auth/silent-refresh", request.url)
+      silentUrl.searchParams.set("next", pathname + request.nextUrl.search)
+      return NextResponse.redirect(silentUrl)
+    }
     const redirectRes = NextResponse.redirect(new URL("/login", request.url))
     return finalizeResponse(request, redirectRes, requestId)
   }
@@ -132,6 +140,12 @@ export async function authProxy(request: NextRequest): Promise<NextResponse> {
     if (isApiPath(pathname)) {
       const errRes = jsonError("UNAUTHORIZED", "Session expired. Please log in again.", 401)
       return finalizeResponse(request, errRes, requestId)
+    }
+    const hasRefresh = !!request.cookies.get(REFRESH_COOKIE)?.value
+    if (hasRefresh) {
+      const silentUrl = new URL("/api/auth/silent-refresh", request.url)
+      silentUrl.searchParams.set("next", pathname + request.nextUrl.search)
+      return NextResponse.redirect(silentUrl)
     }
     const redirectRes = NextResponse.redirect(new URL("/login", request.url))
     redirectRes.cookies.delete(AUTH_COOKIE)

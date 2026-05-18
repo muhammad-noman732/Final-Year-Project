@@ -101,6 +101,8 @@ export interface VCStudentLedgerRow {
   paidAt: string | null
   daysOverdue: number
   enrollmentStatus: string
+  riskLevel?: string | null
+  riskScore?: number | null
 }
 
 export interface VCPaginatedStudents {
