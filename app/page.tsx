@@ -1,33 +1,29 @@
-import StickyNav from "@/components/landing/StickyNav";
-import HeroSection from "@/components/landing/HeroSection";
-import StatsSection from "@/components/landing/StatsSection";
+import Hero from "@/components/landing/hero";
+import LogoStrip from "@/components/landing/logo-strip";
+import Features from "@/components/landing/features";
+import Workflow from "@/components/landing/workflow";
+import Showcase from "@/components/landing/showcase";
+import Stats from "@/components/landing/stats";
+import Testimonials from "@/components/landing/testimonials";
+import Pricing from "@/components/landing/pricing";
+import FAQ from "@/components/landing/faq";
+import FinalCTA from "@/components/landing/cta";
+import Footer from "@/components/landing/footer";
 
-import FeaturesSection from "@/components/landing/FeaturesSection";
-import SolutionSection from "@/components/landing/SolutionSection";
-import RolesSection from "@/components/landing/RolesSection";
-import TestimonialsSection from "@/components/landing/TestimonialsSection";
-import CTASection from "@/components/landing/CTASection";
-import Footer from "@/components/landing/Footer";
-
-export const metadata = {
-  title: "UniSync | University Registration & Fee Management — Automated",
-  description:
-    "Replace paper vouchers and spreadsheets with real-time registration, instant payment processing, and intelligent dashboards for your entire institution.",
-};
-
-export default function LandingPage() {
+export default function LuminaPage() {
   return (
-    <main className="bg-[#05080f] min-h-[100dvh] antialiased selection:bg-[#d4a843]/30">
-      <StickyNav />
-      <HeroSection />
-      <StatsSection />
-
-      <FeaturesSection />
-      <SolutionSection />
-      <RolesSection />
-      <TestimonialsSection />
-      <CTASection />
+    <div className="lumina-theme min-h-screen bg-background text-foreground">
+      <Hero />
+      <LogoStrip />
+      <Features />
+      <Workflow />
+      <Showcase />
+      <Stats />
+      <Testimonials />
+      <Pricing />
+      <FAQ />
+      <FinalCTA />
       <Footer />
-    </main>
+    </div>
   );
 }

@@ -30,6 +30,7 @@ export function applySecurityHeaders(
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
     "font-src 'self' https://fonts.gstatic.com",
     "img-src 'self' data: blob: https:",
+    "media-src 'self' https://d8j0ntlcm91z4.cloudfront.net",
     "connect-src 'self' https://api.stripe.com https://js.stripe.com",
     "frame-src 'self' https://js.stripe.com https://hooks.stripe.com",
     "frame-ancestors 'none'",
