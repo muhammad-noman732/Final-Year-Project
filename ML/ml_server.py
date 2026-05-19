@@ -66,9 +66,10 @@ def read_root():
     return {"message": "GCUF Intelligent Fee ML Engine v2.0 is online."}
 
 
-# ═══════════════════════════════════════════════════════════════════════════════
-# DEFAULTER MODEL ENDPOINTS
-# ═══════════════════════════════════════════════════════════════════════════════
+@app.get("/health")
+def health_check():
+    return {"status": "ok"}
+
 
 @app.post("/train-defaulter")
 def api_train_defaulter():
