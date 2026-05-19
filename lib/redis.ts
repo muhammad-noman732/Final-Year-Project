@@ -9,11 +9,13 @@ export function createClient(): Redis {
   const url = process.env.REDIS_URL
   if (!url) throw new Error("REDIS_URL environment variable is not set")
 
+  const useTls = url.startsWith("rediss://")
+
   const client = new Redis(url, {
     maxRetriesPerRequest: 3,
     enableReadyCheck: false,
     retryStrategy: (times) => Math.min(times * 100, 3_000),
-    tls: {},
+    ...(useTls ? { tls: {} } : {}),
   })
 
   client.on("error", (err: Error) => {
@@ -35,11 +37,13 @@ export function createRedisSubscriber(): Redis {
   const url = process.env.REDIS_URL
   if (!url) throw new Error("REDIS_URL environment variable is not set")
 
+  const useTls = url.startsWith("rediss://")
+
   return new Redis(url, {
     maxRetriesPerRequest: null,
     enableReadyCheck: false,
     retryStrategy: (times) => Math.min(times * 100, 3_000),
-    tls: {},
+    ...(useTls ? { tls: {} } : {}),
   })
 }
 
