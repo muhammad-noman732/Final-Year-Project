@@ -8,7 +8,7 @@ const prisma = new PrismaClient({ adapter })
 
 const BCRYPT_ROUNDS = 12
 const TENANT_SLUG = "gcuf"
-const STUDENT_TARGET = 100
+const STUDENT_TARGET = 200
 const ADMIN_EMAILS = ["muhammadnomanbaghoor@gmail.com", "iasknoman156@gmail.com"]
 const VC_EMAIL = "noman.dev200@gmail.com"
 const COMMON_PASSWORD = "Noman@123"
@@ -338,6 +338,11 @@ async function main(): Promise<void> {
 
   const studentUsers = []
   const studentRows = []
+  // Determine distribution for current-semester statuses:
+  // 30% -> PAID, 25% -> UNPAID, remaining -> OVERDUE (defaulters)
+  const PAID_PERCENT = 30
+  const UNPAID_PERCENT = 25
+
   for (let index = 0; index < STUDENT_TARGET; index += 1) {
     const firstName = pick(firstNames, index)
     const lastName = pick(lastNames, index * 3)
@@ -364,7 +369,6 @@ async function main(): Promise<void> {
       isActive: true,
     })
 
-    const isScholarship = index % 5 === 0
     studentRows.push({
       id: studentId,
       tenantId: tenant.id,
@@ -424,9 +428,27 @@ async function main(): Promise<void> {
       const statusBucket = (bucketCount + departmentIndex + sessionYear + offset) % 5
       const assignmentId = `seed-assignment-${assignmentCounter}`
       assignmentCounter += 1
-      const isPaid = statusBucket === 0 || statusBucket === 1
-      const isPartial = statusBucket === 2
-      const isOverdue = statusBucket === 4
+      // For the current semester we enforce the requested distribution.
+      let isPaid = statusBucket === 0 || statusBucket === 1
+      let isPartial = statusBucket === 2
+      let isOverdue = statusBucket === 4
+
+      if (semester === student.currentSemester) {
+        const pct = (index % 100) + 1 // 1..100 deterministic per student
+        if (pct <= PAID_PERCENT) {
+          isPaid = true
+          isPartial = false
+          isOverdue = false
+        } else if (pct <= PAID_PERCENT + UNPAID_PERCENT) {
+          isPaid = false
+          isPartial = false
+          isOverdue = false // UNPAID (not paid yet)
+        } else {
+          isPaid = false
+          isPartial = false
+          isOverdue = true // defaulter
+        }
+      }
       const amountDue = structure.totalFee
       const amountPaid = isPaid
         ? amountDue
@@ -444,9 +466,27 @@ async function main(): Promise<void> {
 
       const randomDayOffset = ((index * 3 + offset * 11) % 120) + 20
       const randomPaymentDelayDays = (index * 7 + offset * 13) % 25
-      const paidAt = isPaid
+      let paidAt = isPaid
         ? new Date(today.getTime() - (randomDayOffset - randomPaymentDelayDays) * 24 * 60 * 60 * 1000)
         : null
+
+      // For paid students in the current semester, distribute payments across April and May,
+      // and ensure a handful (5) are paid on 2026-05-19 for supervisor review.
+      if (isPaid && semester === student.currentSemester) {
+        const paidBucket = index % 100
+        if (paidBucket < 5) {
+          // first 5 -> today 2026-05-19
+          paidAt = new Date(2026, 4, 19)
+        } else if (paidBucket % 2 === 0) {
+          // April (random day 5..25)
+          const day = 5 + (index % 21)
+          paidAt = new Date(2026, 3, day)
+        } else {
+          // May (random day 1..18)
+          const day = 1 + (index % 18)
+          paidAt = new Date(2026, 4, day)
+        }
+      }
 
       const dueDate = isOverdue
         ? new Date(today.getTime() - (7 + ((index + offset) % 45)) * 24 * 60 * 60 * 1000)
@@ -483,7 +523,7 @@ async function main(): Promise<void> {
           stripeResponse: { seeded: true, index, offset, simulatedStatus: paymentStatus, sessionYear },
           receiptNumber: `GCUF-2026-${String(receiptCounter).padStart(5, "0")}`,
           paidAt: isCompleted ? paidAt ?? new Date(today.getTime() - (randomDayOffset - randomPaymentDelayDays) * 24 * 60 * 60 * 1000) : null,
-          createdAt: new Date(today.getTime() - randomDayOffset * 24 * 60 * 60 * 1000),
+          createdAt: isCompleted ? (paidAt ?? new Date(today.getTime() - randomDayOffset * 24 * 60 * 60 * 1000)) : new Date(today.getTime() - randomDayOffset * 24 * 60 * 60 * 1000),
         })
         receiptCounter += 1
       }
@@ -515,6 +555,26 @@ async function main(): Promise<void> {
       where: { id: studentId },
       data: snapshot,
     })
+  }
+
+  // Ensure: students who did NOT pay their current-semester fee should NOT be in semester 2.
+  // Find students currently at semester 2 who have an assignment for semester 2 that is NOT PAID,
+  // and roll them back to semester 1 so dashboards don't show them as progressed.
+  const studentsToDemote = await prisma.student.findMany({
+    where: {
+      currentSemester: 2,
+      feeAssignments: {
+        some: {
+          status: { not: FeeStatus.PAID },
+          feeStructure: { semester: 2 },
+        },
+      },
+    },
+    select: { id: true },
+  })
+
+  for (const s of studentsToDemote) {
+    await prisma.student.update({ where: { id: s.id }, data: { currentSemester: 1 } })
   }
 
   const snapshotRows = Array.from(studentSnapshotMap.values())

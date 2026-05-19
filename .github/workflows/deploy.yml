@@ -19,10 +19,12 @@ jobs:
                   username: ${{ secrets.DOCKERHUB_USERNAME }}
                   password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-            - name: Build and Push Docker image
+            - name: Build and Push Docker images
               run: |
                   docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/unisync:latest .
                   docker push ${{ secrets.DOCKERHUB_USERNAME }}/unisync:latest
+                  docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/unisync-ml:latest -f ML/Dockerfile .
+                  docker push ${{ secrets.DOCKERHUB_USERNAME }}/unisync-ml:latest
 
             - name: Deploy to server
               uses: appleboy/ssh-action@master
@@ -33,5 +35,5 @@ jobs:
                   script: |
                       cd ~/myproject
                       git pull origin main
-                      docker compose pull nextjs
-                      docker compose up -d --force-recreate nextjs
+                      docker compose pull nextjs fastapi-ml
+                      docker compose up -d --force-recreate nextjs fastapi-ml

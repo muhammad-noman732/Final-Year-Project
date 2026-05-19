@@ -22,20 +22,13 @@ async function main() {
     const student = students[i]
     const currentSem = student.currentSemester
     
-    // Distribute strictly across 3 financial archetypes:
-    // Archetype 0: Timely payers (Low Risk) -> 60%
-    // Archetype 1: Moderate procrastinators (Medium Risk) -> 25%
-    // Archetype 2: Chronic late payers / Defaulters (High Risk) -> 15%
-    
+    // New distribution per request: 30% PAID, 25% UNPAID, remaining (45%) -> OVERDUE (defaulters)
+    const pct = (i % 100) + 1 // deterministic 1..100 per student index
+    // archetype: 0 = PAID, 1 = UNPAID, 2 = OVERDUE
     let archetype = 0
-    if (i % 7 === 0) archetype = 2 // Chronic late (High Risk)
-    else if (i % 4 === 0) archetype = 1 // Procrastinator (Medium Risk)
-
-    // Reset Student Metadata to null
-    await prisma.student.update({
-      where: { id: student.id },
-      data: { metadata: null }
-    })
+    if (pct <= 30) archetype = 0
+    else if (pct <= 30 + 25) archetype = 1
+    else archetype = 2
 
     // Fetch assignments for this student, including their fee structures and payments
     const assignments = await prisma.feeAssignment.findMany({
@@ -51,13 +44,13 @@ async function main() {
       
       let delayDays = 2
       let lateFee = 0
-      let status = FeeStatus.PAID // Default prior semesters to PAID
+      let status: FeeStatus = FeeStatus.PAID
 
       // Create a student-specific random shift (0 to 14 days) to smear payments naturally
       const randomShift = (i * 3 + sem * 7) % 15
       
-      let dueDate = new Date(today.getTime())
-      let createdAt = new Date(today.getTime())
+      let dueDate: Date
+      let createdAt: Date
 
       if (sem < currentSem) {
         // Prior Semesters: Chronologically in the past
@@ -65,8 +58,8 @@ async function main() {
         const semesterOffset = currentSem - sem
         const totalOffsetDays = semesterOffset * 45 + randomShift
         
-        dueDate.setTime(today.getTime() - totalOffsetDays * 24 * 60 * 60 * 1000)
-        createdAt.setTime(dueDate.getTime() - 20 * 24 * 60 * 60 * 1000)
+        dueDate = new Date(today.getTime() - totalOffsetDays * 24 * 60 * 60 * 1000)
+        createdAt = new Date(dueDate.getTime() - 20 * 24 * 60 * 60 * 1000)
 
         // Prior semesters are always PAID, but delay depends on archetype
         if (archetype === 0) {
@@ -81,41 +74,57 @@ async function main() {
         }
         status = FeeStatus.PAID
       } else if (sem === currentSem) {
-        // Current Semester: Due 12 days ago with random shift
-        const currentOffsetDays = 12 + (i % 6)
-        dueDate.setTime(today.getTime() - currentOffsetDays * 24 * 60 * 60 * 1000)
-        createdAt.setTime(dueDate.getTime() - 25 * 24 * 60 * 60 * 1000)
-
         if (archetype === 0) {
-          // Low Risk: Already paid on time
+          // PAID
           delayDays = 3
           lateFee = 0
           status = FeeStatus.PAID
+          dueDate = new Date(2026, 3, 25)
+          createdAt = new Date(2026, 3, 5)
         } else if (archetype === 1) {
-          // Medium Risk: Paid late with late fee
-          delayDays = 15 // Paid after due date
-          lateFee = 500
-          status = FeeStatus.PAID
+          // UNPAID — due date has not passed yet
+          delayDays = 0
+          lateFee = 0
+          status = FeeStatus.UNPAID
+          dueDate = new Date(2026, 4, 28)
+          createdAt = new Date(2026, 4, 1)
         } else {
-          // High Risk / Defaulters: Unpaid and Overdue!
+          // OVERDUE — due date has passed and student has not paid
           delayDays = 0
           lateFee = 1500
           status = FeeStatus.OVERDUE
+          dueDate = new Date(2026, 3, 20)
+          createdAt = new Date(2026, 2, 25)
         }
       } else {
         // Future Semesters (assigned early by mistake or pre-generated)
         const semesterOffset = sem - currentSem
-        dueDate.setTime(today.getTime() + (semesterOffset * 45 + randomShift) * 24 * 60 * 60 * 1000)
-        createdAt.setTime(dueDate.getTime() - 20 * 24 * 60 * 60 * 1000)
+        dueDate = new Date(today.getTime() + (semesterOffset * 45 + randomShift) * 24 * 60 * 60 * 1000)
+        createdAt = new Date(dueDate.getTime() - 20 * 24 * 60 * 60 * 1000)
         status = FeeStatus.UNPAID
         lateFee = 0
         delayDays = 0
       }
 
       // Calculate paidAt based on delayDays
-      const paidAt = status === FeeStatus.PAID
+      let paidAt = status === FeeStatus.PAID
         ? new Date(createdAt.getTime() + delayDays * 24 * 60 * 60 * 1000)
         : null
+
+      // For PAID assignments on current semester, distribute paidAt across April/May 2026
+      // and ensure 5 students are paid on 2026-05-19 for supervisor checks.
+      if (status === FeeStatus.PAID && sem === currentSem) {
+        const paidBucket = i % 100
+        if (paidBucket < 5) {
+          paidAt = new Date(2026, 4, 19)
+        } else if (paidBucket % 2 === 0) {
+          const day = 5 + (i % 21)
+          paidAt = new Date(2026, 3, day)
+        } else {
+          const day = 1 + (i % 18)
+          paidAt = new Date(2026, 4, day)
+        }
+      }
 
       // Ensure amountPaid matches status
       const amountPaid = status === FeeStatus.PAID
@@ -156,9 +165,7 @@ async function main() {
   }
 
   console.log("\n✅ Successfully optimized and naturally smeared student profiles!")
-  console.log("🟢 60% Low Risk Archetypes (Smeared daily payment flow)")
-  console.log("🟡 25% Medium Risk Archetypes (Smeared late daily payments)")
-  console.log("🔴 15% High Risk Archetypes (Currently overdue)")
+  console.log("✅ Distribution: 30% PAID, 25% UNPAID, 45% OVERDUE (defaulters)")
 }
 
 main()

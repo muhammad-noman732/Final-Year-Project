@@ -33,6 +33,23 @@ services:
       timeout: 5s
       retries: 5
 
+  fastapi-ml:
+    image: muhammadnomanbaghoor/unisync-ml:latest
+    container_name: fastapi_ml_server
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      PORT: 8000
+      DATABASE_URL: postgresql://${DB_USER}:${DB_PASSWORD}@postgres:5432/${DB_NAME}
+    volumes:
+      - ml_models_data:/app/models
+    networks:
+      - backend_network
+    depends_on:
+      postgres:
+        condition: service_healthy
+
   nextjs:
     image: muhammadnomanbaghoor/unisync:latest
     container_name: nextjs_app
@@ -88,6 +105,8 @@ volumes:
   redis_data:
     driver: local
   certbot_data:
+    driver: local
+  ml_models_data:
     driver: local
 
 networks:
