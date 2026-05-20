@@ -20,6 +20,7 @@ const PUBLIC_PATHS = [
   "/api/auth/silent-refresh",
   "/api/webhooks/stripe",
   "/api/health",
+  "/api/cron",
   "/",
 ]
 

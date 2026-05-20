@@ -212,4 +212,4 @@ if __name__ == "__main__":
         sys.exit(0)
     else:
         logger.info("Starting GCUF ML Engine on port %d...", args.port)
-        uvicorn.run(app, port=args.port)
+        uvicorn.run(app, host="0.0.0.0", port=args.port)
