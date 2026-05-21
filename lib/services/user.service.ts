@@ -38,12 +38,19 @@ export class UserService {
   ): Promise<PaginatedResult<AdminUserRow>> {
     const where: Prisma.UserWhereInput = {
       tenantId,
-
       role: query.role ? query.role : { in: ["VC", "HOD"] },
     }
 
     if (query.isActive !== undefined) {
       where.isActive = query.isActive
+    }
+
+    if (query.search) {
+      const term = query.search.trim()
+      where.OR = [
+        { name: { contains: term, mode: "insensitive" } },
+        { email: { contains: term, mode: "insensitive" } },
+      ]
     }
 
     const orderBy: Prisma.UserOrderByWithRelationInput[] = [

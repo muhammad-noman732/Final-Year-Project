@@ -36,6 +36,18 @@ export const studentApi = baseApi.injectEndpoints({
       invalidatesTags: ["StudentFeeProfile"],
     }),
 
+    sendReceiptEmail: build.mutation<{ sent: boolean }, { assignmentId: string }>({
+      query: (body) => ({
+        url: "/student/me/receipt-email",
+        method: "POST",
+        body,
+      }),
+      transformResponse: (raw: ApiResponse<{ sent: boolean }>) => {
+        if (!raw.data) throw new Error("No response data")
+        return raw.data
+      },
+    }),
+
   }),
   overrideExisting: false,
 })
@@ -44,4 +56,5 @@ export const {
   useGetMyFeeProfileQuery,
   useCreatePaymentIntentMutation,
   useInvalidateFeeProfileMutation,
+  useSendReceiptEmailMutation,
 } = studentApi

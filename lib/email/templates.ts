@@ -1,3 +1,75 @@
+export function receiptEmailTemplate(params: {
+  studentName: string
+  receiptNumber: string
+  amount: number
+  semester: number
+  program: string
+  department: string
+  paidAt: Date
+  universityName: string
+}): string {
+  const formatted = (n: number) =>
+    "PKR " + n.toLocaleString("en-PK", { minimumFractionDigits: 0, maximumFractionDigits: 0 })
+  const dateStr = new Date(params.paidAt).toLocaleDateString("en-PK", {
+    day: "numeric", month: "long", year: "numeric", hour: "2-digit", minute: "2-digit",
+  })
+  const ordinals = ["th", "st", "nd", "rd"]
+  const v = params.semester % 100
+  const semLabel = params.semester + (ordinals[(v - 20) % 10] || ordinals[v] || ordinals[0])
+
+  return `<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fee Payment Receipt</title>
+</head>
+<body style="margin:0;padding:0;font-family:Arial,sans-serif;background-color:#f4f4f4;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#f4f4f4;padding:20px;">
+    <tr><td align="center">
+      <table width="600" cellpadding="0" cellspacing="0" style="background-color:#ffffff;border-radius:8px;overflow:hidden;box-shadow:0 2px 4px rgba(0,0,0,0.1);">
+        <tr>
+          <td style="background:linear-gradient(135deg,#92650a 0%,#b07d10 100%);padding:36px 20px;text-align:center;">
+            <p style="color:#fef3c7;margin:0 0 6px 0;font-size:11px;letter-spacing:3px;text-transform:uppercase;font-weight:bold;">${params.universityName}</p>
+            <h1 style="color:#ffffff;margin:0;font-size:22px;font-weight:bold;letter-spacing:1px;">Fee Payment Receipt</h1>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding:32px 30px 0 30px;">
+            <div style="background-color:#f0fdf4;border-left:4px solid #10b981;border-radius:4px;padding:12px 16px;margin-bottom:24px;">
+              <p style="margin:0;color:#065f46;font-size:14px;font-weight:bold;">✓ Payment Confirmed</p>
+              <p style="margin:4px 0 0 0;color:#047857;font-size:13px;">Your fee has been successfully processed and verified.</p>
+            </div>
+            <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:24px;">
+              <tr><td style="padding:6px 0;border-bottom:1px solid #f3f4f6;"><span style="color:#6b7280;font-size:13px;">Student Name</span></td><td style="padding:6px 0;border-bottom:1px solid #f3f4f6;text-align:right;"><span style="color:#111827;font-size:13px;font-weight:bold;">${params.studentName}</span></td></tr>
+              <tr><td style="padding:6px 0;border-bottom:1px solid #f3f4f6;"><span style="color:#6b7280;font-size:13px;">Program</span></td><td style="padding:6px 0;border-bottom:1px solid #f3f4f6;text-align:right;"><span style="color:#111827;font-size:13px;font-weight:bold;">${params.program}</span></td></tr>
+              <tr><td style="padding:6px 0;border-bottom:1px solid #f3f4f6;"><span style="color:#6b7280;font-size:13px;">Department</span></td><td style="padding:6px 0;border-bottom:1px solid #f3f4f6;text-align:right;"><span style="color:#111827;font-size:13px;font-weight:bold;">${params.department}</span></td></tr>
+              <tr><td style="padding:6px 0;border-bottom:1px solid #f3f4f6;"><span style="color:#6b7280;font-size:13px;">Semester</span></td><td style="padding:6px 0;border-bottom:1px solid #f3f4f6;text-align:right;"><span style="color:#111827;font-size:13px;font-weight:bold;">${semLabel} Semester</span></td></tr>
+              <tr><td style="padding:6px 0;border-bottom:1px solid #f3f4f6;"><span style="color:#6b7280;font-size:13px;">Receipt No.</span></td><td style="padding:6px 0;border-bottom:1px solid #f3f4f6;text-align:right;"><span style="color:#111827;font-size:13px;font-weight:bold;font-family:monospace;">${params.receiptNumber}</span></td></tr>
+              <tr><td style="padding:6px 0;border-bottom:1px solid #f3f4f6;"><span style="color:#6b7280;font-size:13px;">Payment Method</span></td><td style="padding:6px 0;border-bottom:1px solid #f3f4f6;text-align:right;"><span style="color:#111827;font-size:13px;font-weight:bold;">Stripe · Card</span></td></tr>
+              <tr><td style="padding:6px 0;"><span style="color:#6b7280;font-size:13px;">Date & Time</span></td><td style="padding:6px 0;text-align:right;"><span style="color:#111827;font-size:13px;font-weight:bold;">${dateStr}</span></td></tr>
+            </table>
+            <div style="background-color:#fffbeb;border:1px solid #d97706;border-radius:6px;padding:16px 20px;display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;">
+              <span style="color:#92400e;font-size:14px;font-weight:bold;">Total Amount Paid</span>
+              <span style="color:#92400e;font-size:22px;font-weight:bold;">${formatted(params.amount)}</span>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td style="background-color:#f9fafb;padding:16px 30px;border-top:1px solid #e5e7eb;">
+            <p style="color:#6b7280;font-size:11px;line-height:1.5;margin:0;text-align:center;">
+              This is an official digital receipt. Please retain for your records.<br>
+              © ${new Date().getFullYear()} ${params.universityName}. All rights reserved.
+            </p>
+          </td>
+        </tr>
+      </table>
+    </td></tr>
+  </table>
+</body>
+</html>`
+}
+
 export function welcomeEmailTemplate(
     userName: string,
     role: string,

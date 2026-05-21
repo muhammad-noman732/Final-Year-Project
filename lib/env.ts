@@ -4,7 +4,7 @@ const envSchema = z.object({
   DATABASE_URL: z.string().min(1, "DATABASE_URL is required"),
   JWT_SECRET: z.string().min(32, "JWT_SECRET must be at least 32 characters"),
   JWT_EXPIRES_IN: z.string().default("7d"),
-  ACCESS_TOKEN_EXPIRES_IN: z.string().default("15m"),
+  REDIS_URL: z.string().min(1, "REDIS_URL is required for refresh-token and SSE"),
   NODE_ENV: z.enum(["development", "production", "test"]).default("development"),
   SENDGRID_API_KEY: z.string().optional(),
   FROM_EMAIL: z.string().default("noreply@gcuf.edu.pk"),

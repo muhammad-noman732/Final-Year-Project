@@ -4,8 +4,8 @@ import { logger } from "@/lib/logger"
 import { withRetry } from "@/lib/utils/retry"
 import { withTimeout } from "@/lib/utils/timeout"
 import { InternalServerError } from "@/lib/utils/AppError"
-import { welcomeEmailTemplate, passwordResetEmailTemplate } from "../email/templates"
-import type { WelcomeEmailParams, PasswordResetEmailParams } from "@/types/server/auth.types"
+import { welcomeEmailTemplate, passwordResetEmailTemplate, receiptEmailTemplate } from "../email/templates"
+import type { WelcomeEmailParams, PasswordResetEmailParams, ReceiptEmailParams } from "@/types/server/auth.types"
 
 export class EmailService {
     private readonly isConfigured: boolean;
@@ -88,6 +88,63 @@ export class EmailService {
             throw new InternalServerError(
                 `Failed to send welcome email: ${error instanceof Error ? error.message : 'Unknown error'}`
             );
+        }
+    }
+
+    async sendReceiptEmail(params: ReceiptEmailParams): Promise<void> {
+        const htmlContent = receiptEmailTemplate({
+            studentName: params.studentName,
+            receiptNumber: params.receiptNumber,
+            amount: params.amount,
+            semester: params.semester,
+            program: params.program,
+            department: params.department,
+            paidAt: params.paidAt,
+            universityName: params.universityName,
+        })
+
+        if (!this.isConfigured) {
+            logger.info(
+                { event: "email.receipt.skipped_not_configured", to: params.to },
+                "Receipt email skipped because SendGrid is not configured"
+            )
+            return
+        }
+
+        try {
+            await withRetry(
+                () => withTimeout(
+                    sgMail.send({
+                        to: params.to,
+                        from: { email: this.fromEmail, name: this.fromName },
+                        subject: `Fee Payment Receipt — ${params.universityName}`,
+                        html: htmlContent,
+                    }),
+                    10000,
+                    "SendGrid:sendReceiptEmail"
+                ),
+                "SendGrid:sendReceiptEmail",
+                {
+                    maxAttempts: 3,
+                    shouldRetry: (err: unknown) => {
+                        const code = (err as { code?: number })?.code
+                        if (code === 400 || code === 401 || code === 403) return false
+                        return true
+                    },
+                }
+            )
+            logger.info(
+                { event: "email.receipt.sent", to: params.to, provider: "sendgrid" },
+                "Receipt email sent"
+            )
+        } catch (error: Error | unknown) {
+            logger.error(
+                { event: "email.receipt.failed", err: error, to: params.to, provider: "sendgrid" },
+                "Failed to send receipt email after retries"
+            )
+            throw new InternalServerError(
+                `Failed to send receipt email: ${error instanceof Error ? error.message : "Unknown error"}`
+            )
         }
     }
 

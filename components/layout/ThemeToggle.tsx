@@ -1,6 +1,5 @@
 "use client"
 
-import { useState, useEffect } from "react"
 import { Moon, Sun, Monitor } from "lucide-react"
 import { useDispatch, useSelector } from "react-redux"
 import { setTheme } from "@/store/slices/uiSlice"
@@ -16,21 +15,6 @@ import {
 export function ThemeToggle() {
   const dispatch = useDispatch()
   const theme = useSelector((state: RootState) => state.ui.theme)
-
-  const [mounted, setMounted] = useState(false)
-
-  useEffect(() => {
-    setMounted(true)
-  }, [])
-
-  if (!mounted) {
-    return (
-      <Button variant="ghost" size="icon" className="w-8 h-8 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 dark:text-slate-500 dark:hover:text-slate-200 dark:hover:bg-slate-800 transition-colors">
-        <Sun className="h-[1.1rem] w-[1.1rem]" />
-        <span className="sr-only">Toggle theme</span>
-      </Button>
-    )
-  }
 
   return (
     <DropdownMenu>

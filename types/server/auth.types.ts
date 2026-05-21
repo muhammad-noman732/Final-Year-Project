@@ -110,3 +110,15 @@ export interface PasswordResetEmailParams {
   name: string
   resetToken: string
 }
+
+export interface ReceiptEmailParams {
+  to: string
+  studentName: string
+  receiptNumber: string
+  amount: number
+  semester: number
+  program: string
+  department: string
+  paidAt: Date
+  universityName: string
+}

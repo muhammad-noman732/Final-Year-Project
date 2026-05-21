@@ -52,6 +52,17 @@ export class StudentService {
       andConditions.push({ enrollmentStatus: query.enrollmentStatus })
     }
 
+    if (query.search) {
+      const term = query.search.trim()
+      andConditions.push({
+        OR: [
+          { user: { name: { contains: term, mode: "insensitive" } } },
+          { user: { email: { contains: term, mode: "insensitive" } } },
+          { studentId: { contains: term, mode: "insensitive" } },
+        ],
+      })
+    }
+
     if (andConditions.length > 0) {
       where.AND = andConditions
     }

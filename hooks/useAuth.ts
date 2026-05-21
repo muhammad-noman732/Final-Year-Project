@@ -3,6 +3,9 @@
 
 import { useState, useEffect, useCallback } from "react"
 import { useRouter } from "next/navigation"
+import { useDispatch } from "react-redux"
+import { baseApi } from "@/store/api/baseApi"
+import { logout as logoutAction } from "@/store/slices/authSlice"
 import type { Role } from "@/types/server/shared.types"
 
 interface AuthUser {
@@ -23,6 +26,7 @@ interface UseAuthReturn {
 
 export function useAuth(): UseAuthReturn {
   const router = useRouter()
+  const dispatch = useDispatch()
   const [user, setUser] = useState<AuthUser | null>(null)
   const [isLoading, setIsLoading] = useState(true)
 
@@ -55,10 +59,11 @@ export function useAuth(): UseAuthReturn {
     try {
       await fetch("/api/auth/logout", { method: "POST" })
     } finally {
-      setUser(null)
+      dispatch(logoutAction())
+      dispatch(baseApi.util.resetApiState())
       router.push("/login")
     }
-  }, [router])
+  }, [dispatch, router])
 
   return {
     user,

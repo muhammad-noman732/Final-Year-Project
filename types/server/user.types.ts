@@ -32,4 +32,5 @@ export interface ListUsersQueryParams {
   limit?: number
   role?: AdminUserRole
   isActive?: boolean
+  search?: string
 }

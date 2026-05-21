@@ -11,7 +11,7 @@ export async function signJWT(
   payload: JWTPayload,
   expiresIn?: string,
 ): Promise<string> {
-  const ttl = expiresIn ?? env.ACCESS_TOKEN_EXPIRES_IN
+  const ttl = expiresIn ?? env.JWT_EXPIRES_IN
   return new SignJWT({ ...payload })
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()

@@ -5,7 +5,9 @@ import { useForm } from "react-hook-form"
 import { z } from "zod/v4"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useRouter } from "next/navigation"
+import { useDispatch } from "react-redux"
 import { useLoginMutation } from "@/store/api/authApi"
+import { baseApi } from "@/store/api/baseApi"
 
 const loginSchema = z.object({
   email: z.email("Please enter a valid email address"),
@@ -24,6 +26,7 @@ const ROLE_REDIRECT: Record<string, string> = {
 
 export function useLoginPage() {
   const router = useRouter()
+  const dispatch = useDispatch()
   const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -44,14 +47,26 @@ export function useLoginPage() {
       const result = await login(data).unwrap()
       if (result.success) {
         const redirectTo = result.data?.redirectTo || ROLE_REDIRECT[result.data?.user?.role] || "/login"
+        dispatch(baseApi.util.resetApiState())
         router.push(redirectTo)
       }
-    } catch (err: any) {
-      if (err.data?.error?.fields) {
-        const firstField = Object.values(err.data.error.fields)[0]
+    } catch (error: unknown) {
+      type ErrorShape = {
+        data?: {
+          error?: {
+            fields?: Record<string, string[] | string>
+            message?: string
+          }
+        }
+      }
+
+      const e = error as ErrorShape
+
+      if (e.data?.error?.fields) {
+        const firstField = Object.values(e.data.error.fields)[0]
         setError(Array.isArray(firstField) ? firstField[0] : String(firstField))
       } else {
-        setError(err.data?.error?.message || "Login failed. Please try again.")
+        setError(e.data?.error?.message || "Login failed. Please try again.")
       }
     }
   }

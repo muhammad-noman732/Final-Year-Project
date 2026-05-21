@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useGetStudentsQuery } from "@/store/api/admin/studentsApi"
 import { useGetDepartmentsQuery } from "@/store/api/admin/departmentsApi"
 import { useGetProgramsQuery } from "@/store/api/admin/programsApi"
@@ -15,6 +15,10 @@ export function useGetStudents() {
   const [selectedSemester, setSelectedSemester] = useState("all")
   const [selectedSession, setSelectedSession] = useState("all")
   const [page, setPage] = useState(1)
+
+  useEffect(() => {
+    setPage(1)
+  }, [debouncedSearch])
 
   const { data: deptsRes } = useGetDepartmentsQuery({ limit: 100 })
   const { data: progsRes } = useGetProgramsQuery({

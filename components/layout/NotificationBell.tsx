@@ -1,6 +1,5 @@
 "use client"
 
-import { useState, useEffect } from "react"
 import {
   Bell,
   CheckCircle2,
@@ -158,17 +157,6 @@ export function NotificationBell() {
   const unreadCount = countData?.data?.count ?? 0
   const notifications = listData?.data?.data ?? []
   const hasUnread = unreadCount > 0
-
-  const [mounted, setMounted] = useState(false)
-  useEffect(() => setMounted(true), [])
-
-  if (!mounted) {
-    return (
-      <button className="relative w-8 h-8 rounded-lg flex items-center justify-center text-[#64748B] bg-slate-50 transition-colors duration-150" aria-label="Notifications loading">
-        <Bell className="w-4 h-4" />
-      </button>
-    )
-  }
 
   return (
     <Popover>

@@ -40,6 +40,7 @@ export const listUsersQuerySchema = paginationQuerySchema.extend({
     .enum(["true", "false"])
     .transform((v) => v === "true")
     .optional(),
+  search: z.string().optional(),
 })
 
 export type CreateUserInput = z.infer<typeof createUserSchema>
@@ -88,6 +89,7 @@ export const listStudentsQuerySchema = paginationQuerySchema.extend({
     .enum(["ACTIVE", "SUSPENDED", "GRADUATED", "WITHDRAWN"])
     .optional(),
   feeStatus: z.enum(["UNPAID", "PARTIAL", "PAID", "OVERDUE", "WAIVED"]).optional(),
+  search: z.string().optional(),
 })
 
 export type CreateStudentInput = z.infer<typeof createStudentSchema>

@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { Plus, Trash2, ChevronLeft, ChevronRight } from "lucide-react";
+import { Plus, Trash2, ChevronLeft, ChevronRight, Search } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ConfirmDialog } from "@/components/shared/ConfirmDialog";
@@ -18,6 +18,7 @@ import type { AdminUserRole } from "@/types/client/store/user.store.types";
 
 export default function UsersPage() {
     const {
+        searchQuery, setSearchQuery,
         selectedRole, handleRoleChange,
         page, setPage,
         users, meta, isLoading, isFetching,
@@ -49,6 +50,15 @@ export default function UsersPage() {
 
             <Card className="glass-card border-0 p-4">
                 <div className="flex flex-wrap gap-2">
+                    <div className="relative">
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground pointer-events-none" />
+                        <Input
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            placeholder="Search by name or email..."
+                            className="pl-9 w-[240px] bg-navy-800/50 border-gold-500/10"
+                        />
+                    </div>
                     <Select value={selectedRole} onValueChange={handleRoleChange}>
                         <SelectTrigger className="w-[160px] bg-navy-800/50 border-gold-500/10">
                             <SelectValue placeholder="Role Filter" />

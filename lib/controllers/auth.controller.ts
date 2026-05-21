@@ -5,6 +5,7 @@ import { getAuthUser } from "@/lib/auth"
 import { logger } from "@/lib/logger"
 import { UnauthorizedError } from "@/lib/utils/AppError"
 import type { AuthService } from "@/lib/services/auth.service"
+import { env } from "@/lib/env"
 
 const ACCESS_COOKIE = "auth-token"
 const REFRESH_COOKIE = "refresh-token"
@@ -16,7 +17,15 @@ const COOKIE_BASE = {
   path: "/",
 }
 
-const ACCESS_MAX_AGE = 15 * 60
+function parseDurationToSeconds(d: string): number {
+  const m = /^(\d+)(s|m|h|d|w)$/.exec(d)
+  if (!m) return 7 * 24 * 60 * 60
+  const n = parseInt(m[1])
+  const map: Record<string, number> = { s: 1, m: 60, h: 3600, d: 86400, w: 604800 }
+  return n * (map[m[2]] ?? 86400)
+}
+
+const ACCESS_MAX_AGE = parseDurationToSeconds(env.JWT_EXPIRES_IN)
 const REFRESH_MAX_AGE = 7 * 24 * 60 * 60
 
 function attachTokenCookies(

@@ -18,6 +18,7 @@ const toListQueryParams = (query?: ListUsersQueryParams): Record<string, string>
   if (query.limit !== undefined) params.limit = String(query.limit)
   if (query.role !== undefined) params.role = query.role
   if (query.isActive !== undefined) params.isActive = String(query.isActive)
+  if (query.search) params.search = query.search
   return params
 }
 export const usersApi = baseApi.injectEndpoints({
