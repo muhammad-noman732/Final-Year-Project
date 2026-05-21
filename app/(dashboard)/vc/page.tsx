@@ -59,8 +59,7 @@ export default function VCDashboard() {
   return (
     <div className="relative isolate space-y-6 pb-10 min-h-[calc(100dvh-3.5rem)] transition-colors duration-300">
 
-      {}
-
+      {/* Toast */}
       {showToast && (
         <div className="fixed top-4 right-4 z-50 animate-in slide-in-from-top-2 fade-in duration-200">
           <div className="flex items-center gap-3 rounded-xl border border-primary/20 bg-white/80 dark:bg-navy-800/80 backdrop-blur-md px-4 py-3 shadow-2xl shadow-black/40">
@@ -75,7 +74,7 @@ export default function VCDashboard() {
         </div>
       )}
 
-      {}
+      {/* Tab Bar */}
       <div className="flex items-center gap-1 rounded-xl bg-white/40 dark:bg-[#080c18] backdrop-blur-md p-1 shadow-[0_8px_32px_rgba(0,0,0,0.04)]">
         {TABS.map(({ id, label, Icon }) => {
           const isActive = activeTab === id
@@ -105,8 +104,9 @@ export default function VCDashboard() {
         })}
       </div>
 
-      {}
+      {/* Tab Content */}
       <AnimatePresence mode="wait" initial={false}>
+
         {activeTab === "fee" && (
           <motion.div
             key="fee-tab"
@@ -116,17 +116,19 @@ export default function VCDashboard() {
             transition={{ duration: 0.18, ease: "easeOut" }}
             className="space-y-5"
           >
-            {}
+            {/* Insights */}
             <InsightsPanel insightsUpdatedAt={insightsUpdatedAt} />
 
-            {}
+            {/* Header */}
             <div className="flex items-start justify-between gap-4">
               <div className="flex items-center gap-3">
                 <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10 flex-shrink-0">
                   <LayoutDashboard className="h-4.5 w-4.5 text-primary" />
                 </div>
                 <div>
-                  <h1 className="text-lg font-bold tracking-tight text-[#0F172A] dark:text-foreground">VC Dashboard</h1>
+                  <h1 className="text-lg font-bold tracking-tight text-[#0F172A] dark:text-foreground">
+                    VC Dashboard
+                  </h1>
                   <p className="text-xs text-[#64748B] dark:text-muted-foreground mt-0.5">
                     Tenant-wide payment visibility — filter by department, semester, session, status.
                   </p>
@@ -144,10 +146,11 @@ export default function VCDashboard() {
                   type="button"
                   variant="outline"
                   size="sm"
-                  className={`h-8 text-xs border transition-colors ${filters.range === "today"
+                  className={`h-8 text-xs border transition-colors ${
+                    filters.range === "today"
                       ? "border-emerald-500/20 bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/15"
                       : "border-slate-200/50 dark:border-white/[0.08] bg-white/40 dark:bg-transparent text-[#64748B] dark:text-muted-foreground hover:text-[#0F172A] dark:hover:text-foreground backdrop-blur-md shadow-[0_8px_32px_rgba(0,0,0,0.04)]"
-                    }`}
+                  }`}
                   onClick={handleTodayToggle}
                 >
                   <Zap className="mr-1.5 h-3 w-3" />
@@ -156,7 +159,7 @@ export default function VCDashboard() {
               </div>
             </div>
 
-            {}
+            {/* Filters */}
             <VCFilterBar
               filters={filters}
               departments={departments}
@@ -167,7 +170,7 @@ export default function VCDashboard() {
               showSearch={false}
             />
 
-            {}
+            {/* Health Score Bento */}
             <Skeleton name="vc-health-bento" loading={loadingData}>
               {dashboard ? (
                 <VCHealthScoreBento
@@ -180,7 +183,7 @@ export default function VCDashboard() {
               ) : null}
             </Skeleton>
 
-            {}
+            {/* Main Grid */}
             <div className="grid gap-4 xl:grid-cols-[1fr_320px]">
               <Skeleton name="vc-dashboard-panels" loading={loadingData}>
                 {dashboard && (
@@ -201,6 +204,7 @@ export default function VCDashboard() {
                     />
                   )}
                 </Skeleton>
+
                 <Skeleton name="vc-live-feed" loading={loadingData}>
                   <VCLiveFeed
                     transactions={liveTransactions}
@@ -213,11 +217,13 @@ export default function VCDashboard() {
               </div>
             </div>
 
-            {}
+            {/* Advanced Analytics */}
             <div>
               <div className="flex items-center gap-2 mb-4">
                 <BarChart2 className="h-4 w-4 text-primary" />
-                <h2 className="text-sm font-semibold text-[#0F172A] dark:text-foreground">Advanced Analytics</h2>
+                <h2 className="text-sm font-semibold text-[#0F172A] dark:text-foreground">
+                  Advanced Analytics
+                </h2>
                 <Separator className="flex-1 bg-slate-200/50 dark:bg-white/[0.04]" />
               </div>
 
@@ -256,6 +262,7 @@ export default function VCDashboard() {
             />
           </motion.div>
         )}
+
       </AnimatePresence>
     </div>
   )

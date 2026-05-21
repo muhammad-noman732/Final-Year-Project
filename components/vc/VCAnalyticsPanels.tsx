@@ -4,7 +4,7 @@ import {
   Bar, BarChart, CartesianGrid, Line, LineChart,
   ResponsiveContainer, Tooltip, XAxis, YAxis,
 } from "recharts"
-import { TrendingUp, BookOpen } from "lucide-react"
+import { TrendingUp } from "lucide-react"
 import { Separator } from "@/components/ui/separator"
 import { formatCurrency, formatFullCurrency } from "@/config/constants"
 import VCDepartmentHealthGrid from "@/components/vc/VCDepartmentHealthGrid"
@@ -62,7 +62,7 @@ export default function VCAnalyticsPanels({
 }) {
   return (
     <div className="space-y-4">
-      {}
+      {/* Collection Timeline — commented out
       <div className="rounded-xl border border-white/60 dark:border-white/[0.05] bg-white/40 dark:bg-slate-900/40 backdrop-blur-md p-5 shadow-[0_8px_32px_rgba(0,0,0,0.04)]">
         <PanelHeader icon={TrendingUp} iconClass="bg-gold-500/10 text-gold-400" title="Collection Timeline" />
         {data.collectionTrend.length > 0 ? (
@@ -88,6 +88,7 @@ export default function VCAnalyticsPanels({
           </div>
         )}
       </div>
+      */}
 
       {}
       <div className="rounded-xl border border-white/60 dark:border-white/[0.05] bg-white/40 dark:bg-slate-900/40 backdrop-blur-md p-5 shadow-[0_8px_32px_rgba(0,0,0,0.04)]">
@@ -98,48 +99,6 @@ export default function VCAnalyticsPanels({
         />
       </div>
 
-      {}
-      <div className="rounded-xl border border-white/60 dark:border-white/[0.05] bg-white/40 dark:bg-slate-900/40 backdrop-blur-md p-5 shadow-[0_8px_32px_rgba(0,0,0,0.04)]">
-        <PanelHeader icon={BookOpen} iconClass="bg-sky-500/10 text-sky-400" title="Semester Collections" />
-        <div className="mb-3 flex items-center gap-3 text-[11px] text-[#64748B] dark:text-muted-foreground">
-          <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-sm bg-sky-500" />Paid</span>
-          <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-sm bg-gold-500" />Outstanding</span>
-        </div>
-        {data.semesterBreakdown.length > 0 ? (
-          <>
-            <ResponsiveContainer width="100%" height={240}>
-              <BarChart data={data.semesterBreakdown} barCategoryGap="30%">
-                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" vertical={false} />
-                <XAxis dataKey="semester" tick={{ fill: "#6b7a99", fontSize: 10 }} tickLine={false} axisLine={false} />
-                <YAxis
-                  tick={{ fill: "#6b7a99", fontSize: 10 }} tickLine={false} axisLine={false}
-                  tickFormatter={(v) => `${Math.round(v / 1000)}K`}
-                />
-                <Tooltip content={<ChartTooltip />} cursor={{ fill: "rgba(255,255,255,0.02)" }} />
-                <Bar dataKey="paidAmount" name="Paid" fill="#0ea5e9" radius={[4, 4, 0, 0]} />
-                <Bar dataKey="unpaidAmount" name="Outstanding" fill="#d4a843" radius={[4, 4, 0, 0]} />
-              </BarChart>
-            </ResponsiveContainer>
-            {onSemesterSelect && (
-              <div className="mt-3 flex flex-wrap gap-2">
-                {data.semesterBreakdown.map((s) => (
-                  <button
-                    key={s.semester} type="button"
-                    onClick={() => onSemesterSelect(s.semester)}
-                    className="rounded-lg border border-slate-200/80 dark:border-white/[0.06] bg-white/60 dark:bg-white/[0.02] px-2.5 py-1 text-[11px] text-[#64748B] dark:text-muted-foreground transition-colors hover:border-gold-500/40 hover:text-[#0F172A] dark:hover:border-gold-500/25 dark:hover:text-gold-300"
-                  >
-                    Sem {s.semester}
-                  </button>
-                ))}
-              </div>
-            )}
-          </>
-        ) : (
-          <div className="flex h-40 items-center justify-center">
-            <p className="text-xs text-[#64748B] dark:text-muted-foreground">No semester data.</p>
-          </div>
-        )}
-      </div>
     </div>
   )
 }

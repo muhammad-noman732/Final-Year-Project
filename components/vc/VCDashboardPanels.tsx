@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { CreditCard, GraduationCap, TrendingDown, TrendingUp } from "lucide-react"
+import { BookOpen, CreditCard, GraduationCap, TrendingDown, TrendingUp } from "lucide-react"
 import {
   Area, AreaChart, Bar, BarChart, CartesianGrid, Cell, Pie, PieChart,
   ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis,
@@ -180,7 +180,56 @@ export default function VCDashboardPanels({
         )}
       </div>
 
+      {/* Semester Collections */}
+      <div className="rounded-xl border border-white/60 dark:border-white/[0.05] bg-white/40 dark:bg-slate-900/40 backdrop-blur-md p-5 shadow-[0_8px_32px_rgba(0,0,0,0.04)]">
+        <div className="flex items-center gap-2 mb-5">
+          <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-sky-500/10">
+            <BookOpen className="h-3.5 w-3.5 text-sky-400" />
+          </div>
+          <h3 className="text-sm font-semibold text-[#0F172A] dark:text-foreground">Semester Collections</h3>
+        </div>
+        <div className="mb-3 flex items-center gap-3 text-[11px] text-[#64748B] dark:text-muted-foreground">
+          <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-sm bg-sky-500" />Paid</span>
+          <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-sm bg-gold-500" />Outstanding</span>
+        </div>
+        {semesterBreakdown.length > 0 ? (
+          <>
+            <ResponsiveContainer width="100%" height={240}>
+              <BarChart data={semesterBreakdown} barCategoryGap="30%">
+                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" vertical={false} />
+                <XAxis dataKey="semester" tick={{ fill: "#6b7a99", fontSize: 10 }} tickLine={false} axisLine={false} />
+                <YAxis
+                  tick={{ fill: "#6b7a99", fontSize: 10 }} tickLine={false} axisLine={false}
+                  tickFormatter={(v) => `${Math.round(v / 1000)}K`}
+                />
+                <Tooltip content={<ChartTooltip />} cursor={{ fill: "rgba(255,255,255,0.02)" }} />
+                <Bar dataKey="paidAmount" name="Paid" fill="#0ea5e9" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="unpaidAmount" name="Outstanding" fill="#d4a843" radius={[4, 4, 0, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+            {onSemesterSelect && (
+              <div className="mt-3 flex flex-wrap gap-2">
+                {semesterBreakdown.map((s) => (
+                  <button
+                    key={s.semester} type="button"
+                    onClick={() => onSemesterSelect(s.semester)}
+                    className="rounded-lg border border-slate-200/80 dark:border-white/[0.06] bg-white/60 dark:bg-white/[0.02] px-2.5 py-1 text-[11px] text-[#64748B] dark:text-muted-foreground transition-colors hover:border-gold-500/40 hover:text-[#0F172A] dark:hover:border-gold-500/25 dark:hover:text-gold-300"
+                  >
+                    Sem {s.semester}
+                  </button>
+                ))}
+              </div>
+            )}
+          </>
+        ) : (
+          <div className="flex h-40 items-center justify-center">
+            <p className="text-xs text-[#64748B] dark:text-muted-foreground">No semester data.</p>
+          </div>
+        )}
+      </div>
+
       {}
+      {/*
       <div className="rounded-xl border border-white/60 dark:border-white/[0.05] bg-white/40 dark:bg-slate-900/40 backdrop-blur-md p-5 shadow-[0_8px_32px_rgba(0,0,0,0.04)]">
         <div className="flex items-center gap-2 mb-5">
           <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-sky-500/10">
@@ -237,6 +286,7 @@ export default function VCDashboardPanels({
           </div>
         )}
       </div>
+      */}
     </div>
   )
 }

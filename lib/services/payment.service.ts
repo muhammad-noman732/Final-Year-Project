@@ -1,4 +1,4 @@
-import { stripe } from "@/lib/stripe/stripe.server"
+import { getStripe } from "@/lib/stripe/stripe.server"
 import type { PaymentRepository } from "@/lib/repositories/payment.repository"
 import {
   FeeAlreadyPaidError,
@@ -91,7 +91,7 @@ export class PaymentService {
         existingPI = await withRetry(
           () =>
             withTimeout(
-              stripe.paymentIntents.retrieve(existingPayment.stripePaymentIntentId!),
+              getStripe().paymentIntents.retrieve(existingPayment.stripePaymentIntentId!),
               STRIPE_TIMEOUT_MS,
               "stripe.paymentIntents.retrieve",
             ),
@@ -158,7 +158,7 @@ export class PaymentService {
     const paymentIntent = await withRetry(
       () =>
         withTimeout(
-          stripe.paymentIntents.create(
+          getStripe().paymentIntents.create(
             {
               amount: assignment.amountDue,
               currency: "pkr",

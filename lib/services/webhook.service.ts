@@ -1,6 +1,6 @@
 import Stripe from "stripe"
 import type { Prisma } from "@/app/generated/prisma/client"
-import { stripe } from "@/lib/stripe/stripe.server"
+import { getStripe } from "@/lib/stripe/stripe.server"
 import type { PaymentRepository } from "@/lib/repositories/payment.repository"
 import type { WebhookRepository } from "@/lib/repositories/webhook.repository"
 import type { StudentRepository } from "@/lib/repositories/student.repository"
@@ -30,11 +30,9 @@ export class WebhookService {
     let event: Stripe.Event
 
     try {
-      event = stripe.webhooks.constructEvent(
-        rawBody,
-        signature,
-        process.env.STRIPE_WEBHOOK_SECRET!,
-      )
+      const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET
+      if (!webhookSecret) throw new Error("[stripe-server] STRIPE_WEBHOOK_SECRET is not set.")
+      event = getStripe().webhooks.constructEvent(rawBody, signature, webhookSecret)
     } catch {
       throw new InvalidWebhookSignatureError()
     }

@@ -26,12 +26,13 @@ jobs:
                   username: ${{ secrets.DOCKERHUB_USERNAME }}
                   password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-            - name: Build and Push Docker images
+            - name: Build and Push Next.js image
               run: |
-                  docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/unisync:latest .
+                  docker build \
+                    --build-arg NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY="${{ secrets.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY }}" \
+                    --build-arg NEXT_PUBLIC_APP_URL="https://nomandev.dev" \
+                    -t ${{ secrets.DOCKERHUB_USERNAME }}/unisync:latest .
                   docker push ${{ secrets.DOCKERHUB_USERNAME }}/unisync:latest
-                  docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/unisync-ml:latest -f ML/Dockerfile .
-                  docker push ${{ secrets.DOCKERHUB_USERNAME }}/unisync-ml:latest
 
             - name: Deploy to server
               uses: appleboy/ssh-action@master
@@ -42,5 +43,6 @@ jobs:
                   script: |
                       cd ~/myproject
                       git pull origin main
-                      docker compose pull nextjs fastapi-ml
-                      docker compose up -d --force-recreate nextjs fastapi-ml
+                      docker image prune -f
+                      docker compose pull nextjs
+                      docker compose up -d --force-recreate nextjs

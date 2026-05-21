@@ -3,7 +3,7 @@
  import {
      Elements,
  } from "@stripe/react-stripe-js";
- import { stripePromise } from "@/lib/stripe/stripe.client";
+ import { getStripePromise } from "@/lib/stripe/stripe.client";
  import { usePayFee } from "@/hooks/student/usePayFee";
  import {
      AlertCircle,
@@ -60,7 +60,7 @@
                  <div className="order-2 lg:order-1">
                          {clientSecret && targetAssignment ? (
                              <Elements
-                                 stripe={stripePromise}
+                                 stripe={getStripePromise()}
                                  options={{
                                      clientSecret,
                                      appearance: { theme: theme === 'dark' ? 'night' : 'stripe' },
