@@ -1,0 +1,35 @@
+name: Scheduled Cron Jobs
+
+on:
+    schedule:
+        - cron: "0 * * * *" # Every hour at :00
+    workflow_dispatch: # Allow manual trigger from GitHub UI
+
+jobs:
+    fee-insights:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Trigger fee insights cron
+              run: |
+                  STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
+                    -X GET "https://nomandev.dev/api/cron/fee-insights" \
+                    -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}")
+                  echo "Response status: $STATUS"
+                  if [ "$STATUS" != "200" ]; then
+                    echo "Fee insights cron failed with status $STATUS"
+                    exit 1
+                  fi
+
+    registration-insights:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Trigger registration insights cron
+              run: |
+                  STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
+                    -X GET "https://nomandev.dev/api/cron/registration-insights" \
+                    -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}")
+                  echo "Response status: $STATUS"
+                  if [ "$STATUS" != "200" ]; then
+                    echo "Registration insights cron failed with status $STATUS"
+                    exit 1
+                  fi
