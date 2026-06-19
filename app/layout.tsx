@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { DM_Sans, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import Script from 'next/script'
 
 const dmSans = DM_Sans({
   variable: "--font-dm-sans",
@@ -16,7 +17,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://uni-ync.vercel.app"),
+  metadataBase: new URL("https://uni-sync.tech"),
   title: {
     default: "UniSync | Management System",
     template: "%s | UniSync",
@@ -33,7 +34,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://uni-ync.vercel.app",
+    url: "nomande.dev",
     title: "UniSync | Fee Management System",
     description: "Intelligent University Registration & Fee Management System",
     siteName: "UniSync",
@@ -66,6 +67,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${dmSans.variable} ${geistMono.variable} font-sans antialiased bg-background min-h-[100dvh] text-foreground`}>
+          <Script src="https://scripts.simpleanalyticscdn.com/latest.js"  />
         <StoreProvider>
           <ThemeApplier />
           {children}
@@ -75,3 +77,6 @@ export default function RootLayout({
     </html>
   );
 }
+
+
+

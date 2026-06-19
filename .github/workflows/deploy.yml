@@ -30,7 +30,7 @@ jobs:
               run: |
                   docker build \
                     --build-arg NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY="${{ secrets.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY }}" \
-                    --build-arg NEXT_PUBLIC_APP_URL="https://nomandev.dev" \
+                    --build-arg NEXT_PUBLIC_APP_URL="https://uni-sync.tech" \
                     -t ${{ secrets.DOCKERHUB_USERNAME }}/unisync:latest .
                   docker push ${{ secrets.DOCKERHUB_USERNAME }}/unisync:latest
 
