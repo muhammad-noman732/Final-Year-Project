@@ -1,6 +1,6 @@
 # GCUF Fee Management System
 
-Multi-tenant, role-based university fee management platform for Government College University Faisalabad.
+Multi-tenant, role-based university fee management platform for institutions.
 
 The system replaces manual fee operations with:
 - digital fee structures and assignments
