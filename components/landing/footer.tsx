@@ -42,15 +42,19 @@ const FOOTER_COLS = [
   { title: "Legal", links: ["Privacy", "Terms", "Refund Policy", "Compliance", "Security"] },
 ];
 
+import { GraduationCap } from "lucide-react";
+
 export default function Footer() {
   return (
     <footer id="about" className="px-6 md:px-12 lg:px-20 pb-10 bg-background border-t border-border pt-16">
       <div className="max-w-6xl mx-auto">
         <div className="grid grid-cols-2 md:grid-cols-6 gap-10">
           <div className="col-span-2 max-w-sm">
-            <a href="#" className="text-xl font-semibold tracking-tight text-foreground flex items-center gap-1">
-              <span className="font-display text-2xl leading-none">✦</span>
-              <span>UniSync</span>
+            <a href="#" className="text-xl font-semibold tracking-tight text-foreground flex items-center gap-2.5">
+              <div className="w-8 h-8 rounded-lg bg-secondary border border-border flex items-center justify-center shadow-xs">
+                <GraduationCap className="w-4.5 h-4.5 text-foreground" />
+              </div>
+              <span className="font-semibold text-lg tracking-tight">UniSync</span>
             </a>
             <p className="mt-4 text-sm text-muted-foreground leading-relaxed">
               The multi-tenant university fee management system. Secure, real-time, and built for scale.

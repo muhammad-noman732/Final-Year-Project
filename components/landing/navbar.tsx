@@ -1,12 +1,16 @@
+import { GraduationCap } from "lucide-react";
+
 export default function Navbar() {
   return (
     <nav className="relative z-20 flex items-center justify-between px-6 md:px-12 lg:px-20 py-5 font-sans">
       <a
         href="#"
-        className="text-xl font-semibold tracking-tight flex items-center gap-1"
+        className="text-xl font-semibold tracking-tight flex items-center gap-2.5"
       >
-        <span className="font-display text-2xl leading-none">✦</span>
-        <span>UniSync</span>
+        <div className="w-8 h-8 rounded-lg bg-secondary border border-border flex items-center justify-center shadow-xs">
+          <GraduationCap className="w-4.5 h-4.5 text-foreground" />
+        </div>
+        <span className="font-semibold text-lg tracking-tight">UniSync</span>
       </a>
       <div className="hidden md:flex items-center gap-8 text-sm text-muted-foreground">
         <a href="#features" className="hover:text-foreground transition-colors">

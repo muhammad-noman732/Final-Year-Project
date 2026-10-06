@@ -14,6 +14,7 @@ import {
   Plus,
   MoreHorizontal,
   Check,
+  GraduationCap,
 } from "lucide-react";
 
 function SidebarItem({
@@ -156,8 +157,8 @@ export default function DashboardPreview() {
       {/* Top bar */}
       <div className="flex items-center justify-between px-3 md:px-4 py-2 border-b border-border bg-white h-11">
         <div className="flex items-center gap-2">
-          <div className="h-5 w-5 rounded-[5px] bg-foreground text-primary-foreground flex items-center justify-center text-[10px] font-semibold font-display shadow-sm">
-            U
+          <div className="h-6 w-6 rounded-md bg-secondary border border-border flex items-center justify-center shadow-xs">
+            <GraduationCap size={13} className="text-foreground" />
           </div>
           <span className="text-[12px] font-semibold tracking-tight">
             UniSync
